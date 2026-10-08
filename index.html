@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="A2 MissionLab — public-data Artemis II mission operations and engineering reconstruction." />
+  <title>A2 MissionLab</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <div class="eyebrow">ARTEMIS II · PUBLIC-DATA RECONSTRUCTION</div>
+      <h1>A2 MissionLab</h1>
+      <p class="subtitle">Mission Operations & Engineering Reconstruction</p>
+    </div>
+    <div class="status-card">
+      <span class="pulse"></span>
+      <div><strong>PHASE 0</strong><small>Foundation prototype</small></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero-grid">
+      <div class="mission-clock panel">
+        <div class="panel-label">MISSION CLOCK</div>
+        <div id="clock-time" class="clock-time">—</div>
+        <div id="clock-phase" class="clock-phase">Select an event</div>
+      </div>
+      <div class="panel mission-principle">
+        <div class="panel-label">OPERATIONS PRINCIPLE</div>
+        <blockquote>Observe → Understand → Integrate → Decide → Verify</blockquote>
+        <p>Every displayed item must expose what came from NASA, what was derived, and what was modeled.</p>
+      </div>
+    </section>
+
+    <section class="controls panel">
+      <label>
+        Domain
+        <select id="domain-filter"><option value="ALL">All domains</option></select>
+      </label>
+      <label>
+        Provenance
+        <select id="provenance-filter">
+          <option value="ALL">All provenance</option>
+          <option value="FLIGHT_DATA">FLIGHT DATA</option>
+          <option value="NASA_REPORTED">NASA REPORTED</option>
+          <option value="DERIVED">DERIVED</option>
+          <option value="MODEL">MODEL</option>
+          <option value="SYNTHETIC">SYNTHETIC</option>
+        </select>
+      </label>
+      <label>
+        Criticality
+        <select id="criticality-filter">
+          <option value="ALL">All criticalities</option>
+          <option value="CRITICAL">Critical</option>
+          <option value="HIGH">High</option>
+          <option value="MEDIUM">Medium</option>
+          <option value="LOW">Low</option>
+        </select>
+      </label>
+      <button id="reset-btn" type="button">Reset</button>
+    </section>
+
+    <section class="workspace">
+      <aside class="timeline panel">
+        <div class="panel-heading">
+          <div>
+            <div class="panel-label">MISSION TIMELINE</div>
+            <h2>Public event backbone</h2>
+          </div>
+          <span id="event-count" class="count">0</span>
+        </div>
+        <div id="event-list" class="event-list" aria-live="polite"></div>
+      </aside>
+
+      <section class="detail panel" id="detail-panel">
+        <div class="empty-state">
+          <div class="orbital-icon">◌</div>
+          <h2>Select a mission event</h2>
+          <p>Inspect its disciplines, public evidence, limitations, and decision thread.</p>
+        </div>
+      </section>
+    </section>
+
+    <section class="provenance-legend panel">
+      <div class="panel-label">PROVENANCE LEGEND</div>
+      <div class="legend-grid">
+        <span class="badge flight">FLIGHT DATA</span><p>Direct public flight-derived value.</p>
+        <span class="badge nasa">NASA REPORTED</span><p>Publicly reported event or fact without raw telemetry here.</p>
+        <span class="badge derived">DERIVED</span><p>Deterministically calculated from public data.</p>
+        <span class="badge model">MODEL</span><p>Physical/statistical estimate with explicit assumptions.</p>
+        <span class="badge synthetic">SYNTHETIC</span><p>Invented only for testing or training.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Independent open-source project using publicly released NASA data. Not an official NASA application and not NASA-endorsed.
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://a2missionlab.dev/schema/mission_event.schema.json",
+  "title": "A2 MissionLab Mission Event",
+  "type": "object",
+  "required": [
+    "id",
+    "timestamp_utc",
+    "mission_phase",
+    "domain",
+    "title",
+    "summary",
+    "provenance_class",
+    "source_agency",
+    "source_title",
+    "source_url",
+    "mission_criticality",
+    "affected_disciplines"
+  ],
+  "properties": {
+    "id": {"type": "string"},
+    "timestamp_utc": {"type": "string", "format": "date-time"},
+    "mission_elapsed_time": {"type": ["string", "null"]},
+    "mission_phase": {"type": "string"},
+    "domain": {"type": "string"},
+    "title": {"type": "string"},
+    "summary": {"type": "string"},
+    "provenance_class": {
+      "type": "string",
+      "enum": ["FLIGHT_DATA", "NASA_REPORTED", "DERIVED", "MODEL", "SYNTHETIC"]
+    },
+    "source_agency": {"type": "string"},
+    "source_title": {"type": "string"},
+    "source_url": {"type": "string", "format": "uri"},
+    "source_product_id": {"type": ["string", "null"]},
+    "mission_criticality": {"type": "string", "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"]},
+    "affected_disciplines": {"type": "array", "items": {"type": "string"}},
+    "decision_thread": {
+      "type": ["object", "null"],
+      "properties": {
+        "detection": {"type": ["string", "null"]},
+        "evidence": {"type": ["string", "null"]},
+        "constraint": {"type": ["string", "null"]},
+        "options": {"type": "array", "items": {"type": "string"}},
+        "decision": {"type": ["string", "null"]},
+        "action": {"type": ["string", "null"]},
+        "outcome": {"type": ["string", "null"]}
+      }
+    },
+    "limitations": {"type": "string"}
+  }
+}

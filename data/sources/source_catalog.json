@@ -1,0 +1,90 @@
+[
+  {
+    "id": "nasa-arow-artemis2",
+    "domain": "flight_dynamics",
+    "title": "NASA Artemis II AROW flight-derived ephemeris",
+    "agency": "NASA",
+    "url": "https://www.nasa.gov/missions/artemis/artemis-2/track-nasas-artemis-ii-mission-in-real-time/",
+    "data_type": "ephemeris/state vectors",
+    "planned_use": "mission clock, trajectory, range, speed, geometry, event synchronization",
+    "cost": "$0",
+    "notes": "Primary trajectory backbone. Preserve source release/version metadata."
+  },
+  {
+    "id": "pds-artemis2-mission",
+    "domain": "mission_science",
+    "title": "Artemis II PDS Mission Archive",
+    "agency": "NASA Planetary Data System",
+    "url": "https://pds-geosciences.wustl.edu/missions/artemis2/mission.htm",
+    "data_type": "mission archive index",
+    "planned_use": "authoritative index for camera, audio, environment, and mission-document bundles",
+    "cost": "$0",
+    "notes": "SPICE bundle was delayed in the initial release; architecture should support later ingestion."
+  },
+  {
+    "id": "pds-artemis2-environment",
+    "domain": "eclss_environment",
+    "title": "Artemis II Orion environmental logger data",
+    "agency": "NASA Planetary Data System",
+    "url": "https://pds-geosciences.wustl.edu/missions/artemis2/mission.htm",
+    "data_type": "CSV/PDS4 temperature, relative humidity, dew point",
+    "planned_use": "time-series analysis, change points, mission-context correlation",
+    "cost": "$0",
+    "notes": "Two HOBO MX1101 data loggers sampled at 60-second cadence."
+  },
+  {
+    "id": "pds-artemis2-target-request",
+    "domain": "lunar_science",
+    "title": "Artemis II Lunar Science Team outgoing target request",
+    "agency": "NASA Planetary Data System",
+    "url": "https://pds-geosciences.wustl.edu/missions/artemis2/mission.htm",
+    "data_type": "JSON mission science target request",
+    "planned_use": "link planned lunar observations to mission time, targets, crew actions, and later images/audio",
+    "cost": "$0",
+    "notes": "Contains target metadata, timing, descriptions, requested actions, and coordinates for selected observations."
+  },
+  {
+    "id": "nasa-artemis2-science-report",
+    "domain": "lunar_science",
+    "title": "Artemis II Preliminary Lunar Science Report",
+    "agency": "NASA",
+    "url": "https://science.nasa.gov/feature/artemis-ii-preliminary-lunar-science-report/",
+    "data_type": "public science report",
+    "planned_use": "impact flashes, color observations, terminator science, eclipse/corona observations, Earth imagery analysis",
+    "cost": "$0",
+    "notes": "Narrative/report source; normalize claims separately from raw PDS products."
+  },
+  {
+    "id": "nasa-heatshield-rootcause",
+    "domain": "thermal_materials",
+    "title": "NASA Artemis I Orion heat shield char-loss root cause",
+    "agency": "NASA",
+    "url": "https://www.nasa.gov/missions/artemis/nasa-identifies-cause-of-artemis-i-orion-heat-shield-char-loss/",
+    "data_type": "engineering investigation summary",
+    "planned_use": "heritage risk closure thread linking Artemis I root cause to Artemis II trajectory mitigation and postflight results",
+    "cost": "$0",
+    "notes": "Do not describe this as an Artemis II pressure-vessel cracking event."
+  },
+  {
+    "id": "nasa-nairas",
+    "domain": "space_weather_radiation",
+    "title": "NAIRAS 3.0 at NASA CCMC",
+    "agency": "NASA CCMC",
+    "url": "https://ccmc.gsfc.nasa.gov/models/NAIRAS~3.0/",
+    "data_type": "radiation environment model / runs-on-request",
+    "planned_use": "modeled radiation-environment context along selected Artemis II trajectory points",
+    "cost": "$0",
+    "notes": "Runs-on-request may require user registration/identity and should clearly expose assumptions such as shielding depth."
+  },
+  {
+    "id": "nasa-omniweb",
+    "domain": "space_weather_radiation",
+    "title": "NASA OMNIWeb",
+    "agency": "NASA GSFC",
+    "url": "https://omniweb.gsfc.nasa.gov/ow.html",
+    "data_type": "solar wind, IMF, energetic-particle and geomagnetic context",
+    "planned_use": "external heliophysics environment synchronized with mission time",
+    "cost": "$0",
+    "notes": "External environment must not be mislabeled as astronaut absorbed dose."
+  }
+]
