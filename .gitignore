@@ -9,3 +9,4 @@ dist/
 # Raw mission archives should not be committed
 /data/raw/
 /data/processed/
+.venv/
