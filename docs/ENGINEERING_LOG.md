@@ -1385,3 +1385,232 @@ This will help determine whether public trajectory-solution differences primaril
 - cross-track separation;
 - velocity-state differences.
 
+# Phase 1F.4 — RTN State-Residual Decomposition
+
+Created:
+
+scripts/analysis/analyze_rtn_residuals.py
+
+Generated:
+
+data/processed/trajectory/oem_rtn_residuals.csv
+data/processed/trajectory/oem_rtn_summary.json
+
+docs/assets/rtn/
+
+## Goal
+
+Decompose public OEM state differences into physically meaningful
+Earth-centered radial, transverse/along-track, and normal/cross-track
+components rather than relying only on scalar 3-D differences.
+
+## Reference Frame
+
+The RTN basis is constructed from the April 10 public OEM reference state.
+
+R:
+
+Earth-centered radial direction.
+
+T:
+
+Transverse / local along-track direction.
+
+N:
+
+Normal / cross-track direction defined by the reference trajectory's
+specific angular momentum vector.
+
+For reference state r and v:
+
+R_hat = r / |r|
+
+N_hat = (r x v) / |r x v|
+
+T_hat = N_hat x R_hat
+
+For another OEM:
+
+delta_r = r_comparison - r_reference
+
+delta_R = delta_r dot R_hat
+
+delta_T = delta_r dot T_hat
+
+delta_N = delta_r dot N_hat
+
+The same basis is used to project inertial velocity-state differences.
+
+The velocity quantities are called delta-v_R, delta-v_T, and delta-v_N.
+
+They are NOT derivatives of rotating-frame RTN coordinates.
+
+## Major Results
+
+### Early OEM products
+
+April 2:
+
+R position RMS: 26.777 km
+T position RMS: 74.239 km
+N position RMS: 39.647 km
+
+Dominant RMS position axis: T
+
+April 3:
+
+R: 24.811 km
+T: 67.294 km
+N: 36.438 km
+
+Dominant axis: T
+
+April 4:
+
+R: 22.281 km
+T: 62.741 km
+N: 35.809 km
+
+Dominant axis: T
+
+### Interpretation
+
+The large early public OEM differences around lunar flyby are primarily
+along-track rather than simply radial Earth-distance differences.
+
+### Later OEM products
+
+April 8:
+
+R RMS: 3.319 km
+T RMS: 12.112 km
+N RMS: 3.644 km
+
+April 9:
+
+R RMS: 2.435 km
+T RMS: 7.593 km
+N RMS: 3.631 km
+
+The largest RMS component remains along-track.
+
+Near RTC-2, the later OEMs show predominantly negative along-track
+separation from the April 10 reference, with smaller radial and
+cross-track components.
+
+This establishes the geometry of the public solution difference but
+does not establish its internal navigation or targeting cause.
+
+## Frequency vs Magnitude
+
+April 8 and April 9 provide an important statistical example.
+
+April 9:
+
+R is the largest position component at 83.3% of common epochs.
+
+T is the largest at only 15.6%.
+
+However:
+
+T RMS = 7.593 km
+
+R RMS = 2.435 km
+
+Therefore R dominates more frequently, but generally at smaller
+amplitudes, while less-frequent T excursions are much larger.
+
+Dominant-component frequency and RMS magnitude answer different
+questions.
+
+## Position vs Velocity
+
+The earliest OEMs have along-track-dominated position residuals but
+radial-dominated velocity RMS.
+
+This demonstrates that the dominant instantaneous velocity-state
+difference does not need to match the accumulated position-difference
+direction.
+
+Small velocity differences integrated over long mission intervals can
+produce much larger position separation.
+
+## Entry Interface Warning
+
+Several products show large velocity-residual spikes near the terminal
+end of the OEM trajectory.
+
+These values will not be interpreted yet.
+
+NASA also released a separate high-rate Post-RTC3-to-Entry-Interface
+trajectory product, and entry dynamics will be analyzed separately.
+
+## Lunar Flyby Frame Limitation
+
+This RTN frame is Earth-centered.
+
+Near lunar closest approach, the Earth-centered RTN basis changes
+rapidly and does not provide the most natural frame for detailed lunar
+targeting analysis.
+
+Future advanced lunar-flyby analysis may use Moon-centered geometry
+and B-plane targeting quantities.
+
+## Interpretation Limits
+
+RTN residuals are public solution-to-solution differences.
+
+They are NOT:
+
+- navigation errors;
+- spacecraft-state uncertainty;
+- FDO tolerances;
+- flight-rule limits;
+- maneuver execution error.
+
+The April 10 public OEM remains a comparison reference, not a proven
+absolute truth trajectory.
+
+## RTN Validation
+
+Created:
+
+scripts/validation/validate_rtn_residuals.py
+
+The RTN decomposition was validated against both its reconstructed vector
+magnitudes and the independent scalar residuals produced during Phase 1E.
+
+Results:
+
+Rows checked:
+23,188
+
+Missing Phase 1E comparison rows:
+0
+
+Maximum position norm reconstruction error:
+8.526512829121e-14 km
+
+Maximum velocity norm reconstruction error:
+2.220446049250e-16 m/s
+
+Maximum RTN position norm versus Phase 1E scalar difference:
+2.842170943040e-14 km
+
+Maximum RTN velocity norm versus Phase 1E scalar difference:
+7.105427357601e-15 m/s
+
+Result:
+
+OK: RTN decomposition preserves position and velocity residual magnitudes.
+
+The remaining numerical differences are at floating-point roundoff scale
+and are many orders of magnitude below the validation tolerances.
+
+This validates the internal consistency of the RTN transformation and its
+agreement with the earlier Phase 1E state-difference calculation.
+
+It does not establish that the April 10 public OEM is an absolute truth
+trajectory, nor does it turn solution-to-solution differences into
+navigation error.
+
