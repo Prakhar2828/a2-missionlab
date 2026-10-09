@@ -1,0 +1,54 @@
+[
+  {
+    "id": "otc3",
+    "timestamp_utc": "2026-04-06T03:03:00Z",
+    "name": "Outbound Correction Burn",
+    "short_name": "OTC",
+    "type": "BURN",
+    "duration_seconds": 17.5,
+    "provenance": "NASA_REPORTED",
+    "source": "https://www.nasa.gov/blogs/missions/2026/04/05/artemis-ii-flight-day-5-correction-burn-complete/"
+  },
+  {
+    "id": "pericynthion",
+    "timestamp_utc": "2026-04-06T23:00:46.177998Z",
+    "name": "Derived Pericynthion",
+    "short_name": "PC",
+    "type": "DERIVED_GEOMETRY",
+    "provenance": "DERIVED",
+    "source": "A2 MissionLab"
+  },
+  {
+    "id": "rtc1",
+    "timestamp_utc": "2026-04-08T00:03:00Z",
+    "name": "Return Correction Burn 1",
+    "short_name": "RTC-1",
+    "type": "BURN",
+    "duration_seconds": 15,
+    "delta_v_ft_s": 1.6,
+    "provenance": "NASA_REPORTED",
+    "source": "https://www.nasa.gov/blogs/missions/2026/04/07/artemis-ii-flight-day-7-first-return-correction-burn-complete/"
+  },
+  {
+    "id": "rtc2",
+    "timestamp_utc": "2026-04-10T02:53:00Z",
+    "name": "Return Correction Burn 2",
+    "short_name": "RTC-2",
+    "type": "BURN",
+    "duration_seconds": 9,
+    "delta_v_ft_s": 5.3,
+    "provenance": "NASA_REPORTED",
+    "source": "https://www.nasa.gov/blogs/artemis/2026/04/"
+  },
+  {
+    "id": "rtc3",
+    "timestamp_utc": "2026-04-10T18:53:00Z",
+    "name": "Return Correction Burn 3",
+    "short_name": "RTC-3",
+    "type": "BURN",
+    "duration_seconds": 8,
+    "delta_v_ft_s": 4.2,
+    "provenance": "NASA_REPORTED",
+    "source": "https://www.nasa.gov/blogs/missions/2026/04/10/artemis-ii-flight-day-10-crew-completes-final-burn-before-splashdown/"
+  }
+]

@@ -925,7 +925,8 @@ python scriptsalidationalidate_trajectory.py
 python scripts\processinguild_primary_trajectory.py
 .\.venv\Scripts\python.exe scripts\ingestion\download_spice_kernels.py
 .\.venv\Scripts\python.exe scripts\processingdd_lunar_geometry.py
-.\.venv\Scripts\python.exe scriptsnalysisefine_lunar_closest_approach.py
+.\.venv\Scripts\python.exe scriptsnalysis
+efine_lunar_closest_approach.py
 .\.venv\Scripts\python.exe scriptsnalysis\classify_mission_phases.py
 .\.venv\Scripts\python.exe scriptsnalysis\compare_oem_products.py
 ```
@@ -984,3 +985,403 @@ Before every commit or merge:
 12. Only then commit.
 
 The README should stay concise. This log preserves the technical depth, learning trail, and proof behind the project.
+
+# Phase 1F.1 — Time-Resolved OEM Evolution
+
+Created:
+
+scripts/analysis/analyze_oem_evolution.py
+
+## Goal
+
+Move beyond summary statistics and examine how the public NASA/JSC/FDO OEM products differ from the April 10 public OEM as a function of mission time.
+
+## Analysis definitions
+
+### Effectively identical state
+
+A common epoch is considered effectively identical when:
+
+position difference <= 0.000001 km
+
+and
+
+velocity difference <= 0.000001 m/s
+
+The position tolerance corresponds to approximately 1 millimeter.
+
+This is an A2 MissionLab numerical comparison tolerance, not a NASA operational tolerance.
+
+### Meaningful difference threshold
+
+For exploratory analysis:
+
+position difference >= 1 km
+
+is labeled a meaningful solution difference.
+
+This is NOT a NASA navigation limit, flight rule, acceptable error, or mission threshold.
+
+## Results
+
+### April 2 OEM v3
+
+Effectively identical epochs: 7.37%
+Median difference: 41.721 km
+Maximum: 209.372 km
+Maximum epoch: 2026-04-06T22:58:51.667Z
+
+### April 3 OEM
+
+Effectively identical epochs: 17.93%
+Median difference: 31.403 km
+Maximum: 192.122 km
+Maximum epoch: 2026-04-06T23:02:51.667Z
+
+### April 4 OEM
+
+Effectively identical epochs: 26.27%
+Median difference: 29.513 km
+Maximum: 178.682 km
+Maximum epoch: 2026-04-06T23:02:51.667Z
+
+### April 6 Pre-OTC3 OEM
+
+Effectively identical epochs: 19.31%
+Median difference: 23.908 km
+Maximum: 78.421 km
+Maximum epoch: 2026-04-10T02:53:28.122Z
+
+### April 7 Pre-Lunar-Flyby OEM
+
+Effectively identical epochs: 9.24%
+Median difference: 10.505 km
+Maximum: 71.734 km
+Maximum epoch: 2026-04-10T02:53:28.122Z
+
+### April 8 OEM
+
+Effectively identical epochs: 73.24%
+Median difference: 0 km
+Maximum: 48.957 km
+Maximum epoch: 2026-04-10T02:53:28.122Z
+
+### April 9 OEM
+
+Effectively identical epochs: 81.94%
+Median difference: 0 km
+Maximum: 34.547 km
+Maximum epoch: 2026-04-10T02:53:28.122Z
+
+## Major observations
+
+1. Large portions of the later public OEMs are exactly or effectively identical to the April 10 reference.
+
+2. Every product has a median difference of zero for epochs at or before its creation time.
+
+This suggests, but does not prove, that large portions of the already-established trajectory history may have been preserved between releases while later trajectory states changed.
+
+3. Early April 2–4 products show their largest differences around lunar pericynthion.
+
+4. The April 6–9 products all show their largest difference at approximately 2026-04-10 02:53 UTC.
+
+NASA publicly reports that RTC-2 began at 10:53 p.m. EDT April 9, equivalent to 02:53 UTC April 10.
+
+This is a strong temporal alignment but NOT yet evidence that the maneuver caused the observed OEM solution differences.
+
+## Scientific-order rule
+
+We intentionally measured the solution differences before adding mission events.
+
+Next:
+
+measure -> overlay documented events -> inspect alignment -> interpret cautiously
+
+rather than assuming maneuver causality first.
+
+# Phase 1F.2 — Overlay of Documented Trajectory Events
+
+Created:
+
+data/reference/trajectory_events.json
+scripts/analysis/overlay_trajectory_events.py
+
+Generated:
+
+docs/assets/phase1f_oem_with_events.svg
+
+## Goal
+
+Overlay independently measured public OEM solution differences with documented Artemis II trajectory events only after the solution-difference analysis had already been performed.
+
+This avoids selecting events in advance and then searching for apparent confirmation.
+
+## Events
+
+### Outbound Correction Burn
+
+UTC:
+2026-04-06T03:03:00Z
+
+NASA reported the burn began at 11:03 p.m. EDT on April 5 and lasted 17.5 seconds.
+
+Provenance:
+NASA_REPORTED
+
+### Pericynthion
+
+UTC:
+2026-04-06T23:00:46.177998Z
+
+This timestamp was independently derived by A2 MissionLab using cubic Hermite interpolation of the NASA OEM trajectory and JPL DE440 lunar geometry.
+
+Provenance:
+DERIVED
+
+### Return Correction Burn 1
+
+UTC:
+2026-04-08T00:03:00Z
+
+Duration:
+15 seconds
+
+Reported delta-v:
+1.6 ft/s
+
+Provenance:
+NASA_REPORTED
+
+### Return Correction Burn 2
+
+UTC:
+2026-04-10T02:53:00Z
+
+Duration:
+9 seconds
+
+Reported delta-v:
+5.3 ft/s
+
+Provenance:
+NASA_REPORTED
+
+### Return Correction Burn 3
+
+UTC:
+2026-04-10T18:53:00Z
+
+Duration:
+8 seconds
+
+Reported delta-v:
+4.2 ft/s
+
+Provenance:
+NASA_REPORTED
+
+## Major Observations
+
+1. The April 2, April 3, and April 4 public OEM products reach their largest position differences from the April 10 reference around lunar pericynthion.
+
+2. The April 6, April 7, April 8, and April 9 products reach their maximum position difference at approximately:
+
+2026-04-10T02:53:28Z
+
+This occurs approximately 28 seconds after the publicly reported start of RTC-2 at:
+
+2026-04-10T02:53:00Z
+
+This is a strong temporal alignment.
+
+It is NOT yet proof that RTC-2 caused the solution difference.
+
+3. RTC-1 occurs during a period where several newer OEM products begin or continue diverging from the April 10 reference.
+
+4. By RTC-3, most public OEM differences are decreasing toward Entry Interface, although individual products retain different behavior.
+
+## Interpretation Limits
+
+The plotted curves represent differences between publicly released trajectory solutions.
+
+They do not directly represent:
+
+- navigation error;
+- targeting error;
+- spacecraft position uncertainty;
+- Flight Dynamics Officer allowable error;
+- maneuver execution error;
+- trajectory-control tolerance.
+
+No causal relationship between a maneuver and a solution change is claimed without further evidence.
+
+## Scientific Workflow
+
+The analysis followed:
+
+measure solution differences
+→ visualize them
+→ add documented events
+→ inspect temporal alignment
+→ investigate possible relationships
+
+rather than:
+
+assume maneuver causation
+→ construct analysis around that assumption.
+
+# Phase 1F.3 — Event-Window Analysis
+
+Created:
+
+scripts/analysis/analyze_event_windows.py
+
+Generated:
+
+data/processed/trajectory/event_window_analysis.json
+
+## Goal
+
+Quantify public OEM solution behavior within ±30 minutes of documented trajectory events rather than relying only on visual inspection of the time-history plot.
+
+For each event and each public OEM product, the analysis records:
+
+- nearest state approximately 30 minutes before;
+- nearest state at the event;
+- nearest state approximately 30 minutes after;
+- net change in 3-D position difference across the window.
+
+The analysis measures temporal behavior only.
+
+It does not establish causal relationships between maneuvers and trajectory-solution differences.
+
+## OTC
+
+Early OEM products showed large absolute differences from the April 10 reference around OTC:
+
+approximately 166–186 km.
+
+However, their net changes across the ±30 minute window were only approximately +1.6 to +1.9 km.
+
+Later public OEM products were effectively identical to the April 10 reference during this interval.
+
+### Interpretation
+
+No obvious discontinuous solution change is visible in the 3-D position-difference magnitude at OTC.
+
+## Pericynthion
+
+The April 2–4 products reached approximately:
+
+- 209 km;
+- 192 km;
+- 179 km;
+
+respectively around lunar closest approach.
+
+The curves remained relatively smooth across the ±30 minute window.
+
+### Interpretation
+
+The early trajectory products have their greatest separation from the April 10 reference near lunar flyby geometry.
+
+This does not imply that pericynthion itself caused a trajectory-solution change.
+
+## RTC-1
+
+Differences changed only modestly during the ±30 minute interval.
+
+No strong step-like behavior is visible in the position-difference magnitude.
+
+## RTC-2
+
+Several later OEM products reach their absolute maximum position difference almost exactly at RTC-2.
+
+Examples:
+
+April 6 product:
+~78.42 km
+
+April 7 product:
+~71.73 km
+
+April 8 product:
+~48.96 km
+
+April 9 product:
+~34.55 km
+
+However, the local windows show smooth behavior.
+
+Example:
+
+April 8:
+48.13 km
+→ 48.96 km at RTC-2
+→ 47.66 km
+
+April 9:
+33.83 km
+→ 34.55 km at RTC-2
+→ 33.68 km
+
+### Interpretation
+
+The maxima are strongly temporally aligned with RTC-2.
+
+The current analysis does NOT demonstrate a discontinuity caused by the burn.
+
+Therefore:
+
+SUPPORTED:
+The maximum public OEM solution difference is temporally aligned with RTC-2.
+
+NOT YET SUPPORTED:
+RTC-2 caused the observed solution difference.
+
+## RTC-3
+
+Several later OEM differences decrease across the event window.
+
+Examples:
+
+April 7:
+3.96 km
+→ 2.11 km
+→ 1.89 km
+
+April 8:
+3.32 km
+→ 1.99 km
+→ 1.77 km
+
+April 9:
+2.80 km
+→ 1.99 km
+→ 1.77 km
+
+The behavior is interesting but does not establish that RTC-3 caused solution convergence.
+
+## Key Learning
+
+A scalar 3-D position-difference magnitude is insufficient for diagnosing maneuver effects.
+
+A maneuver primarily changes spacecraft velocity, while resulting position differences evolve afterward.
+
+Additionally, the magnitude removes directional information.
+
+The next analysis should therefore decompose position and velocity differences into a physically meaningful spacecraft-centered frame such as RTN:
+
+R — radial
+
+T — transverse / along-track
+
+N — normal / cross-track
+
+This will help determine whether public trajectory-solution differences primarily reflect:
+
+- radial separation;
+- along-track timing/trajectory separation;
+- cross-track separation;
+- velocity-state differences.
+
