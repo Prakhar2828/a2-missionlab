@@ -11,13 +11,21 @@
 A2 MissionLab should leave an auditable trail showing:
 
 - public source data used;
+
 - what NASA/JPL provided directly;
+
 - what we derived ourselves;
+
 - mathematical assumptions;
+
 - code transformations;
+
 - validation methods;
+
 - failures and corrections;
+
 - supported conclusions vs. hypotheses;
+
 - technical and mission-operations learnings.
 
 ### Provenance labels
@@ -35,8 +43,11 @@ A2 MissionLab should leave an auditable trail showing:
 Do not upgrade a hypothesis into a fact.
 
 Example:
+
 - Supported: two public OEM products differ by 40 km at an epoch.
+
 - Not yet supported: the difference was caused by a navigation update or trajectory correction.
+
 - Correct wording until proven: **solution-to-solution difference**.
 
 ---
@@ -48,69 +59,111 @@ Example:
 Create a zero-cost, public, open-source foundation for reconstructing Artemis II mission operations and engineering using public NASA data.
 
 Long-term coverage:
+
 - mission timeline
+
 - flight dynamics
+
 - GNC
+
 - propulsion
+
 - communications
+
 - ECLSS
+
 - space weather and radiation
+
 - materials/TPS
+
 - entry and recovery
+
 - lunar science
+
 - crew observations
+
 - anomalies and decisions
+
 - postflight engineering
+
 - AI-assisted mission analysis
 
 ## Initial architecture
 
 The first prototype established:
+
 - static web application
+
 - mission-event schema
+
 - source catalog
+
 - provenance taxonomy
+
 - decision-thread representation
+
 - validation tooling
+
 - project disclaimer/documentation
 
 Initial structure:
 
 ```text
+
 a2-missionlab/
+
 ├── README.md
+
 ├── LICENSE
+
 ├── DISCLAIMER.md
+
 ├── index.html
+
 ├── styles.css
+
 ├── app.js
+
 ├── docs/
+
 ├── data/
+
 └── scripts/
+
 ```
 
 ## Validation
 
 ```powershell
+
 python scripts/validate_data.py
+
 ```
 
 Observed:
 
 ```text
+
 OK: 8 mission events and 8 sources validated.
+
 ```
 
 Local server:
 
 ```powershell
+
 python -m http.server 8000
+
 ```
 
 Successful loads:
+
 - `/`
+
 - `/styles.css`
+
 - `/app.js`
+
 - `/data/seed/mission_events.json`
 
 `favicon.ico` returned 404.
@@ -126,17 +179,23 @@ First push failed because Windows Git credentials authenticated as another GitHu
 Observed:
 
 ```text
+
 remote: Permission to Prakhar2828/a2-missionlab.git denied to Prakhar6565.
+
 ```
 
 Fix:
 
 ```powershell
+
 @"
+
 protocol=https
+
 host=github.com
 
 "@ | git credential-manager erase
+
 ```
 
 After re-authenticating as the correct account, push succeeded.
@@ -148,7 +207,9 @@ After re-authenticating as the correct account, push succeeded.
 Observed Phase 0 commit:
 
 ```text
+
 0f16378 Initialize A2 MissionLab Phase 0 foundation
+
 ```
 
 ---
@@ -158,17 +219,29 @@ Observed Phase 0 commit:
 Goal: create a trustworthy temporal and geometric spine to which later subsystems can attach.
 
 ```text
+
 NASA flight data
-      ↓
+
+      ↓
+
 Mission clock
-      ↓
+
+      ↓
+
 Orion state vectors
-      ↓
+
+      ↓
+
 Earth/Moon geometry
-      ↓
+
+      ↓
+
 mission phases
-      ↓
+
+      ↓
+
 events / systems / science / anomalies
+
 ```
 
 ---
@@ -182,22 +255,31 @@ NASA Artemis II public AROW ephemeris archive:
 `all-artemis-ii-oem-files.zip`
 
 Source:
+
 https://www.nasa.gov/missions/artemis/artemis-2/track-nasas-artemis-ii-mission-in-real-time/
 
 ## Archive contents
 
 Found:
+
 - 9 standard CCSDS OEM products
+
 - 1 separate high-rate post-RTC3-to-Entry-Interface trajectory product using a different format
 
 OEM metadata included:
 
 ```text
+
 ORIGINATOR = NASA/JSC/FOD/FDO
+
 OBJECT_NAME = EM2
+
 CENTER_NAME = EARTH
+
 REF_FRAME = EME2000
+
 TIME_SYSTEM = UTC
+
 ```
 
 ### Interpretation correction
@@ -215,16 +297,25 @@ We will not claim exactly how each product was generated until NASA documentatio
 Each row contains:
 
 ```text
+
 timestamp
+
 x y z
+
 vx vy vz
+
 ```
 
 For these products:
+
 - position: km
+
 - velocity: km/s
+
 - center: Earth
+
 - frame: EME2000
+
 - time system: UTC
 
 ## Parser
@@ -232,16 +323,25 @@ For these products:
 Created:
 
 ```text
+
 scripts/ingestion/parse_oem.py
+
 ```
 
 It:
+
 1. opens the outer ZIP;
+
 2. opens nested ZIPs;
+
 3. skips the non-OEM entry file;
+
 4. parses `.asc` OEMs;
+
 5. preserves metadata;
+
 6. writes clean CSVs;
+
 7. creates a manifest.
 
 ## Parsed counts
@@ -265,13 +365,19 @@ The separate `2026.04.10 - Post-RTC3 to EI` file is intentionally deferred for e
 `.gitignore` includes:
 
 ```text
+
 /data/raw/
+
 /data/processed/
+
 ```
 
 Reason:
+
 - public raw archives can be downloaded reproducibly;
+
 - generated products can be recreated from code;
+
 - Git should track transformation logic, metadata, and documentation rather than large/redundant generated files.
 
 ---
@@ -281,14 +387,19 @@ Reason:
 Created:
 
 ```text
+
 scripts/validation/validate_trajectory.py
+
 ```
 
 ## Checks
 
 ### Structural integrity
+
 - expected CSV exists
+
 - metadata exists
+
 - row count matches manifest
 
 ### Metadata integrity
@@ -296,14 +407,21 @@ scripts/validation/validate_trajectory.py
 Expected:
 
 ```text
+
 CENTER_NAME = EARTH
+
 REF_FRAME = EME2000
+
 TIME_SYSTEM = UTC
+
 ```
 
 ### Temporal integrity
+
 - timestamps strictly increase
+
 - first state equals `START_TIME`
+
 - final state equals `STOP_TIME`
 
 ### Numerical integrity
@@ -312,20 +430,26 @@ All six state-vector components must be finite.
 
 Earth-centered radius:
 
-\[
+$$
+
 r = \sqrt{x^2+y^2+z^2}
-\]
+
+$$
 
 Inertial speed:
 
-\[
+$$
+
 v = \sqrt{v_x^2+v_y^2+v_z^2}
-\]
+
+$$
 
 ## Result
 
 ```text
+
 OK: 9 Artemis II OEM trajectory products validated.
+
 ```
 
 Observed Earth-centered radii reached about 413,144–413,148 km.
@@ -347,13 +471,17 @@ Moon-relative geometry requires the Moon's time-dependent position in the same f
 Launch epoch configured:
 
 ```text
+
 2026-04-01T22:35:12Z
+
 ```
 
 Stored in:
 
 ```text
+
 data/config/mission.json
+
 ```
 
 Used to derive Mission Elapsed Time (MET).
@@ -361,17 +489,25 @@ Used to derive Mission Elapsed Time (MET).
 ## Primary OEM working reference
 
 ```text
+
 Artemis_II_OEM_2026_04_10_Post-ICPS-Sep-to-EI.csv
+
 ```
 
 Rationale:
+
 - latest full pre-entry OEM in the public archive
+
 - spans the mission arc through Entry Interface
+
 - useful comparison reference
 
 Qualification:
+
 - “primary” is an A2 MissionLab design choice
+
 - it is not proven to be an absolute postflight truth solution
+
 - all nine public OEMs are preserved for comparison
 
 ## Derived metrics
@@ -379,41 +515,57 @@ Qualification:
 Created:
 
 ```text
+
 scripts/processing/build_primary_trajectory.py
+
 ```
 
 Earth-center distance:
 
-\[
+$$
+
 r = \sqrt{x^2+y^2+z^2}
-\]
+
+$$
 
 Inertial speed:
 
-\[
+$$
+
 v = \sqrt{v_x^2+v_y^2+v_z^2}
-\]
+
+$$
 
 Earth radial velocity:
 
-\[
-v_r = rac{\mathbf r \cdot \mathbf v}{\|\mathbf r\|}
-\]
+$$
+
+v_r = \frac{\mathbf r \cdot \mathbf v}{\|\mathbf r\|}
+
+$$
 
 Interpretation:
+
 - positive → moving away from Earth
+
 - negative → moving toward Earth
+
 - near zero → Earth-distance turning region
 
 ## Observed result
 
 ```text
+
 States: 3262
+
 Closest Earth-center distance:
+
 6,515.0 km at 2026-04-10T23:53:16.723
 
 Maximum Earth-center distance:
+
 413,144.4 km at 2026-04-06T23:02:51.667
+
 ```
 
 ### Validation
@@ -429,28 +581,37 @@ The maximum Earth distance closely reproduced NASA's public maximum-distance rep
 NASA OEM gives:
 
 ```text
+
 Orion relative to Earth
+
 ```
 
 To calculate Moon-relative geometry:
 
 ```text
+
 Moon relative to Earth
+
 ```
 
 must be known at the same epoch in the same inertial frame.
 
 ## Python dependencies
 
+Pinned direct dependencies at Phase 1 closure:
+
 ```text
-spiceypy==8.2.0
 numpy==2.5.3
+spiceypy==8.2.0
+matplotlib==3.11.2
 ```
 
 Recorded in:
 
 ```text
+
 requirements.txt
+
 ```
 
 ## JPL kernels
@@ -458,20 +619,27 @@ requirements.txt
 Downloaded via:
 
 ```text
+
 scripts/ingestion/download_spice_kernels.py
+
 ```
 
 - `de440s.bsp` — planetary/lunar ephemeris
+
 - `naif0012.tls` — leap-second kernel
+
 - `pck00011.tpc` — body constants/radii
 
 Source:
+
 https://naif.jpl.nasa.gov/naif/data_generic.html
 
 SPICE load test:
 
 ```text
+
 SPICE kernels loaded successfully
+
 ```
 
 ## Reference-frame compatibility
@@ -484,49 +652,68 @@ For this analysis they are treated as the compatible inertial frame needed for v
 
 ## Moon-relative math
 
-\[
-\mathbf r_{O/M}=\mathbf r_O-\mathbf r_M
-\]
+$$
 
-\[
+\mathbf r_{O/M}=\mathbf r_O-\mathbf r_M
+
+$$
+
+$$
+
 \mathbf v_{O/M}=\mathbf v_O-\mathbf v_M
-\]
+
+$$
 
 Moon-center distance:
 
-\[
+$$
+
 d_{O/M}=\|\mathbf r_{O/M}\|
-\]
+
+$$
 
 Mean-radius lunar altitude:
 
-\[
+$$
+
 h=d_{O/M}-R_{Moon,mean}
-\]
+
+$$
 
 SPICE mean lunar radius observed:
 
 ```text
+
 1737.400 km
+
 ```
 
 Moon-relative speed:
 
-\[
+$$
+
 v_{rel}=\|\mathbf v_{O/M}\|
-\]
+
+$$
 
 Moon radial velocity:
 
-\[
+$$
+
 v_{r,M}=
-rac{\mathbf r_{O/M}\cdot\mathbf v_{O/M}}
+
+\frac{\mathbf r_{O/M}\cdot\mathbf v_{O/M}}
+
 {\|\mathbf r_{O/M}\|}
-\]
+
+$$
 
 Interpretation:
+
 - negative → approaching Moon
+
 - zero → stationary Moon distance
+
 - positive → receding
 
 ## Geometric SPICE state
@@ -534,7 +721,9 @@ Interpretation:
 Used:
 
 ```python
+
 spice.spkezr("MOON", et, "J2000", "NONE", "EARTH")
+
 ```
 
 `NONE` means geometric state without apparent light-time/stellar-aberration correction.
@@ -548,13 +737,17 @@ This is appropriate for physical state comparison at a common epoch.
 Initial:
 
 ```python
+
 spice.str2et(f"{timestamp} UTC")
+
 ```
 
 produced:
 
 ```text
+
 SPICE(UNPARSEDTIME)
+
 ```
 
 for timestamp strings containing the ISO `T`.
@@ -562,17 +755,25 @@ for timestamp strings containing the ISO `T`.
 Fix:
 
 ```python
+
 spice_time = timestamp.replace("T", " ") + " UTC"
+
 et = spice.str2et(spice_time)
+
 ```
 
 ### Learning
 
 Mission timing must be explicit about:
+
 - format
+
 - time system
+
 - UTC
+
 - leap seconds
+
 - ephemeris time conversions
 
 ---
@@ -582,18 +783,27 @@ Mission timing must be explicit about:
 Created:
 
 ```text
+
 scripts/processing/add_lunar_geometry.py
+
 ```
 
 Observed nearest OEM sample:
 
 ```text
+
 UTC: 2026-04-06T22:58:51.667
+
 MET: 05:00:23:40
+
 Moon-center distance: 8,282.980 km
+
 Mean-radius lunar altitude: 6,545.580 km
+
 Moon-relative speed: 1.381019 km/s
+
 Moon radial velocity: -0.018195 km/s
+
 ```
 
 ### Interpretation
@@ -609,40 +819,56 @@ It was only the closest discrete OEM sample.
 Created:
 
 ```text
+
 scripts/analysis/refine_lunar_closest_approach.py
+
 ```
 
 ## Cubic Hermite interpolation
 
 The OEM gives endpoint positions and velocities, allowing a smoother continuous interpolation than straight-line position interpolation.
 
-For normalized interval coordinate \(u\):
+For normalized interval coordinate \\(u\\):
 
-\[
+$$
+
 h_{00}=2u^3-3u^2+1
-\]
 
-\[
+$$
+
+$$
+
 h_{10}=u^3-2u^2+u
-\]
 
-\[
+$$
+
+$$
+
 h_{01}=-2u^3+3u^2
-\]
 
-\[
+$$
+
+$$
+
 h_{11}=u^3-u^2
-\]
+
+$$
 
 Position:
 
-\[
+$$
+
 \mathbf p(u)=
+
 h_{00}\mathbf p_0
+
 +h_{10}\Delta t\mathbf v_0
+
 +h_{01}\mathbf p_1
+
 +h_{11}\Delta t\mathbf v_1
-\]
+
+$$
 
 The derivative gives interpolated velocity.
 
@@ -650,26 +876,38 @@ The derivative gives interpolated velocity.
 
 We minimize:
 
-\[
+$$
+
 d(t)=\|\mathbf r_O(t)-\mathbf r_M(t)\|
-\]
+
+$$
 
 over the short interval surrounding closest approach.
 
 Why golden-section search:
+
 - one-dimensional minimization
+
 - deterministic
+
 - simple to audit
+
 - no SciPy dependency
 
 ## Refined result
 
 ```text
+
 UTC: 2026-04-06T23:00:46.177998+00:00
+
 Moon-center distance: 8,281.938 km
+
 Mean-radius lunar altitude: 6,544.538 km
+
 Moon-relative speed: 1.381073 km/s
+
 Moon radial velocity: -0.000000005 km/s
+
 ```
 
 Near-zero radial velocity is exactly what we expect at a local minimum in Moon distance.
@@ -677,14 +915,19 @@ Near-zero radial velocity is exactly what we expect at a local minimum in Moon d
 ## External validation
 
 NASA publicly reported about:
+
 - 7:00 p.m. EDT
+
 - 4,067 miles
+
 - 6,545 km above lunar surface
 
 Our result:
 
 ```text
+
 6,544.538 km
+
 ```
 
 Difference from NASA's rounded value is roughly 1 km (~0.02%).
@@ -696,8 +939,11 @@ NASA also publicly reported Moon-relative speed around 3,139 mph.
 Our derived:
 
 ```text
+
 1.381073 km/s
+
 ≈ 3,089 mph
+
 ```
 
 Difference: roughly 1.6%.
@@ -715,56 +961,77 @@ We will not force our value to match.
 Created:
 
 ```text
+
 scripts/analysis/classify_mission_phases.py
+
 ```
 
 ## NASA-reported boundary
 
 ```text
+
 41,072 miles
+
 ```
 
 Using:
 
-\[
+$$
+
 1\ mile=1.609344\ km
-\]
+
+$$
 
 gives approximately:
 
 ```text
+
 66,099.0 km
+
 ```
 
 Provenance:
+
 - SOI boundary distance = **NASA REPORTED**
+
 - crossing times = **DERIVED**
 
 ## Crossing method
 
 For adjacent samples:
+
 1. determine inside/outside threshold
+
 2. detect crossing
+
 3. linearly interpolate crossing time
 
 ## Results
 
 ```text
+
 Derived SOI entry:
+
 2026-04-06T04:38:07.532302+00:00
 
 Derived SOI exit:
+
 2026-04-07T17:23:41.922211+00:00
 
 Time inside SOI:
+
 36.76 hours
 
 Pericynthion:
+
 2026-04-06T23:00:46.177998+00:00
 
 Maximum Earth-center distance:
+
 413,144.445 km
+
 2026-04-06T23:02:51.667
+
 ```
 
 ## External validation
@@ -780,10 +1047,15 @@ NASA reporting placed exit around 1:23 p.m. EDT.
 ## A2 MissionLab geometric phases
 
 ```text
+
 OUTBOUND_TRANSIT
+
 LUNAR_APPROACH
+
 LUNAR_DEPARTURE
+
 TRANS_EARTH_RETURN
+
 ```
 
 These are A2 MissionLab analytical labels, not official NASA phase names.
@@ -795,7 +1067,9 @@ These are A2 MissionLab analytical labels, not official NASA phase names.
 Created:
 
 ```text
+
 scripts/analysis/compare_oem_products.py
+
 ```
 
 ## Question
@@ -805,33 +1079,47 @@ How do successive public NASA/JSC/FDO OEM products differ from the April 10 publ
 ## Method
 
 At common epochs:
+
 1. April 10 OEM is used as comparison reference
+
 2. other OEM is Hermite-interpolated to same epoch
+
 3. calculate 3-D position difference
+
 4. calculate 3-D velocity difference
+
 5. separate epochs at/before creation from epochs after creation
 
 Position difference:
 
-\[
+$$
+
 \Delta r=\|\mathbf r_A-\mathbf r_B\|
-\]
+
+$$
 
 Velocity difference:
 
-\[
+$$
+
 \Delta v=\|\mathbf v_A-\mathbf v_B\|
-\]
+
+$$
 
 ## Interpretation rule
 
 These are **solution-to-solution differences**.
 
 They are not automatically:
+
 - navigation errors
+
 - prediction errors
+
 - targeting errors
+
 - maneuver errors
+
 - filter corrections
 
 ## Results
@@ -856,8 +1144,11 @@ Broadly true, but not perfectly monotonic.
 Example:
 
 ```text
+
 Apr 3 post-creation median: 37.940 km
+
 Apr 4 post-creation median: 49.605 km
+
 ```
 
 Therefore we should not call this simple convergence.
@@ -867,8 +1158,11 @@ Therefore we should not call this simple convergence.
 April 8 and April 9 have median 0 km, but:
 
 ```text
+
 Apr 8 p95 = 38.371 km
+
 Apr 9 p95 = 26.258 km
+
 ```
 
 So large portions match exactly/effectively exactly while other portions differ materially.
@@ -881,20 +1175,33 @@ This remains unproven.
 
 ---
 
-# Phase 1F — Planned Next Step
+# Phase 1F — Analysis Plan (Completed)
+
+This section records the analysis plan that led to Phase 1F.1–F.4. The planned work is now complete and documented in the sections below.
+
 
 Convert OEM comparison statistics into an auditable time-history analysis.
 
 For each OEM:
+
 - percent common epochs exactly matching April 10
+
 - median difference before product creation
+
 - median difference after product creation
+
 - maximum position difference
+
 - timestamp of maximum
+
 - maximum velocity difference
+
 - timestamp of maximum
+
 - first meaningful divergence
+
 - last meaningful divergence
+
 - time-history plot
 
 Then overlay NASA-reported trajectory events **after** measuring the differences.
@@ -902,33 +1209,59 @@ Then overlay NASA-reported trajectory events **after** measuring the differences
 Scientific order:
 
 ```text
+
 measure
-   ↓
+
+   ↓
+
 visualize
-   ↓
+
+   ↓
+
 overlay documented events
-   ↓
+
+   ↓
+
 test relationships
-   ↓
+
+   ↓
+
 interpret
+
 ```
 
 ---
 
 # Reproducibility Commands
 
+Run from the repository root:
+
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
-python scripts\ingestion\parse_oem.py
-python scriptsalidationalidate_trajectory.py
-python scripts\processinguild_primary_trajectory.py
-.\.venv\Scripts\python.exe scripts\ingestion\download_spice_kernels.py
-.\.venv\Scripts\python.exe scripts\processingdd_lunar_geometry.py
-.\.venv\Scripts\python.exe scriptsnalysis
-efine_lunar_closest_approach.py
-.\.venv\Scripts\python.exe scriptsnalysis\classify_mission_phases.py
-.\.venv\Scripts\python.exe scriptsnalysis\compare_oem_products.py
+.\.venv\Scripts\python.exe scripts\run_phase1.py
+git diff --check
+git status
+```
+
+`scripts/run_phase1.py` executes the full 13-stage Phase 1 pipeline in dependency order. It downloads the required SPICE kernels only when they are missing.
+
+The raw NASA AROW OEM archive is intentionally not version controlled and must exist at:
+
+```text
+data/raw/arow/all-artemis-ii-oem-files.zip
+```
+
+A successful committed-state reproduction ends with:
+
+```text
+PHASE 1 PIPELINE COMPLETE
+```
+
+followed by a blank `git diff --check` and:
+
+```text
+nothing to commit, working tree clean
 ```
 
 ---
@@ -936,21 +1269,27 @@ efine_lunar_closest_approach.py
 # Current Source Register
 
 ### NASA Artemis II flight-derived ephemeris / AROW
+
 https://www.nasa.gov/missions/artemis/artemis-2/track-nasas-artemis-ii-mission-in-real-time/
 
 ### NASA Artemis II mission reporting
+
 https://www.nasa.gov/blogs/missions/
 
 ### NASA Scientific Visualization Studio
+
 https://svs.gsfc.nasa.gov/
 
 ### JPL DE440/DE441 documentation
+
 https://ssd.jpl.nasa.gov/doc/de440_de441.html
 
 ### JPL NAIF Generic Kernels
+
 https://naif.jpl.nasa.gov/naif/data_generic.html
 
 ### CCSDS Orbit Data Messages
+
 https://ccsds.org/Pubs/502x0b3e1.pdf
 
 ---
@@ -959,11 +1298,12 @@ https://ccsds.org/Pubs/502x0b3e1.pdf
 
 1. Why does derived Moon-relative speed at pericynthion differ by ~1.6% from NASA's public reported value?
 2. What exactly distinguishes each public JSC/FDO OEM product operationally?
-3. Why are large portions of Apr 8/9 OEMs identical to Apr 10 while other portions differ?
-4. Do solution differences align with documented maneuver decisions/burns?
-5. How should the separate high-rate `Post-RTC3 to EI` trajectory be parsed and integrated?
-6. Which values should be treated as authoritative flight data vs. derived analytical products?
-7. What interpolation/coordinate assumptions require further validation?
+3. Why are large portions of the April 8/9 OEMs identical to the April 10 reference while other portions differ?
+4. What physical or operational process explains the strong temporal alignment between several later OEM maxima and RTC-2? The alignment is measured, but causality is not established.
+5. How should the separate high-rate `Post-RTC3 to EI` trajectory be parsed, validated, and integrated?
+6. Which values should be treated as authoritative flight data versus derived analytical products?
+7. Which interpolation and coordinate-frame assumptions require further validation?
+8. Would a Moon-centered or B-plane analysis materially improve interpretation of the lunar-flyby solution differences?
 
 ---
 
@@ -972,16 +1312,27 @@ https://ccsds.org/Pubs/502x0b3e1.pdf
 Before every commit or merge:
 
 1. Record the goal.
+
 2. Record the source data.
+
 3. Record the mission concept.
+
 4. Write down the math.
+
 5. Document files/code added or changed.
+
 6. Record exact observed output.
+
 7. Document errors/challenges and fixes.
+
 8. Validate against an independent source when possible.
+
 9. Record what we learned.
+
 10. Record unresolved questions.
+
 11. Record interpretation limits.
+
 12. Only then commit.
 
 The README should stay concise. This log preserves the technical depth, learning trail, and proof behind the project.
@@ -1027,50 +1378,71 @@ This is NOT a NASA navigation limit, flight rule, acceptable error, or mission t
 ### April 2 OEM v3
 
 Effectively identical epochs: 7.37%
+
 Median difference: 41.721 km
+
 Maximum: 209.372 km
+
 Maximum epoch: 2026-04-06T22:58:51.667Z
 
 ### April 3 OEM
 
 Effectively identical epochs: 17.93%
+
 Median difference: 31.403 km
+
 Maximum: 192.122 km
+
 Maximum epoch: 2026-04-06T23:02:51.667Z
 
 ### April 4 OEM
 
 Effectively identical epochs: 26.27%
+
 Median difference: 29.513 km
+
 Maximum: 178.682 km
+
 Maximum epoch: 2026-04-06T23:02:51.667Z
 
 ### April 6 Pre-OTC3 OEM
 
 Effectively identical epochs: 19.31%
+
 Median difference: 23.908 km
+
 Maximum: 78.421 km
+
 Maximum epoch: 2026-04-10T02:53:28.122Z
 
 ### April 7 Pre-Lunar-Flyby OEM
 
 Effectively identical epochs: 9.24%
+
 Median difference: 10.505 km
+
 Maximum: 71.734 km
+
 Maximum epoch: 2026-04-10T02:53:28.122Z
 
 ### April 8 OEM
 
 Effectively identical epochs: 73.24%
+
 Median difference: 0 km
+
 Maximum: 48.957 km
+
 Maximum epoch: 2026-04-10T02:53:28.122Z
 
 ### April 9 OEM
 
 Effectively identical epochs: 81.94%
+
 Median difference: 0 km
+
 Maximum: 34.547 km
+
 Maximum epoch: 2026-04-10T02:53:28.122Z
 
 ## Major observations
@@ -1104,6 +1476,7 @@ rather than assuming maneuver causality first.
 Created:
 
 data/reference/trajectory_events.json
+
 scripts/analysis/overlay_trajectory_events.py
 
 Generated:
@@ -1121,63 +1494,79 @@ This avoids selecting events in advance and then searching for apparent confirma
 ### Outbound Correction Burn
 
 UTC:
+
 2026-04-06T03:03:00Z
 
 NASA reported the burn began at 11:03 p.m. EDT on April 5 and lasted 17.5 seconds.
 
 Provenance:
+
 NASA_REPORTED
 
 ### Pericynthion
 
 UTC:
+
 2026-04-06T23:00:46.177998Z
 
 This timestamp was independently derived by A2 MissionLab using cubic Hermite interpolation of the NASA OEM trajectory and JPL DE440 lunar geometry.
 
 Provenance:
+
 DERIVED
 
 ### Return Correction Burn 1
 
 UTC:
+
 2026-04-08T00:03:00Z
 
 Duration:
+
 15 seconds
 
 Reported delta-v:
+
 1.6 ft/s
 
 Provenance:
+
 NASA_REPORTED
 
 ### Return Correction Burn 2
 
 UTC:
+
 2026-04-10T02:53:00Z
 
 Duration:
+
 9 seconds
 
 Reported delta-v:
+
 5.3 ft/s
 
 Provenance:
+
 NASA_REPORTED
 
 ### Return Correction Burn 3
 
 UTC:
+
 2026-04-10T18:53:00Z
 
 Duration:
+
 8 seconds
 
 Reported delta-v:
+
 4.2 ft/s
 
 Provenance:
+
 NASA_REPORTED
 
 ## Major Observations
@@ -1207,10 +1596,15 @@ The plotted curves represent differences between publicly released trajectory so
 They do not directly represent:
 
 - navigation error;
+
 - targeting error;
+
 - spacecraft position uncertainty;
+
 - Flight Dynamics Officer allowable error;
+
 - maneuver execution error;
+
 - trajectory-control tolerance.
 
 No causal relationship between a maneuver and a solution change is claimed without further evidence.
@@ -1220,14 +1614,19 @@ No causal relationship between a maneuver and a solution change is claimed witho
 The analysis followed:
 
 measure solution differences
+
 → visualize them
+
 → add documented events
+
 → inspect temporal alignment
+
 → investigate possible relationships
 
 rather than:
 
 assume maneuver causation
+
 → construct analysis around that assumption.
 
 # Phase 1F.3 — Event-Window Analysis
@@ -1247,8 +1646,11 @@ Quantify public OEM solution behavior within ±30 minutes of documented trajecto
 For each event and each public OEM product, the analysis records:
 
 - nearest state approximately 30 minutes before;
+
 - nearest state at the event;
+
 - nearest state approximately 30 minutes after;
+
 - net change in 3-D position difference across the window.
 
 The analysis measures temporal behavior only.
@@ -1274,7 +1676,9 @@ No obvious discontinuous solution change is visible in the 3-D position-differen
 The April 2–4 products reached approximately:
 
 - 209 km;
+
 - 192 km;
+
 - 179 km;
 
 respectively around lunar closest approach.
@@ -1300,15 +1704,19 @@ Several later OEM products reach their absolute maximum position difference almo
 Examples:
 
 April 6 product:
+
 ~78.42 km
 
 April 7 product:
+
 ~71.73 km
 
 April 8 product:
+
 ~48.96 km
 
 April 9 product:
+
 ~34.55 km
 
 However, the local windows show smooth behavior.
@@ -1316,13 +1724,19 @@ However, the local windows show smooth behavior.
 Example:
 
 April 8:
+
 48.13 km
+
 → 48.96 km at RTC-2
+
 → 47.66 km
 
 April 9:
+
 33.83 km
+
 → 34.55 km at RTC-2
+
 → 33.68 km
 
 ### Interpretation
@@ -1334,9 +1748,11 @@ The current analysis does NOT demonstrate a discontinuity caused by the burn.
 Therefore:
 
 SUPPORTED:
+
 The maximum public OEM solution difference is temporally aligned with RTC-2.
 
 NOT YET SUPPORTED:
+
 RTC-2 caused the observed solution difference.
 
 ## RTC-3
@@ -1346,18 +1762,27 @@ Several later OEM differences decrease across the event window.
 Examples:
 
 April 7:
+
 3.96 km
+
 → 2.11 km
+
 → 1.89 km
 
 April 8:
+
 3.32 km
+
 → 1.99 km
+
 → 1.77 km
 
 April 9:
+
 2.80 km
+
 → 1.99 km
+
 → 1.77 km
 
 The behavior is interesting but does not establish that RTC-3 caused solution convergence.
@@ -1381,8 +1806,11 @@ N — normal / cross-track
 This will help determine whether public trajectory-solution differences primarily reflect:
 
 - radial separation;
+
 - along-track timing/trajectory separation;
+
 - cross-track separation;
+
 - velocity-state differences.
 
 # Phase 1F.4 — RTN State-Residual Decomposition
@@ -1394,6 +1822,7 @@ scripts/analysis/analyze_rtn_residuals.py
 Generated:
 
 data/processed/trajectory/oem_rtn_residuals.csv
+
 data/processed/trajectory/oem_rtn_summary.json
 
 docs/assets/rtn/
@@ -1401,7 +1830,9 @@ docs/assets/rtn/
 ## Goal
 
 Decompose public OEM state differences into physically meaningful
+
 Earth-centered radial, transverse/along-track, and normal/cross-track
+
 components rather than relying only on scalar 3-D differences.
 
 ## Reference Frame
@@ -1419,6 +1850,7 @@ Transverse / local along-track direction.
 N:
 
 Normal / cross-track direction defined by the reference trajectory's
+
 specific angular momentum vector.
 
 For reference state r and v:
@@ -1452,7 +1884,9 @@ They are NOT derivatives of rotating-frame RTN coordinates.
 April 2:
 
 R position RMS: 26.777 km
+
 T position RMS: 74.239 km
+
 N position RMS: 39.647 km
 
 Dominant RMS position axis: T
@@ -1460,7 +1894,9 @@ Dominant RMS position axis: T
 April 3:
 
 R: 24.811 km
+
 T: 67.294 km
+
 N: 36.438 km
 
 Dominant axis: T
@@ -1468,7 +1904,9 @@ Dominant axis: T
 April 4:
 
 R: 22.281 km
+
 T: 62.741 km
+
 N: 35.809 km
 
 Dominant axis: T
@@ -1476,6 +1914,7 @@ Dominant axis: T
 ### Interpretation
 
 The large early public OEM differences around lunar flyby are primarily
+
 along-track rather than simply radial Earth-distance differences.
 
 ### Later OEM products
@@ -1483,22 +1922,29 @@ along-track rather than simply radial Earth-distance differences.
 April 8:
 
 R RMS: 3.319 km
+
 T RMS: 12.112 km
+
 N RMS: 3.644 km
 
 April 9:
 
 R RMS: 2.435 km
+
 T RMS: 7.593 km
+
 N RMS: 3.631 km
 
 The largest RMS component remains along-track.
 
 Near RTC-2, the later OEMs show predominantly negative along-track
+
 separation from the April 10 reference, with smaller radial and
+
 cross-track components.
 
 This establishes the geometry of the public solution difference but
+
 does not establish its internal navigation or targeting cause.
 
 ## Frequency vs Magnitude
@@ -1518,31 +1964,39 @@ T RMS = 7.593 km
 R RMS = 2.435 km
 
 Therefore R dominates more frequently, but generally at smaller
+
 amplitudes, while less-frequent T excursions are much larger.
 
 Dominant-component frequency and RMS magnitude answer different
+
 questions.
 
 ## Position vs Velocity
 
 The earliest OEMs have along-track-dominated position residuals but
+
 radial-dominated velocity RMS.
 
 This demonstrates that the dominant instantaneous velocity-state
+
 difference does not need to match the accumulated position-difference
+
 direction.
 
 Small velocity differences integrated over long mission intervals can
+
 produce much larger position separation.
 
 ## Entry Interface Warning
 
 Several products show large velocity-residual spikes near the terminal
+
 end of the OEM trajectory.
 
 These values will not be interpreted yet.
 
 NASA also released a separate high-rate Post-RTC3-to-Entry-Interface
+
 trajectory product, and entry dynamics will be analyzed separately.
 
 ## Lunar Flyby Frame Limitation
@@ -1550,10 +2004,13 @@ trajectory product, and entry dynamics will be analyzed separately.
 This RTN frame is Earth-centered.
 
 Near lunar closest approach, the Earth-centered RTN basis changes
+
 rapidly and does not provide the most natural frame for detailed lunar
+
 targeting analysis.
 
 Future advanced lunar-flyby analysis may use Moon-centered geometry
+
 and B-plane targeting quantities.
 
 ## Interpretation Limits
@@ -1563,12 +2020,17 @@ RTN residuals are public solution-to-solution differences.
 They are NOT:
 
 - navigation errors;
+
 - spacecraft-state uncertainty;
+
 - FDO tolerances;
+
 - flight-rule limits;
+
 - maneuver execution error.
 
 The April 10 public OEM remains a comparison reference, not a proven
+
 absolute truth trajectory.
 
 ## RTN Validation
@@ -1578,26 +2040,33 @@ Created:
 scripts/validation/validate_rtn_residuals.py
 
 The RTN decomposition was validated against both its reconstructed vector
+
 magnitudes and the independent scalar residuals produced during Phase 1E.
 
 Results:
 
 Rows checked:
+
 23,188
 
 Missing Phase 1E comparison rows:
+
 0
 
 Maximum position norm reconstruction error:
+
 8.526512829121e-14 km
 
 Maximum velocity norm reconstruction error:
+
 2.220446049250e-16 m/s
 
 Maximum RTN position norm versus Phase 1E scalar difference:
+
 2.842170943040e-14 km
 
 Maximum RTN velocity norm versus Phase 1E scalar difference:
+
 7.105427357601e-15 m/s
 
 Result:
@@ -1605,13 +2074,17 @@ Result:
 OK: RTN decomposition preserves position and velocity residual magnitudes.
 
 The remaining numerical differences are at floating-point roundoff scale
+
 and are many orders of magnitude below the validation tolerances.
 
 This validates the internal consistency of the RTN transformation and its
+
 agreement with the earlier Phase 1E state-difference calculation.
 
 It does not establish that the April 10 public OEM is an absolute truth
+
 trajectory, nor does it turn solution-to-solution differences into
+
 navigation error.
 
 # Phase 1 Closure — Full Reproducibility Run
@@ -1623,7 +2096,9 @@ scripts/run_phase1.py
 ## Purpose
 
 Verify that the complete Artemis II mission-backbone analysis can be
+
 regenerated in dependency order from the retained source inputs rather
+
 than relying on manually created intermediate files.
 
 ## Pipeline
@@ -1631,17 +2106,29 @@ than relying on manually created intermediate files.
 The reproducibility runner executed 13 stages:
 
 1. Validate Phase 0 foundation data.
+
 2. Parse NASA Artemis II OEM products.
+
 3. Validate parsed trajectory products.
+
 4. Build the April 10 primary trajectory.
+
 5. Add JPL SPICE lunar geometry.
+
 6. Refine lunar closest approach.
+
 7. Classify geometric mission phases.
+
 8. Compare public NASA OEM products.
+
 9. Analyze time-resolved OEM evolution.
+
 10. Overlay documented trajectory events.
+
 11. Analyze trajectory-event windows.
+
 12. Decompose OEM residuals into the Earth-centered RTN frame.
+
 13. Validate the RTN residual decomposition.
 
 ## Result
@@ -1667,6 +2154,7 @@ Primary April 10 OEM:
 Maximum Earth-center distance:
 
 413,144.4 km
+
 2026-04-06T23:02:51.667 UTC
 
 Refined pericynthion:
@@ -1698,28 +2186,92 @@ Missing Phase 1E comparison rows:
 0
 
 Maximum position magnitude consistency errors were approximately
+
 1e-14 km, consistent with floating-point roundoff.
 
 ## Reproducibility Decisions
 
 Raw NASA trajectory data and generated processed datasets remain outside
+
 Git.
 
 Source code, reference event data, configuration, documentation, and
+
 selected deterministic SVG figures remain version controlled.
 
 Matplotlib SVG generation was made deterministic by:
 
 - fixing the SVG hash salt;
+
 - removing generation-date metadata;
+
 - normalizing trailing whitespace after SVG generation.
 
 This allows repeated analysis runs to reproduce the committed figures
+
 without timestamp- or random-ID-driven Git changes.
+
+## Final Committed-State Reproducibility Proof
+
+After the Phase 1 closure changes were committed and pushed, the entire pipeline was rerun from the committed state:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\run_phase1.py
+```
+
+Observed:
+
+```text
+PHASE 1 PIPELINE COMPLETE
+Completed 13 steps in 15.89 seconds.
+Mission backbone regenerated and validated successfully.
+```
+
+The final RTN validator again checked 23,188 residual records with zero missing scalar-comparison rows.
+
+After the complete rerun:
+
+```powershell
+git diff --check
+git status
+```
+
+produced no diff-check errors and:
+
+```text
+nothing to commit, working tree clean
+```
+
+This is the strongest Phase 1 reproducibility proof: the committed pipeline regenerates the committed analytical figures and leaves no repository changes.
+
+## Merge and Archive Record
+
+Phase 1 was merged into `main` with a non-fast-forward merge:
+
+```text
+Merge Phase 1 mission backbone
+```
+
+The merge was pushed to GitHub as commit:
+
+```text
+afc1a15
+```
+
+The completed feature branch `phase-1-mission-backbone` is intentionally retained as a historical development branch.
+
+An annotated milestone tag was created and pushed:
+
+```text
+phase-1-complete
+```
+
+The tag marks the completed Phase 1 state on `main`.
 
 ## Explicit Phase Boundary
 
 The separate high-rate Post-RTC3-to-Entry-Interface trajectory product
+
 remains outside Phase 1.
 
 It is intentionally reserved for the dedicated entry/reentry analysis.
@@ -1729,4 +2281,5 @@ It is intentionally reserved for the dedicated entry/reentry analysis.
 COMPLETE
 
 The project now has a validated temporal and geometric mission backbone
+
 capable of supporting later Artemis II engineering subsystems.
