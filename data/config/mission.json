@@ -1,0 +1,9 @@
+{
+  "mission": "Artemis II",
+  "spacecraft": "Orion Integrity",
+  "launch_epoch_utc": "2026-04-01T22:35:12Z",
+  "launch_site": "Kennedy Space Center Launch Complex 39B",
+  "launch_epoch_source": "JPL Horizons Artemis II trajectory notice",
+  "primary_oem": "Artemis_II_OEM_2026_04_10_Post-ICPS-Sep-to-EI.csv",
+  "primary_oem_rationale": "Latest full pre-entry OEM product in the publicly released AROW archive. Earlier OEM products are retained for comparison and version-evolution analysis."
+}
