@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import csv
 import json
-import math
 import re
 from bisect import bisect_right
 from collections import Counter
@@ -14,17 +13,35 @@ import matplotlib.dates as mdates
 import numpy as np
 
 
-TRAJECTORY_DIR = Path("data/processed/trajectory")
-MANIFEST_PATH = TRAJECTORY_DIR / "manifest.json"
-CONFIG_PATH = Path("data/config/mission.json")
-EVENTS_PATH = Path("data/reference/trajectory_events.json")
+plt.rcParams["svg.hashsalt"] = "a2-missionlab"
+SVG_METADATA = {"Date": None}
+
+
+TRAJECTORY_DIR = Path(
+    "data/processed/trajectory"
+)
+
+MANIFEST_PATH = (
+    TRAJECTORY_DIR
+    / "manifest.json"
+)
+
+CONFIG_PATH = Path(
+    "data/config/mission.json"
+)
+
+EVENTS_PATH = Path(
+    "data/reference/trajectory_events.json"
+)
 
 OUTPUT_DETAIL = (
-    TRAJECTORY_DIR / "oem_rtn_residuals.csv"
+    TRAJECTORY_DIR
+    / "oem_rtn_residuals.csv"
 )
 
 OUTPUT_SUMMARY = (
-    TRAJECTORY_DIR / "oem_rtn_summary.json"
+    TRAJECTORY_DIR
+    / "oem_rtn_summary.json"
 )
 
 PLOT_DIR = Path(
@@ -32,52 +49,109 @@ PLOT_DIR = Path(
 )
 
 
-def parse_utc(value: str) -> datetime:
+def normalize_svg(
+    path: Path,
+):
+    text = path.read_text(
+        encoding="utf-8",
+    )
+
+    cleaned = "\n".join(
+        line.rstrip(" \t")
+        for line in text.splitlines()
+    ) + "\n"
+
+    path.write_text(
+        cleaned,
+        encoding="utf-8",
+    )
+
+
+def parse_utc(
+    value: str,
+) -> datetime:
     dt = datetime.fromisoformat(
-        value.replace("Z", "+00:00")
+        value.replace(
+            "Z",
+            "+00:00",
+        )
     )
 
     if dt.tzinfo is None:
-        dt = dt.replace(tzinfo=timezone.utc)
+        dt = dt.replace(
+            tzinfo=timezone.utc
+        )
 
-    return dt.astimezone(timezone.utc)
+    return dt.astimezone(
+        timezone.utc
+    )
 
 
-def state_from_row(row):
+def state_from_row(
+    row,
+):
     position = np.array(
         [
-            float(row["x_km"]),
-            float(row["y_km"]),
-            float(row["z_km"]),
+            float(
+                row["x_km"]
+            ),
+            float(
+                row["y_km"]
+            ),
+            float(
+                row["z_km"]
+            ),
         ],
         dtype=float,
     )
 
     velocity = np.array(
         [
-            float(row["vx_km_s"]),
-            float(row["vy_km_s"]),
-            float(row["vz_km_s"]),
+            float(
+                row["vx_km_s"]
+            ),
+            float(
+                row["vy_km_s"]
+            ),
+            float(
+                row["vz_km_s"]
+            ),
         ],
         dtype=float,
     )
 
-    return position, velocity
+    return (
+        position,
+        velocity,
+    )
 
 
-def load_product(path: Path):
+def load_product(
+    path: Path,
+):
     with path.open(
         "r",
         encoding="utf-8",
     ) as f:
-        rows = list(csv.DictReader(f))
+        rows = list(
+            csv.DictReader(
+                f
+            )
+        )
 
     times = [
-        parse_utc(row["timestamp_utc"])
+        parse_utc(
+            row[
+                "timestamp_utc"
+            ]
+        )
         for row in rows
     ]
 
-    return rows, times
+    return (
+        rows,
+        times,
+    )
 
 
 def interpolate_state(
@@ -97,36 +171,86 @@ def interpolate_state(
     )
 
     if index == 0:
-        return state_from_row(rows[0])
+        return state_from_row(
+            rows[0]
+        )
 
-    if index >= len(rows):
-        return state_from_row(rows[-1])
+    if index >= len(
+        rows
+    ):
+        return state_from_row(
+            rows[-1]
+        )
 
-    row0 = rows[index - 1]
-    row1 = rows[index]
+    row0 = rows[
+        index - 1
+    ]
 
-    t0 = times[index - 1]
-    t1 = times[index]
+    row1 = rows[
+        index
+    ]
+
+    t0 = times[
+        index - 1
+    ]
+
+    t1 = times[
+        index
+    ]
 
     if target_time == t0:
-        return state_from_row(row0)
+        return state_from_row(
+            row0
+        )
 
     if target_time == t1:
-        return state_from_row(row1)
+        return state_from_row(
+            row1
+        )
 
-    dt = (t1 - t0).total_seconds()
+    dt = (
+        t1 - t0
+    ).total_seconds()
 
     u = (
         target_time - t0
     ).total_seconds() / dt
 
-    p0, v0 = state_from_row(row0)
-    p1, v1 = state_from_row(row1)
+    (
+        p0,
+        v0,
+    ) = state_from_row(
+        row0
+    )
 
-    h00 = 2 * u**3 - 3 * u**2 + 1
-    h10 = u**3 - 2 * u**2 + u
-    h01 = -2 * u**3 + 3 * u**2
-    h11 = u**3 - u**2
+    (
+        p1,
+        v1,
+    ) = state_from_row(
+        row1
+    )
+
+    h00 = (
+        2 * u**3
+        - 3 * u**2
+        + 1
+    )
+
+    h10 = (
+        u**3
+        - 2 * u**2
+        + u
+    )
+
+    h01 = (
+        -2 * u**3
+        + 3 * u**2
+    )
+
+    h11 = (
+        u**3
+        - u**2
+    )
 
     position = (
         h00 * p0
@@ -135,10 +259,26 @@ def interpolate_state(
         + h11 * dt * v1
     )
 
-    dh00 = 6 * u**2 - 6 * u
-    dh10 = 3 * u**2 - 4 * u + 1
-    dh01 = -6 * u**2 + 6 * u
-    dh11 = 3 * u**2 - 2 * u
+    dh00 = (
+        6 * u**2
+        - 6 * u
+    )
+
+    dh10 = (
+        3 * u**2
+        - 4 * u
+        + 1
+    )
+
+    dh01 = (
+        -6 * u**2
+        + 6 * u
+    )
+
+    dh11 = (
+        3 * u**2
+        - 2 * u
+    )
 
     velocity = (
         dh00 * p0
@@ -147,14 +287,19 @@ def interpolate_state(
         + dh11 * dt * v1
     ) / dt
 
-    return position, velocity
+    return (
+        position,
+        velocity,
+    )
 
 
 def rtn_basis(
     position,
     velocity,
 ):
-    r_norm = np.linalg.norm(position)
+    r_norm = np.linalg.norm(
+        position
+    )
 
     if r_norm == 0:
         raise ValueError(
@@ -162,7 +307,10 @@ def rtn_basis(
             "from zero position vector."
         )
 
-    r_hat = position / r_norm
+    r_hat = (
+        position
+        / r_norm
+    )
 
     angular_momentum = np.cross(
         position,
@@ -180,7 +328,8 @@ def rtn_basis(
         )
 
     n_hat = (
-        angular_momentum / h_norm
+        angular_momentum
+        / h_norm
     )
 
     t_hat = np.cross(
@@ -188,30 +337,60 @@ def rtn_basis(
         r_hat,
     )
 
-    t_hat = (
+    t_norm = np.linalg.norm(
         t_hat
-        / np.linalg.norm(t_hat)
     )
 
-    return r_hat, t_hat, n_hat
+    if t_norm == 0:
+        raise ValueError(
+            "Cannot construct RTN basis "
+            "from zero transverse vector."
+        )
+
+    t_hat = (
+        t_hat
+        / t_norm
+    )
+
+    return (
+        r_hat,
+        t_hat,
+        n_hat,
+    )
 
 
 def project_rtn(
     vector,
     basis,
 ):
-    r_hat, t_hat, n_hat = basis
+    (
+        r_hat,
+        t_hat,
+        n_hat,
+    ) = basis
 
     return np.array(
         [
-            np.dot(vector, r_hat),
-            np.dot(vector, t_hat),
-            np.dot(vector, n_hat),
-        ]
+            np.dot(
+                vector,
+                r_hat,
+            ),
+            np.dot(
+                vector,
+                t_hat,
+            ),
+            np.dot(
+                vector,
+                n_hat,
+            ),
+        ],
+        dtype=float,
     )
 
 
-def rms(values):
+def rms(
+    values,
+):
     values = np.asarray(
         values,
         dtype=float,
@@ -219,12 +398,16 @@ def rms(values):
 
     return float(
         np.sqrt(
-            np.mean(values**2)
+            np.mean(
+                values**2
+            )
         )
     )
 
 
-def median_abs(values):
+def median_abs(
+    values,
+):
     values = np.asarray(
         values,
         dtype=float,
@@ -232,12 +415,16 @@ def median_abs(values):
 
     return float(
         np.median(
-            np.abs(values)
+            np.abs(
+                values
+            )
         )
     )
 
 
-def max_abs(values):
+def max_abs(
+    values,
+):
     values = np.asarray(
         values,
         dtype=float,
@@ -245,7 +432,9 @@ def max_abs(values):
 
     return float(
         np.max(
-            np.abs(values)
+            np.abs(
+                values
+            )
         )
     )
 
@@ -256,9 +445,18 @@ def dominant_component(
     n_value,
 ):
     values = {
-        "R": abs(r_value),
-        "T": abs(t_value),
-        "N": abs(n_value),
+        "R":
+            abs(
+                r_value
+            ),
+        "T":
+            abs(
+                t_value
+            ),
+        "N":
+            abs(
+                n_value
+            ),
     }
 
     return max(
@@ -272,9 +470,12 @@ def summarize_components(
     prefix,
 ):
     keys = {
-        "R": f"{prefix}_r",
-        "T": f"{prefix}_t",
-        "N": f"{prefix}_n",
+        "R":
+            f"{prefix}_r",
+        "T":
+            f"{prefix}_t",
+        "N":
+            f"{prefix}_n",
     }
 
     summary = {}
@@ -282,43 +483,70 @@ def summarize_components(
     for axis, key in keys.items():
         values = [
             record[key]
-            for record in records
+            for record
+            in records
         ]
 
-        summary[axis] = {
+        summary[
+            axis
+        ] = {
             "rms":
-                rms(values),
+                rms(
+                    values
+                ),
 
             "median_absolute":
-                median_abs(values),
+                median_abs(
+                    values
+                ),
 
             "maximum_absolute":
-                max_abs(values),
+                max_abs(
+                    values
+                ),
         }
 
     dominant_counts = Counter(
         record[
             f"{prefix}_dominant"
         ]
-        for record in records
+        for record
+        in records
     )
 
-    total = len(records)
+    total = len(
+        records
+    )
 
     summary[
         "dominant_epoch_fraction"
     ] = {
-        axis: (
-            dominant_counts[axis]
-            / total
-        )
-        for axis in ["R", "T", "N"]
+        axis:
+            (
+                dominant_counts[
+                    axis
+                ]
+                / total
+            )
+        for axis in [
+            "R",
+            "T",
+            "N",
+        ]
     }
 
     dominant_rms_axis = max(
-        ["R", "T", "N"],
+        [
+            "R",
+            "T",
+            "N",
+        ],
         key=lambda axis:
-            summary[axis]["rms"],
+            summary[
+                axis
+            ][
+                "rms"
+            ],
     )
 
     summary[
@@ -328,14 +556,18 @@ def summarize_components(
     return summary
 
 
-def sanitize_filename(value: str) -> str:
+def sanitize_filename(
+    value: str,
+) -> str:
     value = re.sub(
         r"[^A-Za-z0-9]+",
         "_",
         value,
     )
 
-    return value.strip("_")
+    return value.strip(
+        "_"
+    )
 
 
 def load_events():
@@ -346,13 +578,17 @@ def load_events():
         "r",
         encoding="utf-8",
     ) as f:
-        events = json.load(f)
+        events = json.load(
+            f
+        )
 
     for event in events:
-        event["parsed_time"] = (
-            parse_utc(
-                event["timestamp_utc"]
-            )
+        event[
+            "parsed_time"
+        ] = parse_utc(
+            event[
+                "timestamp_utc"
+            ]
         )
 
     return events
@@ -364,21 +600,29 @@ def add_event_lines(
 ):
     for event in events:
         ax.axvline(
-            event["parsed_time"],
+            event[
+                "parsed_time"
+            ],
             linestyle="--",
             linewidth=0.8,
             alpha=0.6,
         )
 
         ax.text(
-            event["parsed_time"],
+            event[
+                "parsed_time"
+            ],
             0.97,
-            event["short_name"],
+            event[
+                "short_name"
+            ],
             rotation=90,
             fontsize=7,
             verticalalignment="top",
             horizontalalignment="right",
-            transform=ax.get_xaxis_transform(),
+            transform=(
+                ax.get_xaxis_transform()
+            ),
         )
 
 
@@ -395,19 +639,30 @@ def plot_product(
     records = sorted(
         records,
         key=lambda record:
-            record["timestamp"],
+            record[
+                "timestamp"
+            ],
     )
 
     timestamps = [
-        record["timestamp"]
-        for record in records
+        record[
+            "timestamp"
+        ]
+        for record
+        in records
     ]
 
     safe_name = sanitize_filename(
-        product.replace(".csv", "")
+        product.replace(
+            ".csv",
+            "",
+        )
     )
 
+    # ---------------------------------------------------------
     # Position residual plot
+    # ---------------------------------------------------------
+
     fig, ax = plt.subplots(
         figsize=(14, 7)
     )
@@ -415,8 +670,11 @@ def plot_product(
     ax.plot(
         timestamps,
         [
-            record["dr_r"]
-            for record in records
+            record[
+                "dr_r"
+            ]
+            for record
+            in records
         ],
         label="ΔR radial",
     )
@@ -424,8 +682,11 @@ def plot_product(
     ax.plot(
         timestamps,
         [
-            record["dr_t"]
-            for record in records
+            record[
+                "dr_t"
+            ]
+            for record
+            in records
         ],
         label="ΔT along-track",
     )
@@ -433,8 +694,11 @@ def plot_product(
     ax.plot(
         timestamps,
         [
-            record["dr_n"]
-            for record in records
+            record[
+                "dr_n"
+            ]
+            for record
+            in records
         ],
         label="ΔN cross-track",
     )
@@ -450,12 +714,17 @@ def plot_product(
     )
 
     ax.set_title(
-        f"RTN Position Residuals\n{product}"
+        "RTN Position Residuals\n"
+        f"{product}"
     )
 
-    ax.set_xlabel("UTC")
+    ax.set_xlabel(
+        "UTC"
+    )
+
     ax.set_ylabel(
-        "Comparison OEM − April 10 OEM (km)"
+        "Comparison OEM − "
+        "April 10 OEM (km)"
     )
 
     ax.grid(
@@ -477,18 +746,31 @@ def plot_product(
 
     position_path = (
         PLOT_DIR
-        / f"{safe_name}_position.svg"
+        / (
+            f"{safe_name}"
+            "_position.svg"
+        )
     )
 
     fig.savefig(
         position_path,
         format="svg",
         bbox_inches="tight",
+        metadata=SVG_METADATA,
     )
 
-    plt.close(fig)
+    normalize_svg(
+        position_path
+    )
 
+    plt.close(
+        fig
+    )
+
+    # ---------------------------------------------------------
     # Velocity residual plot
+    # ---------------------------------------------------------
+
     fig, ax = plt.subplots(
         figsize=(14, 7)
     )
@@ -496,8 +778,11 @@ def plot_product(
     ax.plot(
         timestamps,
         [
-            record["dv_r"]
-            for record in records
+            record[
+                "dv_r"
+            ]
+            for record
+            in records
         ],
         label="Δv_R radial",
     )
@@ -505,8 +790,11 @@ def plot_product(
     ax.plot(
         timestamps,
         [
-            record["dv_t"]
-            for record in records
+            record[
+                "dv_t"
+            ]
+            for record
+            in records
         ],
         label="Δv_T along-track",
     )
@@ -514,8 +802,11 @@ def plot_product(
     ax.plot(
         timestamps,
         [
-            record["dv_n"]
-            for record in records
+            record[
+                "dv_n"
+            ]
+            for record
+            in records
         ],
         label="Δv_N cross-track",
     )
@@ -531,12 +822,17 @@ def plot_product(
     )
 
     ax.set_title(
-        f"RTN Velocity Residuals\n{product}"
+        "RTN Velocity Residuals\n"
+        f"{product}"
     )
 
-    ax.set_xlabel("UTC")
+    ax.set_xlabel(
+        "UTC"
+    )
+
     ax.set_ylabel(
-        "Comparison OEM − April 10 OEM (m/s)"
+        "Comparison OEM − "
+        "April 10 OEM (m/s)"
     )
 
     ax.grid(
@@ -558,20 +854,34 @@ def plot_product(
 
     velocity_path = (
         PLOT_DIR
-        / f"{safe_name}_velocity.svg"
+        / (
+            f"{safe_name}"
+            "_velocity.svg"
+        )
     )
 
     fig.savefig(
         velocity_path,
         format="svg",
         bbox_inches="tight",
+        metadata=SVG_METADATA,
     )
 
-    plt.close(fig)
+    normalize_svg(
+        velocity_path
+    )
+
+    plt.close(
+        fig
+    )
 
     return (
-        str(position_path),
-        str(velocity_path),
+        str(
+            position_path
+        ),
+        str(
+            velocity_path
+        ),
     )
 
 
@@ -580,16 +890,22 @@ def main():
         "r",
         encoding="utf-8",
     ) as f:
-        config = json.load(f)
+        config = json.load(
+            f
+        )
 
     with MANIFEST_PATH.open(
         "r",
         encoding="utf-8",
     ) as f:
-        manifest = json.load(f)
+        manifest = json.load(
+            f
+        )
 
     reference_name = (
-        config["primary_oem"]
+        config[
+            "primary_oem"
+        ]
     )
 
     reference_path = (
@@ -597,10 +913,11 @@ def main():
         / reference_name
     )
 
-    reference_rows, reference_times = (
-        load_product(
-            reference_path
-        )
+    (
+        reference_rows,
+        reference_times,
+    ) = load_product(
+        reference_path
     )
 
     events = load_events()
@@ -615,15 +932,17 @@ def main():
     print(
         "------------------------------------"
     )
-
     print(
-        f"Reference: {reference_name}"
+        f"Reference: "
+        f"{reference_name}"
     )
     print()
 
     for product in manifest:
         product_path = Path(
-            product["output_csv"]
+            product[
+                "output_csv"
+            ]
         )
 
         if (
@@ -632,22 +951,31 @@ def main():
         ):
             continue
 
-        rows, times = load_product(
+        (
+            rows,
+            times,
+        ) = load_product(
             product_path
         )
 
         metadata_path = Path(
-            product["metadata_file"]
+            product[
+                "metadata_file"
+            ]
         )
 
         with metadata_path.open(
             "r",
             encoding="utf-8",
         ) as f:
-            metadata = json.load(f)
+            metadata = json.load(
+                f
+            )
 
         creation_time = parse_utc(
-            metadata["CREATION_DATE"]
+            metadata[
+                "CREATION_DATE"
+            ]
         )
 
         product_records = []
@@ -697,9 +1025,11 @@ def main():
                 - reference_velocity
             )
 
-            position_rtn = project_rtn(
-                delta_position,
-                basis,
+            position_rtn = (
+                project_rtn(
+                    delta_position,
+                    basis,
+                )
             )
 
             velocity_rtn_km_s = (
@@ -724,24 +1054,33 @@ def main():
                 "epoch_class":
                     (
                         "AT_OR_BEFORE_PRODUCT_CREATION"
-                        if target_time
-                        <= creation_time
-                        else "AFTER_PRODUCT_CREATION"
+                        if (
+                            target_time
+                            <= creation_time
+                        )
+                        else
+                        "AFTER_PRODUCT_CREATION"
                     ),
 
                 "dr_r":
                     float(
-                        position_rtn[0]
+                        position_rtn[
+                            0
+                        ]
                     ),
 
                 "dr_t":
                     float(
-                        position_rtn[1]
+                        position_rtn[
+                            1
+                        ]
                     ),
 
                 "dr_n":
                     float(
-                        position_rtn[2]
+                        position_rtn[
+                            2
+                        ]
                     ),
 
                 "dr_norm":
@@ -758,17 +1097,23 @@ def main():
 
                 "dv_r":
                     float(
-                        velocity_rtn_m_s[0]
+                        velocity_rtn_m_s[
+                            0
+                        ]
                     ),
 
                 "dv_t":
                     float(
-                        velocity_rtn_m_s[1]
+                        velocity_rtn_m_s[
+                            1
+                        ]
                     ),
 
                 "dv_n":
                     float(
-                        velocity_rtn_m_s[2]
+                        velocity_rtn_m_s[
+                            2
+                        ]
                     ),
 
                 "dv_norm":
@@ -824,7 +1169,9 @@ def main():
                 ],
 
             "common_epochs":
-                len(product_records),
+                len(
+                    product_records
+                ),
 
             "position_rtn_km":
                 position_summary,
@@ -928,13 +1275,11 @@ def main():
             "product",
             "timestamp_utc",
             "epoch_class",
-
             "delta_r_radial_km",
             "delta_r_along_track_km",
             "delta_r_cross_track_km",
             "delta_r_norm_km",
             "dominant_position_axis",
-
             "delta_v_radial_m_s",
             "delta_v_along_track_m_s",
             "delta_v_cross_track_m_s",
@@ -1079,11 +1424,13 @@ def main():
         )
 
     print(
-        f"Wrote: {OUTPUT_DETAIL}"
+        f"Wrote: "
+        f"{OUTPUT_DETAIL}"
     )
 
     print(
-        f"Wrote: {OUTPUT_SUMMARY}"
+        f"Wrote: "
+        f"{OUTPUT_SUMMARY}"
     )
 
     print(

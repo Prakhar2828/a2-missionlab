@@ -10,6 +10,10 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
 
+plt.rcParams["svg.hashsalt"] = "a2-missionlab"
+SVG_METADATA = {"Date": None}
+
+
 COMPARISON_PATH = Path(
     "data/processed/trajectory/oem_comparison_detail.csv"
 )
@@ -23,48 +27,95 @@ OUTPUT_PATH = Path(
 )
 
 
-def parse_utc(value: str) -> datetime:
+def normalize_svg(
+    path: Path,
+):
+    text = path.read_text(
+        encoding="utf-8",
+    )
+
+    cleaned = "\n".join(
+        line.rstrip(" \t")
+        for line in text.splitlines()
+    ) + "\n"
+
+    path.write_text(
+        cleaned,
+        encoding="utf-8",
+    )
+
+
+def parse_utc(
+    value: str,
+) -> datetime:
     dt = datetime.fromisoformat(
-        value.replace("Z", "+00:00")
+        value.replace(
+            "Z",
+            "+00:00",
+        )
     )
 
     if dt.tzinfo is None:
-        dt = dt.replace(tzinfo=timezone.utc)
+        dt = dt.replace(
+            tzinfo=timezone.utc
+        )
 
-    return dt.astimezone(timezone.utc)
+    return dt.astimezone(
+        timezone.utc
+    )
 
 
-def short_product_name(product: str) -> str:
+def short_product_name(
+    product: str,
+) -> str:
     return (
         product
-        .replace("Artemis_II_OEM_", "")
-        .replace(".csv", "")
-        .replace("_", " ")
+        .replace(
+            "Artemis_II_OEM_",
+            "",
+        )
+        .replace(
+            ".csv",
+            "",
+        )
+        .replace(
+            "_",
+            " ",
+        )
     )
 
 
 def main():
-    grouped = defaultdict(list)
+    grouped = defaultdict(
+        list
+    )
 
     with COMPARISON_PATH.open(
         "r",
         encoding="utf-8",
     ) as f:
-        reader = csv.DictReader(f)
+        reader = csv.DictReader(
+            f
+        )
 
         for row in reader:
-            grouped[row["product"]].append(
+            grouped[
+                row["product"]
+            ].append(
                 {
-                    "timestamp": parse_utc(
-                        row[
-                            "comparison_timestamp_utc"
-                        ]
-                    ),
-                    "difference_km": float(
-                        row[
-                            "position_difference_km"
-                        ]
-                    ),
+                    "timestamp":
+                        parse_utc(
+                            row[
+                                "comparison_timestamp_utc"
+                            ]
+                        ),
+
+                    "difference_km":
+                        float(
+                            row[
+                                "position_difference_km"
+                            ]
+                        ),
                 }
             )
 
@@ -72,7 +123,9 @@ def main():
         "r",
         encoding="utf-8",
     ) as f:
-        events = json.load(f)
+        events = json.load(
+            f
+        )
 
     fig, ax = plt.subplots(
         figsize=(15, 8)
@@ -83,28 +136,40 @@ def main():
     ):
         records.sort(
             key=lambda record:
-                record["timestamp"]
+                record[
+                    "timestamp"
+                ]
         )
 
         ax.plot(
             [
-                record["timestamp"]
+                record[
+                    "timestamp"
+                ]
                 for record in records
             ],
             [
-                record["difference_km"]
+                record[
+                    "difference_km"
+                ]
                 for record in records
             ],
             linewidth=1.15,
-            label=short_product_name(product),
+            label=short_product_name(
+                product
+            ),
         )
 
     for event in events:
         timestamp = parse_utc(
-            event["timestamp_utc"]
+            event[
+                "timestamp_utc"
+            ]
         )
 
-        if event["type"] == "BURN":
+        if event[
+            "type"
+        ] == "BURN":
             linestyle = "--"
         else:
             linestyle = ":"
@@ -117,8 +182,11 @@ def main():
 
         ax.text(
             timestamp,
-            ax.get_ylim()[1] * 0.96,
-            event["short_name"],
+            ax.get_ylim()[1]
+            * 0.96,
+            event[
+                "short_name"
+            ],
             rotation=90,
             verticalalignment="top",
             horizontalalignment="right",
@@ -130,7 +198,9 @@ def main():
         "with Documented Trajectory Events"
     )
 
-    ax.set_xlabel("UTC")
+    ax.set_xlabel(
+        "UTC"
+    )
 
     ax.set_ylabel(
         "3-D Position Difference "
@@ -166,12 +236,21 @@ def main():
         OUTPUT_PATH,
         format="svg",
         bbox_inches="tight",
+        metadata=SVG_METADATA,
     )
 
-    plt.close(fig)
+    normalize_svg(
+        OUTPUT_PATH
+    )
+
+    plt.close(
+        fig
+    )
 
     print(
-        f"Loaded {len(events)} mission events."
+        f"Loaded "
+        f"{len(events)} "
+        f"mission events."
     )
 
     for event in events:
@@ -182,7 +261,10 @@ def main():
         )
 
     print()
-    print(f"Wrote: {OUTPUT_PATH}")
+
+    print(
+        f"Wrote: {OUTPUT_PATH}"
+    )
 
 
 if __name__ == "__main__":

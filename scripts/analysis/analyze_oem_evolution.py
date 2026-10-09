@@ -11,6 +11,10 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
 
+plt.rcParams["svg.hashsalt"] = "a2-missionlab"
+SVG_METADATA = {"Date": None}
+
+
 INPUT_PATH = Path(
     "data/processed/trajectory/oem_comparison_detail.csv"
 )
@@ -32,22 +36,44 @@ EXACT_VELOCITY_TOLERANCE_M_S = 1e-6
 MEANINGFUL_POSITION_DIFFERENCE_KM = 1.0
 
 
+def normalize_svg(path: Path):
+    text = path.read_text(
+        encoding="utf-8",
+    )
+
+    cleaned = "\n".join(
+        line.rstrip(" \t")
+        for line in text.splitlines()
+    ) + "\n"
+
+    path.write_text(
+        cleaned,
+        encoding="utf-8",
+    )
+
+
 def parse_utc(value: str) -> datetime:
     dt = datetime.fromisoformat(
         value.replace("Z", "+00:00")
     )
 
     if dt.tzinfo is None:
-        dt = dt.replace(tzinfo=timezone.utc)
+        dt = dt.replace(
+            tzinfo=timezone.utc
+        )
 
-    return dt.astimezone(timezone.utc)
+    return dt.astimezone(
+        timezone.utc
+    )
 
 
 def median_or_none(values):
     if not values:
         return None
 
-    return statistics.median(values)
+    return statistics.median(
+        values
+    )
 
 
 def analyze_product(records):
@@ -124,10 +150,14 @@ def analyze_product(records):
             / len(records),
 
         "median_position_difference_km":
-            statistics.median(positions),
+            statistics.median(
+                positions
+            ),
 
         "median_velocity_difference_m_s":
-            statistics.median(velocities),
+            statistics.median(
+                velocities
+            ),
 
         "before_or_at_creation": {
             "count":
@@ -200,21 +230,27 @@ def analyze_product(records):
 
         "first_meaningful_difference_utc":
             (
-                meaningful[0]["timestamp"].isoformat()
+                meaningful[0][
+                    "timestamp"
+                ].isoformat()
                 if meaningful
                 else None
             ),
 
         "last_meaningful_difference_utc":
             (
-                meaningful[-1]["timestamp"].isoformat()
+                meaningful[-1][
+                    "timestamp"
+                ].isoformat()
                 if meaningful
                 else None
             ),
     }
 
 
-def build_plot(grouped_records):
+def build_plot(
+    grouped_records,
+):
     OUTPUT_PLOT.parent.mkdir(
         parents=True,
         exist_ok=True,
@@ -229,7 +265,8 @@ def build_plot(grouped_records):
     ):
         records = sorted(
             records,
-            key=lambda r: r["timestamp"],
+            key=lambda r:
+                r["timestamp"],
         )
 
         timestamps = [
@@ -244,9 +281,18 @@ def build_plot(grouped_records):
 
         short_name = (
             product
-            .replace("Artemis_II_OEM_", "")
-            .replace(".csv", "")
-            .replace("_", " ")
+            .replace(
+                "Artemis_II_OEM_",
+                "",
+            )
+            .replace(
+                ".csv",
+                "",
+            )
+            .replace(
+                "_",
+                " ",
+            )
         )
 
         ax.plot(
@@ -268,7 +314,10 @@ def build_plot(grouped_records):
         "Relative to April 10 Public OEM"
     )
 
-    ax.set_xlabel("UTC")
+    ax.set_xlabel(
+        "UTC"
+    )
+
     ax.set_ylabel(
         "3-D Position Difference (km)"
     )
@@ -297,28 +346,42 @@ def build_plot(grouped_records):
         OUTPUT_PLOT,
         format="svg",
         bbox_inches="tight",
+        metadata=SVG_METADATA,
     )
 
-    plt.close(fig)
+    normalize_svg(
+        OUTPUT_PLOT
+    )
+
+    plt.close(
+        fig
+    )
 
 
 def main():
     if not INPUT_PATH.exists():
         raise SystemExit(
-            f"Missing comparison data: {INPUT_PATH}\n"
+            f"Missing comparison data: "
+            f"{INPUT_PATH}\n"
             "Run compare_oem_products.py first."
         )
 
-    grouped = defaultdict(list)
+    grouped = defaultdict(
+        list
+    )
 
     with INPUT_PATH.open(
         "r",
         encoding="utf-8",
     ) as f:
-        reader = csv.DictReader(f)
+        reader = csv.DictReader(
+            f
+        )
 
         for row in reader:
-            grouped[row["product"]].append(
+            grouped[
+                row["product"]
+            ].append(
                 {
                     "timestamp":
                         parse_utc(
@@ -335,7 +398,9 @@ def main():
                         ),
 
                     "epoch_class":
-                        row["epoch_class"],
+                        row[
+                            "epoch_class"
+                        ],
 
                     "position_difference_km":
                         float(
@@ -356,18 +421,28 @@ def main():
     analysis = {}
 
     print()
-    print("Artemis II OEM Evolution Analysis")
-    print("---------------------------------")
+    print(
+        "Artemis II OEM Evolution Analysis"
+    )
+    print(
+        "---------------------------------"
+    )
     print()
 
     for product, records in sorted(
         grouped.items()
     ):
-        result = analyze_product(records)
+        result = analyze_product(
+            records
+        )
 
-        analysis[product] = result
+        analysis[
+            product
+        ] = result
 
-        print(product)
+        print(
+            product
+        )
 
         print(
             "  Common epochs:                "
@@ -404,7 +479,8 @@ def main():
             "  Pre/at-creation median:        "
             + (
                 f"{before_value:.3f} km"
-                if before_value is not None
+                if before_value
+                is not None
                 else "N/A"
             )
         )
@@ -413,7 +489,8 @@ def main():
             "  Post-creation median:          "
             + (
                 f"{after_value:.3f} km"
-                if after_value is not None
+                if after_value
+                is not None
                 else "N/A"
             )
         )
@@ -470,7 +547,8 @@ def main():
                         (
                             "Analysis threshold only. "
                             "Not a NASA navigation, "
-                            "flight-rule, or operational threshold."
+                            "flight-rule, or operational "
+                            "threshold."
                         ),
                 },
 
@@ -481,10 +559,17 @@ def main():
             indent=2,
         )
 
-    build_plot(grouped)
+    build_plot(
+        grouped
+    )
 
-    print(f"Wrote: {OUTPUT_JSON}")
-    print(f"Wrote: {OUTPUT_PLOT}")
+    print(
+        f"Wrote: {OUTPUT_JSON}"
+    )
+
+    print(
+        f"Wrote: {OUTPUT_PLOT}"
+    )
 
 
 if __name__ == "__main__":

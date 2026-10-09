@@ -1614,3 +1614,119 @@ It does not establish that the April 10 public OEM is an absolute truth
 trajectory, nor does it turn solution-to-solution differences into
 navigation error.
 
+# Phase 1 Closure — Full Reproducibility Run
+
+A complete Phase 1 reconstruction was executed through:
+
+scripts/run_phase1.py
+
+## Purpose
+
+Verify that the complete Artemis II mission-backbone analysis can be
+regenerated in dependency order from the retained source inputs rather
+than relying on manually created intermediate files.
+
+## Pipeline
+
+The reproducibility runner executed 13 stages:
+
+1. Validate Phase 0 foundation data.
+2. Parse NASA Artemis II OEM products.
+3. Validate parsed trajectory products.
+4. Build the April 10 primary trajectory.
+5. Add JPL SPICE lunar geometry.
+6. Refine lunar closest approach.
+7. Classify geometric mission phases.
+8. Compare public NASA OEM products.
+9. Analyze time-resolved OEM evolution.
+10. Overlay documented trajectory events.
+11. Analyze trajectory-event windows.
+12. Decompose OEM residuals into the Earth-centered RTN frame.
+13. Validate the RTN residual decomposition.
+
+## Result
+
+PHASE 1 PIPELINE COMPLETE
+
+13 stages completed successfully.
+
+Total runtime during the closure run:
+
+15.94 seconds
+
+The complete mission backbone was regenerated and validated successfully.
+
+## Validation Highlights
+
+Nine public CCSDS OEM trajectory products were parsed and validated.
+
+Primary April 10 OEM:
+
+3,262 states.
+
+Maximum Earth-center distance:
+
+413,144.4 km
+2026-04-06T23:02:51.667 UTC
+
+Refined pericynthion:
+
+2026-04-06T23:00:46.177998 UTC
+
+Moon-center distance:
+
+8,281.938 km
+
+Mean-radius lunar altitude:
+
+6,544.538 km
+
+Derived lunar SOI entry:
+
+2026-04-06T04:38:07.532302 UTC
+
+Derived lunar SOI exit:
+
+2026-04-07T17:23:41.922211 UTC
+
+RTN validation:
+
+23,188 residual records checked.
+
+Missing Phase 1E comparison rows:
+
+0
+
+Maximum position magnitude consistency errors were approximately
+1e-14 km, consistent with floating-point roundoff.
+
+## Reproducibility Decisions
+
+Raw NASA trajectory data and generated processed datasets remain outside
+Git.
+
+Source code, reference event data, configuration, documentation, and
+selected deterministic SVG figures remain version controlled.
+
+Matplotlib SVG generation was made deterministic by:
+
+- fixing the SVG hash salt;
+- removing generation-date metadata;
+- normalizing trailing whitespace after SVG generation.
+
+This allows repeated analysis runs to reproduce the committed figures
+without timestamp- or random-ID-driven Git changes.
+
+## Explicit Phase Boundary
+
+The separate high-rate Post-RTC3-to-Entry-Interface trajectory product
+remains outside Phase 1.
+
+It is intentionally reserved for the dedicated entry/reentry analysis.
+
+## Phase 1 Status
+
+COMPLETE
+
+The project now has a validated temporal and geometric mission backbone
+capable of supporting later Artemis II engineering subsystems.
