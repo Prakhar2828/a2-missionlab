@@ -13347,3 +13347,1006 @@ Phase 2F.2 status:
 ```text
 COMPLETE
 ```
+
+---
+
+# Phase 2F.3 — Artemis II Loft / Rebound Heating-History Segmentation
+
+## Goal
+
+Phase 2F.3 connects the existing Phase 2E.4 modeled external convective-heating history to the derived Artemis II vertical rebound / loft identified in Phase 2C and formalized in Phase 2F.2.
+
+The phase asks:
+
+```text
+What happened to the modeled external
+convective heating before, during,
+and after the Artemis II loft / rebound?
+```
+
+This phase does not introduce a new aerothermal model.
+
+Instead it segments the existing Phase 2E.4 Sutton-Graves heating product relative to the derived trajectory landmarks.
+
+---
+
+# Relationship to Phase 2E.4
+
+Phase 2E.4 produced:
+
+```text
+entry_heating.csv
+entry_heating_summary.json
+```
+
+with:
+
+```text
+819 trajectory states
+Sutton-Graves convective heat flux
+formal cumulative heat load
+Knudsen-domain flags
+Mach-domain flags
+```
+
+The stronger-continuum interpretation domain is:
+
+```text
+Kn < 0.001
+and
+Mach >= 5
+```
+
+Its integrated modeled convective heat load is:
+
+```text
+159.150073328 MJ/m^2
+```
+
+Phase 2F.3 does not alter this model or recompute its physical assumptions.
+
+It only partitions that existing heating history around the Artemis II derived vertical rebound.
+
+---
+
+# Relationship to Phase 2F.2
+
+Phase 2F.2 established the Artemis II trajectory terminology:
+
+```text
+NASA classification:
+MODIFIED TRAJECTORY WITHOUT SKIP ENTRY
+
+NASA public label:
+LOFTED ENTRY SEQUENCE
+
+MissionLab derived feature:
+VERTICAL REBOUND / LOFT
+```
+
+Phase 2F.3 therefore preserves:
+
+```text
+loft
+rebound
+```
+
+as the allowed terminology.
+
+It does not relabel Artemis II as a skip entry.
+
+---
+
+# Permanent Analyzer
+
+Created:
+
+```text
+scripts/analysis/analyze_loft_heating_history.py
+```
+
+The analyzer combines:
+
+```text
+Phase 2E.4 entry_heating.csv
++
+Phase 2E.4 entry_heating_summary.json
++
+Phase 2C entry_dynamics_summary.json
+```
+
+and writes:
+
+```text
+data/processed/entry/loft_heating_history.json
+```
+
+The processed JSON remains ignored from Git.
+
+---
+
+# Product Provenance
+
+The derived product uses:
+
+```text
+MISSIONLAB_DERIVED_FROM_PHASE2E4_MODEL_OUTPUT
+```
+
+provenance.
+
+This is important because the result is not:
+
+```text
+measured heat-shield heat flux
+onboard thermal telemetry
+Avcoat internal temperature
+material-response reconstruction
+or postflight damage measurement
+```
+
+It is a segmentation of the existing MissionLab external aerothermal model.
+
+---
+
+# Thermal-History Ordering
+
+The reconstructed ordering is:
+
+```text
+strong-continuum start
+EI+45.249112 s
+
+Sutton-Graves peak
+EI+85.000000 s
+
+loft / rebound start
+EI+112.294128 s
+
+loft / rebound end
+EI+239.647374 s
+
+final Mach 5 crossing
+EI+464.815771 s
+```
+
+The ordering is therefore:
+
+```text
+strong-domain start
+→ SG peak
+→ loft start
+→ loft end
+→ Mach 5
+```
+
+This ordering is independently validated.
+
+---
+
+# Sutton-Graves Peak Relative to Loft
+
+Peak modeled Sutton-Graves heat flux:
+
+```text
+109.641953 W/cm^2
+```
+
+Peak time:
+
+```text
+EI+85.000000 s
+```
+
+Loft start:
+
+```text
+EI+112.294128 s
+```
+
+Difference:
+
+```text
+27.294128 s
+```
+
+Therefore the modeled external convective-heating peak occurs:
+
+```text
+27.294128 s before loft start
+```
+
+---
+
+# Strong-Domain Segmentation
+
+The stronger-continuum / hypersonic domain is partitioned into three permanent segments.
+
+## Pre-Loft Segment
+
+Segment identifier:
+
+```text
+PRE_REBOUND_STRONG_DOMAIN
+```
+
+Bounds:
+
+```text
+Kn < 0.001 start
+to
+derived descent-to-climb crossing
+```
+
+Integrated modeled heat load:
+
+```text
+58.914089364 MJ/m^2
+```
+
+Fraction of stronger-domain total:
+
+```text
+37.017947%
+```
+
+---
+
+## Loft / Rebound Segment
+
+Segment identifier:
+
+```text
+REBOUND_LOFT
+```
+
+Bounds:
+
+```text
+descent-to-climb
+to
+climb-to-descent
+```
+
+Duration:
+
+```text
+127.353246 s
+```
+
+Integrated modeled heat load:
+
+```text
+60.443349677 MJ/m^2
+```
+
+Fraction of stronger-domain total:
+
+```text
+37.978839%
+```
+
+---
+
+## Post-Loft Segment
+
+Segment identifier:
+
+```text
+POST_REBOUND_TO_MACH5
+```
+
+Bounds:
+
+```text
+climb-to-descent
+to
+final Mach 5 crossing
+```
+
+Integrated modeled heat load:
+
+```text
+39.792634286 MJ/m^2
+```
+
+Fraction of stronger-domain total:
+
+```text
+25.003215%
+```
+
+---
+
+# Heat-Load Partition Closure
+
+The reconstructed partition sums to:
+
+```text
+159.150073328 MJ/m^2
+```
+
+Existing Phase 2E.4 stronger-domain heat load:
+
+```text
+159.150073328 MJ/m^2
+```
+
+Closure error:
+
+```text
+-0.000000030 J/m^2
+```
+
+Percent sum:
+
+```text
+100.000000000%
+```
+
+The segmentation therefore reproduces the Phase 2E.4 stronger-domain integral to essentially numerical precision.
+
+---
+
+# Key Heat-Load Result
+
+The loft / rebound interval alone accounts for:
+
+```text
+37.978839%
+```
+
+of the entire stronger-continuum, Mach>=5 modeled convective heat load.
+
+This is slightly more than the pre-loft segment:
+
+```text
+37.978839%
+versus
+37.017947%
+```
+
+The post-loft portion contributes:
+
+```text
+25.003215%
+```
+
+This demonstrates that a substantial portion of modeled external heating continues to accumulate after the formal Sutton-Graves peak.
+
+---
+
+# External Heat Flux at Loft Start
+
+Derived loft start:
+
+```text
+EI+112.294128 s
+```
+
+Altitude:
+
+```text
+60.350128 km
+```
+
+Earth-relative speed:
+
+```text
+8.993741 km/s
+```
+
+Mach:
+
+```text
+28.826346
+```
+
+Body-scale Knudsen number:
+
+```text
+5.403559655275e-05
+```
+
+Modeled external Sutton-Graves heat flux:
+
+```text
+88.222385 W/cm^2
+```
+
+---
+
+# External Heat Flux at Loft End
+
+Derived loft end:
+
+```text
+EI+239.647374 s
+```
+
+Altitude:
+
+```text
+64.211808 km
+```
+
+Earth-relative speed:
+
+```text
+6.479165 km/s
+```
+
+Mach:
+
+```text
+21.291566
+```
+
+Body-scale Knudsen number:
+
+```text
+8.988479177380e-05
+```
+
+Modeled external Sutton-Graves heat flux:
+
+```text
+25.574568 W/cm^2
+```
+
+---
+
+# External Heat-Flux Change Across the Loft
+
+Loft-start modeled external heat flux:
+
+```text
+88.222385 W/cm^2
+```
+
+Loft-end modeled external heat flux:
+
+```text
+25.574568 W/cm^2
+```
+
+Signed change:
+
+```text
+-71.011249%
+```
+
+Classification:
+
+```text
+DECREASED
+```
+
+This refers only to the modeled external convective heat-flux boundary condition.
+
+---
+
+# Important Thermal Interpretation Limit
+
+A decrease in modeled external heat flux does not imply:
+
+```text
+decreasing Avcoat internal temperature
+```
+
+or:
+
+```text
+cooling throughout the TPS
+```
+
+because MissionLab does not currently model:
+
+```text
+solid conduction
+material thermal inertia
+Avcoat pyrolysis
+gas generation
+internal gas pressure
+char evolution
+permeability
+recession
+or coupled material response
+```
+
+External heating can decline while internal material temperatures continue evolving because of thermal lag.
+
+Therefore MissionLab uses:
+
+```text
+external heat-flux decline
+```
+
+and does not use:
+
+```text
+TPS cooling
+```
+
+as an inferred conclusion.
+
+---
+
+# Rebound Interval Extrema
+
+The permanent analyzer includes interpolated interval boundaries when determining extrema.
+
+This corrects the exploratory inspection, which initially searched only integer-second trajectory samples.
+
+Permanent rebound maximum:
+
+```text
+88.222385 W/cm^2
+```
+
+at:
+
+```text
+EI+112.294128 s
+```
+
+Location classification:
+
+```text
+START_BOUNDARY
+```
+
+Permanent rebound minimum:
+
+```text
+25.574568 W/cm^2
+```
+
+at:
+
+```text
+EI+239.647374 s
+```
+
+Location classification:
+
+```text
+END_BOUNDARY
+```
+
+Average modeled external heat flux during the loft:
+
+```text
+47.461177 W/cm^2
+```
+
+---
+
+# Why Boundary Interpolation Matters
+
+The loft boundaries occur at:
+
+```text
+EI+112.294128 s
+EI+239.647374 s
+```
+
+rather than at integer-second samples.
+
+Searching only sampled states would produce approximately:
+
+```text
+87.502812 W/cm^2
+```
+
+and:
+
+```text
+25.657622 W/cm^2
+```
+
+for the nearest interior samples.
+
+Those are not the actual interval-boundary values.
+
+The permanent implementation explicitly inserts interpolated endpoints before:
+
+```text
+integration
+minimum calculation
+maximum calculation
+average calculation
+```
+
+so all interval statistics use identical mathematical boundaries.
+
+---
+
+# Post-Peak Heating Context
+
+Heat load accumulated from the SG peak to loft start:
+
+```text
+27.555928369 MJ/m^2
+```
+
+Heat load accumulated from the SG peak through loft end:
+
+```text
+87.999278046 MJ/m^2
+```
+
+This represents:
+
+```text
+55.293269%
+```
+
+of the entire stronger-domain heat load.
+
+Heat load accumulated from the SG peak through final Mach 5:
+
+```text
+127.791912333 MJ/m^2
+```
+
+This represents:
+
+```text
+80.296483%
+```
+
+of the stronger-domain heat load.
+
+---
+
+# Key Post-Peak Result
+
+The modeled Sutton-Graves peak is not the point at which most integrated heating is complete.
+
+From the SG peak through final Mach 5, the model still accumulates:
+
+```text
+127.791912333 MJ/m^2
+```
+
+or:
+
+```text
+80.296483%
+```
+
+of the full stronger-domain integrated heat load.
+
+This reinforces the distinction between:
+
+```text
+peak heat flux
+```
+
+and:
+
+```text
+integrated heat load
+```
+
+They describe different aspects of the thermal environment.
+
+---
+
+# Figures
+
+Created:
+
+```text
+docs/assets/entry/phase2f_loft_heating_flux.svg
+```
+
+This figure shows modeled external Sutton-Graves heat flux through:
+
+```text
+SG peak
+loft start
+loft end
+```
+
+within the permanent stronger-continuum / hypersonic interpretation domain.
+
+Created:
+
+```text
+docs/assets/entry/phase2f_loft_heat_load_partition.svg
+```
+
+This figure compares the modeled stronger-domain integrated heat load for:
+
+```text
+pre-loft
+loft / rebound
+post-loft
+```
+
+Created:
+
+```text
+docs/assets/entry/phase2f_loft_cumulative_heat_load.svg
+```
+
+This figure shows cumulative modeled external convective heat load from the stronger-continuum boundary through final Mach 5 with the loft boundaries marked.
+
+All figures use deterministic SVG configuration.
+
+---
+
+# Independent Validator
+
+Created:
+
+```text
+scripts/validation/validate_loft_heating_history.py
+```
+
+The validator independently reconstructs:
+
+```text
+thermal-history ordering
+three segment boundaries
+segment heat-load integrals
+segment percentages
+segment durations
+boundary-interpolated extrema
+average loft heat flux
+external flux change
+partition closure
+post-peak heat-load accumulation
+figure inventory
+interpretation guardrails
+```
+
+from the existing Phase 2E.4 and Phase 2C products.
+
+---
+
+# Validation Results
+
+Thermal-history ordering:
+
+```text
+strong start:
+EI+45.249112 s
+
+SG peak:
+EI+85.000000 s
+
+loft start:
+EI+112.294128 s
+
+loft end:
+EI+239.647374 s
+
+Mach 5:
+EI+464.815771 s
+```
+
+Strong-domain partition:
+
+```text
+PRE_REBOUND_STRONG_DOMAIN
+58.914089364 MJ/m^2
+37.017947%
+
+REBOUND_LOFT
+60.443349677 MJ/m^2
+37.978839%
+
+POST_REBOUND_TO_MACH5
+39.792634286 MJ/m^2
+25.003215%
+```
+
+External loft heat-flux change:
+
+```text
+start:
+88.222385 W/cm^2
+
+end:
+25.574568 W/cm^2
+
+change:
+-71.011249%
+```
+
+Boundary extrema:
+
+```text
+maximum:
+START_BOUNDARY
+
+minimum:
+END_BOUNDARY
+```
+
+Partition reconstruction:
+
+```text
+159.150073328 MJ/m^2
+```
+
+Phase 2E.4 reference:
+
+```text
+159.150073328 MJ/m^2
+```
+
+Closure error:
+
+```text
+-0.000000030 J/m^2
+```
+
+Percent sum:
+
+```text
+100.000000000%
+```
+
+Figures checked:
+
+```text
+3
+```
+
+Final validation result:
+
+```text
+PASS
+```
+
+---
+
+# Permanent Guardrails
+
+The following inference is prohibited:
+
+```text
+external heat-flux decline
+→ internal TPS cooling
+```
+
+The following inference is prohibited:
+
+```text
+external Sutton-Graves heat load
+→ Avcoat char-loss quantity
+```
+
+The following inference is prohibited:
+
+```text
+loft geometry
+→ TPS damage quantity
+```
+
+The following inference is prohibited:
+
+```text
+loft
+→ Artemis II skip-entry classification
+```
+
+No Phase 2F.3 output represents:
+
+```text
+internal Avcoat temperature
+pyrolysis-gas generation
+internal gas pressure
+material permeability
+char thickness
+recession depth
+crack initiation
+or damage probability
+```
+
+---
+
+# What Phase 2F.3 Teaches
+
+The Artemis II loft occurs after the modeled external heat-flux peak, but not after the external thermal environment becomes insignificant.
+
+The loft interval alone contains approximately:
+
+```text
+38%
+```
+
+of the entire stronger-domain integrated modeled heat load.
+
+At the same time, modeled external heat flux falls by approximately:
+
+```text
+71%
+```
+
+across the loft.
+
+These observations demonstrate why:
+
+```text
+peak heat flux
+```
+
+and:
+
+```text
+integrated heat load
+```
+
+must not be treated as interchangeable quantities.
+
+They also demonstrate why TPS interpretation requires time history.
+
+Ablative material behavior depends on the coupled evolution of:
+
+```text
+external heating
++
+material temperature
++
+thermal transport
++
+pyrolysis
++
+gas flow
++
+material structure
+```
+
+MissionLab currently reconstructs only the first element with a low-fidelity engineering heating correlation.
+
+---
+
+# Phase 2F.3 Status
+
+External heating segmentation:
+
+```text
+PASS
+```
+
+Boundary interpolation:
+
+```text
+PASS
+```
+
+Strong-domain partition closure:
+
+```text
+PASS
+```
+
+Post-peak heat-load analysis:
+
+```text
+PASS
+```
+
+Interpretation guardrails:
+
+```text
+PASS
+```
+
+Figures:
+
+```text
+3
+PASS
+```
+
+Phase 2F.3 status:
+
+```text
+COMPLETE
+```
