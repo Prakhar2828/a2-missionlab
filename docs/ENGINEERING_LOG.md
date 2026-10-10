@@ -29270,3 +29270,1782 @@ COMPLETE
 ```
 
 Git workflow closure remains pending until the documented implementation is committed, pushed, and the working tree is verified clean.
+
+---
+
+# Phase 2I.4 — Maneuver Operational Threads and Phase 2I Closure
+
+## Goal
+
+Phase 2I.4 integrates the maneuver, propulsion, communications, trajectory, and entry-context work from Phases 2I.1 through 2I.3 into evidence-backed mission-operations threads.
+
+The purpose is not to reconstruct an undocumented Mission Control transcript.
+
+The purpose is to establish:
+
+```text
+what was planned
+what was cancelled
+what was executed
+what public evidence says about why
+where the spacecraft was in the mission
+what communications context existed
+what propulsion information is known
+what propulsion information remains unknown
+what trajectory-solution evolution is visible
+what conclusions cannot be made from public evidence
+```
+
+The permanent operational boundary is:
+
+```text
+public operational sequence
+!=
+console transcript
+!=
+Flight Director rationale tree
+!=
+root-cause analysis
+```
+
+---
+
+# Permanent Reference Dataset
+
+Created:
+
+```text
+data/reference/artemis_ii_maneuver_operational_threads.json
+```
+
+Dataset identifier:
+
+```text
+phase2i4_artemis_ii_maneuver_operational_threads
+```
+
+Provenance:
+
+```text
+NASA_AND_ESA_REPORTED_WITH_MISSIONLAB_DERIVED_OPERATIONAL_CORRELATIONS
+```
+
+The dataset integrates:
+
+```text
+Phase 2I.1 maneuver plan/execution evidence
+Phase 2I.2 propulsion architecture
+Phase 2I.2 burn-selection evidence boundary
+Phase 2I.3 mission-clock correlations
+Phase 2I.3 OEM solution evolution
+Phase 2H communications operational threads
+lunar geometry context
+entry and splashdown timing
+```
+
+---
+
+# Correction Opportunity Accounting
+
+Total planned correction opportunities:
+
+```text
+6
+```
+
+Executed:
+
+```text
+4
+```
+
+Cancelled:
+
+```text
+2
+```
+
+---
+
+# Outbound Correction Accounting
+
+Planned outbound corrections:
+
+```text
+3
+```
+
+Cancelled:
+
+```text
+2
+```
+
+Executed:
+
+```text
+1
+```
+
+Cancellation fraction:
+
+```text
+2 / 3
+=
+0.666666...
+=
+66.667%
+```
+
+This does not represent a failure rate.
+
+The two cancelled maneuvers were intentionally not executed because public reporting stated that Orion's trajectory already satisfied the required flight path.
+
+---
+
+# Return Correction Accounting
+
+Planned return corrections:
+
+```text
+3
+```
+
+Executed:
+
+```text
+3
+```
+
+Execution fraction:
+
+```text
+3 / 3
+=
+100%
+```
+
+Executed return corrections:
+
+```text
+RTC1
+RTC2
+RTC3
+```
+
+---
+
+# Operational Thread 1 — Outbound Adaptive Trajectory Management
+
+Thread ID:
+
+```text
+outbound_adaptive_trajectory_management
+```
+
+Classification:
+
+```text
+NOMINAL_ADAPTIVE_TRAJECTORY_MANAGEMENT
+```
+
+Anomaly:
+
+```text
+FALSE
+```
+
+Sequence:
+
+```text
+OTC1 planned
+↓
+OTC1 cancelled
+↓
+OTC2 planned
+↓
+OTC2 cancelled
+↓
+OTC3 executed
+↓
+lunar SOI entry
+↓
+pericynthion
+```
+
+---
+
+# OTC1
+
+Status:
+
+```text
+CANCELLED
+```
+
+Reason classification:
+
+```text
+TRAJECTORY_ALREADY_ON_CORRECT_FLIGHT_PATH
+```
+
+Failed burn:
+
+```text
+FALSE
+```
+
+Propulsion anomaly:
+
+```text
+FALSE
+```
+
+The burn was never executed.
+
+Therefore:
+
+```text
+cancelled correction
+!=
+failed burn
+```
+
+---
+
+# OTC2
+
+Status:
+
+```text
+CANCELLED
+```
+
+Reason classification:
+
+```text
+TRAJECTORY_REMAINED_ON_TRACK
+```
+
+Failed burn:
+
+```text
+FALSE
+```
+
+Propulsion anomaly:
+
+```text
+FALSE
+```
+
+Parallel operational activity:
+
+```text
+ATTITUDE_ADJUSTMENT_FOR_WASTEWATER_VENT_CLEARING
+```
+
+The schedule change did not establish a propulsion problem.
+
+---
+
+# OTC3
+
+Status:
+
+```text
+EXECUTED
+```
+
+Timestamp:
+
+```text
+2026-04-06T03:03:00Z
+```
+
+Precision:
+
+```text
+MINUTE_LEVEL
+```
+
+Duration:
+
+```text
+17.5 s
+```
+
+Mission phase:
+
+```text
+OUTBOUND_TRANSIT
+```
+
+Reported public delta-v in the Phase 2I source set:
+
+```text
+NONE
+```
+
+Engine assignment:
+
+```text
+UNRESOLVED_AS_FLOWN
+```
+
+---
+
+# OTC3 to Lunar SOI Entry
+
+Interval:
+
+```text
+5707.532302 s
+```
+
+Equivalent:
+
+```text
+1 h 35 min 07.532 s
+```
+
+Sequence:
+
+```text
+OTC3
+↓
+~1 h 35 min
+↓
+lunar SOI entry
+```
+
+The interval combines:
+
+```text
+minute-level public burn timing
++
+MissionLab-derived lunar geometry
+```
+
+---
+
+# OTC3 to Pericynthion
+
+Interval:
+
+```text
+71866.177998 s
+```
+
+Equivalent:
+
+```text
+19 h 57 min 46.178 s
+```
+
+This connects the final outbound correction to the lunar-flyby geometry without implying that public timing alone reconstructs the targeting algorithm.
+
+---
+
+# Postflight Outbound Context
+
+ESA postflight reporting provides the context that the translunar injection was sufficiently precise that two of the three planned outbound corrections were unnecessary.
+
+MissionLab preserves this as:
+
+```text
+POSTFLIGHT REPORTED CONTEXT
+```
+
+It does not reconstruct:
+
+```text
+full console decision logic
+Flight Director rationale tree
+targeting threshold logic
+navigation covariance threshold
+go/no-go criteria
+```
+
+because those are not present in the public evidence set.
+
+---
+
+# Operational Thread 2 — Lunar Flyby Expected Communications Constraint
+
+Thread ID:
+
+```text
+lunar_flyby_expected_communications_constraint
+```
+
+Classification:
+
+```text
+EXPECTED_OPERATIONAL_CONSTRAINT
+```
+
+Anomaly:
+
+```text
+FALSE
+```
+
+Propulsion anomaly:
+
+```text
+FALSE
+```
+
+Sequence:
+
+```text
+expected lunar blackout
+↓
+Earthrise
+↓
+DSN reacquisition sequence
+```
+
+The lunar blackout is caused by known lunar occultation geometry and was expected operationally.
+
+Therefore:
+
+```text
+expected lunar blackout
+!=
+communications anomaly
+```
+
+and:
+
+```text
+expected lunar blackout
+!=
+propulsion anomaly
+```
+
+---
+
+# Lunar Reacquisition Precision Boundary
+
+Reported Earthrise:
+
+```text
+2026-04-06T23:24:00Z
+```
+
+Precision:
+
+```text
+MINUTE_LEVEL
+```
+
+Live DSN reacquisition:
+
+```text
+MOMENTS AFTER EARTHRISE
+```
+
+Precision:
+
+```text
+SEQUENCE_ONLY
+```
+
+Exact live reacquisition UTC:
+
+```text
+NOT PUBLIC
+```
+
+MissionLab does not assign the planned 23:25 UTC value as an observed live reacquisition time.
+
+---
+
+# Operational Thread 3 — Return Trajectory Refinement
+
+Thread ID:
+
+```text
+return_trajectory_refinement
+```
+
+Classification:
+
+```text
+NOMINAL_RETURN_TRAJECTORY_MANAGEMENT
+```
+
+Anomaly:
+
+```text
+FALSE
+```
+
+Sequence:
+
+```text
+lunar SOI exit
+↓
+RTC1
+↓
+RTC2 after communications recovery
+↓
+RTC3
+↓
+Entry Interface
+```
+
+---
+
+# Lunar SOI Exit to RTC1
+
+Derived lunar SOI exit:
+
+```text
+2026-04-07T17:23:41.922211Z
+```
+
+RTC1:
+
+```text
+2026-04-08T00:03:00Z
+```
+
+Interval:
+
+```text
+23958.077789 s
+```
+
+Equivalent:
+
+```text
+6 h 39 min 18.078 s
+```
+
+RTC1 therefore occurred during the trans-Earth return after Orion exited the MissionLab-derived lunar SOI.
+
+---
+
+# RTC1
+
+Status:
+
+```text
+EXECUTED
+```
+
+Duration:
+
+```text
+15.0 s
+```
+
+Reported delta-v magnitude:
+
+```text
+1.6 ft/s
+```
+
+Engine assignment:
+
+```text
+UNRESOLVED_AS_FLOWN
+```
+
+---
+
+# RTC2
+
+Status:
+
+```text
+EXECUTED
+```
+
+Duration:
+
+```text
+9.0 s
+```
+
+Reported delta-v magnitude:
+
+```text
+5.3 ft/s
+```
+
+Engine assignment:
+
+```text
+UNRESOLVED_AS_FLOWN
+```
+
+Communications had been restored before the burn and burn preparation resumed.
+
+---
+
+# RTC3
+
+Status:
+
+```text
+EXECUTED
+```
+
+Duration:
+
+```text
+8.0 s
+```
+
+Reported delta-v magnitude:
+
+```text
+4.2 ft/s
+```
+
+Engine assignment:
+
+```text
+UNRESOLVED_AS_FLOWN
+```
+
+---
+
+# Operational Thread 4 — RTC2 Communications Interruption and Recovery
+
+Thread ID:
+
+```text
+rtc2_communications_interruption_and_recovery
+```
+
+Classification:
+
+```text
+UNEXPECTED_COMMUNICATIONS_ANOMALY_WITH_MISSION_CONTINUATION
+```
+
+Anomaly:
+
+```text
+TRUE
+```
+
+Operational sequence:
+
+```text
+unexpected return-link loss
+↓
+two-way communications reestablished
+↓
+burn preparation resumed
+↓
+RTC2 executed
+```
+
+---
+
+# RTC2 Return-Link Loss
+
+Approximate computational anchor:
+
+```text
+2026-04-10T00:53:00Z
+```
+
+Precision:
+
+```text
+APPROXIMATE
+```
+
+Observed exact anomaly timestamp:
+
+```text
+FALSE
+```
+
+Supported affected direction:
+
+```text
+RETURN_LINK
+```
+
+The event affected communication and telemetry transmission from spacecraft to ground.
+
+---
+
+# Data-Rate Change Boundary
+
+NASA reported the communications event occurred:
+
+```text
+DURING_DATA_RATE_CHANGE
+```
+
+This establishes context.
+
+It does not establish:
+
+```text
+DATA_RATE_CHANGE CAUSED FAILURE
+```
+
+Therefore:
+
+```text
+context
+!=
+causation
+```
+
+Permanent causal classification:
+
+```text
+NOT_ESTABLISHED
+```
+
+---
+
+# Two-Way Outage Boundary
+
+The public evidence supports:
+
+```text
+return-link loss
+```
+
+It does not establish:
+
+```text
+complete simultaneous two-way outage
+```
+
+Therefore:
+
+```text
+complete_two_way_outage_established:
+FALSE
+```
+
+---
+
+# RTC2 Mission Continuation
+
+Public sequence:
+
+```text
+return-link loss
+↓
+communications restored
+↓
+burn preparation resumed
+↓
+RTC2 executed
+```
+
+Burn executed after recovery:
+
+```text
+TRUE
+```
+
+Burn failure:
+
+```text
+FALSE
+```
+
+Propulsion anomaly inferred:
+
+```text
+FALSE
+```
+
+This distinction is critical.
+
+The communications anomaly and subsequent maneuver are operationally connected in sequence but are not evidence of a propulsion failure.
+
+---
+
+# Operational Thread 5 — Final Correction to Entry Handoff
+
+Thread ID:
+
+```text
+final_correction_to_entry_handoff
+```
+
+Classification:
+
+```text
+NOMINAL_ENTRY_TARGETING_HANDOFF
+```
+
+Anomaly:
+
+```text
+FALSE
+```
+
+Sequence:
+
+```text
+RTC3
+↓
+5-hour public clock interval
+↓
+Entry Interface
+↓
+splashdown
+```
+
+---
+
+# RTC3 to Entry Interface
+
+RTC3:
+
+```text
+2026-04-10T18:53:00Z
+```
+
+Entry Interface:
+
+```text
+2026-04-10T23:53:00Z
+```
+
+Interval:
+
+```text
+18000 s
+```
+
+Equivalent:
+
+```text
+5 h
+```
+
+The interval inherits minute-level public timing precision.
+
+It does not expose the complete entry-targeting algorithm.
+
+---
+
+# RTC3 to Splashdown
+
+Splashdown:
+
+```text
+2026-04-11T00:07:00Z
+```
+
+RTC3-to-splashdown interval:
+
+```text
+18840 s
+```
+
+Equivalent:
+
+```text
+5 h 14 min
+```
+
+---
+
+# Final Navigation / Guidance Boundary
+
+The final-correction thread establishes:
+
+```text
+RTC3
+→
+Entry Interface
+→
+splashdown
+```
+
+on the public mission clock.
+
+It does not establish:
+
+```text
+final navigation state vector
+final targeting covariance
+entry targeting algorithm
+guidance command history
+bank-command history
+flight-control command history
+```
+
+Those belong to future guidance/GNC reconstruction only where public evidence supports them.
+
+---
+
+# Propulsion Assignment Boundary
+
+Phase 2I.2 remains authoritative for burn-specific propulsion assignment.
+
+Resolved correction-burn engine assignments:
+
+```text
+0
+```
+
+Unresolved:
+
+```text
+4
+```
+
+Unresolved burns:
+
+```text
+OTC3
+RTC1
+RTC2
+RTC3
+```
+
+---
+
+# Confirmed OMS-E Uses
+
+Confirmed as-flown major maneuvers:
+
+```text
+Perigee Raise
+TLI
+```
+
+Engine:
+
+```text
+OMS-E
+```
+
+This does not imply:
+
+```text
+OTC3 -> OMS-E
+RTC1 -> OMS-E
+RTC2 -> OMS-E
+RTC3 -> OMS-E
+```
+
+Permanent rule:
+
+```text
+confirmed major-burn engine assignment
+!=
+correction-burn engine assignment
+```
+
+---
+
+# Correction Firing-Time Aggregate
+
+Known executed correction durations:
+
+```text
+OTC3   17.5 s
+RTC1   15.0 s
+RTC2    9.0 s
+RTC3    8.0 s
+```
+
+Sum:
+
+```text
+17.5 + 15 + 9 + 8
+=
+49.5 s
+```
+
+Therefore:
+
+```text
+known executed correction firing time:
+49.5 s
+```
+
+This is a duration sum only.
+
+It is not propulsion impulse.
+
+---
+
+# Return Scalar Delta-v Magnitude Sum
+
+Reported return magnitudes:
+
+```text
+RTC1   1.6 ft/s
+RTC2   5.3 ft/s
+RTC3   4.2 ft/s
+```
+
+Scalar magnitude sum:
+
+```text
+1.6 + 5.3 + 4.2
+=
+11.1 ft/s
+```
+
+Conversion:
+
+```text
+11.1 × 0.3048
+=
+3.38328 m/s
+```
+
+Therefore:
+
+```text
+11.1 ft/s
+3.38328 m/s
+```
+
+---
+
+# Scalar vs Vector Delta-v Boundary
+
+The quantity above is:
+
+```text
+SUM OF REPORTED SCALAR MAGNITUDES
+```
+
+It is not:
+
+```text
+NET VECTOR DELTA-V
+```
+
+because burn-vector directions are not present in the public source set.
+
+Therefore:
+
+```text
+net vector delta-v:
+NOT COMPUTED
+```
+
+---
+
+# All-Correction Delta-v Boundary
+
+OTC3 public delta-v in the Phase 2I source set:
+
+```text
+MISSING
+```
+
+Therefore MissionLab does not compute:
+
+```text
+OTC3 + RTC1 + RTC2 + RTC3
+```
+
+as an all-correction scalar delta-v total.
+
+Reason:
+
+```text
+OTC3_PUBLIC_DELTA_V_MISSING
+AND
+VECTOR_DIRECTIONS_UNAVAILABLE
+```
+
+---
+
+# OEM Trajectory-Solution Boundary
+
+Standard public OEM products:
+
+```text
+9
+```
+
+Same-epoch creation-bracket comparisons available:
+
+```text
+3
+```
+
+Available:
+
+```text
+OTC3
+RTC1
+RTC2
+```
+
+Unavailable:
+
+```text
+RTC3
+```
+
+because no later standard public OEM exists in the current archive.
+
+---
+
+# Maneuver Assimilation Boundary
+
+Maneuver assimilation established from public OEM metadata:
+
+```text
+FALSE
+```
+
+for:
+
+```text
+OTC3
+RTC1
+RTC2
+RTC3
+```
+
+Permanent rule:
+
+```text
+CREATION_DATE
+!=
+maneuver assimilation
+```
+
+---
+
+# OEM Interpretation Boundary
+
+Permanent rules:
+
+```text
+OEM solution difference
+!=
+navigation error
+```
+
+and:
+
+```text
+OEM solution difference
+!=
+measured burn delta-v
+```
+
+The OEM comparisons represent public trajectory-solution evolution only.
+
+---
+
+# Operational Thread Product
+
+Generated:
+
+```text
+data/processed/maneuvers/maneuver_operational_threads.csv
+```
+
+Rows:
+
+```text
+5
+```
+
+Each row contains:
+
+```text
+thread ID
+thread name
+classification
+anomaly flag
+step count
+sequence
+```
+
+The processed product remains ignored from Git.
+
+---
+
+# Operational Thread Summary
+
+Generated:
+
+```text
+data/processed/maneuvers/maneuver_operational_threads_summary.json
+```
+
+Product identifier:
+
+```text
+phase2i4_maneuver_operational_threads_analysis
+```
+
+The summary preserves:
+
+```text
+maneuver accounting
+propulsion boundary
+correction aggregates
+OEM solution boundary
+five operational threads
+Phase 2I closure criteria
+guardrails
+output paths
+```
+
+The processed product remains ignored from Git.
+
+---
+
+# Operational Thread Figure
+
+Created:
+
+```text
+docs/assets/maneuvers/phase2i4_maneuver_operational_threads.svg
+```
+
+The figure presents the five integrated operational threads:
+
+```text
+Outbound adaptive trajectory management
+Lunar flyby expected communications constraint
+Return trajectory refinement
+RTC2 communications interruption and recovery
+Final correction to entry handoff
+```
+
+The figure also preserves the explicit warning that operational threads are not:
+
+```text
+console logs
+Flight Director rationale trees
+root-cause analyses
+burn telemetry
+complete targeting logic
+```
+
+---
+
+# Independent Validator
+
+Created:
+
+```text
+scripts/validation/validate_maneuver_operational_threads.py
+```
+
+The validator independently checks:
+
+```text
+dataset identity
+summary identity
+six correction opportunities
+four executed corrections
+two cancelled corrections
+OTC1 cancellation semantics
+OTC2 cancellation semantics
+four unresolved correction engine assignments
+OMS-E non-generalization
+mission-phase classification
+OEM comparison count
+maneuver-assimilation boundary
+communications thread classification
+RTC2 causality boundary
+RTC2 outage-scope boundary
+five operational-thread identities
+five operational-thread classifications
+anomaly flags
+RTC2 mission-continuation semantics
+49.5-second firing-time aggregate
+11.1 ft/s return scalar magnitude sum
+3.38328 m/s SI conversion
+net-vector non-computation
+all-correction scalar non-computation
+OEM interpretation boundary
+CSV integrity
+summary integrity
+SVG integrity
+all Phase 2I closure criteria
+```
+
+---
+
+# Independent Validation Result
+
+Correction accounting:
+
+```text
+planned:
+6
+
+executed:
+4
+
+cancelled:
+2
+
+outbound:
+2 cancelled / 1 executed
+
+return:
+3 executed / 3 planned
+```
+
+Operational threads:
+
+```text
+outbound_adaptive_trajectory_management:
+PASS
+
+lunar_flyby_expected_communications_constraint:
+PASS
+
+return_trajectory_refinement:
+PASS
+
+rtc2_communications_interruption_and_recovery:
+PASS
+
+final_correction_to_entry_handoff:
+PASS
+```
+
+Outbound cancellation semantics:
+
+```text
+OTC1 cancelled != failed burn:
+PASS
+
+OTC2 cancelled != failed burn:
+PASS
+
+propulsion anomaly inferred:
+FALSE
+```
+
+Lunar blackout:
+
+```text
+EXPECTED_OPERATIONAL_CONSTRAINT:
+PASS
+
+anomaly:
+FALSE
+```
+
+RTC2 integration:
+
+```text
+communications anomaly:
+PASS
+
+causal relationship:
+NOT_ESTABLISHED
+
+complete two-way outage:
+NOT_ESTABLISHED
+
+burn executed after recovery:
+TRUE
+
+burn failure:
+FALSE
+
+propulsion anomaly inferred:
+FALSE
+```
+
+Propulsion assignment boundary:
+
+```text
+resolved correction assignments:
+0
+
+unresolved correction assignments:
+4
+
+confirmed OMS-E major burns generalized:
+FALSE
+```
+
+Correction aggregates:
+
+```text
+known firing time:
+49.5 s
+
+return scalar delta-v sum:
+11.1 ft/s
+
+return scalar delta-v sum:
+3.38328 m/s
+
+net vector delta-v:
+NOT COMPUTED
+
+all-correction scalar delta-v:
+NOT COMPUTED
+```
+
+OEM boundary:
+
+```text
+standard products:
+9
+
+common-epoch comparisons:
+3
+
+RTC3 later OEM:
+NONE
+
+maneuver assimilation established:
+FALSE
+
+navigation-error interpretation:
+FALSE
+
+measured-burn-delta-v interpretation:
+FALSE
+```
+
+Products:
+
+```text
+thread CSV rows:
+5
+
+summary:
+PASS
+
+operational-thread figure:
+PASS
+```
+
+---
+
+# Phase 2I Closure Criteria
+
+Maneuver plan vs execution:
+
+```text
+PASS
+```
+
+Cancelled vs failed semantics:
+
+```text
+PASS
+```
+
+Propulsion architecture:
+
+```text
+PASS
+```
+
+Burn-specific engine-assignment boundary:
+
+```text
+PASS
+```
+
+Mission-clock correlation:
+
+```text
+PASS
+```
+
+Lunar geometry correlation:
+
+```text
+PASS
+```
+
+Communications cross-phase context:
+
+```text
+PASS
+```
+
+Entry handoff correlation:
+
+```text
+PASS
+```
+
+OEM solution evolution:
+
+```text
+PASS
+```
+
+OEM-not-telemetry boundary:
+
+```text
+PASS
+```
+
+OEM-assimilation uncertainty:
+
+```text
+PASS
+```
+
+Scalar-vs-vector delta-v boundary:
+
+```text
+PASS
+```
+
+No unsupported thrust performance:
+
+```text
+PASS
+```
+
+Operational threads complete:
+
+```text
+PASS
+```
+
+Phase ready to close:
+
+```text
+PASS
+```
+
+---
+
+# Permanent Interpretation Guardrails
+
+## Guardrail 1
+
+```text
+cancelled correction
+!=
+failed burn
+```
+
+## Guardrail 2
+
+```text
+cancelled correction
+!=
+propulsion anomaly
+```
+
+## Guardrail 3
+
+```text
+expected lunar blackout
+!=
+anomaly
+```
+
+## Guardrail 4
+
+```text
+RTC2 communications anomaly
+!=
+propulsion anomaly
+```
+
+## Guardrail 5
+
+```text
+RTC2 communications anomaly
+!=
+failed burn
+```
+
+## Guardrail 6
+
+```text
+data-rate-change context
+!=
+causation
+```
+
+## Guardrail 7
+
+```text
+return-link loss
+!=
+proven complete two-way outage
+```
+
+## Guardrail 8
+
+```text
+propulsion architecture
+!=
+burn-specific engine assignment
+```
+
+## Guardrail 9
+
+```text
+confirmed OMS-E major maneuvers
+!=
+correction-burn engine assignment
+```
+
+## Guardrail 10
+
+```text
+scalar delta-v magnitude sum
+!=
+net vector delta-v
+```
+
+## Guardrail 11
+
+```text
+OEM solution difference
+!=
+navigation error
+```
+
+## Guardrail 12
+
+```text
+OEM solution difference
+!=
+measured burn delta-v
+```
+
+## Guardrail 13
+
+```text
+CREATION_DATE
+!=
+maneuver assimilation
+```
+
+## Guardrail 14
+
+```text
+public operational sequence
+!=
+full console log
+```
+
+## Guardrail 15
+
+```text
+public operational sequence
+!=
+Flight Director rationale tree
+```
+
+## Guardrail 16
+
+```text
+public operational sequence
+!=
+root-cause analysis
+```
+
+## Guardrail 17
+
+No unsupported:
+
+```text
+thrust-derived acceleration
+burn impulse
+propellant consumption
+engine efficiency
+```
+
+is inferred for the trajectory corrections.
+
+---
+
+# Engineering Significance
+
+Phase 2I now provides a complete public-evidence reconstruction of Artemis II maneuver and propulsion operations.
+
+The project can answer:
+
+```text
+What trajectory corrections were planned?
+
+Which were cancelled?
+
+Why did public reporting say they were cancelled?
+
+Which corrections actually executed?
+
+Where did they occur in the mission?
+
+What correction magnitudes were publicly reported?
+
+What propulsion architecture was available?
+
+Which engine assignments can actually be confirmed?
+
+How did communications context interact with maneuver operations?
+
+How did public trajectory solutions evolve around maneuver epochs?
+
+What cannot be inferred from those trajectory solutions?
+
+How did the final correction lead into entry?
+```
+
+without manufacturing unavailable mission-control or propulsion telemetry.
+
+---
+
+# Phase 2I Final Status
+
+Phase 2I.1:
+
+```text
+MANEUVER PLAN VS EXECUTION
+COMPLETE
+```
+
+Phase 2I.2:
+
+```text
+ESM PROPULSION ARCHITECTURE / BURN SELECTION
+COMPLETE
+```
+
+Phase 2I.3:
+
+```text
+MISSION-CLOCK / TRAJECTORY-SOLUTION CORRELATION
+COMPLETE
+```
+
+Phase 2I.4:
+
+```text
+MANEUVER OPERATIONAL THREADS
+COMPLETE
+```
+
+Overall Phase 2I:
+
+```text
+READY TO CLOSE
+```
+
+Git workflow closure remains pending until the documented implementation is committed, pushed, and the working tree is verified clean.
