@@ -22882,3 +22882,1590 @@ COMPLETE
 ```
 
 Git workflow closure remains pending until the documented implementation is committed, pushed, and the working tree is verified clean.
+
+---
+
+# Phase 2H.4 — Communications Operational Threads
+
+## Goal
+
+Phase 2H.4 converts the Artemis II communications reconstruction into evidence-backed operational threads.
+
+The purpose is to distinguish between:
+
+```text
+planned readiness activity
+expected communications constraints
+unexpected communications anomalies
+```
+
+while preserving the timing and provenance rules established in Phase 2H.1.
+
+The phase does not attempt to reconstruct private NASA console traffic or undocumented Flight Director decision logic.
+
+The permanent operational rule is:
+
+```text
+public operational sequence
+!=
+complete mission-control decision record
+```
+
+---
+
+# Permanent Reference Dataset
+
+Created:
+
+```text
+data/reference/artemis_ii_communications_operational_threads.json
+```
+
+Dataset identifier:
+
+```text
+phase2h4_artemis_ii_communications_operational_threads
+```
+
+Provenance:
+
+```text
+NASA_REPORTED_WITH_MISSIONLAB_DERIVED_CORRELATIONS
+```
+
+The reference dataset contains:
+
+```text
+source-backed operational threads
+thread classifications
+expected-versus-unexpected state
+event identities
+precision rules
+operational sequence
+decision-evidence boundaries
+interpretation guardrails
+```
+
+---
+
+# Thread Model
+
+Phase 2H.4 defines three operational threads.
+
+```text
+1.
+Emergency communications readiness
+
+2.
+Lunar occultation blackout and reacquisition
+
+3.
+Flight Day 9 return-link loss and recovery
+```
+
+The threads are not interchangeable.
+
+They represent three fundamentally different operational situations.
+
+---
+
+# Thread 1 — Emergency Communications Readiness
+
+Thread ID:
+
+```text
+emergency_communications_readiness
+```
+
+Classification:
+
+```text
+CONTINGENCY_READINESS
+```
+
+Expectedness:
+
+```text
+PLANNED_TEST_ACTIVITY
+```
+
+Anomaly:
+
+```text
+FALSE
+```
+
+NASA reported that Orion's emergency communications system was tested in deep space.
+
+Associated event:
+
+```text
+dsn_emergency_communications_test
+```
+
+Date:
+
+```text
+2026-04-03
+```
+
+Precision:
+
+```text
+DATE_LEVEL
+```
+
+State:
+
+```text
+OBSERVED_REPORTED
+```
+
+Exact test time:
+
+```text
+NONE
+```
+
+MissionLab does not create a time-of-day value because the public evidence does not support one.
+
+---
+
+# Readiness-Test Interpretation
+
+The emergency communications test is not classified as:
+
+```text
+an anomaly
+```
+
+or:
+
+```text
+communications failure
+```
+
+It is represented as contingency readiness activity.
+
+This distinction matters operationally because a mission-control system should separate:
+
+```text
+testing contingency capability
+```
+
+from:
+
+```text
+responding to an actual contingency
+```
+
+---
+
+# Thread 2 — Lunar Occultation Blackout and Reacquisition
+
+Thread ID:
+
+```text
+lunar_occultation_blackout_and_reacquisition
+```
+
+Classification:
+
+```text
+EXPECTED_OPERATIONAL_CONSTRAINT
+```
+
+Expectedness:
+
+```text
+EXPECTED
+```
+
+Anomaly:
+
+```text
+FALSE
+```
+
+This is a critical Phase 2H.4 distinction.
+
+The lunar-flyby loss of communications was expected.
+
+It must not be represented as a communications failure.
+
+---
+
+# Planned Lunar Blackout
+
+Planned blackout:
+
+```text
+2026-04-06T22:44:00Z
+```
+
+Precision:
+
+```text
+MINUTE_LEVEL
+```
+
+State:
+
+```text
+PLANNED
+```
+
+---
+
+# Reported Lunar Blackout
+
+Reported blackout:
+
+```text
+2026-04-06T22:44:00Z
+```
+
+Precision:
+
+```text
+MINUTE_LEVEL
+```
+
+State:
+
+```text
+OBSERVED_REPORTED
+```
+
+Reported minus planned blackout:
+
+```text
+0 seconds
+```
+
+At the precision available in NASA's public reporting:
+
+```text
+reported blackout minute
+=
+planned blackout minute
+```
+
+This does not imply second-level agreement.
+
+Both remain:
+
+```text
+MINUTE_LEVEL
+```
+
+---
+
+# Planned Earthrise
+
+Planned Earthrise:
+
+```text
+2026-04-06T23:25:00Z
+```
+
+Precision:
+
+```text
+MINUTE_LEVEL
+```
+
+---
+
+# Reported Earthrise
+
+Reported Earthrise:
+
+```text
+2026-04-06T23:24:00Z
+```
+
+Precision:
+
+```text
+MINUTE_LEVEL
+```
+
+Reported minus planned Earthrise:
+
+```text
+-60 seconds
+```
+
+Therefore NASA reported Earthrise one minute earlier than the previously published planned value.
+
+This is a comparison between minute-level public timestamps.
+
+It is not a second-level navigation measurement.
+
+---
+
+# Planned DSN Reacquisition
+
+Planned DSN reacquisition:
+
+```text
+2026-04-06T23:25:00Z
+```
+
+Precision:
+
+```text
+MINUTE_LEVEL
+```
+
+State:
+
+```text
+PLANNED
+```
+
+---
+
+# Live DSN Reacquisition
+
+Live NASA reporting states that DSN reacquisition occurred:
+
+```text
+MOMENTS_AFTER_REPORTED_EARTHRISE
+```
+
+Precision:
+
+```text
+SEQUENCE_ONLY
+```
+
+Exact UTC:
+
+```text
+NONE
+```
+
+Approximate UTC anchor:
+
+```text
+NONE
+```
+
+MissionLab does not replace the live sequence-only report with:
+
+```text
+23:25 UTC
+```
+
+simply because 23:25 UTC had been the planned reacquisition time.
+
+That would incorrectly convert a planned event into an observed event.
+
+---
+
+# Planned Blackout Window
+
+Planned blackout:
+
+```text
+22:44 UTC
+```
+
+Planned AOS:
+
+```text
+23:25 UTC
+```
+
+Difference:
+
+```text
+2460 seconds
+41.0 minutes
+```
+
+---
+
+# Reported Blackout to Reported Earthrise
+
+Reported blackout:
+
+```text
+22:44 UTC
+```
+
+Reported Earthrise:
+
+```text
+23:24 UTC
+```
+
+Difference:
+
+```text
+2400 seconds
+40.0 minutes
+```
+
+This is a geometric-context interval.
+
+The actual live DSN reacquisition remains untimed because the public source only establishes sequence.
+
+---
+
+# Flight Day 6 Operational Sequence
+
+The evidence-backed sequence is:
+
+```text
+planned blackout
+        ↓
+reported blackout
+        ↓
+reported Earthrise
+        ↓
+live DSN reacquisition
+```
+
+with the parallel planned recovery context:
+
+```text
+planned Earthrise
+planned DSN AOS
+```
+
+The sequence demonstrates the distinction between:
+
+```text
+planned operations
+reported geometric context
+reported communications state
+```
+
+---
+
+# Flight Day 6 Classification
+
+Permanent classification:
+
+```text
+EXPECTED_OPERATIONAL_CONSTRAINT
+```
+
+Anomaly:
+
+```text
+FALSE
+```
+
+This remains true even though communications were temporarily unavailable.
+
+The reason is that the loss of communication was expected as part of lunar occultation.
+
+---
+
+# Thread 3 — Flight Day 9 Return-Link Loss and Recovery
+
+Thread ID:
+
+```text
+flight_day_9_return_link_loss_and_recovery
+```
+
+Classification:
+
+```text
+UNEXPECTED_COMMUNICATIONS_ANOMALY
+```
+
+Expectedness:
+
+```text
+UNEXPECTED
+```
+
+Anomaly:
+
+```text
+TRUE
+```
+
+This thread is operationally different from the lunar blackout.
+
+---
+
+# Flight Day 9 Anomaly Detection
+
+NASA reported:
+
+```text
+unexpected return-link loss of signal
+```
+
+Context:
+
+```text
+DURING_DATA_RATE_CHANGE
+```
+
+Event state:
+
+```text
+REPORTED
+```
+
+Precision:
+
+```text
+APPROXIMATE
+```
+
+Approximate computational anchor:
+
+```text
+~2026-04-10T00:53:00Z
+```
+
+Anchor exact:
+
+```text
+FALSE
+```
+
+The anchor is constructed from:
+
+```text
+RTC2 timestamp
+minus
+approximately two hours
+```
+
+It is not an observed loss-of-signal timestamp.
+
+---
+
+# RTC2 Anchor
+
+RTC2:
+
+```text
+2026-04-10T02:53:00Z
+```
+
+Approximate loss anchor:
+
+```text
+~2026-04-10T00:53:00Z
+```
+
+Difference:
+
+```text
+~7200 seconds
+~2.000 hours
+```
+
+The approximation comes from NASA's public phrase:
+
+```text
+about two hours before the burn
+```
+
+rather than from telemetry.
+
+---
+
+# Data-Rate-Change Context
+
+NASA reported that the return-link loss occurred:
+
+```text
+during a data-rate change
+```
+
+MissionLab permanently represents this as:
+
+```text
+context = DURING_DATA_RATE_CHANGE
+```
+
+Causal relationship:
+
+```text
+NOT_ESTABLISHED
+```
+
+This is an important engineering distinction.
+
+The evidence supports:
+
+```text
+event occurred during data-rate change
+```
+
+but does not support:
+
+```text
+data-rate change caused the event
+```
+
+---
+
+# Supported Affected Direction
+
+Supported direction:
+
+```text
+RETURN_LINK
+```
+
+The public reporting supports impact to information traveling:
+
+```text
+Orion
+→
+ground
+```
+
+including:
+
+```text
+communications
+telemetry
+```
+
+MissionLab does not generalize the event into an unsupported total communications failure.
+
+---
+
+# Two-Way-Outage Guardrail
+
+Complete simultaneous two-way outage established:
+
+```text
+FALSE
+```
+
+The anomaly was described as a:
+
+```text
+return-link loss
+```
+
+Therefore the initial anomaly is not automatically interpreted as:
+
+```text
+both uplink and downlink completely unavailable
+```
+
+The later statement that two-way communications were reestablished does not change the precision of the original anomaly description.
+
+---
+
+# Recovery
+
+NASA subsequently reported:
+
+```text
+two-way communications reestablished
+```
+
+Associated event:
+
+```text
+two_way_communications_reestablished
+```
+
+Precision:
+
+```text
+SEQUENCE_ONLY
+```
+
+Ordering:
+
+```text
+SHORTLY_AFTER_UNEXPECTED_RETURN_LINK_LOSS_BEFORE_RTC2
+```
+
+Exact recovery UTC:
+
+```text
+NONE
+```
+
+Approximate recovery UTC:
+
+```text
+NONE
+```
+
+Anomaly duration:
+
+```text
+UNKNOWN
+```
+
+MissionLab does not turn:
+
+```text
+shortly afterward
+```
+
+into a numeric duration.
+
+---
+
+# Operations Resumed
+
+NASA reported that flight controllers resumed preparation for RTC2 with the crew after communications were restored.
+
+Permanent operational step:
+
+```text
+burn_preparation_resumed
+```
+
+Precision:
+
+```text
+SEQUENCE_ONLY
+```
+
+Timestamp:
+
+```text
+NONE
+```
+
+Ordering:
+
+```text
+AFTER_COMMUNICATIONS_REESTABLISHED_BEFORE_RTC2
+```
+
+This allows MissionLab to represent the operational consequence without inventing a console timestamp.
+
+---
+
+# Flight Day 9 Operational Sequence
+
+The evidence-backed sequence is:
+
+```text
+unexpected return-link loss
+        ↓
+two-way communications reestablished
+        ↓
+burn preparation resumed
+        ↓
+RTC2
+```
+
+Only the final RTC2 event has a source-reported timestamp precise enough to use as a timed burn anchor.
+
+The anomaly and recovery stages retain their weaker public precision.
+
+---
+
+# Root Cause
+
+Public root cause available:
+
+```text
+FALSE
+```
+
+MissionLab does not identify:
+
+```text
+hardware failure
+software failure
+ground-system failure
+spacecraft subsystem failure
+modem failure
+antenna failure
+network failure
+configuration error
+operator error
+```
+
+because the available public evidence does not establish any of those explanations.
+
+---
+
+# Failed Subsystem
+
+Failed subsystem identified:
+
+```text
+FALSE
+```
+
+The reconstruction intentionally stops at the supported event description.
+
+---
+
+# Anomaly Duration
+
+Duration known:
+
+```text
+FALSE
+```
+
+The public evidence establishes sequence:
+
+```text
+loss
+↓
+recovery
+```
+
+but does not provide both endpoints with defensible timestamps.
+
+Therefore no anomaly-duration calculation is performed.
+
+---
+
+# Decision-Evidence Boundary
+
+Phase 2H.4 explicitly records the difference between information available publicly and information that would normally exist inside mission operations.
+
+Public event sequence:
+
+```text
+TRUE
+```
+
+Public planned-versus-reported timing:
+
+```text
+TRUE
+```
+
+Public full console transcript:
+
+```text
+FALSE
+```
+
+Public Flight Director rationale tree:
+
+```text
+FALSE
+```
+
+Public fault-isolation sequence:
+
+```text
+FALSE
+```
+
+Public root-cause analysis:
+
+```text
+FALSE
+```
+
+Public failed-subsystem identification:
+
+```text
+FALSE
+```
+
+---
+
+# Mission-Control Reconstruction Boundary
+
+MissionLab can reconstruct:
+
+```text
+what was planned
+what was publicly reported
+event order
+approximate relationship to major mission events
+whether an event was expected
+whether an event was anomalous
+whether normal operations resumed
+```
+
+MissionLab cannot reconstruct from the current public evidence:
+
+```text
+console calls
+Flight Director polling
+internal troubleshooting hypotheses
+fault isolation
+private telemetry interpretation
+command history
+decision rationale
+GO / NO-GO logic
+root cause
+```
+
+Those boundaries are features of the reconstruction rather than missing rigor.
+
+---
+
+# Permanent Analyzer
+
+Created:
+
+```text
+scripts/analysis/analyze_communications_operational_threads.py
+```
+
+The analyzer validates:
+
+```text
+three operational-thread identities
+classification semantics
+expected-versus-unexpected state
+anomaly flags
+source precision
+planned-versus-reported timing
+lunar blackout window
+Flight Day 9 approximate anchor
+recovery sequence
+burn-preparation resumption
+RTC2 relationship
+decision-evidence boundaries
+non-causation guardrails
+```
+
+---
+
+# Permanent Processed Thread Product
+
+Generated:
+
+```text
+data/processed/communications/communications_operational_threads.csv
+```
+
+Rows:
+
+```text
+3
+```
+
+Each row preserves:
+
+```text
+thread ID
+thread name
+classification
+expectedness
+anomaly flag
+precision pattern
+primary source
+public decision-rationale availability
+public console-log availability
+```
+
+This file remains reproducibly generated and ignored from Git.
+
+---
+
+# Permanent Summary Product
+
+Generated:
+
+```text
+data/processed/communications/communications_operational_threads_summary.json
+```
+
+Product identifier:
+
+```text
+phase2h4_communications_operational_threads_analysis
+```
+
+The summary contains:
+
+```text
+thread counts
+anomaly counts
+classification counts
+derived timing metrics
+Flight Day 6 operational context
+Flight Day 9 anomaly context
+decision-evidence boundary
+guardrails
+output paths
+```
+
+This file remains ignored from Git.
+
+---
+
+# Operational Threads Figure
+
+Created:
+
+```text
+docs/assets/communications/phase2h4_communications_operational_threads.svg
+```
+
+The figure visualizes the three operational threads separately.
+
+Thread 1:
+
+```text
+Emergency communications test
+```
+
+Thread 2:
+
+```text
+planned blackout
+→
+reported blackout
+→
+reported Earthrise
+→
+planned AOS
+→
+sequence-only live reacquisition
+```
+
+Thread 3:
+
+```text
+approximate return-link loss
+→
+sequence-only recovery
+→
+sequence-only burn preparation
+→
+RTC2
+```
+
+The figure explicitly states that the sequence-only events are not assigned invented times.
+
+---
+
+# Derived Operational Metrics
+
+Permanent metrics:
+
+```text
+blackout reported minus planned:
+0 s
+
+Earthrise reported minus planned:
+-60 s
+
+planned blackout to planned AOS:
+2460 s
+41.0 min
+
+reported blackout to reported Earthrise:
+2400 s
+40.0 min
+
+approximate Flight Day 9 loss anchor to RTC2:
+7200 s
+2.000 h
+```
+
+---
+
+# Operational Thread Counts
+
+Total threads:
+
+```text
+3
+```
+
+Anomaly threads:
+
+```text
+1
+```
+
+Non-anomaly threads:
+
+```text
+2
+```
+
+Classification distribution:
+
+```text
+CONTINGENCY_READINESS:
+1
+
+EXPECTED_OPERATIONAL_CONSTRAINT:
+1
+
+UNEXPECTED_COMMUNICATIONS_ANOMALY:
+1
+```
+
+---
+
+# Independent Validator
+
+Created:
+
+```text
+scripts/validation/validate_communications_operational_threads.py
+```
+
+The validator independently checks:
+
+```text
+reference dataset ID
+summary product ID
+thread identity
+thread order
+thread classification
+anomaly flags
+emergency-test precision
+Flight Day 6 timing
+live reacquisition precision
+Flight Day 9 loss precision
+Flight Day 9 recovery precision
+RTC2 relationship
+non-causation rule
+supported affected direction
+two-way-outage boundary
+root-cause boundary
+failed-subsystem boundary
+anomaly-duration boundary
+burn-preparation sequence
+CSV integrity
+summary integrity
+SVG integrity
+guardrail preservation
+```
+
+---
+
+# Independent Validation Result
+
+Threads:
+
+```text
+total:
+3
+
+non-anomaly:
+2
+
+anomaly:
+1
+```
+
+Thread classifications:
+
+```text
+contingency readiness:
+PASS
+
+expected lunar constraint:
+PASS
+
+unexpected Flight Day 9 anomaly:
+PASS
+```
+
+Flight Day 6:
+
+```text
+reported - planned blackout:
++0 s
+
+reported - planned Earthrise:
+-60 s
+
+planned blackout -> planned AOS:
+2460 s
+41.0 min
+
+reported blackout -> reported Earthrise:
+2400 s
+40.0 min
+
+live reacquisition:
+SEQUENCE_ONLY
+
+exact reacquisition UTC:
+NONE
+```
+
+Flight Day 9:
+
+```text
+loss precision:
+APPROXIMATE
+
+loss anchor exact:
+FALSE
+
+causal relationship:
+NOT_ESTABLISHED
+
+supported affected direction:
+RETURN_LINK
+
+complete two-way outage established:
+FALSE
+
+recovery:
+SEQUENCE_ONLY
+
+exact recovery UTC:
+NONE
+
+anomaly duration known:
+FALSE
+
+burn preparation resumed:
+TRUE
+
+approximate loss anchor -> RTC2:
+~7200 s
+~2.000 h
+```
+
+Decision-evidence boundary:
+
+```text
+public event sequence:
+TRUE
+
+full console transcript:
+FALSE
+
+Flight Director rationale tree:
+FALSE
+
+fault-isolation sequence:
+FALSE
+
+root-cause analysis:
+FALSE
+
+failed subsystem identification:
+FALSE
+```
+
+Products:
+
+```text
+operational threads CSV rows:
+3
+
+summary:
+PASS
+
+operational threads figure:
+PASS
+```
+
+Final validation:
+
+```text
+PASS
+```
+
+---
+
+# Interpretation Guardrails
+
+## Guardrail 1
+
+```text
+planned lunar blackout
+!=
+anomaly
+```
+
+---
+
+## Guardrail 2
+
+```text
+reported blackout minute
+=
+planned blackout minute
+```
+
+does not imply exact second-level agreement.
+
+---
+
+## Guardrail 3
+
+```text
+reported Earthrise one minute early
+!=
+exact live DSN reacquisition time
+```
+
+---
+
+## Guardrail 4
+
+```text
+planned 23:25 AOS
+!=
+observed 23:25 reacquisition
+```
+
+---
+
+## Guardrail 5
+
+```text
+MOMENTS_AFTER_REPORTED_EARTHRISE
+=
+SEQUENCE_ONLY
+```
+
+No exact UTC is assigned.
+
+---
+
+## Guardrail 6
+
+```text
+~00:53 UTC Flight Day 9 anchor
+!=
+observed exact LOS timestamp
+```
+
+---
+
+## Guardrail 7
+
+```text
+during a data-rate change
+!=
+caused by a data-rate change
+```
+
+---
+
+## Guardrail 8
+
+```text
+return-link loss
+!=
+proven complete two-way outage
+```
+
+---
+
+## Guardrail 9
+
+```text
+shortly afterward
+!=
+known anomaly duration
+```
+
+---
+
+## Guardrail 10
+
+```text
+two-way communications restored
+!=
+identified failed subsystem
+```
+
+---
+
+## Guardrail 11
+
+```text
+public event sequence
+!=
+full console decision log
+```
+
+---
+
+## Guardrail 12
+
+MissionLab does not fabricate:
+
+```text
+Flight Director decisions
+console commands
+controller dialogue
+fault trees
+internal troubleshooting
+root cause
+failed subsystem
+recovery duration
+undocumented timestamps
+```
+
+---
+
+# Engineering Significance
+
+Phase 2H.4 changes the communications reconstruction from a collection of communications facts into a mission-operations representation.
+
+The project can now distinguish:
+
+```text
+TEST
+EXPECTED CONSTRAINT
+ANOMALY
+RECOVERY
+RETURN TO PLANNED OPERATIONS
+```
+
+This is important because mission control does not treat every loss of signal the same way.
+
+For example:
+
+```text
+Flight Day 6 LOS
+=
+expected geometry-driven constraint
+
+Flight Day 9 LOS
+=
+unexpected operational anomaly
+```
+
+Those events may superficially both look like:
+
+```text
+communications unavailable
+```
+
+but operationally they mean very different things.
+
+The completed communications reconstruction now connects:
+
+```text
+network architecture
+        +
+lunar geometry
+        +
+ground-station geometry
+        +
+mission timing
+        +
+optical communications
+        +
+expected communications constraints
+        +
+unexpected anomaly recovery
+```
+
+while maintaining clear evidence boundaries.
+
+---
+
+# Phase 2H Communications Reconstruction Summary
+
+Phase 2H now consists of four completed subphases.
+
+```text
+2H.1
+Operational Communications Event Catalog
+
+2H.2
+Mission-Clock Communications Correlation
+
+2H.3
+O2O Optical Communications Reconstruction
+
+2H.4
+Communications Operational Threads
+```
+
+Together they provide:
+
+```text
+NASA-reported event catalog
+planned-versus-reported timing
+shared mission clock
+lunar blackout sequence
+geocentric communications geometry
+topocentric DSN geometry
+optical communications architecture
+O2O performance
+contingency readiness
+unexpected communications anomaly
+recovery sequence
+decision-evidence boundary
+```
+
+---
+
+# Phase 2H.4 Status
+
+Operational thread dataset:
+
+```text
+PASS
+```
+
+Expected-versus-unexpected classification:
+
+```text
+PASS
+```
+
+Flight Day 6 operational thread:
+
+```text
+PASS
+```
+
+Flight Day 9 anomaly thread:
+
+```text
+PASS
+```
+
+Recovery sequence:
+
+```text
+PASS
+```
+
+Decision-evidence boundary:
+
+```text
+PASS
+```
+
+Non-causation guardrail:
+
+```text
+PASS
+```
+
+Independent validation:
+
+```text
+PASS
+```
+
+Phase 2H.4 implementation status:
+
+```text
+COMPLETE
+```
+
+Phase 2H overall implementation status:
+
+```text
+COMPLETE
+```
+
+Git workflow closure remains pending until the documented implementation is committed, pushed, and the working tree is verified clean.
