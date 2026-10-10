@@ -7390,3 +7390,1321 @@ COMPLETE
 
 The next atmospheric/aerothermal step should introduce additional physics only with explicitly documented assumptions.
 
+---
+
+# Phase 2E.2 — Free-Stream Mach and Flow-Regime Reconstruction
+
+## Goal
+
+Extend the Phase 2E atmospheric reconstruction into a free-stream compressibility timeline.
+
+Phase 2E.1 established:
+
+```text
+NASA flight-derived trajectory
++
+NRLMSIS 2.0 atmosphere
+→ modeled density
+→ modeled neutral temperature
+→ modeled dynamic pressure
+```
+
+Phase 2E.2 adds:
+
+```text
+modeled neutral composition
++
+modeled neutral temperature
++
+Earth-relative trajectory speed
+→ mixture thermodynamic properties
+→ modeled speed of sound
+→ modeled free-stream Mach
+→ formal flow-regime transitions
+```
+
+The objective is to reconstruct the free-stream Mach history before introducing shock-layer, heating, or TPS models.
+
+---
+
+# Provenance
+
+The underlying velocity is:
+
+```text
+DERIVED_FROM_NASA_FLIGHT_DERIVED_EPHEMERIS
+```
+
+NRLMSIS composition and neutral temperature are:
+
+```text
+MODEL
+```
+
+The following quantities are:
+
+```text
+MODEL_DERIVED
+```
+
+- thermal-mixture composition fractions;
+- mixture specific-heat ratio;
+- effective mixture molar mass;
+- effective specific gas constant;
+- free-stream speed of sound;
+- free-stream Mach number;
+- formal compressibility regime;
+- Mach-threshold crossing epochs.
+
+No Mach value in Phase 2E.2 is treated as direct NASA telemetry.
+
+---
+
+# Input Data
+
+Phase 2E.2 consumes:
+
+```text
+data/processed/entry/entry_geometry.csv
+data/processed/entry/entry_atmosphere.csv
+data/reference/artemis_ii_msis_drivers.csv
+data/reference/artemis_ii_entry_events.json
+```
+
+Total aligned trajectory states:
+
+```text
+819
+```
+
+The NRLMSIS atmospheric state is reconstructed using the same pinned historical forcing established in Phase 2E.1.
+
+---
+
+# Free-Stream Velocity Assumption
+
+The velocity used in the Mach calculation is the reconstructed Earth-relative trajectory speed.
+
+Therefore:
+
+```text
+V_free-stream ≈ V_Earth-relative
+```
+
+This assumes:
+
+```text
+zero local atmospheric wind
+```
+
+No atmospheric wind model is currently applied.
+
+The approximation is adequate for constructing the first modeled compressibility timeline, but the resulting Mach number remains:
+
+```text
+MODEL-DERIVED
+```
+
+rather than flight-measured.
+
+---
+
+# Thermal Species Model
+
+NRLMSIS 2.0 provides the neutral species used in the acoustic mixture.
+
+Phase 2E.2 includes the thermal species:
+
+```text
+N2
+O2
+O
+He
+H
+Ar
+N
+```
+
+The species are divided into:
+
+```text
+diatomic:
+N2
+O2
+```
+
+and:
+
+```text
+monatomic:
+O
+He
+H
+Ar
+N
+```
+
+---
+
+## Anomalous oxygen
+
+NRLMSIS also exposes:
+
+```text
+anomalous O
+```
+
+This component is excluded from the acoustic mixture because it is not treated as a thermal species in equilibrium at the neutral temperature.
+
+It is retained only for a sensitivity check.
+
+Observed maximum anomalous-oxygen particle fraction across the complete entry trajectory:
+
+```text
+0.000000000000e+00 %
+```
+
+Therefore its exclusion produces no meaningful numerical effect for this trajectory.
+
+---
+
+# Calorically Perfect Mixture Approximation
+
+For the exploratory free-stream acoustic model:
+
+```text
+diatomic species:
+cv / R = 5/2
+
+monatomic species:
+cv / R = 3/2
+```
+
+Vibrational excitation is neglected.
+
+For mole fractions:
+
+\[
+x_i
+\]
+
+the dimensionless constant-volume heat capacity is approximated as:
+
+\[
+\frac{c_v}{R}
+=
+\frac{5}{2}x_{diatomic}
++
+\frac{3}{2}x_{monatomic}
+\]
+
+and the mixture specific-heat ratio is:
+
+\[
+\gamma
+=
+1
++
+\frac{1}{c_v/R}
+\]
+
+---
+
+# Mixture Molar Mass
+
+The effective mixture molar mass is reconstructed using:
+
+\[
+M_{mix}
+=
+\sum_i x_i M_i
+\]
+
+where:
+
+```text
+x_i = mole fraction
+M_i = species molar mass
+```
+
+The effective specific gas constant is then:
+
+\[
+R_{mix}
+=
+\frac{R_u}{M_{mix}}
+\]
+
+using:
+
+```text
+R_u = 8.31446261815324 J/(mol K)
+```
+
+---
+
+# Modeled Speed of Sound
+
+The Phase 2E.2 free-stream sound speed is:
+
+\[
+a
+=
+\sqrt{
+\gamma
+R_{mix}
+T
+}
+\]
+
+where:
+
+```text
+gamma = modeled thermal-mixture specific-heat ratio
+R_mix = modeled mixture gas constant
+T = NRLMSIS neutral temperature
+```
+
+The Mach number is:
+
+\[
+M
+=
+\frac{V}{a}
+\]
+
+where:
+
+```text
+V = Earth-relative trajectory speed
+```
+
+---
+
+# Thermal-Mass Consistency Check
+
+The mass density reconstructed from the modeled thermal species was independently compared against NRLMSIS total mass density.
+
+Maximum observed relative difference:
+
+```text
+1.632719908634e-05 %
+```
+
+The worst case occurred during the high-altitude portion of the entry.
+
+This very small difference supports internal consistency between the species composition and the total modeled atmospheric density.
+
+---
+
+# Exploratory Formulation Refinement
+
+An earlier exploratory formulation included anomalous O in the acoustic mixture and reconstructed the gas constant from modeled pressure divided by total mass density.
+
+The refined permanent formulation:
+
+```text
+excludes anomalous O
++
+uses thermal species directly
++
+derives mixture molar mass explicitly
+```
+
+Observed maximum change relative to the exploratory formulation:
+
+```text
+sound speed:
+-8.163598558838e-06 %
+
+Mach:
++8.163599227091e-06 %
+```
+
+The numerical change is negligible, but the refined formulation is physically cleaner and is retained permanently.
+
+---
+
+# Entry Interface
+
+At:
+
+```text
+2026-04-10T23:53:30.866000Z
+```
+
+the reconstructed state is:
+
+```text
+Altitude:
+121.919907 km
+
+Earth-relative speed:
+10.632214 km/s
+
+NRLMSIS neutral temperature:
+415.921 K
+```
+
+Modeled thermal-mixture properties:
+
+```text
+gamma:
+1.434384762
+
+modeled speed of sound:
+436.020413 m/s
+```
+
+Formal free-stream Mach:
+
+```text
+24.384670
+```
+
+Therefore the trajectory begins inside the nominal hypersonic Mach regime.
+
+However, the high-altitude continuum validity of this number is not yet established.
+
+---
+
+# Non-Monotonic Early Mach History
+
+Mach does not decrease monotonically beginning at Entry Interface.
+
+Although the Earth-relative spacecraft speed changes only modestly during the first tens of seconds, the modeled atmospheric temperature and composition cause the modeled sound speed to decrease substantially.
+
+The formal free-stream Mach therefore initially rises.
+
+Observed ascending threshold crossings include:
+
+```text
+Mach 25
+2026-04-10T23:53:31.906993Z
+EI + 1.041 s
+120.753 km
+```
+
+```text
+Mach 30
+2026-04-10T23:53:38.059687Z
+EI + 7.194 s
+114.056 km
+```
+
+```text
+Mach 35
+2026-04-10T23:53:43.069316Z
+EI + 12.203 s
+108.856 km
+```
+
+This behavior is a property of the modeled free-stream atmosphere and should not be interpreted solely from vehicle velocity.
+
+---
+
+# Maximum Formal Free-Stream Mach
+
+The permanent reconstruction identifies its maximum formal free-stream Mach at:
+
+```text
+UTC:
+2026-04-10T23:53:50.866000Z
+
+EI elapsed:
+20.000 s
+
+Altitude:
+101.215372 km
+
+Earth-relative speed:
+10.650226 km/s
+
+Neutral temperature:
+182.980 K
+
+gamma:
+1.410199166
+
+mixture molar mass:
+28.166444 g/mol
+
+effective specific gas constant:
+295.190359 J/(kg K)
+
+modeled speed of sound:
+275.990073 m/s
+```
+
+Formal Mach:
+
+```text
+38.589162
+```
+
+This is classified as:
+
+```text
+MAXIMUM FORMAL FREE-STREAM MACH
+```
+
+rather than an unrestricted physical claim about continuum hypersonic flow.
+
+A continuum-validity analysis has not yet been applied at approximately 101 km altitude.
+
+---
+
+# Descending Mach Threshold History
+
+After the early maximum, Mach enters its final sustained decline.
+
+Observed descending threshold crossings are:
+
+```text
+Mach 35
+2026-04-10T23:54:39.204295Z
+EI + 68.338 s
+66.982 km
+```
+
+```text
+Mach 30
+2026-04-10T23:55:13.083443Z
+EI + 102.217 s
+60.488 km
+```
+
+```text
+Mach 25
+2026-04-10T23:56:07.544064Z
+EI + 156.678 s
+61.349 km
+```
+
+```text
+Mach 20
+2026-04-10T23:58:04.195676Z
+EI + 273.330 s
+63.196 km
+```
+
+```text
+Mach 15
+2026-04-10T23:59:27.420606Z
+EI + 356.555 s
+53.096 km
+```
+
+```text
+Mach 10
+2026-04-11T00:00:21.803535Z
+EI + 410.938 s
+43.684 km
+```
+
+```text
+Mach 5
+2026-04-11T00:01:15.681771Z
+EI + 464.816 s
+33.506 km
+```
+
+```text
+Mach 3
+2026-04-11T00:01:39.445165Z
+EI + 488.579 s
+28.252 km
+```
+
+```text
+Mach 1.2
+2026-04-11T00:02:16.569754Z
+EI + 525.704 s
+20.030 km
+```
+
+```text
+Mach 1
+2026-04-11T00:02:26.449533Z
+EI + 535.584 s
+17.859 km
+```
+
+```text
+Mach 0.8
+2026-04-11T00:02:43.862307Z
+EI + 552.996 s
+14.116 km
+```
+
+---
+
+# Formal Flow-Regime Definitions
+
+For Phase 2E.2, the following conventional categories are used:
+
+```text
+Mach >= 5.0
+HYPERSONIC
+
+1.2 <= Mach < 5.0
+SUPERSONIC
+
+0.8 <= Mach < 1.2
+TRANSONIC
+
+Mach < 0.8
+SUBSONIC
+```
+
+These categories are descriptive labels for the modeled free-stream Mach timeline.
+
+They do not replace a rarefied-flow or continuum-validity classification.
+
+---
+
+# Final Hypersonic Exit
+
+The final descending Mach 5 crossing occurs at:
+
+```text
+UTC:
+2026-04-11T00:01:15.681771Z
+
+EI elapsed:
+464.815771 s
+
+Altitude:
+33.505721 km
+
+Earth-relative speed:
+1535.716 m/s
+
+Modeled speed of sound:
+307.142 m/s
+
+Mach:
+5.000000
+```
+
+Phase 2E.2 labels this:
+
+```text
+formal hypersonic → supersonic transition
+```
+
+---
+
+# Final Transonic Entry
+
+The final descending Mach 1.2 crossing occurs at:
+
+```text
+UTC:
+2026-04-11T00:02:16.569754Z
+
+EI elapsed:
+525.703754 s
+
+Altitude:
+20.029568 km
+
+Earth-relative speed:
+347.615 m/s
+
+Modeled speed of sound:
+289.678 m/s
+
+Mach:
+1.200000
+```
+
+This marks the Phase 2E.2 transition:
+
+```text
+formal supersonic → transonic
+```
+
+---
+
+# Mach 1
+
+The reconstructed Mach 1 crossing occurs at:
+
+```text
+UTC:
+2026-04-11T00:02:26.449533Z
+
+EI elapsed:
+535.583533 s
+
+Altitude:
+17.859327 km
+
+Earth-relative speed:
+288.457 m/s
+
+Modeled speed of sound:
+288.457 m/s
+
+Mach:
+1.000000
+```
+
+---
+
+# Final Subsonic Entry
+
+The final descending Mach 0.8 crossing occurs at:
+
+```text
+UTC:
+2026-04-11T00:02:43.862307Z
+
+EI elapsed:
+552.996307 s
+
+Altitude:
+14.116279 km
+
+Earth-relative speed:
+232.936 m/s
+
+Modeled speed of sound:
+291.170 m/s
+
+Mach:
+0.800000
+```
+
+Phase 2E.2 labels this:
+
+```text
+formal transonic → subsonic transition
+```
+
+---
+
+# Dynamic-Pressure Context
+
+The Phase 2E.1 early modeled dynamic-pressure peak occurs at:
+
+```text
+2026-04-10T23:55:05.866000Z
+EI + 95 s
+60.807901 km
+```
+
+Modeled Mach at this state:
+
+```text
+30.911622
+```
+
+The global modeled dynamic-pressure peak occurs at:
+
+```text
+2026-04-11T00:00:41.866000Z
+EI + 431 s
+40.042026 km
+```
+
+Modeled Mach:
+
+```text
+8.102942
+```
+
+Therefore the two nearly equal dynamic-pressure peaks occur in substantially different modeled compressibility regimes.
+
+The first occurs at approximately:
+
+```text
+Mach 30.9
+```
+
+while the second occurs at approximately:
+
+```text
+Mach 8.1
+```
+
+This illustrates why dynamic pressure alone does not characterize the full aerothermodynamic state.
+
+---
+
+# Recovery Event Mach Conditions
+
+Phase 2D independently correlated the parachute and splashdown sequence using NASA public reporting.
+
+Phase 2E.2 evaluates the modeled free-stream Mach at those event anchors.
+
+## Drogue altitude anchor
+
+At the NASA-reported:
+
+```text
+23,400 ft
+```
+
+altitude anchor:
+
+```text
+EI + 593.951733 s
+```
+
+Modeled free-stream Mach:
+
+```text
+0.450737
+```
+
+Therefore the drogue altitude anchor is well inside the formal subsonic regime.
+
+---
+
+## Main parachute altitude anchor
+
+At:
+
+```text
+5,400 ft
+```
+
+or:
+
+```text
+EI + 674.814532 s
+```
+
+Modeled free-stream Mach:
+
+```text
+0.183603
+```
+
+---
+
+## Splashdown-correlated surface crossing
+
+At the Phase 2D derived surface crossing:
+
+```text
+EI + 817.957676 s
+```
+
+Modeled free-stream Mach:
+
+```text
+0.026717
+```
+
+This value is derived from the modeled sound speed and Earth-relative terminal trajectory speed.
+
+It is not a NASA-reported splashdown Mach number.
+
+---
+
+# Composition-Aware Versus Constant Dry-Air Model
+
+A sensitivity calculation also evaluates the simpler approximation:
+
+```text
+gamma = 1.4
+R = 287.05287 J/(kg K)
+```
+
+while retaining the same NRLMSIS neutral temperature.
+
+At Entry Interface, the composition-aware atmosphere differs noticeably because the upper-atmosphere mixture has a substantial monatomic fraction.
+
+The exploratory Entry Interface comparison gave:
+
+```text
+composition-aware Mach:
+24.384670
+
+constant-dry-air Mach:
+26.005995
+```
+
+Difference:
+
+```text
+-6.234428%
+```
+
+However, lower in the atmosphere the difference rapidly becomes small.
+
+Maximum absolute Mach difference at or below:
+
+```text
+80 km:
+0.064422236%
+```
+
+At or below:
+
+```text
+60 km:
+0.062820488%
+```
+
+Therefore the composition-aware treatment is most important in the high-altitude portion of the trajectory.
+
+The final lower-atmosphere flow-regime transitions are comparatively insensitive to the dry-air approximation.
+
+---
+
+# Permanent Implementation
+
+Created:
+
+```text
+scripts/analysis/build_entry_mach.py
+```
+
+The analysis:
+
+1. loads the validated Earth-fixed trajectory;
+2. loads the Phase 2E.1 modeled atmosphere;
+3. loads the pinned MSIS drivers;
+4. reruns NRLMSIS 2.0 to obtain thermal neutral species;
+5. excludes anomalous oxygen from the acoustic mixture;
+6. computes thermal species mole fractions;
+7. computes modeled mixture gamma;
+8. computes modeled mixture molar mass;
+9. computes modeled specific gas constant;
+10. computes modeled free-stream sound speed;
+11. computes modeled free-stream Mach;
+12. classifies formal flow regime;
+13. reconstructs all ascending and descending Mach-threshold crossings;
+14. identifies the maximum formal Mach state;
+15. correlates Mach with Phase 2D recovery events;
+16. performs dry-air sensitivity analysis;
+17. writes deterministic documentation figures.
+
+Generated processed products:
+
+```text
+data/processed/entry/entry_mach.csv
+data/processed/entry/entry_mach_summary.json
+```
+
+These remain ignored under:
+
+```text
+data/processed/
+```
+
+---
+
+# Documentation Figures
+
+Created:
+
+```text
+docs/assets/entry/phase2e_mach_history.svg
+docs/assets/entry/phase2e_flow_regime_timeline.svg
+```
+
+The Mach-history figure shows:
+
+```text
+Entry Interface
+initial formal Mach rise
+formal maximum Mach
+final Mach decline
+Mach-regime thresholds
+```
+
+The flow-regime timeline maps the reconstructed trajectory into:
+
+```text
+hypersonic
+supersonic
+transonic
+subsonic
+```
+
+using the Phase 2E.2 threshold definitions.
+
+SVG output follows the project's deterministic plotting configuration.
+
+---
+
+# Independent Validator
+
+Created:
+
+```text
+scripts/validation/validate_entry_mach.py
+```
+
+The validator independently reconstructs the thermal mixture and verifies:
+
+```text
+gamma
+specific gas constant
+speed of sound
+Mach number
+maximum Mach state
+thermal-species mass consistency
+anomalous-O contribution
+Mach threshold crossing structure
+final flow-regime transitions
+recovery-event Mach conditions
+dry-air sensitivity
+documentation figures
+```
+
+---
+
+# Validation Results
+
+Records checked:
+
+```text
+819
+```
+
+Independent reconstruction errors:
+
+```text
+Maximum gamma error:
+0.000000000000e+00
+
+Maximum specific-gas-constant error:
+0.000000000000e+00 J/(kg K)
+
+Maximum sound-speed error:
+0.000000000000e+00 m/s
+
+Maximum Mach error:
+0.000000000000e+00
+```
+
+Result:
+
+```text
+PASS
+```
+
+---
+
+## Maximum-Mach validation
+
+Observed:
+
+```text
+UTC:
+2026-04-10T23:53:50.866000Z
+
+Altitude:
+101.215372 km
+
+Mach:
+38.589162
+```
+
+The validator requires the maximum to occur:
+
+```text
+EI + 15 to 25 s
+```
+
+at altitude:
+
+```text
+95 to 105 km
+```
+
+and formal Mach:
+
+```text
+38 to 39
+```
+
+Result:
+
+```text
+PASS
+```
+
+---
+
+## Threshold crossing-count validation
+
+Expected crossing structure:
+
+```text
+Mach 35:
+2 crossings
+
+Mach 30:
+2 crossings
+
+Mach 25:
+2 crossings
+
+Mach 20:
+1 crossing
+
+Mach 15:
+1 crossing
+
+Mach 10:
+1 crossing
+
+Mach 5:
+1 crossing
+
+Mach 3:
+1 crossing
+
+Mach 1.2:
+1 crossing
+
+Mach 1:
+1 crossing
+
+Mach 0.8:
+1 crossing
+```
+
+The duplicate crossings of Mach:
+
+```text
+25
+30
+35
+```
+
+result from the initial modeled Mach rise followed by the final decline.
+
+The permanent output matches this expected topology.
+
+Result:
+
+```text
+PASS
+```
+
+---
+
+## Thermal-mixture validation
+
+Observed maximum anomalous-O particle fraction:
+
+```text
+0.000000000000e+00%
+```
+
+Observed maximum difference between thermal-species reconstructed mass density and stored NRLMSIS total mass density:
+
+```text
+1.632719908634e-05%
+```
+
+Result:
+
+```text
+PASS
+```
+
+---
+
+## Flow-transition validation
+
+Validated final transitions:
+
+```text
+Hypersonic → Supersonic
+EI + 464.815771 s
+33.505721 km
+
+Supersonic → Transonic
+EI + 525.703754 s
+20.029568 km
+
+Mach 1
+EI + 535.583533 s
+17.859327 km
+
+Transonic → Subsonic
+EI + 552.996307 s
+14.116279 km
+```
+
+Result:
+
+```text
+PASS
+```
+
+---
+
+## Recovery validation
+
+Modeled free-stream Mach:
+
+```text
+Drogue altitude anchor:
+0.450737
+
+Main altitude anchor:
+0.183603
+
+Splashdown-correlated surface crossing:
+0.026717
+```
+
+All recovery anchors satisfy the expected low-Mach sanity checks.
+
+Result:
+
+```text
+PASS
+```
+
+---
+
+# Permanent Validation Result
+
+Observed:
+
+```text
+OK: thermal-mixture sound speed,
+formal free-stream Mach,
+and flow-regime transitions validated.
+```
+
+---
+
+# Interpretation Limits
+
+The Phase 2E.2 Mach number is a:
+
+```text
+MODEL-DERIVED FREE-STREAM ESTIMATE
+```
+
+It assumes:
+
+```text
+Earth-relative velocity ≈ air-relative velocity
+```
+
+and therefore neglects atmospheric winds.
+
+The modeled gas is treated as:
+
+```text
+ideal
+calorically perfect
+neutral
+```
+
+with:
+
+```text
+vibrational excitation neglected
+```
+
+The result does not model:
+
+```text
+shock-layer conditions
+normal-shock temperature
+real-gas thermodynamics
+vibrational excitation
+dissociation
+ionization
+plasma chemistry
+chemical nonequilibrium
+radiative heating
+convective heating
+TPS response
+```
+
+The maximum formal Mach occurs at approximately:
+
+```text
+101 km altitude
+```
+
+where rarefied-flow effects may be important.
+
+Therefore:
+
+```text
+Mach 38.589162
+```
+
+is retained as a formal ideal-mixture free-stream estimate until continuum validity is evaluated.
+
+---
+
+# Phase 2E.2 Status
+
+The reconstructed entry now includes a complete modeled compressibility timeline:
+
+```text
+Entry Interface
+M ≈ 24.38
+
+→ formal Mach rise
+
+→ M25 ascending
+→ M30 ascending
+→ M35 ascending
+
+→ formal maximum
+M ≈ 38.59
+EI + 20 s
+101.2 km
+
+→ final Mach decline
+
+→ M35
+→ M30
+→ M25
+→ M20
+→ M15
+→ M10
+
+→ M5
+formal hypersonic exit
+33.5 km
+
+→ M3
+
+→ M1.2
+formal transonic entry
+20.0 km
+
+→ M1
+17.9 km
+
+→ M0.8
+formal subsonic entry
+14.1 km
+
+→ drogue deployment anchor
+M ≈ 0.451
+
+→ main parachute anchor
+M ≈ 0.184
+
+→ splashdown-correlated surface crossing
+M ≈ 0.027
+```
+
+Phase 2E.2 status:
+
+```text
+COMPLETE
+```
+
+Before using the highest-altitude Mach estimates for aerothermal interpretation, the next step should evaluate rarefaction and continuum validity.
+
