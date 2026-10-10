@@ -1,0 +1,58 @@
+{
+  "dataset": "Artemis II actual entry and splashdown public event references",
+  "mission": "Artemis II",
+  "provenance": "NASA_REPORTED",
+  "source": {
+    "title": "Artemis II Flight Day 10: Live Re-Entry Updates",
+    "publisher": "NASA",
+    "date": "2026-04-10",
+    "url": "https://www.nasa.gov/blogs/missions/2026/04/10/artemis-ii-flight-day-10-re-entry-live-updates/"
+  },
+  "time_interpretation": {
+    "reported_timezone": "Eastern",
+    "reported_timezone_on_2026_04_10": "EDT",
+    "utc_offset_hours": -4,
+    "resolution": "minute",
+    "rule": "Public blog timestamps are treated as minute-resolution event reports. They are not interpreted as exact second-level telemetry epochs."
+  },
+  "events": [
+    {
+      "event_id": "entry_interface",
+      "label": "Entry Interface",
+      "reported_local_time": "2026-04-10T19:53:00-04:00",
+      "reported_utc_minute": "2026-04-10T23:53:00Z",
+      "reported_altitude_ft": 400000.0,
+      "reported_distance_to_splashdown_statute_miles": 1956.0,
+      "distance_qualifier": "about",
+      "notes": "NASA reported Orion reaching Earth's atmosphere 400,000 feet above the planet's surface, traveling about 1,956 statute miles from the splashdown site."
+    },
+    {
+      "event_id": "drogue_deploy",
+      "label": "Drogue Parachute Deployment",
+      "reported_local_time": "2026-04-10T20:03:00-04:00",
+      "reported_utc_minute": "2026-04-11T00:03:00Z",
+      "reported_altitude_ft": 23400.0,
+      "reported_speed_ft_s": 479.0,
+      "reported_distance_to_splashdown_statute_miles": 0.8,
+      "notes": "NASA reported the drogues deploying at 23,400 feet to slow and stabilize Orion. The live update also reported velocity dropping to 479 feet per second and the spacecraft being 0.8 miles from splashdown. These associated values are not assumed to describe one exact sub-second state."
+    },
+    {
+      "event_id": "main_deploy",
+      "label": "Main Parachute Deployment",
+      "reported_local_time": "2026-04-10T20:04:00-04:00",
+      "reported_utc_minute": "2026-04-11T00:04:00Z",
+      "reported_altitude_ft": 5400.0,
+      "reported_speed_upper_ft_s": 200.0,
+      "speed_relation": "less_than",
+      "notes": "NASA reported the drogues being cut at 5,400 feet and three main parachutes deploying, reducing velocity to less than 200 feet per second."
+    },
+    {
+      "event_id": "splashdown",
+      "label": "Splashdown",
+      "reported_local_time": "2026-04-10T20:07:00-04:00",
+      "reported_utc_minute": "2026-04-11T00:07:00Z",
+      "reported_location": "Pacific Ocean off the coast of San Diego",
+      "notes": "NASA reported successful parachute-assisted splashdown at 8:07 p.m. EDT. No second-level official splashdown timestamp is inferred from this source."
+    }
+  ]
+}

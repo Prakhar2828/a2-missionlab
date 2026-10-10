@@ -5463,3 +5463,912 @@ COMPLETE
 
 The next analysis should correlate the derived trajectory with independently reported NASA entry events before assigning operational labels to later trajectory transitions such as parachute deployment or splashdown.
 
+---
+
+# Phase 2D — Entry Events and Recovery Timeline Validation
+
+## Goal
+
+Correlate the reconstructed Artemis II entry trajectory with independently reported NASA mission events.
+
+Previous Phase 2 work reconstructed the entry trajectory through:
+
+```text
+NASA flight-derived ephemeris
+→ M50
+→ B1950 analysis proxy
+→ J2000
+→ ITRF93
+→ WGS 84
+→ Earth-relative geometry
+→ entry dynamics
+```
+
+Phase 2D adds independent operational-event evidence.
+
+The objective is not to infer parachute or splashdown events from trajectory shape alone.
+
+Instead:
+
+```text
+NASA public event report
++
+derived trajectory state
+→
+event correlation
+```
+
+---
+
+## NASA event-reference source
+
+A curated reference file was created:
+
+```text
+data/reference/artemis_ii_entry_events.json
+```
+
+The reference contains actual NASA public reports for:
+
+```text
+Entry Interface
+Drogue Parachute Deployment
+Main Parachute Deployment
+Splashdown
+```
+
+Reference provenance:
+
+```text
+NASA_REPORTED
+```
+
+The source timestamps are public blog timestamps with:
+
+```text
+minute-level resolution
+```
+
+They are therefore interpreted as time intervals:
+
+```text
+HH:MM:00 <= event < HH:MM:60
+```
+
+rather than exact second-level telemetry epochs.
+
+A derived trajectory state is considered time-consistent if it occurs inside NASA's reported minute.
+
+---
+
+## Trajectory provenance refinement
+
+The Artemis II AROW trajectory products are treated as:
+
+```text
+NASA FLIGHT-DERIVED EPHEMERIS
+```
+
+This is more precise than describing them as raw onboard telemetry.
+
+The public trajectory represents mission trajectory information derived from the actual flight.
+
+A2 MissionLab therefore distinguishes:
+
+```text
+NASA_REPORTED
+```
+
+for independently published event facts,
+
+from:
+
+```text
+FLIGHT-DERIVED EPHEMERIS
+```
+
+for the trajectory,
+
+and:
+
+```text
+DERIVED
+```
+
+for quantities calculated by this project.
+
+---
+
+# Entry Interface Correlation
+
+NASA reported Entry Interface during the:
+
+```text
+23:53 UTC minute
+```
+
+with altitude:
+
+```text
+400,000 ft
+=
+121.920000 km
+```
+
+The first high-rate trajectory state occurs at:
+
+```text
+2026-04-10T23:53:30.866000Z
+```
+
+Therefore it occurs:
+
+```text
+30.866 s
+```
+
+into the NASA-reported minute.
+
+Time correlation:
+
+```text
+PASS
+```
+
+Derived WGS 84 altitude:
+
+```text
+121.919907 km
+```
+
+Difference from the NASA Entry Interface reference:
+
+```text
+-0.000092549 km
+=
+-0.093 m
+```
+
+Altitude correlation:
+
+```text
+PASS
+```
+
+---
+
+## Entry Interface distance-to-splashdown check
+
+NASA also reported Orion was approximately:
+
+```text
+1,956 statute miles
+```
+
+from splashdown at Entry Interface.
+
+A2 MissionLab calculated the spherical great-circle distance from the derived Entry Interface location to the derived terminal surface-crossing location.
+
+Derived distance:
+
+```text
+3153.188993 km
+```
+
+or:
+
+```text
+1959.300804 mi
+```
+
+Difference:
+
+```text
++3.300804 mi
+```
+
+Percent difference:
+
+```text
++0.1688%
+```
+
+Because NASA's published value is explicitly approximate and the project uses a spherical great-circle distance rather than an operational range definition, the approximately 0.17% agreement is treated as strong independent geographic validation.
+
+---
+
+# Drogue Parachute Correlation
+
+NASA reported drogue deployment during the:
+
+```text
+00:03 UTC minute
+```
+
+with an associated altitude:
+
+```text
+23,400 ft
+```
+
+Converted exactly:
+
+```text
+7.132320 km
+```
+
+The trajectory descending through this WGS 84 altitude occurs at:
+
+```text
+2026-04-11T00:03:24.817733Z
+```
+
+or:
+
+```text
+EI + 593.951733 s
+```
+
+This occurs:
+
+```text
+24.818 s
+```
+
+into NASA's reported minute.
+
+Time correlation:
+
+```text
+PASS
+```
+
+Derived Earth-relative speed at the 23,400-ft altitude anchor:
+
+```text
+468.548 ft/s
+```
+
+NASA also reported:
+
+```text
+479 ft/s
+```
+
+during the drogue sequence.
+
+The trajectory reaches exactly:
+
+```text
+479 ft/s
+```
+
+at:
+
+```text
+2026-04-11T00:03:23.960907Z
+```
+
+or:
+
+```text
+EI + 593.094907 s
+```
+
+Offset relative to the 23,400-ft anchor:
+
+```text
+-0.856825 s
+```
+
+Therefore the altitude and reported velocity conditions align to within approximately one second in the reconstructed trajectory.
+
+This is treated as strong event-sequence agreement.
+
+---
+
+## Drogue 0.8-mile statement
+
+NASA's public update also reported approximately:
+
+```text
+0.8 mi
+```
+
+from splashdown in association with the drogue sequence.
+
+The reconstructed trajectory reaches a spherical surface distance of exactly:
+
+```text
+0.8 mi
+```
+
+from the derived terminal location at:
+
+```text
+2026-04-11T00:04:01.167311Z
+```
+
+or:
+
+```text
+EI + 630.301311 s
+```
+
+This occurs:
+
+```text
++36.349579 s
+```
+
+after the 23,400-ft altitude anchor.
+
+Therefore A2 MissionLab does NOT treat:
+
+```text
+23,400 ft
+479 ft/s
+0.8 mi from splashdown
+```
+
+as a synchronous sub-second telemetry tuple.
+
+Instead, these are preserved as associated values from a minute-resolution NASA operational update.
+
+The 23,400-ft altitude and 479-ft/s conditions show close trajectory alignment.
+
+The 0.8-mile statement is retained as an approximate sequence-level observation.
+
+---
+
+# Main Parachute Correlation
+
+NASA reported main parachute deployment during the:
+
+```text
+00:04 UTC minute
+```
+
+with deployment altitude:
+
+```text
+5,400 ft
+```
+
+Converted:
+
+```text
+1.645920 km
+```
+
+The reconstructed trajectory crosses this WGS 84 altitude at:
+
+```text
+2026-04-11T00:04:45.680532Z
+```
+
+or:
+
+```text
+EI + 674.814532 s
+```
+
+This occurs:
+
+```text
+45.681 s
+```
+
+into NASA's reported minute.
+
+Time correlation:
+
+```text
+PASS
+```
+
+Earth-relative speed at this altitude:
+
+```text
+202.653 ft/s
+```
+
+NASA reported that main deployment was:
+
+```text
+reducing velocity to less than 200 ft/s
+```
+
+The trajectory reaches:
+
+```text
+200.000 ft/s
+```
+
+at:
+
+```text
+2026-04-11T00:04:48.316247Z
+```
+
+or:
+
+```text
+EI + 677.450247 s
+```
+
+Time after the 5,400-ft altitude anchor:
+
+```text
++2.635715 s
+```
+
+Altitude when 200 ft/s is reached:
+
+```text
+4839.669 ft
+```
+
+This is consistent with NASA's wording describing velocity reduction following deployment rather than requiring speed to already be below 200 ft/s at the exact deployment altitude.
+
+---
+
+# Splashdown Correlation
+
+NASA reported successful splashdown during the:
+
+```text
+00:07 UTC minute
+```
+
+in the:
+
+```text
+Pacific Ocean off San Diego
+```
+
+A2 MissionLab independently reconstructs the descending WGS 84 zero-altitude crossing.
+
+Derived crossing:
+
+```text
+2026-04-11T00:07:08.823676Z
+```
+
+or:
+
+```text
+EI + 817.957676 s
+```
+
+This occurs:
+
+```text
+8.824 s
+```
+
+into NASA's reported splashdown minute.
+
+Time correlation:
+
+```text
+PASS
+```
+
+Derived location:
+
+```text
+Latitude:
+32.340599 deg
+
+Longitude:
+-117.763095 deg
+```
+
+Derived Earth-relative speed:
+
+```text
+9.128 m/s
+```
+
+or:
+
+```text
+20.419 mph
+```
+
+The final file state occurs only approximately:
+
+```text
+0.017 s
+```
+
+later at:
+
+```text
+2026-04-11T00:07:08.841000Z
+```
+
+with WGS 84 altitude:
+
+```text
+-0.000133 km
+```
+
+and Earth-relative speed:
+
+```text
+9.130 m/s
+```
+
+---
+
+## Splashdown terminology
+
+Phase 2B previously labeled the final trajectory state:
+
+```text
+terminal near-surface state
+```
+
+Phase 2D provides independent NASA event evidence sufficient to refine this classification to:
+
+```text
+DERIVED SPLASHDOWN-CORRELATED SURFACE CROSSING
+```
+
+This means:
+
+```text
+derived trajectory geometry
++
+NASA-reported splashdown minute
++
+terminal flight-derived ephemeris
+```
+
+are mutually consistent.
+
+However, the project does NOT claim:
+
+```text
+2026-04-11T00:07:08.823676Z
+```
+
+is NASA's official splashdown timestamp.
+
+NASA's public source provides only minute-level timing.
+
+The sub-second value is an A2 MissionLab trajectory correlation.
+
+---
+
+# Phase 2D implementation
+
+Created:
+
+```text
+scripts/analysis/correlate_entry_events.py
+```
+
+The analysis:
+
+1. loads the NASA event reference catalog;
+2. loads the validated Earth-fixed entry trajectory;
+3. reconstructs the zero-altitude terminal crossing;
+4. calculates the terminal geodetic location;
+5. calculates spherical great-circle distance to that terminal point;
+6. correlates the Entry Interface state;
+7. reconstructs the 23,400-ft drogue altitude crossing;
+8. independently reconstructs the 479-ft/s crossing;
+9. reconstructs the 0.8-mi-to-terminal condition;
+10. reconstructs the 5,400-ft main-parachute altitude crossing;
+11. reconstructs the subsequent 200-ft/s threshold;
+12. correlates the derived surface crossing with NASA's splashdown minute;
+13. preserves operational interpretation limits;
+14. produces deterministic event figures.
+
+Generated processed output:
+
+```text
+data/processed/entry/entry_event_correlations.json
+```
+
+This remains ignored under:
+
+```text
+data/processed/
+```
+
+---
+
+## Documentation figures
+
+Created:
+
+```text
+docs/assets/entry/phase2d_entry_events_altitude.svg
+docs/assets/entry/phase2d_terminal_ground_track.svg
+```
+
+The first figure overlays the NASA-correlated entry events onto the reconstructed altitude history.
+
+The second shows the terminal geographic ground track with:
+
+```text
+Drogues
+Mains
+Splashdown correlation
+```
+
+marked.
+
+The figures use the project's deterministic SVG configuration.
+
+---
+
+# Independent validation
+
+Created:
+
+```text
+scripts/validation/validate_entry_events.py
+```
+
+The validator independently requires all four major NASA events to correlate within the reported minute.
+
+Observed:
+
+```text
+Entry Interface: PASS
+Drogues:         PASS
+Mains:           PASS
+Splashdown:      PASS
+```
+
+---
+
+## Entry Interface validation
+
+Observed altitude difference:
+
+```text
+-0.093 m
+```
+
+Observed distance-to-terminal difference from NASA's approximate 1,956-mile value:
+
+```text
++0.1688%
+```
+
+Both satisfy the Phase 2D validation criteria.
+
+---
+
+## Drogue validation
+
+Observed offset between:
+
+```text
+23,400-ft altitude crossing
+```
+
+and:
+
+```text
+479-ft/s speed crossing
+```
+
+is:
+
+```text
+-0.856825 s
+```
+
+The validator requires this alignment to be within:
+
+```text
+2 seconds
+```
+
+Result:
+
+```text
+PASS
+```
+
+The 0.8-mile condition occurs:
+
+```text
++36.349579 s
+```
+
+after the altitude anchor.
+
+This value is intentionally NOT used as a synchronous deployment-state validation requirement.
+
+---
+
+## Main parachute validation
+
+Observed:
+
+```text
+5,400-ft altitude anchor:
+2026-04-11T00:04:45.680532Z
+```
+
+The trajectory reaches:
+
+```text
+200 ft/s
+```
+
+after:
+
+```text
++2.635715 s
+```
+
+The validator requires the 200-ft/s threshold to follow the altitude anchor within a short physically plausible interval.
+
+Result:
+
+```text
+PASS
+```
+
+---
+
+## Splashdown validation
+
+The derived WGS 84 surface crossing occurs during NASA's reported splashdown minute.
+
+Observed:
+
+```text
+UTC:
+2026-04-11T00:07:08.823676Z
+
+Latitude:
+32.340599 deg
+
+Longitude:
+-117.763095 deg
+
+Earth-relative speed:
+9.128 m/s
+```
+
+Classification:
+
+```text
+DERIVED_SPLASHDOWN_CORRELATED_SURFACE_CROSSING
+```
+
+Result:
+
+```text
+PASS
+```
+
+---
+
+# Permanent validation result
+
+Observed:
+
+```text
+Artemis II Entry Event Correlation Validation
+--------------------------------
+
+Minute-level NASA event matches:
+  Entry Interface: PASS
+  Drogues:         PASS
+  Mains:           PASS
+  Splashdown:      PASS
+```
+
+Additional validation:
+
+```text
+Entry Interface altitude difference:
+-0.093 m
+
+Entry Interface range difference:
++0.1688%
+
+Drogue 479-ft/s offset:
+-0.856825 s
+
+Main 200-ft/s response offset:
++2.635715 s
+```
+
+Final result:
+
+```text
+OK: NASA entry-event timing,
+reported-condition alignment,
+and splashdown correlation validated.
+```
+
+---
+
+# Provenance classification
+
+NASA public event facts:
+
+```text
+NASA_REPORTED
+```
+
+NASA trajectory:
+
+```text
+NASA FLIGHT-DERIVED EPHEMERIS
+```
+
+Project event correlations:
+
+```text
+DERIVED
+```
+
+This includes:
+
+```text
+sub-second event-correlated epochs
+WGS84 event coordinates
+event-state speeds
+terminal surface crossing
+distance-to-terminal values
+event-condition offsets
+```
+
+The project does not promote these derived values into official NASA telemetry timestamps.
+
+---
+
+# Interpretation limits
+
+NASA blog timestamps have minute-level public resolution.
+
+The project therefore does not claim sub-second event timing from those reports.
+
+NASA-reported altitude references are not assumed to use exactly the same geodetic datum as A2 MissionLab's WGS 84 ellipsoidal altitude.
+
+The NASA 1,956-mile Entry Interface range is approximate.
+
+A2 MissionLab uses a spherical great-circle distance for its independent comparison.
+
+The NASA 0.8-mile drogue statement is retained as an associated public-report condition but is not interpreted as synchronous with the 23,400-ft deployment state.
+
+The derived terminal crossing is strongly correlated with splashdown but is not claimed as an official NASA splashdown timestamp.
+
+---
+
+# Phase 2D status
+
+The project now independently correlates:
+
+```text
+Entry Interface
+Drogue deployment
+Main parachute deployment
+Splashdown
+```
+
+against actual NASA public mission reporting.
+
+All four events occur inside NASA's reported UTC minute.
+
+Phase 2D status:
+
+```text
+COMPLETE
+```
+
+The high-rate entry product can now be interpreted as an end-to-end entry and descent trajectory with independently validated operational event anchors.
+
