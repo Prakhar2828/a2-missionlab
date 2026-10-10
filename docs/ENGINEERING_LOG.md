@@ -16696,3 +16696,1511 @@ COMPLETE
 ```
 
 Git workflow closure remains pending until the documented implementation is committed, pushed, and the working tree is verified clean.
+
+---
+
+# Phase 2G.2 — Topocentric Deep Space Network Geometry
+
+## Goal
+
+Phase 2G.2 extends the Phase 2G.1 Earth-center lunar-occultation reconstruction to physically located Deep Space Network reference stations on Earth's surface.
+
+Phase 2G.1 established that the dominant lunar-flyby communications interruption could be independently reconstructed using:
+
+```text
+Earth center
+→ Orion
+→ Moon occultation
+```
+
+The remaining question was whether part of the several-minute difference between MissionLab's Earth-center geometric contacts and NASA's public communications LOS/AOS timing could be explained by:
+
+```text
+topocentric parallax
+```
+
+from actual Deep Space Network locations.
+
+The specific Phase 2G.2 questions are:
+
+```text
+How does lunar occultation timing change
+when the observer moves from Earth's center
+to a DSN ground location?
+
+Which representative DSN complexes are
+geometrically capable of viewing Orion
+during the NASA public contact window?
+
+How much of the Phase 2G.1 timing residual
+can topocentric geometry explain?
+```
+
+Phase 2G.2 does not attempt to identify the operationally assigned Artemis II antenna.
+
+---
+
+# Parent Phase 2G.1 Result
+
+Phase 2G.1 derived the geocentric occultation interval:
+
+```text
+Ingress:
+2026-04-06T22:41:43.652252Z
+
+Egress:
+2026-04-06T23:21:35.489288Z
+
+Duration:
+2391.837 s
+39.864 min
+```
+
+NASA public operational reference:
+
+```text
+LOS:
+2026-04-06T22:44:00Z
+
+AOS:
+2026-04-06T23:25:00Z
+```
+
+Earth-center offsets:
+
+```text
+Ingress - NASA LOS:
+-136.348 s
+
+Egress - NASA AOS:
+-204.511 s
+```
+
+Total absolute timing offset:
+
+```text
+340.858 s
+```
+
+Phase 2G.2 therefore investigates whether replacing the Earth-center observer with an Earth-surface DSN reference station explains part of this residual.
+
+---
+
+# Reference Dataset
+
+Created:
+
+```text
+data/reference/dsn_topocentric_geometry_reference.json
+```
+
+Dataset identifier:
+
+```text
+phase2g2_dsn_topocentric_geometry_reference
+```
+
+Provenance:
+
+```text
+MIXED_NAIF_REFERENCE_AND_NASA_REPORTED
+```
+
+The dataset preserves:
+
+```text
+NASA public communications timing
+NASA public Earthset/Earthrise context
+NAIF DSN station coordinates
+NAIF DSN station velocities
+station coordinate epoch
+Earth reference spheroid
+Earth-orientation kernel identity
+model assumptions
+validation thresholds
+interpretation guardrails
+```
+
+---
+
+# DSN Reference-Station Strategy
+
+Phase 2G.2 uses one representative 70-meter antenna from each of the three Deep Space Network complexes:
+
+```text
+DSS-14
+Goldstone, California
+
+DSS-43
+Canberra, Australia
+
+DSS-63
+Madrid, Spain
+```
+
+These stations provide geographically separated topocentric reference locations.
+
+Their purpose is:
+
+```text
+geometric comparison
+```
+
+not:
+
+```text
+operational tracking assignment
+```
+
+The analysis explicitly records:
+
+```text
+operational_assignment_claimed = FALSE
+```
+
+for all three stations.
+
+---
+
+# Why Representative Stations Are Used
+
+Public sources examined for Phase 2G.2 did not establish the exact DSS antenna assigned to the April 6 lunar-flyby LOS/AOS interval with sufficient confidence for MissionLab to make an operational attribution.
+
+Therefore MissionLab does not select or tune a station in order to reproduce NASA's public timestamps.
+
+Instead, the three DSN complexes are sampled using authoritative fixed reference stations.
+
+The logic is:
+
+```text
+Goldstone reference geometry
+Canberra reference geometry
+Madrid reference geometry
+
+        ↓
+
+compare physical visibility
+and lunar-occultation timing
+```
+
+Any similarity to NASA timing is treated as:
+
+```text
+geometric consistency
+```
+
+and not proof of operational assignment.
+
+---
+
+# NAIF Station Reference
+
+Station coordinates and plate-motion velocities come from the NAIF Deep Space Network ITRF93 station reference.
+
+Coordinate frame:
+
+```text
+ITRF93
+```
+
+Reference epoch:
+
+```text
+2003 JAN 01 00:00:00 TDB
+```
+
+Station motion model:
+
+```text
+constant Cartesian plate velocity
+```
+
+Units:
+
+```text
+position:
+meters
+
+velocity:
+meters per year
+```
+
+MissionLab propagates each station from the 2003.0 reference epoch to the requested 2026 calculation time.
+
+---
+
+# DSS-14 Reference
+
+Complex:
+
+```text
+Goldstone
+```
+
+Diameter:
+
+```text
+70 m
+```
+
+ITRF93 position at reference epoch:
+
+```text
+X = -2353621.420 m
+Y = -4641341.472 m
+Z = +3677052.318 m
+```
+
+Velocity:
+
+```text
+VX = -0.0180 m/year
+VY = +0.0065 m/year
+VZ = -0.0038 m/year
+```
+
+---
+
+# DSS-43 Reference
+
+Complex:
+
+```text
+Canberra
+```
+
+Diameter:
+
+```text
+70 m
+```
+
+ITRF93 position at reference epoch:
+
+```text
+X = -4460894.917 m
+Y = +2682361.507 m
+Z = -3674748.152 m
+```
+
+Velocity:
+
+```text
+VX = -0.0335 m/year
+VY = -0.0041 m/year
+VZ = +0.0392 m/year
+```
+
+---
+
+# DSS-63 Reference
+
+Complex:
+
+```text
+Madrid
+```
+
+Diameter:
+
+```text
+70 m
+```
+
+ITRF93 position at reference epoch:
+
+```text
+X = +4849092.518 m
+Y = -360180.348 m
+Z = +4115109.251 m
+```
+
+Velocity:
+
+```text
+VX = -0.0100 m/year
+VY = +0.0242 m/year
+VZ = +0.0156 m/year
+```
+
+---
+
+# Earth Orientation
+
+A topocentric calculation requires the rotating Earth-fixed station position to be transformed into the inertial trajectory frame.
+
+Phase 2G.2 uses the high-precision NAIF Earth binary PCK already introduced during the entry-geometry work:
+
+```text
+earth_1962_260806_2126_combined.bpc
+```
+
+Validated SHA256:
+
+```text
+CC87AD1A495CF598800BA403763D350F087AC0B97DA9FEC603278A3864C6A53E
+```
+
+Station transformation:
+
+```text
+ITRF93
+→
+J2000
+```
+
+is evaluated at every requested epoch.
+
+The kernel hash is checked before analysis to prevent silent Earth-orientation input changes.
+
+---
+
+# Orion State Reconstruction
+
+Orion continues to use the primary public flight-derived trajectory.
+
+Frame:
+
+```text
+J2000
+```
+
+Between public OEM states, Orion position is reconstructed using:
+
+```text
+piecewise cubic Hermite interpolation
+```
+
+from adjacent:
+
+```text
+position
++
+velocity
+```
+
+states.
+
+This preserves consistency with Phase 2G.1.
+
+---
+
+# Moon State Reconstruction
+
+Moon state:
+
+```text
+SPICE DE440S
+```
+
+Target:
+
+```text
+MOON
+```
+
+Observer:
+
+```text
+EARTH
+```
+
+Frame:
+
+```text
+J2000
+```
+
+Aberration correction:
+
+```text
+NONE
+```
+
+The same spherical SPICE mean-radius Moon used in Phase 2G.1 is retained.
+
+---
+
+# Station Propagation
+
+For each station:
+
+```text
+r_station(t)
+=
+r_station(epoch)
++
+v_station × elapsed_years
+```
+
+The propagated position remains in:
+
+```text
+ITRF93
+```
+
+until transformed to J2000 using the Earth binary PCK.
+
+This incorporates the published plate-motion velocity rather than treating the 2003 reference position as fixed through 2026.
+
+---
+
+# Topocentric Occultation Geometry
+
+For a station position:
+
+```text
+S
+```
+
+Orion:
+
+```text
+O
+```
+
+Moon:
+
+```text
+M
+```
+
+define:
+
+```text
+V = O - S
+```
+
+and:
+
+```text
+W = M - S
+```
+
+The projection parameter is:
+
+```text
+u = (W dot V) / (V dot V)
+```
+
+The projected point along the station-Orion LOS is:
+
+```text
+P = u V
+```
+
+The Moon-center distance from the LOS is:
+
+```text
+d = |W - P|
+```
+
+The lunar-limb clearance becomes:
+
+```text
+C = d - R_moon
+```
+
+A lunar occultation requires:
+
+```text
+0 < u < 1
+```
+
+and:
+
+```text
+C < 0
+```
+
+This is the same physical test as Phase 2G.1, but the observer is now a moving Earth-surface station rather than Earth's center.
+
+---
+
+# Local Horizon Geometry
+
+Topocentric lunar-occultation timing alone is not sufficient.
+
+A station must also have Orion above its local horizon to be a plausible direct RF observer.
+
+MissionLab therefore transforms Orion into:
+
+```text
+ITRF93
+```
+
+and computes a local geodetic vertical using the Earth reference spheroid.
+
+The station-Orion elevation is then derived from:
+
+```text
+elevation
+=
+asin(
+unit(station_to_Orion)
+dot
+local_up
+)
+```
+
+Horizon threshold:
+
+```text
+0 deg
+```
+
+Therefore:
+
+```text
+elevation > 0
+```
+
+is required for basic geometric plausibility as a direct observer.
+
+This is a simple geometric horizon test.
+
+It is not an operational antenna mask.
+
+---
+
+# Analysis Window
+
+Permanent Phase 2G.2 analysis interval:
+
+```text
+2026-04-06T22:00:00Z
+through
+2026-04-07T00:00:00Z
+```
+
+Sampling interval:
+
+```text
+30 s
+```
+
+Inclusive timestamps per station:
+
+```text
+241
+```
+
+Reference stations:
+
+```text
+3
+```
+
+Total sampled rows:
+
+```text
+723
+```
+
+The permanent CSV row count was independently verified.
+
+---
+
+# DSS-14 Goldstone Result
+
+Topocentric ingress:
+
+```text
+2026-04-06T22:42:01.283698Z
+```
+
+Topocentric egress:
+
+```text
+2026-04-06T23:21:30.325466Z
+```
+
+Duration:
+
+```text
+2369.042 s
+39.484 min
+```
+
+Shift from Earth-center geometry:
+
+```text
+Ingress:
++17.631 s
+
+Egress:
+-5.164 s
+```
+
+Difference from NASA public timing:
+
+```text
+Ingress - NASA LOS:
+-118.716 s
+
+Egress - NASA AOS:
+-209.675 s
+```
+
+Total absolute NASA timing offset:
+
+```text
+328.391 s
+```
+
+Orion elevation at NASA LOS:
+
+```text
+-78.274 deg
+```
+
+Orion elevation at NASA AOS:
+
+```text
+-81.897 deg
+```
+
+Therefore:
+
+```text
+above horizon at both NASA contacts:
+FALSE
+```
+
+Goldstone is not a plausible direct Earth-to-Orion observer during this interval under the modeled geometry.
+
+---
+
+# DSS-43 Canberra Result
+
+Topocentric ingress:
+
+```text
+2026-04-06T22:42:50.341173Z
+```
+
+Topocentric egress:
+
+```text
+2026-04-06T23:23:08.532040Z
+```
+
+Duration:
+
+```text
+2418.191 s
+40.303 min
+```
+
+Shift from Earth-center geometry:
+
+```text
+Ingress:
++66.689 s
+
+Egress:
++93.043 s
+```
+
+Difference from NASA public timing:
+
+```text
+Ingress - NASA LOS:
+-69.659 s
+
+Egress - NASA AOS:
+-111.468 s
+```
+
+Total absolute NASA timing offset:
+
+```text
+181.127 s
+```
+
+Orion elevation at NASA LOS:
+
+```text
++25.504 deg
+```
+
+Orion elevation at NASA AOS:
+
+```text
++17.388 deg
+```
+
+Therefore:
+
+```text
+above horizon at both NASA contacts:
+TRUE
+```
+
+At NASA LOS:
+
+```text
+geometrically occulted:
+TRUE
+```
+
+At NASA AOS:
+
+```text
+geometrically occulted:
+FALSE
+```
+
+Among the three representative 70-meter reference antennas, DSS-43 is the only one with direct geometric visibility to Orion at both NASA public contact times.
+
+---
+
+# DSS-63 Madrid Result
+
+Topocentric ingress:
+
+```text
+2026-04-06T22:40:48.695648Z
+```
+
+Topocentric egress:
+
+```text
+2026-04-06T23:20:01.160190Z
+```
+
+Duration:
+
+```text
+2352.465 s
+39.208 min
+```
+
+Shift from Earth-center geometry:
+
+```text
+Ingress:
+-54.957 s
+
+Egress:
+-94.329 s
+```
+
+Difference from NASA public timing:
+
+```text
+Ingress - NASA LOS:
+-191.304 s
+
+Egress - NASA AOS:
+-298.840 s
+```
+
+Total absolute NASA timing offset:
+
+```text
+490.144 s
+```
+
+Orion elevation at NASA LOS:
+
+```text
+-9.473 deg
+```
+
+Orion elevation at NASA AOS:
+
+```text
+-2.732 deg
+```
+
+Therefore:
+
+```text
+above horizon at both NASA contacts:
+FALSE
+```
+
+Madrid is also not a plausible direct Earth-to-Orion observer at these times under the modeled geometry.
+
+---
+
+# Geometric Plausibility Result
+
+Reference stations above the local geometric horizon at both NASA public contact times:
+
+```text
+DSS-43
+```
+
+Only:
+
+```text
+Canberra
+```
+
+passes this basic topocentric visibility test among the three representative 70-meter antennas.
+
+This result is derived from geometry.
+
+It does not establish an operational tracking assignment.
+
+---
+
+# Timing Similarity Result
+
+Earth-center model:
+
+```text
+total absolute NASA contact offset:
+340.858 s
+```
+
+Best representative topocentric model:
+
+```text
+DSS-43
+181.127 s
+```
+
+Absolute reduction:
+
+```text
+159.731 s
+```
+
+Fractional improvement:
+
+```text
+46.862%
+```
+
+Therefore almost half of the Phase 2G.1 Earth-center timing residual can be explained simply by replacing:
+
+```text
+Earth center
+```
+
+with:
+
+```text
+a physically plausible Earth-surface observer
+```
+
+at the Canberra DSN complex reference location.
+
+---
+
+# Important Non-Conclusion
+
+The following statement is NOT made:
+
+```text
+DSS-43 was the operational Artemis II
+flyby tracking antenna.
+```
+
+MissionLab does not have sufficient public evidence in this phase to establish that claim.
+
+The actual conclusion is:
+
+```text
+Among the representative 70-meter reference
+antennas at the three DSN complexes,
+DSS-43 is the only station geometrically above
+the horizon at both NASA public contact times
+and also gives the closest pure occultation
+timing agreement.
+```
+
+That is a geometry result.
+
+It is not a network-assignment result.
+
+---
+
+# Why Residual Timing Still Remains
+
+Even with Canberra topocentric geometry:
+
+```text
+Ingress residual:
+-69.659 s
+
+Egress residual:
+-111.468 s
+```
+
+MissionLab intentionally does not tune these remaining differences away.
+
+Possible contributors outside the Phase 2G.2 model include:
+
+```text
+actual assigned DSS antenna location
+public minute-level timestamp precision
+local lunar limb topography
+signal acquisition criteria
+receiver or transmitter state
+antenna pointing constraints
+link-margin thresholds
+network scheduling
+handover timing
+operational reporting latency
+light-time conventions
+other communications-system constraints
+```
+
+No unsupported correction is introduced merely to force agreement.
+
+---
+
+# Communications-Layer Separation
+
+Phase 2G now establishes three distinct layers:
+
+```text
+SPACECRAFT / CELESTIAL GEOMETRY
+        ↓
+Earthset / Earthrise
+and geocentric lunar occultation
+
+GROUND-STATION GEOMETRY
+        ↓
+topocentric station-specific
+lunar occultation
+and local horizon
+
+OPERATIONAL COMMUNICATIONS
+        ↓
+NASA LOS / AOS
+network configuration
+tracking assignment
+link availability
+```
+
+These layers are physically related but are not interchangeable.
+
+This distinction is foundational for the later communications-event reconstruction.
+
+---
+
+# Permanent Sampled Product
+
+Generated:
+
+```text
+data/processed/communications/dsn_topocentric_geometry.csv
+```
+
+Rows:
+
+```text
+723
+```
+
+Each sampled row contains:
+
+```text
+station
+UTC
+projection fraction
+Moon-between-station-and-Orion flag
+lunar-limb clearance
+Moon-center LOS distance
+geometric occultation flag
+Orion elevation
+station-Orion range
+one-way light time
+```
+
+The product is reproducibly generated and remains ignored from Git.
+
+---
+
+# Permanent Summary
+
+Generated:
+
+```text
+data/processed/communications/dsn_topocentric_summary.json
+```
+
+Product identifier:
+
+```text
+phase2g2_dsn_topocentric_geometry
+```
+
+Provenance:
+
+```text
+MISSIONLAB_DERIVED_TOPOCENTRIC_GEOMETRY_WITH_NAIF_STATION_REFERENCE_AND_NASA_REPORTED_TIMING
+```
+
+The summary preserves:
+
+```text
+model configuration
+NASA reference timing
+geocentric parent result
+station-specific contacts
+station elevations
+horizon plausibility
+timing ranking
+timing improvement
+non-assignment statement
+interpretation guardrails
+```
+
+This processed summary remains ignored from Git.
+
+---
+
+# Permanent Figures
+
+Created:
+
+```text
+docs/assets/communications/phase2g2_dsn_topocentric_occultation.svg
+```
+
+This figure compares:
+
+```text
+DSS-14 lunar-limb clearance
+DSS-43 lunar-limb clearance
+DSS-63 lunar-limb clearance
+NASA LOS
+NASA AOS
+geometric lunar limb
+```
+
+Also created:
+
+```text
+docs/assets/communications/phase2g2_dsn_station_elevation.svg
+```
+
+This figure compares:
+
+```text
+DSS-14 Orion elevation
+DSS-43 Orion elevation
+DSS-63 Orion elevation
+geometric horizon
+NASA LOS
+NASA AOS
+```
+
+Together the figures separate:
+
+```text
+occultation
+```
+
+from:
+
+```text
+basic ground-station visibility
+```
+
+---
+
+# Permanent Analyzer
+
+Created:
+
+```text
+scripts/analysis/build_dsn_topocentric_geometry.py
+```
+
+The analyzer performs:
+
+```text
+authoritative reference loading
+Earth binary-PCK hash verification
+station plate-motion propagation
+ITRF93-to-J2000 transformation
+Orion Hermite interpolation
+SPICE Moon evaluation
+station-Orion LOS construction
+lunar occultation calculation
+local geodetic elevation calculation
+30-second sampled timeline generation
+sub-second contact refinement
+geocentric comparison
+NASA timing comparison
+horizon-plausibility classification
+timing-similarity ranking
+deterministic SVG generation
+processed CSV generation
+processed summary generation
+```
+
+---
+
+# Independent Validator
+
+Created:
+
+```text
+scripts/validation/validate_dsn_topocentric_geometry.py
+```
+
+The validator independently reconstructs:
+
+```text
+station propagation
+Earth orientation
+topocentric occultation
+contact roots
+local elevations
+NASA timing offsets
+horizon plausibility
+timing ranking
+topocentric improvement
+```
+
+It independently verifies the authoritative reference values for:
+
+```text
+DSS-14
+DSS-43
+DSS-63
+```
+
+and checks:
+
+```text
+station positions
+station velocities
+Earth kernel SHA256
+3262 trajectory states
+two contacts per station
+summary agreement
+only DSS-43 above horizon at both NASA contacts
+DSS-43 best pure timing agreement
+DSS-43 occulted at NASA LOS
+DSS-43 clear at NASA AOS
+minimum timing-improvement threshold
+723 sampled output rows
+occultation SVG
+elevation SVG
+non-assignment guardrails
+```
+
+---
+
+# Independent Validation Result
+
+Independent results:
+
+```text
+DSS-43
+
+Ingress:
+2026-04-06T22:42:50.341173Z
+
+Egress:
+2026-04-06T23:23:08.532040Z
+
+NASA LOS elevation:
++25.504 deg
+
+NASA AOS elevation:
++17.388 deg
+
+Total absolute NASA timing offset:
+181.127 s
+
+Horizon plausible:
+TRUE
+```
+
+```text
+DSS-14
+
+Ingress:
+2026-04-06T22:42:01.283698Z
+
+Egress:
+2026-04-06T23:21:30.325466Z
+
+NASA LOS elevation:
+-78.274 deg
+
+NASA AOS elevation:
+-81.897 deg
+
+Total absolute NASA timing offset:
+328.391 s
+
+Horizon plausible:
+FALSE
+```
+
+```text
+DSS-63
+
+Ingress:
+2026-04-06T22:40:48.695648Z
+
+Egress:
+2026-04-06T23:20:01.160190Z
+
+NASA LOS elevation:
+-9.473 deg
+
+NASA AOS elevation:
+-2.732 deg
+
+Total absolute NASA timing offset:
+490.144 s
+
+Horizon plausible:
+FALSE
+```
+
+Derived validation conclusions:
+
+```text
+only reference station above horizon
+at both NASA contacts:
+DSS-43
+```
+
+```text
+best pure timing agreement:
+DSS-43
+```
+
+```text
+timing improvement vs Earth-center:
+46.862%
+```
+
+Generated products:
+
+```text
+sampled rows:
+723
+
+summary:
+PASS
+
+occultation figure:
+PASS
+
+elevation figure:
+PASS
+```
+
+Final independent validator result:
+
+```text
+PASS
+```
+
+---
+
+# Interpretation Guardrails
+
+## Guardrail 1
+
+```text
+Representative 70-meter station geometry
+!=
+actual Artemis II tracking assignment
+```
+
+## Guardrail 2
+
+```text
+Best NASA timing agreement
+!=
+proof of operational antenna identity
+```
+
+## Guardrail 3
+
+```text
+Topocentric lunar visibility
+!=
+actual RF link availability
+```
+
+## Guardrail 4
+
+```text
+Above geometric horizon
+!=
+antenna scheduled and tracking
+```
+
+## Guardrail 5
+
+Phase 2G.2 does not infer:
+
+```text
+antenna gain
+link budget
+signal strength
+modulation state
+network schedule
+handover logic
+receiver lock
+transmitter state
+```
+
+## Guardrail 6
+
+NASA public LOS/AOS timestamps remain:
+
+```text
+minute-level operational references
+```
+
+not exact physical lunar-limb observations.
+
+## Guardrail 7
+
+```text
+DSN RF geometry
+!=
+O2O optical availability
+```
+
+---
+
+# Engineering Significance
+
+Phase 2G.2 demonstrates quantitatively why an Earth-center communications model is incomplete.
+
+Moving the observer from:
+
+```text
+Earth center
+```
+
+to:
+
+```text
+a physical DSN location
+```
+
+changes lunar-occultation contacts by approximately tens to more than ninety seconds.
+
+For Canberra:
+
+```text
+Ingress shift from Earth center:
++66.689 s
+
+Egress shift from Earth center:
++93.043 s
+```
+
+That change reduces the NASA timing residual by:
+
+```text
+46.862%
+```
+
+without introducing any fitted parameter.
+
+The result therefore provides a physically motivated explanation for a substantial portion of the Phase 2G.1 residual.
+
+Just as importantly, the local horizon calculation eliminates Goldstone and Madrid as plausible direct observers at the public contact times for these representative reference antennas.
+
+This demonstrates how:
+
+```text
+trajectory
++
+Earth rotation
++
+station location
++
+Moon geometry
+```
+
+combine into mission-operational communications geometry.
+
+---
+
+# Phase 2G.2 Status
+
+NAIF station reference:
+
+```text
+PASS
+```
+
+Station plate motion:
+
+```text
+PASS
+```
+
+Earth orientation:
+
+```text
+PASS
+```
+
+Orion interpolation:
+
+```text
+PASS
+```
+
+Moon geometry:
+
+```text
+PASS
+```
+
+Topocentric occultation:
+
+```text
+PASS
+```
+
+Local horizon reconstruction:
+
+```text
+PASS
+```
+
+NASA timing comparison:
+
+```text
+PASS
+```
+
+DSS-43 geometric plausibility:
+
+```text
+PASS
+```
+
+Operational assignment guardrail:
+
+```text
+PASS
+```
+
+Independent validation:
+
+```text
+PASS
+```
+
+Phase 2G.2 implementation status:
+
+```text
+COMPLETE
+```
+
+Git workflow closure remains pending until the documented implementation is committed, pushed, and the working tree is verified clean.
+
