@@ -21419,3 +21419,1466 @@ COMPLETE
 ```
 
 Git workflow closure remains pending until the documented implementation is committed, pushed, and the working tree is verified clean.
+
+---
+
+# Phase 2H.3 — O2O Optical Communications Reconstruction
+
+## Goal
+
+Phase 2H.3 reconstructs the Artemis II Orion Artemis II Optical Communications System, or O2O, as a communications system distinct from the mission's primary RF communications architecture.
+
+The analysis separates four evidence layers:
+
+```text
+PREMISSION ARCHITECTURE
+        ↓
+GROUND / OPERATIONS SEGMENT
+        ↓
+LIVE MISSION REPORTING
+        ↓
+POSTFLIGHT PERFORMANCE
+```
+
+The primary engineering rule is:
+
+```text
+O2O optical communications
+!=
+primary Artemis II RF communications
+```
+
+NASA's Near Space Network and Deep Space Network remained the mission's primary communications support.
+
+O2O operated as a parallel optical communications demonstration.
+
+---
+
+# Permanent Reference Dataset
+
+Created:
+
+```text
+data/reference/artemis_ii_o2o_reference.json
+```
+
+Dataset identifier:
+
+```text
+phase2h3_artemis_ii_o2o_reference
+```
+
+Provenance:
+
+```text
+NASA_AND_NASA_NTRS_REPORTED_WITH_MISSIONLAB_DERIVED_METRICS
+```
+
+The reference dataset preserves:
+
+```text
+mission role
+optical architecture
+terminal architecture
+ground segment
+mission-control operations segment
+live mission events
+postflight results
+source evidence layers
+interpretation guardrails
+```
+
+---
+
+# O2O Mission Role
+
+System:
+
+```text
+Orion Artemis II Optical Communications System
+```
+
+Short name:
+
+```text
+O2O
+```
+
+Classification:
+
+```text
+OPTICAL_COMMUNICATIONS_DEMONSTRATION
+```
+
+Primary mission communications:
+
+```text
+Near Space Network
+Deep Space Network
+```
+
+Primary RF replacement:
+
+```text
+FALSE
+```
+
+This distinction is permanent.
+
+O2O must not be described as replacing NASA's primary RF communications architecture.
+
+---
+
+# Optical Architecture
+
+Nominal wavelength:
+
+```text
+1550 nm
+```
+
+Optical band:
+
+```text
+OPTICAL_C_BAND
+```
+
+Maximum architecture return/downlink rate:
+
+```text
+260 Mbps
+```
+
+Maximum architecture forward/uplink rate:
+
+```text
+20 Mbps
+```
+
+Derived maximum-return to maximum-forward ratio:
+
+```text
+260 / 20
+= 13.000x
+```
+
+This ratio compares architecture maxima only.
+
+It does not imply:
+
+```text
+13x average mission throughput
+```
+
+or:
+
+```text
+13x operational efficiency
+```
+
+---
+
+# O2O Flight Terminal
+
+The permanent terminal component set is:
+
+```text
+Optical Module
+Modem
+Controller
+```
+
+## Optical Module
+
+Telescope aperture:
+
+```text
+4 inches
+```
+
+Gimbal count:
+
+```text
+2
+```
+
+Functions include:
+
+```text
+optical transmission
+optical reception
+pointing toward optical ground terminals
+```
+
+## Modem
+
+MissionLab records the modem as the component responsible for converting mission information to and from optical communications signals.
+
+## Controller
+
+MissionLab records the controller as the interface between:
+
+```text
+Orion flight avionics
+and
+the O2O optical terminal
+```
+
+including control and pointing functions.
+
+---
+
+# Optical Line of Sight
+
+The reference architecture records:
+
+```text
+line_of_sight_required = TRUE
+```
+
+Optical communications therefore have different environmental and geometric constraints from RF communications.
+
+Phase 2H.3 does not model:
+
+```text
+cloud attenuation
+atmospheric turbulence
+optical scintillation
+received optical power
+pointing error
+optical link margin
+weather scheduling
+pass scheduling
+```
+
+Those remain outside the current reconstruction.
+
+---
+
+# Main Optical Ground Segment
+
+Two primary U.S. optical ground sites are preserved.
+
+## White Sands Complex
+
+Location:
+
+```text
+Las Cruces, New Mexico, USA
+```
+
+Role:
+
+```text
+PRIMARY_OPTICAL_GROUND_STATION
+```
+
+Premission status:
+
+```text
+PLANNED
+```
+
+Mission status:
+
+```text
+MISSION_USED
+```
+
+---
+
+## Table Mountain Facility
+
+Organization:
+
+```text
+NASA Jet Propulsion Laboratory
+```
+
+Location:
+
+```text
+Southern California, USA
+```
+
+Role:
+
+```text
+PRIMARY_OPTICAL_GROUND_STATION
+```
+
+The permanent reference includes a cross-source mapping note.
+
+Premission NASA material explicitly identifies:
+
+```text
+Table Mountain Facility
+```
+
+while the postflight NASA reporting refers more generally to:
+
+```text
+NASA JPL in Southern California
+```
+
+MissionLab preserves that relationship without pretending the postflight article independently re-identifies the exact facility name.
+
+---
+
+# Additional Demonstration Ground Site
+
+Additional site:
+
+```text
+Australian National University
+Quantum Optical Ground Station
+```
+
+Short name:
+
+```text
+QOGS
+```
+
+Location:
+
+```text
+Mount Stromlo
+Canberra, Australia
+```
+
+Role:
+
+```text
+ADDITIONAL_OPTICAL_DEMONSTRATION_SITE
+```
+
+Mission status:
+
+```text
+MISSION_DEMONSTRATED
+```
+
+The site demonstrated that additional optical infrastructure beyond the two main U.S. ground sites could participate successfully in Artemis II O2O operations.
+
+---
+
+# Environmental Ground-Site Context
+
+Optical communications are sensitive to atmospheric obscuration.
+
+The permanent reference records:
+
+```text
+clear_sky_dependency = TRUE
+```
+
+and notes NASA's use of favorable ground locations for optical operations.
+
+Phase 2H.3 does not convert this contextual fact into:
+
+```text
+a weather model
+cloud probability model
+atmospheric attenuation model
+```
+
+---
+
+# Mission-Control Operations Segment
+
+The reconstructed O2O operations segment is centered at:
+
+```text
+Johnson Space Center
+Houston, Texas, USA
+```
+
+Permanent operations elements:
+
+```text
+MCC
+Artemis II Mission Control Center
+
+LSTC
+Lasercomm Space Terminal Console
+
+LPAC
+Lasercomm Link Planning and Analysis Center
+```
+
+This is an especially important mission-operations connection.
+
+O2O was not merely a spacecraft hardware experiment.
+
+Its link planning and execution were integrated with the human-spaceflight mission-control environment.
+
+---
+
+# Existing Phase 2H.1 Cross-Checks
+
+Phase 2H.3 reuses two operational events already established during Phase 2H.1.
+
+No duplicate timestamps are invented.
+
+---
+
+# Flight Day 3 Optical Ground Links
+
+Catalog event:
+
+```text
+o2o_two_us_ground_station_links
+```
+
+Precision:
+
+```text
+DATE_LEVEL
+```
+
+State:
+
+```text
+OBSERVED_REPORTED
+```
+
+NASA reported successful O2O connections with two U.S.-based ground stations.
+
+Reported content included:
+
+```text
+high-definition video
+mission data
+```
+
+No unsupported time of day is assigned.
+
+---
+
+# Flight Day 4 100 GB Milestone
+
+Catalog event:
+
+```text
+o2o_100_gb_downlink_milestone
+```
+
+Precision:
+
+```text
+APPROXIMATE
+```
+
+NASA timing language:
+
+```text
+just after 12 p.m. EDT
+```
+
+MissionLab computational anchor:
+
+```text
+~2026-04-04T16:00:00Z
+```
+
+Anchor exact:
+
+```text
+FALSE
+```
+
+The event is modeled as:
+
+```text
+greater than 100 GB
+```
+
+rather than:
+
+```text
+exactly 100 GB
+```
+
+because the public report states that O2O had surpassed the threshold.
+
+---
+
+# Postflight Mission Total
+
+NASA-reported mission data exchange:
+
+```text
+484 GB
+```
+
+Permanent semantics:
+
+```text
+DATA_EXCHANGED_BETWEEN_ORION_AND_EARTH
+```
+
+Downlink-only:
+
+```text
+FALSE
+```
+
+Single session:
+
+```text
+FALSE
+```
+
+Therefore MissionLab must not describe the result as:
+
+```text
+484 GB downlinked
+```
+
+unless a future source explicitly supports that statement.
+
+The supported interpretation is:
+
+```text
+484 GB exchanged between Orion and Earth
+```
+
+across the mission.
+
+---
+
+# Demonstrated Downlink Performance
+
+NASA reported:
+
+```text
+multiple 260 Mbps downlinks
+```
+
+Maximum demonstrated downlink:
+
+```text
+260 Mbps
+```
+
+This matches the architecture maximum return/downlink rate.
+
+That establishes:
+
+```text
+architecture maximum:
+260 Mbps
+
+mission demonstrated:
+260 Mbps
+```
+
+It does not establish:
+
+```text
+mission-average throughput:
+260 Mbps
+```
+
+---
+
+# 26 GB Main-Ground-Station Transfer
+
+NASA reported a transfer involving the two main U.S. optical ground stations:
+
+```text
+26 GB
+```
+
+in:
+
+```text
+under one hour
+```
+
+Exact duration:
+
+```text
+UNKNOWN
+```
+
+Individual ground-station assignment:
+
+```text
+NONE
+```
+
+MissionLab therefore does not attribute the complete 26 GB result exclusively to:
+
+```text
+White Sands
+```
+
+or:
+
+```text
+Table Mountain
+```
+
+---
+
+# Derived 26 GB Average-Rate Lower Bound
+
+MissionLab derives a lower bound using:
+
+```text
+26 GB
+```
+
+and the duration upper bound:
+
+```text
+1 hour
+```
+
+Using decimal gigabytes:
+
+```text
+26 GB
+= 26 × 8 × 1000 megabits
+= 208,000 megabits
+```
+
+One hour:
+
+```text
+3600 seconds
+```
+
+Therefore:
+
+```text
+208000 / 3600
+= 57.777777... Mbps
+```
+
+Because NASA reported a duration of:
+
+```text
+less than one hour
+```
+
+the average transfer rate must have been:
+
+```text
+>57.778 Mbps
+```
+
+This is a:
+
+```text
+MISSIONLAB_DERIVED LOWER BOUND
+```
+
+It is not:
+
+```text
+NASA-reported throughput
+```
+
+and not:
+
+```text
+the actual average transfer rate
+```
+
+because the exact transfer duration is unknown.
+
+---
+
+# Architecture Maximum vs Derived Transfer Lower Bound
+
+Architecture maximum return/downlink:
+
+```text
+260 Mbps
+```
+
+Derived 26 GB transfer average-rate lower bound:
+
+```text
+>57.778 Mbps
+```
+
+These values answer different questions.
+
+The first is:
+
+```text
+maximum architecture capability
+```
+
+The second is:
+
+```text
+minimum possible average rate
+consistent with the reported
+26 GB in under one hour
+```
+
+They must not be directly interpreted as observed instantaneous-rate measurements from the same transfer.
+
+---
+
+# Mount Stromlo Result
+
+NASA reported more than:
+
+```text
+15.5 hours
+```
+
+of dual-stream video through Mount Stromlo.
+
+Permanent relation:
+
+```text
+GREATER_THAN
+```
+
+Derived duration lower bound:
+
+```text
+15.5 × 3600
+= 55,800 seconds
+```
+
+Therefore:
+
+```text
+>55,800 seconds
+```
+
+of reported mission aggregate dual-stream video support.
+
+---
+
+# Mount Stromlo Continuity Guardrail
+
+Continuous single pass:
+
+```text
+FALSE
+```
+
+The public result does not establish one uninterrupted:
+
+```text
+15.5-hour optical pass
+```
+
+Therefore MissionLab represents the result as an aggregate duration rather than a continuous contact window.
+
+---
+
+# Mount Stromlo Rate Demonstration
+
+Maximum demonstrated downlink:
+
+```text
+260 Mbps
+```
+
+This establishes that Mount Stromlo successfully demonstrated the highest O2O downlink rate reported for the system.
+
+It does not establish:
+
+```text
+260 Mbps continuously
+```
+
+for the full reported video duration.
+
+---
+
+# Lunar-Flyby Optical Content
+
+Postflight NASA reporting supports optical downlink of imagery associated with:
+
+```text
+Earthset
+Earthrise
+other mission imagery
+```
+
+The permanent dataset therefore records:
+
+```text
+earthset_images_downlinked = TRUE
+earthrise_images_downlinked = TRUE
+other_mission_images_downlinked = TRUE
+```
+
+This is especially relevant to the Phase 2G and 2H mission reconstruction because Earthset and Earthrise are already represented on the common mission clock.
+
+Phase 2H.3 does not infer an exact optical-transmission timestamp for those images.
+
+---
+
+# Forward Optical Link
+
+Postflight evidence also establishes:
+
+```text
+forward_data_to_orion_demonstrated = TRUE
+```
+
+This is operationally distinct from the optical return/downlink.
+
+The architecture maximum forward rate remains:
+
+```text
+20 Mbps
+```
+
+while the return maximum remains:
+
+```text
+260 Mbps
+```
+
+---
+
+# Evidence Layers
+
+Phase 2H.3 explicitly separates three source layers.
+
+## PREMISSION_ARCHITECTURE
+
+Examples:
+
+```text
+terminal components
+1550 nm optical architecture
+maximum link rates
+White Sands
+Table Mountain
+MCC / LSTC / LPAC
+```
+
+These describe system design and planned architecture.
+
+---
+
+## LIVE_MISSION_REPORTED
+
+Examples:
+
+```text
+Flight Day 3 links to two U.S. stations
+Flight Day 4 >100 GB milestone
+```
+
+These are reports published while Artemis II was operating.
+
+---
+
+## POSTFLIGHT_REPORTED
+
+Examples:
+
+```text
+484 GB mission exchange
+multiple 260 Mbps downlinks
+26 GB in under one hour
+Mount Stromlo >15.5 h video
+Mount Stromlo 260 Mbps
+Earthset imagery
+Earthrise imagery
+forward-link demonstration
+```
+
+These describe mission results after execution.
+
+---
+
+# Permanent Analyzer
+
+Created:
+
+```text
+scripts/analysis/analyze_o2o_optical_communications.py
+```
+
+The analyzer validates and reconstructs:
+
+```text
+mission role
+optical architecture
+terminal component identity
+terminal hardware values
+ground-site identity
+operations-segment identity
+Phase 2H.1 event consistency
+mission aggregate performance
+rate architecture
+Mount Stromlo performance
+optical-versus-RF boundary
+derived quantitative metrics
+```
+
+---
+
+# Permanent Metrics Product
+
+Generated:
+
+```text
+data/processed/communications/o2o_performance_metrics.csv
+```
+
+Rows:
+
+```text
+9
+```
+
+Metrics:
+
+```text
+architecture maximum forward rate
+architecture maximum return rate
+Flight Day 4 downlink threshold
+mission total data exchange
+mission maximum demonstrated downlink
+main-ground-station transfer volume
+derived average-rate lower bound
+Mount Stromlo video-duration lower bound
+Mount Stromlo maximum demonstrated rate
+```
+
+This processed product remains ignored from Git.
+
+---
+
+# Permanent Summary Product
+
+Generated:
+
+```text
+data/processed/communications/o2o_optical_communications_summary.json
+```
+
+Product identifier:
+
+```text
+phase2h3_o2o_optical_communications_analysis
+```
+
+The summary preserves:
+
+```text
+mission role
+architecture
+ground segment
+operations segment
+live-event cross-checks
+postflight results
+derived metrics
+source evidence-layer counts
+guardrails
+output paths
+```
+
+This processed product remains ignored from Git.
+
+---
+
+# Architecture Figure
+
+Created:
+
+```text
+docs/assets/communications/phase2h3_o2o_architecture.svg
+```
+
+The figure represents:
+
+```text
+Orion O2O terminal
+        ↓
+White Sands
+Table Mountain / JPL
+Mount Stromlo QOGS
+        ↓
+Johnson Space Center
+MCC / LSTC / LPAC
+```
+
+It also includes the permanent architecture boundary:
+
+```text
+O2O = parallel optical demonstration
+
+NSN + DSN = primary RF communications
+```
+
+---
+
+# Link-Rate Figure
+
+Created:
+
+```text
+docs/assets/communications/phase2h3_o2o_link_rates.svg
+```
+
+The figure compares:
+
+```text
+20 Mbps
+architecture maximum forward
+
+260 Mbps
+architecture maximum return
+
+260 Mbps
+mission maximum demonstrated downlink
+
+>57.778 Mbps
+derived 26 GB transfer average-rate lower bound
+```
+
+The figure explicitly identifies the lower-bound metric as derived rather than NASA-reported instantaneous throughput.
+
+---
+
+# Independent Validator
+
+Created:
+
+```text
+scripts/validation/validate_o2o_optical_communications.py
+```
+
+The independent validator confirms:
+
+```text
+reference dataset identity
+analysis product identity
+mission role
+primary RF boundary
+1550 nm wavelength
+260 Mbps return maximum
+20 Mbps forward maximum
+terminal component set
+4-inch telescope
+two gimbals
+two main U.S. optical sites
+Mount Stromlo identity
+MCC / LSTC / LPAC identity
+Flight Day 3 precision
+Flight Day 4 precision
+100 GB approximate anchor
+484 GB semantics
+260 Mbps mission demonstration
+26 GB transfer semantics
+derived >57.778 Mbps bound
+Mount Stromlo duration semantics
+Mount Stromlo continuity guardrail
+Mount Stromlo 260 Mbps result
+Earthset imagery result
+Earthrise imagery result
+forward-link result
+9-row metrics CSV
+summary integrity
+architecture SVG
+link-rate SVG
+guardrail preservation
+```
+
+---
+
+# Independent Validation Result
+
+Mission role:
+
+```text
+optical demonstration:
+TRUE
+
+primary RF replacement:
+FALSE
+```
+
+Architecture:
+
+```text
+wavelength:
+1550 nm
+
+max return/downlink:
+260 Mbps
+
+max forward/uplink:
+20 Mbps
+
+max return / max forward:
+13.000x
+
+terminal components:
+3
+
+telescope:
+4 in
+
+gimbals:
+2
+```
+
+Ground segment:
+
+```text
+main optical sites:
+2
+
+additional demonstrated sites:
+1
+
+White Sands:
+PASS
+
+Table Mountain / JPL:
+PASS
+
+Mount Stromlo QOGS:
+PASS
+```
+
+Mission-control operations:
+
+```text
+MCC:
+PASS
+
+LSTC:
+PASS
+
+LPAC:
+PASS
+```
+
+Live mission precision:
+
+```text
+Flight Day 3:
+DATE_LEVEL
+
+Flight Day 4 100 GB:
+APPROXIMATE
+
+100 GB anchor exact:
+FALSE
+```
+
+Postflight:
+
+```text
+mission exchange:
+484 GB
+
+marked downlink-only:
+FALSE
+
+multiple 260 Mbps downlinks:
+TRUE
+
+26 GB transfer:
+<1 h
+
+derived average-rate lower bound:
+>57.778 Mbps
+
+Mount Stromlo video:
+>15.5 h
+
+Mount Stromlo continuous-pass claim:
+FALSE
+
+Mount Stromlo 260 Mbps:
+TRUE
+
+Earthset imagery:
+TRUE
+
+Earthrise imagery:
+TRUE
+
+forward data to Orion:
+TRUE
+```
+
+Products:
+
+```text
+performance metrics rows:
+9
+
+summary:
+PASS
+
+architecture figure:
+PASS
+
+link-rate figure:
+PASS
+```
+
+Final validation:
+
+```text
+PASS
+```
+
+---
+
+# Interpretation Guardrails
+
+## Guardrail 1
+
+```text
+O2O
+!=
+primary Artemis II communications architecture
+```
+
+NSN and DSN remain the primary RF communications networks.
+
+---
+
+## Guardrail 2
+
+```text
+484 GB exchanged
+!=
+484 GB downlinked
+```
+
+The public source uses bidirectional exchange language.
+
+---
+
+## Guardrail 3
+
+```text
+484 GB mission aggregate
+!=
+one continuous optical session
+```
+
+---
+
+## Guardrail 4
+
+```text
+260 Mbps demonstrated
+!=
+260 Mbps mission average
+```
+
+---
+
+## Guardrail 5
+
+```text
+>100 GB milestone
+!=
+exactly 100 GB
+```
+
+---
+
+## Guardrail 6
+
+```text
+~16:00 UTC anchor
+!=
+exact milestone timestamp
+```
+
+---
+
+## Guardrail 7
+
+```text
+26 GB in <1 hour
+!=
+known transfer duration
+```
+
+---
+
+## Guardrail 8
+
+```text
+>57.778 Mbps
+=
+derived lower bound
+```
+
+not an observed NASA throughput measurement.
+
+---
+
+## Guardrail 9
+
+```text
+>15.5 h Mount Stromlo video
+!=
+one continuous 15.5 h pass
+```
+
+---
+
+## Guardrail 10
+
+```text
+premission capability
+!=
+mission demonstration
+```
+
+unless postflight evidence explicitly confirms the capability was demonstrated.
+
+---
+
+## Guardrail 11
+
+```text
+optical ground-site participation
+!=
+RF DSN antenna assignment
+```
+
+---
+
+## Guardrail 12
+
+Phase 2H.3 does not infer:
+
+```text
+optical link budget
+received optical power
+weather losses
+cloud attenuation
+pointing losses
+signal-to-noise ratio
+pass schedule
+exact pass duration
+exact imagery transmission times
+mission-average optical throughput
+```
+
+---
+
+# Engineering Significance
+
+Phase 2H.3 extends the communications reconstruction beyond conventional RF communications.
+
+MissionLab now represents three distinct communications perspectives:
+
+```text
+RF network architecture
+        +
+RF lunar occultation geometry
+        +
+high-rate optical communications demonstration
+```
+
+The O2O reconstruction shows that Artemis II was simultaneously a crewed lunar mission and a deep-space communications technology demonstration.
+
+The architecture links:
+
+```text
+Orion spacecraft hardware
+        ↓
+laser communications
+        ↓
+distributed optical ground stations
+        ↓
+Johnson Space Center mission operations
+```
+
+The postflight results demonstrate that the architecture operated at substantial scale:
+
+```text
+484 GB exchanged
+260 Mbps demonstrated
+international optical ground support
+bidirectional communication
+lunar-flyby imagery
+```
+
+while the provenance framework prevents those results from being overstated.
+
+---
+
+# Phase 2H.3 Status
+
+Reference dataset:
+
+```text
+PASS
+```
+
+Optical architecture:
+
+```text
+PASS
+```
+
+Ground segment:
+
+```text
+PASS
+```
+
+Mission-control operations segment:
+
+```text
+PASS
+```
+
+Phase 2H.1 cross-check:
+
+```text
+PASS
+```
+
+Postflight performance reconstruction:
+
+```text
+PASS
+```
+
+Derived transfer-rate lower bound:
+
+```text
+PASS
+```
+
+Optical-versus-RF boundary:
+
+```text
+PASS
+```
+
+Independent validation:
+
+```text
+PASS
+```
+
+Phase 2H.3 implementation status:
+
+```text
+COMPLETE
+```
+
+Git workflow closure remains pending until the documented implementation is committed, pushed, and the working tree is verified clean.
