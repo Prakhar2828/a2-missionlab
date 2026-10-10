@@ -12224,3 +12224,1126 @@ Phase 2F.1 status:
 ```text
 COMPLETE
 ```
+
+---
+
+# Phase 2F.2 — Artemis I vs Artemis II Entry-Profile Heritage Comparison
+
+## Goal
+
+Phase 2F.2 quantitatively compares selected Artemis I entry-profile heritage landmarks with the reconstructed Artemis II entry trajectory.
+
+The phase asks:
+
+```text
+How did the flown Artemis II entry profile differ
+from the Artemis I skip-entry profile associated
+with the heat-shield investigation?
+```
+
+The comparison is intentionally limited to quantities that can be supported by authoritative NASA material and the existing MissionLab Artemis II reconstruction.
+
+This is not:
+
+```text
+a complete Artemis I trajectory reconstruction
+a guidance-law reconstruction
+a TPS material-response model
+a crew-load comparison
+or a damage-prediction model
+```
+
+---
+
+# Relationship to Phase 2F.1
+
+Phase 2F.1 established the qualitative engineering decision chain:
+
+```text
+Artemis I anomaly
+→ investigation
+→ root cause
+→ constraint
+→ Artemis II trajectory mitigation
+→ flight outcome
+→ future manufacturing corrective action
+```
+
+Phase 2F.2 adds quantitative trajectory context to that chain.
+
+It does not attempt to infer:
+
+```text
+how much char loss was prevented
+how much TPS risk was reduced
+or what fraction of the trajectory change
+was attributable to any single design constraint
+```
+
+Instead, it reconstructs measurable differences between the two entry-profile architectures.
+
+---
+
+# Source Foundation
+
+Created:
+
+```text
+data/reference/artemis_entry_profile_heritage.json
+```
+
+Dataset identifier:
+
+```text
+phase2f2_artemis_entry_profile_heritage
+```
+
+The reference dataset contains:
+
+```text
+7 NASA-reported evidence records
+4 unique source URLs
+```
+
+Permitted source hosts:
+
+```text
+ntrs.nasa.gov
+www.nasa.gov
+```
+
+All source evidence uses:
+
+```text
+NASA_REPORTED
+```
+
+provenance.
+
+---
+
+# Permanent Source Evidence
+
+The evidence catalog preserves the following reference quantities.
+
+## Artemis I Entry Interface
+
+NASA-reported Entry Interface altitude:
+
+```text
+400,000 ft
+```
+
+NASA-reconstructed Artemis I Entry Interface inertial velocity magnitude:
+
+```text
+36,062.65680 ft/s
+```
+
+Converted:
+
+```text
+10.991897793 km/s
+```
+
+This quantity is used as the primary Artemis I entry-speed reference.
+
+---
+
+# Artemis I Skip Entry
+
+NASA classifies Artemis I as:
+
+```text
+SKIP ENTRY
+```
+
+NASA-reported actual skip apogee:
+
+```text
+287.40 kft
+```
+
+Converted:
+
+```text
+87.599520 km
+```
+
+NASA-reported predicted skip apogee:
+
+```text
+293.5 kft
+```
+
+MissionLab uses the actual flight value.
+
+---
+
+# Artemis I Sensed Acceleration Heritage
+
+NASA reports first and second peak sensed-acceleration magnitudes of:
+
+```text
+4.05 g
+3.89 g
+```
+
+These values are retained as heritage context only.
+
+They are explicitly not compared directly with the Phase 2C MissionLab quantity:
+
+```text
+-d|V_Earth-relative|/dt / g0
+```
+
+because the latter is a kinematic speed derivative expressed on a g0 scale.
+
+It is not:
+
+```text
+crew g-load
+proper acceleration
+accelerometer output
+or isolated aerodynamic acceleration
+```
+
+---
+
+# Artemis I Entry Duration
+
+NASA's Artemis I mission timeline reports:
+
+```text
+Entry Interface MET:
+025/11:15:52
+
+Splashdown MET:
+025/11:36:27
+```
+
+Difference:
+
+```text
+1,235.0 s
+```
+
+This provides the Artemis I Entry Interface to splashdown duration.
+
+---
+
+# Artemis II Official Profile Terminology
+
+NASA technical reporting classifies Artemis II as:
+
+```text
+MODIFIED TRAJECTORY WITHOUT SKIP ENTRY
+```
+
+NASA public mission coverage also uses the label:
+
+```text
+LOFTED ENTRY SEQUENCE
+```
+
+MissionLab therefore uses the derived terminology:
+
+```text
+VERTICAL REBOUND / LOFT
+```
+
+and explicitly prohibits:
+
+```text
+ARTEMIS II SKIP ENTRY
+```
+
+as a MissionLab classification.
+
+---
+
+# Why the Terminology Matters
+
+Phase 2C identified two vertical-velocity sign changes in the Artemis II reconstructed trajectory:
+
+```text
+descent → climb
+climb → descent
+```
+
+Those sign changes create a real geometric altitude rebound.
+
+However:
+
+```text
+geometric altitude rebound
+```
+
+does not automatically imply:
+
+```text
+skip-entry guidance classification
+```
+
+NASA explicitly says Artemis II did not use the Artemis I skip entry.
+
+Therefore MissionLab preserves both facts:
+
+```text
+The Artemis II trajectory contains
+a measurable altitude rebound.
+
+AND
+
+Artemis II is not classified
+as a skip entry.
+```
+
+---
+
+# Source Validator
+
+Created:
+
+```text
+scripts/validation/validate_entry_profile_heritage.py
+```
+
+The validator checks:
+
+```text
+dataset identity
+NASA provenance
+source URL host restrictions
+source-date syntax
+evidence ID inventory
+Artemis I Entry Interface altitude
+Artemis I Entry Interface inertial speed
+Artemis I skip-apogee altitude
+Artemis I sensed-acceleration peaks
+Artemis I EI-to-splashdown duration
+Artemis II no-skip classification
+Artemis II lofted-entry public label
+Artemis II public pre-EI speed context
+planned comparison metrics
+planned figure inventory
+interpretation guardrails
+```
+
+Observed validation:
+
+```text
+Evidence items checked:
+7
+
+Unique source URLs:
+4
+```
+
+Source hosts:
+
+```text
+ntrs.nasa.gov
+www.nasa.gov
+```
+
+Result:
+
+```text
+PASS
+```
+
+---
+
+# Permanent Comparison Analyzer
+
+Created:
+
+```text
+scripts/analysis/compare_artemis_entry_profiles.py
+```
+
+The analyzer combines:
+
+```text
+NASA Artemis I published entry landmarks
++
+NASA Artemis II high-rate entry ephemeris
++
+MissionLab Artemis II entry dynamics
++
+MissionLab terminal event correlation
+```
+
+into:
+
+```text
+data/processed/entry/artemis_entry_profile_comparison.json
+```
+
+The processed JSON remains ignored from Git.
+
+---
+
+# Comparison Provenance
+
+The derived comparison product is labeled:
+
+```text
+MIXED_NASA_REPORTED_NASA_FLIGHT_DERIVED_MISSIONLAB_DERIVED
+```
+
+This is intentional.
+
+The individual quantities have different provenance.
+
+Artemis I heritage landmarks:
+
+```text
+NASA_REPORTED
+```
+
+Artemis II high-rate source trajectory:
+
+```text
+NASA flight-derived ephemeris
+```
+
+Artemis II rebound detection and surface-crossing correlation:
+
+```text
+MISSIONLAB_DERIVED
+```
+
+No cross-mission result is allowed to obscure these distinctions.
+
+---
+
+# Artemis II Reconstructed Entry Interface
+
+MissionLab Entry Interface epoch:
+
+```text
+2026-04-10T23:53:30.866000Z
+```
+
+WGS84 altitude:
+
+```text
+121.919907 km
+```
+
+Earth-relative speed:
+
+```text
+10.632214 km/s
+```
+
+The first high-rate M50 source state occurs at the same reconstructed Entry Interface epoch.
+
+Its inertial speed magnitude is:
+
+```text
+11.000018640 km/s
+```
+
+---
+
+# Matched Entry-Interface Inertial-Speed Comparison
+
+The original exploratory comparison used public mission speeds.
+
+That approach was rejected as the permanent primary comparison because the public values do not provide sufficiently matched epoch/frame semantics.
+
+The permanent comparison instead uses:
+
+```text
+Artemis I:
+NASA-reconstructed EI inertial velocity magnitude
+
+Artemis II:
+NASA flight-derived first M50 high-rate
+source-state inertial velocity magnitude
+```
+
+Artemis I:
+
+```text
+10.991897793 km/s
+```
+
+Artemis II:
+
+```text
+11.000018640 km/s
+```
+
+Signed difference:
+
+```text
+Artemis II - Artemis I
+
++0.008120847 km/s
+```
+
+Equivalent:
+
+```text
++8.121 m/s
+```
+
+Absolute difference:
+
+```text
+8.121 m/s
+```
+
+Relative difference using Artemis I as the denominator:
+
+```text
++0.073880%
+```
+
+Relationship:
+
+```text
+ARTEMIS_II_HIGHER
+```
+
+---
+
+# Why Speed Magnitude Is Used
+
+The Artemis I source reports an inertial velocity magnitude.
+
+The Artemis II high-rate entry product is expressed in:
+
+```text
+M50
+```
+
+MissionLab preserves M50 as the source frame.
+
+The cross-mission comparison therefore does not compare individual vector components.
+
+Instead it compares:
+
+```text
+|V|
+```
+
+because a pure coordinate-frame rotation preserves vector magnitude.
+
+The comparison is therefore intentionally limited to inertial velocity magnitude.
+
+This does not resolve every M50 convention question documented elsewhere in the project.
+
+---
+
+# Key Speed Result
+
+The two missions reached Entry Interface with extremely similar inertial speed magnitudes.
+
+Difference:
+
+```text
+8.121 m/s
+```
+
+Relative difference:
+
+```text
+0.073880%
+```
+
+This means the large differences in later entry-profile structure cannot be summarized as:
+
+```text
+Artemis II simply entered much slower.
+```
+
+The technical Entry Interface speeds were effectively very close at mission scale.
+
+---
+
+# Public Artemis II Speed Context
+
+NASA public mission coverage reported approximately:
+
+```text
+23,864 mph
+```
+
+maximum velocity just before Entry Interface.
+
+Converted:
+
+```text
+10.668162560 km/s
+```
+
+Difference between the first M50 inertial state and this public value:
+
+```text
++331.856 m/s
+```
+
+This value remains:
+
+```text
+CONTEXT ONLY
+```
+
+because the public statement and high-rate source state do not provide identical technical semantics.
+
+MissionLab does not force them into agreement.
+
+---
+
+# Entry-Duration Comparison
+
+Artemis I NASA-reported Entry Interface to splashdown:
+
+```text
+1,235.000000 s
+```
+
+Artemis II MissionLab Entry Interface to derived WGS84 surface crossing:
+
+```text
+817.957676 s
+```
+
+Difference:
+
+```text
+417.042324 s
+```
+
+Artemis II is therefore shorter by:
+
+```text
+33.768609%
+```
+
+relative to the Artemis I duration.
+
+---
+
+# Duration-Provenance Limitation
+
+The comparison endpoints are not identically sourced.
+
+Artemis I uses:
+
+```text
+NASA-reported EI MET
+and
+NASA-reported splashdown MET
+```
+
+Artemis II uses:
+
+```text
+MissionLab reconstructed Entry Interface
+and
+MissionLab derived WGS84 surface crossing
+correlated with NASA's splashdown minute
+```
+
+Therefore the result is a mission-profile duration comparison, not a sub-second official event-time residual.
+
+---
+
+# Upper-Profile Landmark Comparison
+
+Artemis I actual skip apogee:
+
+```text
+87.599520 km
+```
+
+Artemis II derived rebound top:
+
+```text
+64.211808 km
+```
+
+Difference:
+
+```text
+23.387712 km
+```
+
+Relative to the Artemis I skip-apogee altitude, the Artemis II landmark is:
+
+```text
+26.698448%
+```
+
+lower.
+
+---
+
+# Upper-Landmark Interpretation Limit
+
+These two altitudes are not asserted to represent identical guidance events.
+
+Artemis I value:
+
+```text
+skip apogee
+```
+
+Artemis II value:
+
+```text
+derived climb-to-descent rebound top
+```
+
+They are compared only as:
+
+```text
+upper-profile trajectory landmarks
+```
+
+This allows the geometric scale of the profiles to be compared without misclassifying Artemis II as a skip entry.
+
+---
+
+# Artemis II Derived Rebound
+
+The Phase 2C vertical-velocity analysis identified:
+
+```text
+DESCENT_TO_CLIMB
+```
+
+at:
+
+```text
+EI+112.294128 s
+```
+
+Altitude:
+
+```text
+60.350128 km
+```
+
+Speed:
+
+```text
+8.993741 km/s
+```
+
+The second crossing:
+
+```text
+CLIMB_TO_DESCENT
+```
+
+occurs at:
+
+```text
+EI+239.647374 s
+```
+
+Altitude:
+
+```text
+64.211808 km
+```
+
+Speed:
+
+```text
+6.479165 km/s
+```
+
+---
+
+# Artemis II Rebound Metrics
+
+Rebound duration:
+
+```text
+127.353246 s
+```
+
+Altitude recovery:
+
+```text
+3.861680 km
+```
+
+Speed loss during rebound:
+
+```text
+2.514577 km/s
+```
+
+These quantities describe the reconstructed Artemis II vertical trajectory structure.
+
+They do not redefine the official entry classification.
+
+---
+
+# Core Cross-Mission Result
+
+The most important Phase 2F.2 observation is the combination of three results.
+
+Entry Interface inertial speed:
+
+```text
+Artemis I:
+10.991897793 km/s
+
+Artemis II:
+11.000018640 km/s
+
+difference:
++0.073880%
+```
+
+Entry duration:
+
+```text
+Artemis II:
+33.768609% shorter
+```
+
+Upper trajectory landmark:
+
+```text
+Artemis II:
+26.698448% lower
+```
+
+The two missions therefore entered the atmosphere with nearly identical inertial speed magnitudes while following substantially different subsequent trajectory structures.
+
+This is stronger than attributing the profile difference to a major Entry Interface speed difference.
+
+---
+
+# Figures
+
+Created:
+
+```text
+docs/assets/entry/phase2f_entry_duration_comparison.svg
+```
+
+This figure compares:
+
+```text
+Artemis I NASA-reported EI-to-splashdown duration
+versus
+Artemis II MissionLab EI-to-surface-crossing duration
+```
+
+Created:
+
+```text
+docs/assets/entry/phase2f_skip_loft_altitude_comparison.svg
+```
+
+This figure compares:
+
+```text
+Artemis I skip apogee
+versus
+Artemis II rebound top
+```
+
+with their different trajectory classifications preserved.
+
+Created:
+
+```text
+docs/assets/entry/phase2f_artemis_ii_rebound_profile.svg
+```
+
+This figure shows the actual reconstructed Artemis II altitude history surrounding:
+
+```text
+descent → climb
+```
+
+and:
+
+```text
+climb → descent
+```
+
+events.
+
+All figures use deterministic SVG configuration.
+
+---
+
+# Independent Comparison Validator
+
+Created:
+
+```text
+scripts/validation/validate_artemis_entry_profile_comparison.py
+```
+
+The validator independently reconstructs the expected cross-mission metrics from the underlying reference and processed products.
+
+It checks:
+
+```text
+product identifier
+reference-dataset identifier
+mixed provenance label
+819 high-rate Artemis II entry records
+Entry Interface epoch alignment
+Artemis I entry classification
+Artemis II no-skip classification
+Artemis II loft public label
+MissionLab rebound terminology
+rebound duration
+rebound altitude recovery
+rebound speed loss
+cross-mission duration comparison
+upper-profile landmark comparison
+matched inertial EI speed comparison
+signed speed-difference direction
+absolute speed difference
+relative speed difference
+Artemis I sensed-acceleration guardrail
+interpretation guardrail preservation
+three SVG outputs
+```
+
+---
+
+# Comparison Validation Result
+
+Observed classification:
+
+```text
+Artemis I:
+SKIP_ENTRY
+
+Artemis II:
+MODIFIED_TRAJECTORY_WITHOUT_SKIP_ENTRY
+
+Artemis II derived feature:
+VERTICAL REBOUND / LOFT
+```
+
+Observed duration comparison:
+
+```text
+Artemis I:
+1235.000000 s
+
+Artemis II:
+817.957676 s
+
+shorter by:
+417.042324 s
+
+reduction:
+33.768609%
+```
+
+Observed upper-profile comparison:
+
+```text
+Artemis I skip apogee:
+87.599520 km
+
+Artemis II rebound top:
+64.211808 km
+
+lower by:
+23.387712 km
+
+relative difference:
+26.698448%
+```
+
+Observed matched EI inertial-speed comparison:
+
+```text
+Artemis I:
+10.991897793 km/s
+
+Artemis II:
+11.000018640 km/s
+
+Artemis II - Artemis I:
++0.008120847 km/s
++8.121 m/s
+
+absolute difference:
+8.121 m/s
+
+relative difference:
++0.073880%
+
+relationship:
+ARTEMIS_II_HIGHER
+```
+
+Figures checked:
+
+```text
+3
+```
+
+Final result:
+
+```text
+PASS
+```
+
+---
+
+# Permanent Guardrails
+
+Artemis II must not be labeled:
+
+```text
+SKIP ENTRY
+```
+
+MissionLab may describe its reconstructed feature as:
+
+```text
+vertical rebound
+```
+
+or:
+
+```text
+loft
+```
+
+Artemis I sensed acceleration:
+
+```text
+4.05 g
+3.89 g
+```
+
+must not be directly compared with Phase 2C:
+
+```text
+kinematic deceleration / g0
+```
+
+Public mission speed numbers with unmatched semantics remain:
+
+```text
+CONTEXT ONLY
+```
+
+The Artemis I skip-apogee altitude and Artemis II rebound-top altitude must not be described as identical guidance phases.
+
+No Phase 2F.2 trajectory quantity may be converted directly into:
+
+```text
+Avcoat char-loss quantity
+TPS recession
+TPS damage probability
+crew load
+or heat-shield failure probability
+```
+
+MissionLab also does not claim that every Artemis I versus Artemis II trajectory difference was caused exclusively by the heat-shield investigation.
+
+---
+
+# What Phase 2F.2 Teaches
+
+A mission trajectory can change substantially even when the atmospheric Entry Interface energy state appears very similar at first glance.
+
+For Artemis I and Artemis II:
+
+```text
+EI inertial speed magnitudes:
+nearly equal
+```
+
+while:
+
+```text
+entry duration:
+substantially different
+```
+
+and:
+
+```text
+upper-profile geometry:
+substantially different
+```
+
+This demonstrates why mission analysis cannot rely only on a single scalar such as:
+
+```text
+entry velocity
+```
+
+Trajectory shape and time history matter.
+
+For TPS analysis in particular, the vehicle's thermal response depends on the history of the environment, not merely the initial speed or a single peak quantity.
+
+This directly reinforces the central Phase 2F lesson:
+
+```text
+trajectory history
++
+material response
++
+time-dependent thermal behavior
+```
+
+matter together.
+
+---
+
+# Phase 2F.2 Status
+
+Source heritage dataset:
+
+```text
+7 records
+PASS
+```
+
+Permanent cross-mission comparison:
+
+```text
+PASS
+```
+
+Matched EI inertial-speed comparison:
+
+```text
+PASS
+```
+
+Trajectory classification guardrails:
+
+```text
+PASS
+```
+
+Figures:
+
+```text
+3
+PASS
+```
+
+Phase 2F.2 status:
+
+```text
+COMPLETE
+```
