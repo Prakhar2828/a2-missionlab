@@ -10917,3 +10917,1310 @@ Phase 2E.4 status:
 ```text
 COMPLETE
 ```
+
+---
+
+# Phase 2F.1 — Orion TPS Heritage Evidence and Engineering Decision Thread
+
+## Goal
+
+Phase 2F.1 establishes the evidence foundation connecting:
+
+```text
+Artemis I heat-shield anomaly
+→ investigation
+→ root cause
+→ operational constraint
+→ Artemis II entry mitigation
+→ Artemis II flight outcome
+→ long-term manufacturing corrective action
+```
+
+The purpose is not to create a new thermal-protection-system damage model.
+
+Instead, the phase creates a provenance-controlled engineering decision thread that can later appear in the MissionLab mission-control and engineering interfaces.
+
+Phase 2F.1 deliberately separates:
+
+```text
+Phase 2E.4:
+modeled Artemis II external aerothermal environment
+```
+
+from:
+
+```text
+Phase 2F.1:
+NASA-reported Orion TPS evidence,
+engineering findings,
+decisions,
+and postflight outcomes
+```
+
+---
+
+# Why This Phase Is Separate From Phase 2E.4
+
+Phase 2E.4 produced a low-fidelity external stagnation-point convective-heating reconstruction using:
+
+```text
+Sutton–Graves
++
+NRLMSIS 2.0 density
++
+Earth-relative velocity
++
+Orion heritage nose radius
+```
+
+That model reconstructs an external heating environment.
+
+It does not calculate:
+
+```text
+Avcoat internal temperature
+pyrolysis
+gas generation
+gas transport
+permeability
+internal pressure
+crack formation
+char liberation
+surface recession
+bondline temperature
+TPS structural response
+```
+
+NASA's Artemis I investigation showed that the unexpected heat-shield phenomenon depended on material permeability, internal gas-pressure accumulation, and thermal time history.
+
+Therefore:
+
+```text
+external heat flux
+```
+
+cannot be converted directly into:
+
+```text
+char-loss quantity
+damage probability
+recession depth
+or TPS failure probability
+```
+
+Phase 2F.1 preserves that separation explicitly.
+
+---
+
+# Source Philosophy
+
+Phase 2F.1 uses authoritative NASA material only.
+
+Permitted source hosts in the permanent validator are:
+
+```text
+www.nasa.gov
+nasa.gov
+ntrs.nasa.gov
+```
+
+The evidence catalog contains:
+
+```text
+17 evidence records
+10 evidence categories
+5 unique source URLs
+```
+
+Source hosts represented:
+
+```text
+www.nasa.gov
+ntrs.nasa.gov
+```
+
+All evidence records use:
+
+```text
+NASA_REPORTED
+```
+
+provenance.
+
+The derived thread uses:
+
+```text
+DERIVED_FROM_NASA_REPORTED_EVIDENCE
+```
+
+provenance.
+
+---
+
+# Permanent Evidence Catalog
+
+Created:
+
+```text
+data/reference/artemis_tps_evidence.json
+```
+
+Dataset identifier:
+
+```text
+phase2f1_orion_tps_heritage_evidence
+```
+
+Mission:
+
+```text
+Artemis II
+```
+
+Scope:
+
+```text
+Orion thermal protection system heritage,
+Artemis I heat-shield anomaly/root cause,
+Artemis II mitigation,
+and Artemis II postflight outcome
+```
+
+---
+
+# Evidence Inventory
+
+The permanent evidence catalog contains 17 records.
+
+## Orion TPS architecture
+
+```text
+orion_heat_shield_architecture
+```
+
+NASA reports that Orion's ablative heat shield is:
+
+```text
+16.5 ft diameter
+```
+
+and its outer heat-shield surface uses:
+
+```text
+186 Avcoat blocks
+```
+
+Avcoat is bonded to the underlying structural heat-shield system.
+
+This record provides physical TPS context.
+
+It is not itself part of the anomaly decision sequence.
+
+---
+
+## Avcoat functional behavior
+
+```text
+avcoat_function
+```
+
+Avcoat is an ablative material designed to lose material in a controlled fashion during entry.
+
+This transfers thermal energy away from the vehicle.
+
+This distinction is important because:
+
+```text
+controlled ablation
+```
+
+is expected TPS behavior, whereas:
+
+```text
+unexpected cracking and char liberation
+```
+
+was the Artemis I anomaly.
+
+This record is contextual rather than a decision-thread event.
+
+---
+
+# Artemis I Anomaly
+
+Evidence record:
+
+```text
+artemis_i_unexpected_char_loss
+```
+
+Postflight inspection identified unexpected loss of charred Avcoat material from portions of the Artemis I Orion heat shield.
+
+The spacecraft completed the mission safely.
+
+The anomaly therefore represented:
+
+```text
+unexpected TPS material behavior
+```
+
+rather than:
+
+```text
+loss of crew protection
+```
+
+NASA nevertheless initiated an extensive root-cause investigation before committing crew to the next mission.
+
+---
+
+# Investigation Evidence
+
+NASA's investigation did not rely on a single model or visual inspection.
+
+The evidence program included:
+
+```text
+flight instrumentation
+physical sample extraction
+nondestructive evaluation
+material analysis
+thermal testing
+aerothermal testing
+hypersonic testing
+modeling and simulation
+root-cause analysis
+independent review
+```
+
+---
+
+# Artemis I Flight Instrumentation
+
+Evidence record:
+
+```text
+artemis_i_instrumentation
+```
+
+NASA reports that the Artemis I heat shield was heavily instrumented with:
+
+```text
+pressure sensors
+strain gauges
+thermocouples
+```
+
+at varying depths in the ablative material.
+
+These measurements supported:
+
+```text
+computer-model validation
+entry-environment reconstruction
+internal-temperature profiles
+timing analysis of char loss
+```
+
+MissionLab does not possess these complete raw internal TPS sensor histories.
+
+Therefore Phase 2E.4 quantities must not be represented as equivalent to this instrumentation.
+
+---
+
+# Postflight Sample Campaign
+
+Evidence record:
+
+```text
+artemis_i_sample_campaign
+```
+
+NASA removed approximately:
+
+```text
+200 Avcoat samples
+```
+
+from the Artemis I heat shield for analysis and inspection.
+
+Nondestructive evaluation was also used to examine internal material condition.
+
+The root-cause determination therefore included extensive physical examination of the flown heat shield.
+
+---
+
+# Thermal Test Campaign
+
+Evidence record:
+
+```text
+artemis_i_thermal_test_campaign
+```
+
+NASA reports:
+
+```text
+8 postflight thermal test campaigns
+```
+
+comprising:
+
+```text
+121 individual tests
+```
+
+These included facilities capable of investigating:
+
+```text
+convective heating
+radiative heating
+combined convective/radiative heating
+full-block behavior
+hypersonic flow
+material permeability
+microstructure
+```
+
+MissionLab does not reproduce this test campaign.
+
+The test counts are retained only as NASA-reported evidence of investigation depth.
+
+---
+
+# Ground Replication
+
+Evidence record:
+
+```text
+artemis_i_ground_replication
+```
+
+NASA was able to reproduce the relevant cracking/char-loss phenomenon under reconstructed conditions during the investigation.
+
+This provides stronger causal evidence than postflight visual correlation alone.
+
+The MissionLab decision thread therefore treats ground replication as part of:
+
+```text
+EVIDENCE_COLLECTION
+```
+
+rather than as an independent MissionLab model result.
+
+---
+
+# Artemis I Root Cause
+
+Evidence record:
+
+```text
+artemis_i_root_cause_low_permeability
+```
+
+The investigation determined that gases generated within the ablative Avcoat could not escape adequately from portions of material with insufficient permeability.
+
+The resulting sequence was:
+
+```text
+entry heating
+→ Avcoat thermal response / pyrolysis
+→ gas generation
+→ restricted venting
+→ internal pressure accumulation
+→ cracking
+→ liberation of charred material
+```
+
+The essential engineering parameter was therefore not simply:
+
+```text
+peak external heat flux
+```
+
+but also:
+
+```text
+material permeability
++
+internal gas transport
++
+thermal time history
+```
+
+---
+
+# Role of the Artemis I Skip Entry
+
+Evidence record:
+
+```text
+artemis_i_skip_entry_role
+```
+
+Artemis I used skip-guidance entry.
+
+During the period between atmospheric encounters:
+
+```text
+external heating rate decreased
+```
+
+while:
+
+```text
+thermal energy remained within the Avcoat
+```
+
+NASA's investigation found that this thermal history contributed to continued gas generation and accumulation inside insufficiently permeable material.
+
+This is an important MissionLab interpretation boundary.
+
+A single peak-heating value cannot reproduce this mechanism.
+
+---
+
+# Permeable Versus Less-Permeable Regions
+
+Evidence record:
+
+```text
+permeable_regions_did_not_show_same_behavior
+```
+
+NASA reported that local Avcoat regions identified as permeable before flight did not show the same cracking or char-loss behavior.
+
+Those regions allowed gases produced during ablation to vent.
+
+This observation strongly supported:
+
+```text
+permeability
+```
+
+as a key root-cause parameter.
+
+MissionLab does not infer a numerical permeability threshold because no such project-qualified threshold is present in the public evidence catalog.
+
+---
+
+# Engineering Constraint for Artemis II
+
+The Artemis II heat shield had already been produced and integrated while the Artemis I investigation was underway.
+
+NASA's engineering problem therefore became:
+
+```text
+Can the existing Artemis II heat shield
+be flown safely with operational changes?
+```
+
+The investigation and ground-test program established acceptable flight rationale for doing so.
+
+The permanent decision thread represents this as:
+
+```text
+CONSTRAINT
+```
+
+between:
+
+```text
+ROOT_CAUSE
+```
+
+and:
+
+```text
+DECISION_AND_ACTION
+```
+
+---
+
+# Artemis II Trajectory Mitigation
+
+Evidence records:
+
+```text
+artemis_ii_trajectory_mitigation
+artemis_ii_no_skip_entry
+```
+
+NASA modified the Artemis II entry profile to reduce exposure to the conditions associated with the Artemis I phenomenon.
+
+Public NASA reporting describes the change as:
+
+```text
+shortening the distance Orion travels
+between atmospheric entry and splashdown
+```
+
+and NASA technical reporting states that Artemis II flew:
+
+```text
+without the Artemis I-style skip entry
+```
+
+in order to minimize the crack-inducing conditions identified by the investigation.
+
+This is a direct example of:
+
+```text
+hardware evidence
+→ environment understanding
+→ operational mitigation
+```
+
+---
+
+# Artemis II Postflight Outcome
+
+Phase 2F.1 includes four postflight evidence records:
+
+```text
+artemis_ii_postflight_tps_expected
+artemis_ii_char_loss_reduced
+artemis_ii_arcjet_consistency
+artemis_ii_entry_velocity_prediction
+```
+
+---
+
+# TPS Performance
+
+NASA's initial Artemis II assessment reported:
+
+```text
+thermal protection system performed as expected
+```
+
+with:
+
+```text
+no unusual conditions identified
+```
+
+This is treated as an initial postflight assessment.
+
+It is not assumed to be the final detailed heat-shield material-analysis result.
+
+---
+
+# Artemis II Char-Loss Outcome
+
+NASA reported that the Artemis I-type char-loss behavior was:
+
+```text
+significantly reduced
+```
+
+on Artemis II in both:
+
+```text
+quantity
+and
+size
+```
+
+No public quantitative percentage is assigned in the evidence catalog.
+
+MissionLab therefore preserves NASA's qualitative wording and does not invent a numerical reduction.
+
+---
+
+# Arc-Jet Consistency
+
+NASA reported that Artemis II heat-shield performance was consistent with the post-Artemis-I arc-jet ground-testing program.
+
+This provides an important closure path:
+
+```text
+Artemis I observation
+→ investigation
+→ replicated mechanism
+→ mitigation
+→ Artemis II flight
+→ behavior consistent with test expectations
+```
+
+However, the public source does not provide enough numerical detail to perform a MissionLab flight-versus-arc-jet residual analysis.
+
+---
+
+# Entry-Interface Prediction Accuracy
+
+NASA reported that Artemis II entry-interface velocity was:
+
+```text
+within 1 mph of prediction
+```
+
+The evidence record deliberately preserves the semantic:
+
+```text
+within
+```
+
+rather than interpreting the statement as an exact:
+
+```text
+1.000 mph error
+```
+
+This mission-level prediction agreement is useful context.
+
+It is not direct validation of MissionLab's:
+
+```text
+trajectory reconstruction
+NRLMSIS model
+or Sutton–Graves heating estimate
+```
+
+unless NASA publishes the corresponding prediction dataset required for an apples-to-apples comparison.
+
+---
+
+# Long-Term Corrective Action
+
+Evidence record:
+
+```text
+artemis_iii_permeability_manufacturing_change
+```
+
+For future Orion heat shields, NASA applied the Artemis I lesson directly to material production.
+
+Public NASA reporting describes production changes intended to achieve:
+
+```text
+greater uniformity
+and
+consistent permeability
+```
+
+with more permeable Avcoat blocks.
+
+This is represented as:
+
+```text
+LONG_TERM_CORRECTIVE_ACTION
+```
+
+because it addresses the material parameter implicated in the root cause, rather than relying only on operational trajectory mitigation.
+
+---
+
+# Permanent Decision Thread
+
+The Phase 2F.1 engineering sequence is:
+
+```text
+DETECTION
+→
+EVIDENCE_COLLECTION
+→
+ROOT_CAUSE
+→
+CONSTRAINT
+→
+DECISION_AND_ACTION
+→
+FLIGHT_OUTCOME
+→
+LONG_TERM_CORRECTIVE_ACTION
+```
+
+Seven stages are preserved in this exact order.
+
+---
+
+# Stage 1 — Detection
+
+Evidence records:
+
+```text
+1
+```
+
+Stage:
+
+```text
+DETECTION
+```
+
+Meaning:
+
+```text
+Unexpected Artemis I heat-shield char loss
+was identified after flight.
+```
+
+---
+
+# Stage 2 — Evidence Collection
+
+Evidence records:
+
+```text
+4
+```
+
+Stage:
+
+```text
+EVIDENCE_COLLECTION
+```
+
+Includes:
+
+```text
+flight instrumentation
+postflight Avcoat sampling
+eight thermal-test campaigns / 121 tests
+ground replication of the phenomenon
+```
+
+---
+
+# Stage 3 — Root Cause
+
+Evidence records:
+
+```text
+3
+```
+
+Stage:
+
+```text
+ROOT_CAUSE
+```
+
+Includes:
+
+```text
+low permeability
+internal gas-pressure buildup
+skip-entry thermal-history role
+permeable-region comparison
+```
+
+---
+
+# Stage 4 — Constraint
+
+Evidence records:
+
+```text
+1
+```
+
+Stage:
+
+```text
+CONSTRAINT
+```
+
+Represents the engineering requirement to establish safe flight rationale for the existing Artemis II heat shield.
+
+---
+
+# Stage 5 — Decision and Action
+
+Evidence records:
+
+```text
+2
+```
+
+Stage:
+
+```text
+DECISION_AND_ACTION
+```
+
+Represents:
+
+```text
+Artemis II trajectory modification
++
+removal of the Artemis I-style skip entry
+```
+
+---
+
+# Stage 6 — Flight Outcome
+
+Evidence records:
+
+```text
+4
+```
+
+Stage:
+
+```text
+FLIGHT_OUTCOME
+```
+
+Includes:
+
+```text
+TPS performance as expected
+reduced char loss
+consistency with arc-jet tests
+entry-interface velocity within 1 mph of prediction
+```
+
+---
+
+# Stage 7 — Long-Term Corrective Action
+
+Evidence records:
+
+```text
+1
+```
+
+Stage:
+
+```text
+LONG_TERM_CORRECTIVE_ACTION
+```
+
+Represents future Avcoat manufacturing changes aimed at greater uniformity and consistent permeability.
+
+---
+
+# Context-Only Evidence
+
+Two evidence records intentionally do not appear as decision-thread events:
+
+```text
+orion_heat_shield_architecture
+avcoat_function
+```
+
+They provide engineering background needed to interpret the thread.
+
+They are not themselves:
+
+```text
+detection
+investigation
+root cause
+decision
+or outcome
+```
+
+events.
+
+The derived-product validator requires exactly these two records to remain context-only.
+
+---
+
+# Derived Decision-Thread Product
+
+Created:
+
+```text
+scripts/analysis/build_tps_decision_thread.py
+```
+
+Generated processed product:
+
+```text
+data/processed/entry/tps_decision_thread.json
+```
+
+The processed JSON remains ignored from Git.
+
+The derived product contains:
+
+```text
+7 stages
+15 directly referenced evidence records
+2 context-only records
+4 unique source URLs used by the thread
+```
+
+Every evidence claim embedded in the derived product is copied from the validated reference dataset.
+
+---
+
+# Decision-Thread Visualization
+
+Created:
+
+```text
+docs/assets/entry/phase2f_tps_decision_thread.svg
+```
+
+The deterministic visualization shows the sequence:
+
+```text
+Detection
+→ Evidence collection
+→ Root cause
+→ Constraint
+→ Decision & action
+→ Flight outcome
+→ Long-term corrective action
+```
+
+The visualization is an engineering evidence map.
+
+It is not a quantitative TPS-response plot.
+
+---
+
+# Evidence Catalog Validator
+
+Created:
+
+```text
+scripts/validation/validate_tps_evidence.py
+```
+
+The validator checks:
+
+```text
+JSON validity
+dataset identifier
+mission
+top-level provenance
+17-record evidence inventory
+unique evidence IDs
+required evidence categories
+NASA source hosts
+source-date syntax
+nonempty claims
+nonempty interpretation fields
+limitations
+decision-thread references
+decision-stage ordering
+numerical evidence invariants
+MissionLab interpretation guardrails
+```
+
+Source dates may be represented as:
+
+```text
+null
+YYYY
+YYYY-MM-DD
+```
+
+This preserves source precision without inventing dates.
+
+---
+
+# Evidence Validation Result
+
+Observed:
+
+```text
+Evidence items checked: 17
+Decision-thread stages: 7
+Evidence categories: 10
+Unique source URLs: 5
+```
+
+Source hosts:
+
+```text
+ntrs.nasa.gov
+www.nasa.gov
+```
+
+Decision-thread order:
+
+```text
+DETECTION
+EVIDENCE_COLLECTION
+ROOT_CAUSE
+CONSTRAINT
+DECISION_AND_ACTION
+FLIGHT_OUTCOME
+LONG_TERM_CORRECTIVE_ACTION
+```
+
+Key numerical invariants:
+
+```text
+Orion heat-shield diameter:
+16.5 ft
+
+Artemis II Avcoat blocks:
+186
+
+Artemis I thermal campaigns:
+8
+
+Artemis I individual tests:
+121
+
+Artemis II EI prediction:
+within 1 mph
+```
+
+Result:
+
+```text
+PASS
+```
+
+---
+
+# Derived-Product Validator
+
+Created:
+
+```text
+scripts/validation/validate_tps_decision_thread.py
+```
+
+This validator independently compares:
+
+```text
+reference evidence dataset
+versus
+generated decision-thread product
+```
+
+It checks:
+
+```text
+product identifier
+mission
+derived provenance
+source dataset ID
+seven-stage ordering
+stage indices
+stage summaries
+evidence-reference ordering
+evidence counts
+exact claim reproduction
+exact source reproduction
+exact limitations reproduction
+NASA source hosts
+context-only evidence inventory
+referenced-evidence inventory
+Phase 2E.4 relationship guardrails
+allowed-use guardrails
+prohibited-inference guardrails
+documentation SVG presence
+```
+
+---
+
+# Derived-Product Validation Result
+
+Observed:
+
+```text
+Stages checked:
+7
+
+Evidence records checked:
+17
+
+Thread-referenced evidence:
+15
+
+Context-only evidence:
+2
+
+Unique thread source URLs:
+4
+```
+
+Context-only records:
+
+```text
+avcoat_function
+orion_heat_shield_architecture
+```
+
+Guardrail preservation:
+
+```text
+Source claims copied exactly:
+PASS
+
+NASA source hosts only:
+PASS
+
+Phase 2E.4 relationship preserved:
+PASS
+
+Prohibited inferences preserved:
+PASS
+```
+
+Final result:
+
+```text
+PASS
+```
+
+---
+
+# Relationship to Phase 2E.4
+
+Phase 2E.4 produced:
+
+```text
+Qualified Sutton–Graves peak:
+109.641953 W/cm²
+
+Primary modeled convective heat load:
+162.686370921 MJ/m²
+```
+
+Phase 2F.1 does not calibrate either number using Artemis I or Artemis II char-loss observations.
+
+The permanent interpretation is:
+
+```text
+Phase 2E.4
+describes a low-fidelity external
+aerothermal environment.
+
+Phase 2F.1
+describes authoritative TPS heritage,
+material behavior evidence,
+engineering decisions,
+and observed outcomes.
+```
+
+They are related contextually but remain different classes of evidence.
+
+---
+
+# Explicit Prohibited Inferences
+
+The evidence dataset permanently prohibits:
+
+```text
+predict Artemis II char-loss quantity
+from Sutton–Graves heat flux alone
+```
+
+```text
+predict Avcoat recession depth
+without a material-response model
+```
+
+```text
+predict internal heat-shield temperature
+without TPS thermal-response data
+```
+
+```text
+treat Artemis II reduced char loss
+as numerical validation of the
+MissionLab heating model
+```
+
+```text
+invent quantitative permeability limits
+not published by NASA
+```
+
+```text
+calibrate the Sutton–Graves model
+to Artemis I or Artemis II
+char-loss observations
+```
+
+These are scientific interpretation guardrails rather than software limitations alone.
+
+---
+
+# What Phase 2F.1 Teaches
+
+The key engineering lesson is that spacecraft anomalies cannot always be reduced to a single maximum environment value.
+
+The Artemis I heat-shield issue involved interaction among:
+
+```text
+trajectory
++
+heating history
++
+material thermal response
++
+pyrolysis-gas generation
++
+permeability
++
+internal pressure
+```
+
+This explains why:
+
+```text
+peak heat flux alone
+```
+
+is insufficient to predict the anomaly.
+
+It also demonstrates how mission engineering can mitigate a hardware/material risk by changing:
+
+```text
+the environment experienced by the hardware
+```
+
+rather than immediately replacing the hardware itself.
+
+The Artemis I to Artemis II sequence is therefore a particularly strong example of operational engineering decision-making.
+
+---
+
+# Phase 2F.1 Status
+
+Permanent evidence foundation:
+
+```text
+COMPLETE
+```
+
+Evidence catalog:
+
+```text
+17 records
+PASS
+```
+
+Decision thread:
+
+```text
+7 stages
+PASS
+```
+
+Thread-referenced evidence:
+
+```text
+15 records
+```
+
+Context-only evidence:
+
+```text
+2 records
+```
+
+Interpretation guardrails:
+
+```text
+PASS
+```
+
+Phase 2F.1 status:
+
+```text
+COMPLETE
+```
