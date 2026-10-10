@@ -3447,3 +3447,932 @@ COMPLETE
 
 The next step is Earth-fixed and geodetic reconstruction so that physically meaningful entry quantities such as altitude, latitude, longitude, radial motion, flight-path geometry, and ground track can be derived.
 
+---
+
+# Phase 2B.2 — Earth-Fixed and Geodetic Entry Reconstruction
+
+## Goal
+
+Transform the high-rate Artemis II entry trajectory from its inertial J2000 representation into an Earth-fixed frame and derive physically meaningful entry geometry.
+
+Phase 2B.1 established the analysis chain:
+
+```text
+M50 source state
+→ SPICE B1950 analysis proxy
+→ J2000
+```
+
+Phase 2B.2 extends the chain:
+
+```text
+J2000
+→ ITRF93
+→ WGS 84 geodetic coordinates
+→ local Earth-relative flight geometry
+```
+
+This makes it possible to derive:
+
+```text
+latitude
+longitude
+geodetic altitude
+Earth-relative velocity
+east / north / vertical velocity
+horizontal speed
+flight-path angle
+heading
+ground-track geometry
+```
+
+from the public trajectory.
+
+---
+
+## Earth-orientation source
+
+High-precision Earth orientation is supplied by the NAIF binary Earth PCK:
+
+```text
+earth_1962_260806_2126_combined.bpc
+```
+
+Local source path:
+
+```text
+data/raw/spice/earth_1962_260806_2126_combined.bpc
+```
+
+Observed file size:
+
+```text
+31,318,016 bytes
+```
+
+Pinned SHA-256:
+
+```text
+CC87AD1A495CF598800BA403763D350F087AC0B97DA9FEC603278A3864C6A53E
+```
+
+The kernel is downloaded from the official JPL/NAIF generic-kernel archive.
+
+It remains outside Git under:
+
+```text
+/data/raw/
+```
+
+A dedicated downloader verifies the exact pinned artifact before use.
+
+Created:
+
+```text
+scripts/ingestion/download_entry_earth_kernel.py
+```
+
+The downloader:
+
+1. creates the local SPICE raw-data directory if required;
+2. detects whether the exact kernel is already present;
+3. calculates SHA-256;
+4. accepts the existing file only if the hash matches the pinned value;
+5. otherwise downloads the kernel from NAIF;
+6. validates the downloaded file against the pinned SHA-256;
+7. deletes a newly downloaded file if hash verification fails.
+
+This avoids silently using a moving or altered Earth-orientation product.
+
+---
+
+## Earth-fixed frame
+
+The inertial Phase 2B.1 state is represented in:
+
+```text
+J2000
+```
+
+Earth-fixed coordinates are reconstructed using:
+
+```python
+spice.sxform(
+    "J2000",
+    "ITRF93",
+    et,
+)
+```
+
+The full six-dimensional state is transformed:
+
+\[
+\mathbf{x}_{ITRF93}
+=
+\mathbf{X}_{J2000\rightarrow ITRF93}(t)
+\mathbf{x}_{J2000}
+\]
+
+Unlike the B1950-to-J2000 transformation from Phase 2B.1, the J2000-to-ITRF93 transformation is time dependent because the Earth-fixed frame rotates relative to inertial space.
+
+The SPICE state transformation therefore handles both:
+
+```text
+position rotation
++
+velocity transformation associated with Earth rotation
+```
+
+This is important because Earth-relative velocity cannot be obtained merely by rotating the inertial velocity vector with a static 3x3 matrix.
+
+---
+
+## Geodetic model
+
+A2 MissionLab uses the WGS 84 reference ellipsoid:
+
+```text
+semi-major axis:
+6378.137000 km
+
+inverse flattening:
+298.257223563
+```
+
+Geodetic coordinates are derived using:
+
+```python
+spice.recgeo(...)
+```
+
+The resulting quantities are:
+
+```text
+geodetic longitude
+geodetic latitude
+ellipsoidal altitude
+```
+
+Important distinction:
+
+```text
+Earth-center distance != altitude
+```
+
+and:
+
+```text
+WGS84 ellipsoidal altitude
+!= necessarily local mean sea-level height
+```
+
+The project therefore explicitly labels the derived altitude:
+
+```text
+WGS84 geodetic altitude
+```
+
+rather than generic “height above Earth.”
+
+---
+
+## Local Earth-relative frame
+
+The Earth-fixed ITRF93 velocity is decomposed into a local geodetic East-North-Up basis.
+
+For geodetic longitude \(\lambda\) and latitude \(\phi\):
+
+\[
+\hat{\mathbf e}
+=
+\begin{bmatrix}
+-\sin\lambda \\
+\cos\lambda \\
+0
+\end{bmatrix}
+\]
+
+\[
+\hat{\mathbf n}
+=
+\begin{bmatrix}
+-\sin\phi\cos\lambda \\
+-\sin\phi\sin\lambda \\
+\cos\phi
+\end{bmatrix}
+\]
+
+\[
+\hat{\mathbf u}
+=
+\begin{bmatrix}
+\cos\phi\cos\lambda \\
+\cos\phi\sin\lambda \\
+\sin\phi
+\end{bmatrix}
+\]
+
+Velocity components are:
+
+\[
+v_E
+=
+\mathbf v_{ITRF93}
+\cdot
+\hat{\mathbf e}
+\]
+
+\[
+v_N
+=
+\mathbf v_{ITRF93}
+\cdot
+\hat{\mathbf n}
+\]
+
+\[
+v_U
+=
+\mathbf v_{ITRF93}
+\cdot
+\hat{\mathbf u}
+\]
+
+where:
+
+```text
+v_E = east velocity
+v_N = north velocity
+v_U = vertical / up velocity
+```
+
+Negative vertical velocity indicates descent relative to the local geodetic surface normal.
+
+---
+
+## Earth-relative speed
+
+Earth-relative speed is:
+
+\[
+v_{ER}
+=
+\left\|
+\mathbf v_{ITRF93}
+\right\|
+\]
+
+This differs from the inertial speed derived earlier because ITRF93 rotates with Earth.
+
+At Entry Interface:
+
+```text
+inertial speed:
+approximately 11.000019 km/s
+
+Earth-relative speed:
+10.632214 km/s
+```
+
+The distinction is physically meaningful and must be maintained throughout entry analysis.
+
+---
+
+## Horizontal speed
+
+Local horizontal speed is:
+
+\[
+v_H
+=
+\sqrt{
+v_E^2+v_N^2
+}
+\]
+
+Vertical velocity is:
+
+\[
+v_V=v_U
+\]
+
+---
+
+## Earth-relative flight-path angle
+
+Flight-path angle is derived as:
+
+\[
+\gamma
+=
+\tan^{-1}
+\left(
+\frac{v_U}{v_H}
+\right)
+\]
+
+implemented using `atan2` so that the sign and quadrant remain well defined.
+
+Interpretation:
+
+```text
+gamma < 0
+descending
+
+gamma = 0
+locally horizontal
+
+gamma > 0
+ascending
+```
+
+---
+
+## Heading
+
+Heading is calculated clockwise from local geodetic north:
+
+\[
+\chi
+=
+\tan^{-1}
+\left(
+\frac{v_E}{v_N}
+\right)
+\]
+
+and normalized to:
+
+```text
+0 <= heading < 360 degrees
+```
+
+Interpretation:
+
+```text
+0 deg   north
+90 deg  east
+180 deg south
+270 deg west
+```
+
+Heading becomes increasingly poorly conditioned as horizontal velocity approaches zero.
+
+Terminal-state heading should therefore not be over-interpreted.
+
+---
+
+## Processing implementation
+
+Created:
+
+```text
+scripts/processing/build_entry_geometry.py
+```
+
+The processing step:
+
+1. loads the Phase 2B.1 J2000 trajectory;
+2. loads the leap-second kernel;
+3. loads the pinned high-precision Earth-orientation PCK;
+4. transforms each J2000 state to ITRF93;
+5. derives WGS 84 geodetic coordinates;
+6. derives Earth-relative speed;
+7. constructs the local ENU basis;
+8. decomposes Earth-relative velocity;
+9. calculates horizontal speed;
+10. calculates vertical velocity;
+11. calculates Earth-relative flight-path angle;
+12. calculates heading;
+13. compares altitude with the Entry Interface reference;
+14. preserves all earlier trajectory quantities.
+
+Generated:
+
+```text
+data/processed/entry/entry_geometry.csv
+data/processed/entry/entry_geometry_metadata.json
+```
+
+These generated products remain ignored by Git.
+
+---
+
+## Entry Interface reference
+
+The Orion Entry Interface reference altitude used for this analysis is:
+
+```text
+400,000 ft
+```
+
+Exact conversion:
+
+\[
+400000\ \mathrm{ft}
+\times
+0.3048\ \frac{\mathrm m}{\mathrm{ft}}
+=
+121920\ \mathrm m
+\]
+
+Therefore:
+
+```text
+121.920000 km
+```
+
+The comparison is performed after reconstructing WGS 84 altitude from the public trajectory.
+
+The analysis does not alter the trajectory to force the Entry Interface condition.
+
+---
+
+## Reconstructed Entry Interface state
+
+The first high-rate trajectory record occurs at:
+
+```text
+2026-04-10T23:53:30.866000Z
+```
+
+Derived WGS 84 geodetic position:
+
+```text
+Latitude:
+18.802121 deg
+
+Longitude:
+-145.547425 deg
+
+Altitude:
+121.919907 km
+```
+
+Entry Interface reference:
+
+```text
+121.920000 km
+```
+
+Difference:
+
+```text
+-0.000092549 km
+```
+
+or approximately:
+
+```text
+-0.093 m
+```
+
+Therefore the first state reproduces the 400,000-ft Entry Interface reference to approximately nine centimeters.
+
+This result was derived from:
+
+```text
+public trajectory
+→ M50/B1950 frame reconstruction
+→ J2000
+→ time-dependent ITRF93 transformation
+→ WGS84 geodetic conversion
+```
+
+rather than being inserted as an assumed trajectory altitude.
+
+This is a strong independent validation of the Phase 2 transformation chain.
+
+---
+
+## Entry Interface velocity geometry
+
+Derived at:
+
+```text
+2026-04-10T23:53:30.866000Z
+```
+
+Earth-relative speed:
+
+```text
+10.632214 km/s
+```
+
+From the exploratory geometry reconstruction, the associated local flight geometry was:
+
+```text
+vertical velocity:
+-1.125755 km/s
+
+horizontal speed:
+10.572448 km/s
+
+flight-path angle:
+-6.077956 deg
+
+heading:
+54.795052 deg
+```
+
+The negative flight-path angle and vertical velocity indicate descending motion at atmospheric Entry Interface.
+
+These are A2 MissionLab DERIVED values.
+
+They are not presented as directly reported NASA flight parameters.
+
+---
+
+## Entry trajectory extent
+
+The first state is also the maximum WGS 84 altitude in the dataset:
+
+```text
+121.919907 km
+```
+
+The trajectory then proceeds through atmospheric descent.
+
+The final state occurs at:
+
+```text
+2026-04-11T00:07:08.841000Z
+```
+
+Derived terminal coordinates:
+
+```text
+Latitude:
+32.340599 deg
+
+Longitude:
+-117.763094 deg
+
+WGS84 altitude:
+-0.000133 km
+
+Earth-relative speed:
+0.009130 km/s
+```
+
+The terminal altitude corresponds to approximately:
+
+```text
+-0.133 m
+```
+
+relative to the WGS 84 reference ellipsoid.
+
+The terminal Earth-relative speed corresponds to approximately:
+
+```text
+9.13 m/s
+```
+
+This indicates that the high-rate file spans substantially more than the initial hypersonic entry segment and continues to a terminal near-surface state.
+
+However, Phase 2B.2 does NOT yet label this final state:
+
+```text
+SPLASHDOWN
+```
+
+because that event classification will be validated separately against mission reporting.
+
+Likewise, proximity to zero WGS 84 ellipsoidal altitude should not be interpreted as a precise physical ocean-surface measurement.
+
+---
+
+## Frame transformation validation
+
+Maximum position-norm difference between J2000 and ITRF93 representations:
+
+```text
+1.818989403546e-12 km
+```
+
+A coordinate rotation should preserve physical position magnitude.
+
+The observed residual is consistent with floating-point roundoff.
+
+---
+
+## Independent validator
+
+Created:
+
+```text
+scripts/validation/validate_entry_geometry.py
+```
+
+The validator independently reconstructs all 819 states.
+
+It verifies:
+
+### Earth-fixed state
+
+For every epoch:
+
+```text
+J2000
+→ SPICE J2000-to-ITRF93 transform
+```
+
+is recomputed independently.
+
+Observed maximum errors:
+
+```text
+Position:
+0.000000000000e+00 km
+
+Velocity:
+0.000000000000e+00 km/s
+```
+
+### Geodetic reconstruction
+
+WGS 84 geodetic latitude, longitude, and altitude are independently recalculated.
+
+Observed maximum errors:
+
+```text
+Altitude:
+0.000000000000e+00 km
+
+Latitude:
+0.000000000000e+00 deg
+
+Longitude:
+0.000000000000e+00 deg
+```
+
+### Velocity decomposition
+
+Earth-relative speed is independently reconstructed from the ITRF93 velocity.
+
+The ENU components are independently checked against the total velocity magnitude.
+
+Observed maximum ENU magnitude error:
+
+```text
+1.776356839400e-15 km/s
+```
+
+This is consistent with floating-point roundoff.
+
+---
+
+## Entry Interface validation
+
+The validator requires the first high-rate state to reproduce the 400,000-ft Entry Interface altitude within:
+
+```text
+1 meter
+```
+
+Observed:
+
+```text
+Reference:
+121.920000 km
+
+Derived:
+121.919907 km
+
+Difference:
+-0.000092549 km
+
+Difference:
+-0.093 m
+```
+
+Result:
+
+```text
+PASS
+```
+
+---
+
+## Terminal-state sanity check
+
+The validator requires the final trajectory state to lie within:
+
+```text
+1 meter
+```
+
+of the WGS 84 reference ellipsoid.
+
+Observed:
+
+```text
+Altitude:
+-0.000133 km
+```
+
+or:
+
+```text
+-0.133 m
+```
+
+Result:
+
+```text
+PASS
+```
+
+This is a geometric terminal-state check.
+
+It is not yet an independent splashdown-event validation.
+
+---
+
+## Permanent pipeline result
+
+Observed:
+
+```text
+Earth orientation kernel already present.
+
+SHA256:
+CC87AD1A495CF598800BA403763D350F087AC0B97DA9FEC603278A3864C6A53E
+```
+
+Geometry builder:
+
+```text
+Records:
+819
+
+First state:
+2026-04-10T23:53:30.866000Z
+
+Latitude:
+18.802121 deg
+
+Longitude:
+-145.547425 deg
+
+Altitude:
+121.919907 km
+
+Earth-relative speed:
+10.632214 km/s
+
+Flight-path angle:
+-6.077956 deg
+
+Heading:
+54.795052 deg
+```
+
+Entry Interface check:
+
+```text
+Reference altitude:
+121.920000 km
+
+Derived altitude:
+121.919907 km
+
+Difference:
+-0.000093 km
+```
+
+Terminal state:
+
+```text
+2026-04-11T00:07:08.841000Z
+
+Latitude:
+32.340599 deg
+
+Longitude:
+-117.763094 deg
+
+Altitude:
+-0.000133 km
+
+Earth-relative speed:
+0.009130 km/s
+```
+
+Final validation:
+
+```text
+OK: Earth-fixed frame, WGS84 geodetic geometry,
+Earth-relative velocity, and Entry Interface
+reconstruction validated.
+```
+
+---
+
+## Provenance classification
+
+Direct public source state:
+
+```text
+FLIGHT DATA
+```
+
+includes the raw high-rate trajectory values and source frame/unit declarations.
+
+Earth-orientation kernel:
+
+```text
+authoritative external reference data
+JPL/NAIF
+```
+
+Entry Interface altitude reference:
+
+```text
+NASA REPORTED
+```
+
+The following are:
+
+```text
+DERIVED
+```
+
+- J2000 state representation;
+- ITRF93 state;
+- WGS 84 latitude;
+- WGS 84 longitude;
+- WGS 84 altitude;
+- Earth-relative velocity;
+- east velocity;
+- north velocity;
+- vertical velocity;
+- horizontal speed;
+- flight-path angle;
+- heading;
+- Entry Interface altitude difference.
+
+No atmospheric, aerodynamic, thermal, or guidance model has yet been applied.
+
+---
+
+## Interpretation limits
+
+Phase 2B.2 does NOT yet derive:
+
+- atmospheric density;
+- aerodynamic drag;
+- aerodynamic lift;
+- lift-to-drag ratio;
+- angle of attack;
+- bank angle;
+- dynamic pressure;
+- Mach number;
+- stagnation heating;
+- heat flux;
+- heat-shield temperature;
+- sensed acceleration;
+- crew g-load;
+- parachute events;
+- exact splashdown event;
+- recovery sequence.
+
+The terminal near-zero ellipsoidal altitude does not by itself prove the exact physical ocean-surface altitude.
+
+The trajectory source may contain modeled, reconstructed, or operationally generated states whose exact internal production method has not yet been established.
+
+Derived values must therefore remain labeled according to provenance rather than being upgraded to direct NASA measurements.
+
+---
+
+## Phase 2B.2 status
+
+The high-rate trajectory has now been reconstructed through:
+
+```text
+NASA high-rate source
+→ M50
+→ B1950 analysis proxy
+→ J2000
+→ ITRF93
+→ WGS84
+→ Earth-relative local geometry
+```
+
+The Entry Interface state independently reproduces the 400,000-ft reference altitude to approximately:
+
+```text
+0.093 m
+```
+
+Status:
+
+```text
+COMPLETE
+```
+
+The project now has a defensible physical coordinate system for atmospheric-entry analysis.
+
+The next phase can use this geometry to reconstruct the evolution of the entry itself rather than only its coordinate representation.
+
