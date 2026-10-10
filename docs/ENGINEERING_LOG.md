@@ -2962,3 +2962,488 @@ COMPLETE
 ```
 
 The next engineering problem is to connect this high-rate M50 trajectory to the Phase 1 mission backbone and determine a defensible Earth/entry geometry before calculating atmospheric-entry quantities.
+
+---
+
+# Phase 2B — Entry Frame Handoff and Geometry
+
+# Phase 2B.1 — M50 to J2000 Frame Reconstruction
+
+## Goal
+
+Connect the separate high-rate Phase 2 trajectory to the Phase 1 Artemis II mission backbone in a common inertial coordinate system.
+
+The Phase 1 NASA CCSDS OEM products use:
+
+```text
+EME2000
+```
+
+The high-rate entry product declares:
+
+```text
+M50
+```
+
+Direct subtraction of state-vector components from these differently labeled frames would therefore be invalid without first establishing an appropriate coordinate transformation.
+
+---
+
+## Frame question
+
+The high-rate source provides the frame label:
+
+```text
+M50
+```
+
+Legacy NASA documentation describes M50 / Mean-of-1950 as an Earth-centered inertial reference associated with the mean equator/equinox of the 1950 epoch.
+
+SPICE provides the built-in inertial frame:
+
+```text
+B1950
+```
+
+and an inertial transformation:
+
+```text
+B1950 -> J2000
+```
+
+A2 MissionLab therefore tested the following analysis mapping:
+
+```text
+NASA source label M50
+        ↓
+SPICE B1950 analysis proxy
+        ↓
+SPICE J2000
+        ↓
+Phase 1 EME2000-compatible analysis frame
+```
+
+Important qualification:
+
+The source file itself does not explicitly state:
+
+```text
+M50 = SPICE B1950
+```
+
+Therefore A2 MissionLab treats B1950 as an analysis representation of the M50 source frame rather than claiming explicit file-level equivalence.
+
+The mapping was tested empirically against the actual Artemis II Phase 1 / Phase 2 trajectory handoff before being adopted.
+
+---
+
+## Initial empirical experiment
+
+The final Phase 1 April 10 OEM state occurs at:
+
+```text
+2026-04-10T23:53:16.723Z
+```
+
+The first high-rate Phase 2 state occurs at:
+
+```text
+2026-04-10T23:53:30.866Z
+```
+
+Gap:
+
+```text
+14.143000 seconds
+```
+
+Because the two datasets do not contain a state at the exact same epoch, the final Phase 1 state was propagated across the short gap using a simple Earth two-body model.
+
+This propagation was used only as a comparison tool.
+
+It is not considered atmospheric-entry flight truth.
+
+Two hypotheses were tested.
+
+### Hypothesis A
+
+Treat the M50 coordinates numerically as though they were already J2000 coordinates.
+
+Result:
+
+```text
+Position difference:
+78.386809 km
+
+Velocity difference:
+125.656974 m/s
+```
+
+### Hypothesis B
+
+Represent M50 using SPICE B1950 and transform:
+
+```text
+B1950 -> J2000
+```
+
+Result:
+
+```text
+Position difference:
+0.836950 km
+
+Velocity difference:
+0.734918 m/s
+```
+
+Improvement:
+
+```text
+Position:
+93.658x
+
+Velocity:
+170.981x
+```
+
+This very large improvement provides independent mission-data evidence supporting the B1950 analysis representation.
+
+---
+
+## SPICE transformation
+
+Created:
+
+```text
+scripts/processing/transform_entry_to_j2000.py
+```
+
+The transformation is generated using:
+
+```python
+spice.sxform(
+    "B1950",
+    "J2000",
+    et,
+)
+```
+
+The complete six-dimensional state is transformed:
+
+\[
+\mathbf{x}_{J2000}
+=
+\mathbf{X}_{B1950\rightarrow J2000}
+\mathbf{x}_{M50}
+\]
+
+where the state contains:
+
+\[
+\mathbf{x}
+=
+\begin{bmatrix}
+\mathbf{r} \\
+\mathbf{v}
+\end{bmatrix}
+\]
+
+For these two inertial frames, the SPICE state transformation is effectively constant over the trajectory interval.
+
+Observed maximum transform-time variation:
+
+```text
+0.000000000000e+00
+```
+
+---
+
+## Rotation diagnostics
+
+Observed B1950-to-J2000 rotation matrix at the first trajectory epoch:
+
+```text
++0.999925707952 -0.011178938138 -0.004859003815
++0.011178938126 +0.999937513350 -0.000027162595
++0.004859003841 -0.000027157926 +0.999988194602
+```
+
+Rotation determinant:
+
+```text
+1.000000000000000
+```
+
+Orthogonality error:
+
+```text
+1.570178345518e-16
+```
+
+These values are consistent with a proper rigid coordinate rotation.
+
+---
+
+## Magnitude preservation
+
+A pure inertial-axis rotation should preserve vector magnitudes.
+
+Across all 819 states:
+
+Maximum Earth-center radius preservation error:
+
+```text
+1.818989403546e-12 km
+```
+
+Maximum inertial-speed preservation error:
+
+```text
+1.776356839400e-15 km/s
+```
+
+These differences are consistent with floating-point roundoff.
+
+The transformation therefore changes coordinate representation without changing physical vector magnitudes.
+
+---
+
+## First transformed state
+
+First Phase 2 J2000 state:
+
+```text
+UTC:
+2026-04-10T23:53:30.866000Z
+```
+
+Position:
+
+```text
+x = 3818.913696 km
+y = 4831.658097 km
+z = 2071.969543 km
+```
+
+Velocity:
+
+```text
+vx = -8.996695431 km/s
+vy =  3.251987226 km/s
+vz =  5.429959529 km/s
+```
+
+The corresponding invariant quantities remain:
+
+```text
+Earth-center distance:
+6497.851920 km
+
+Inertial speed:
+11.000019 km/s
+```
+
+---
+
+## Generated products
+
+The processing step writes:
+
+```text
+data/processed/entry/entry_trajectory_j2000.csv
+data/processed/entry/entry_frame_transform_metadata.json
+```
+
+These are generated analysis products and remain outside Git under:
+
+```text
+/data/processed/
+```
+
+---
+
+## Independent validator
+
+Created:
+
+```text
+scripts/validation/validate_entry_frame_transform.py
+```
+
+The validator independently:
+
+- reloads all 819 M50 states;
+- recalculates the SPICE B1950-to-J2000 transformation;
+- compares every reconstructed transformed state with the stored processed state;
+- checks rotation-matrix orthogonality;
+- checks rotation determinant;
+- checks radius preservation;
+- checks speed preservation;
+- independently reconstructs the Phase 1-to-Phase 2 handoff comparison;
+- requires the transformed trajectory to improve both position and velocity continuity substantially.
+
+Observed stored transform errors:
+
+```text
+Maximum position transform error:
+0.000000000000e+00 km
+
+Maximum velocity transform error:
+0.000000000000e+00 km/s
+```
+
+---
+
+## Final handoff validation
+
+Observed:
+
+```text
+Phase 1 -> Phase 2 gap:
+14.143000 s
+```
+
+Without frame transformation:
+
+```text
+Position difference:
+78.386809 km
+
+Velocity difference:
+125.656974 m/s
+```
+
+With SPICE B1950 -> J2000:
+
+```text
+Position difference:
+0.836950 km
+
+Velocity difference:
+0.734918 m/s
+```
+
+Improvement:
+
+```text
+Position:
+93.658x
+
+Velocity:
+170.981x
+```
+
+Result:
+
+```text
+OK: entry frame transformation and empirical handoff continuity validated.
+```
+
+---
+
+## Interpretation
+
+The approximately two-orders-of-magnitude improvement is strong evidence that representing the M50 source coordinates using SPICE B1950 is appropriate for this analysis.
+
+The result is supported by two independent lines of evidence:
+
+```text
+legacy reference-frame definitions
++
+actual Artemis II trajectory continuity
+```
+
+This is significantly stronger than adopting a frame mapping based only on naming similarity.
+
+---
+
+## Important interpretation limits
+
+The remaining transformed handoff difference:
+
+```text
+0.836950 km
+0.734918 m/s
+```
+
+is NOT interpreted as:
+
+```text
+navigation error
+trajectory error
+state-estimation error
+targeting error
+maneuver error
+spacecraft uncertainty
+```
+
+The Phase 1 state and Phase 2 state are separated by:
+
+```text
+14.143 seconds
+```
+
+and the handoff comparison propagates the final Phase 1 state using a simple two-body Earth model.
+
+During this portion of the mission, atmospheric and other forces may already be relevant.
+
+Therefore the residual represents disagreement between:
+
+```text
+short two-body propagated Phase 1 state
+```
+
+and:
+
+```text
+first transformed high-rate Phase 2 state
+```
+
+under the analysis assumptions.
+
+It should not be promoted into an operational error quantity.
+
+---
+
+## EME2000 / J2000 qualification
+
+Phase 1 NASA OEM states are labeled:
+
+```text
+EME2000
+```
+
+The Phase 2 transformed trajectory is represented as:
+
+```text
+J2000
+```
+
+For the current mission-scale inertial analysis, A2 MissionLab treats these as compatible realizations for state comparison.
+
+Any future analysis requiring higher-precision reference-frame distinctions must explicitly revisit this assumption.
+
+---
+
+## Phase 2B.1 status
+
+The high-rate trajectory has now been:
+
+```text
+M50 source state
+→ represented using SPICE B1950
+→ transformed to J2000
+→ checked for magnitude preservation
+→ independently reconstructed
+→ empirically compared with Phase 1
+```
+
+Status:
+
+```text
+COMPLETE
+```
+
+The next step is Earth-fixed and geodetic reconstruction so that physically meaningful entry quantities such as altitude, latitude, longitude, radial motion, flight-path geometry, and ground track can be derived.
+
