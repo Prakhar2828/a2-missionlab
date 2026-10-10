@@ -6372,3 +6372,1021 @@ COMPLETE
 
 The high-rate entry product can now be interpreted as an end-to-end entry and descent trajectory with independently validated operational event anchors.
 
+---
+
+# Phase 2E — Atmospheric and Aerothermal Reconstruction
+
+# Phase 2E.1 — Modeled Atmosphere and Dynamic Pressure
+
+## Goal
+
+Add an atmospheric environment to the validated Artemis II entry trajectory without introducing a vehicle aerodynamic or heating model.
+
+Previous Phase 2 work established:
+
+```text
+NASA flight-derived ephemeris
+→ inertial-frame reconstruction
+→ Earth-fixed trajectory
+→ WGS 84 geometry
+→ Earth-relative velocity
+→ entry dynamics
+→ NASA event correlations
+```
+
+Phase 2E.1 extends this chain with:
+
+```text
+flight-derived trajectory
++
+empirical atmosphere model
+→ density
+→ neutral temperature
+→ modeled dynamic pressure
+```
+
+The atmosphere is explicitly separated from flight-derived trajectory quantities.
+
+---
+
+## Provenance separation
+
+The underlying trajectory is treated as:
+
+```text
+NASA FLIGHT-DERIVED EPHEMERIS
+```
+
+Earth-fixed geometry and Earth-relative velocity are:
+
+```text
+DERIVED
+```
+
+NRLMSIS atmospheric quantities are:
+
+```text
+MODEL
+```
+
+This includes:
+
+```text
+total mass density
+neutral temperature
+```
+
+Dynamic pressure combines modeled atmospheric density with derived Earth-relative speed and is therefore classified:
+
+```text
+MODEL-DERIVED
+```
+
+Phase 2E.1 does not promote modeled atmospheric quantities into flight measurements.
+
+---
+
+## Atmospheric model
+
+A2 MissionLab uses:
+
+```text
+NRLMSIS 2.0
+```
+
+through:
+
+```text
+pymsis 0.12.0
+```
+
+The package version is pinned in:
+
+```text
+requirements.txt
+```
+
+The trajectory is evaluated in aligned fly-through mode, where each atmospheric-model evaluation corresponds to one trajectory epoch and location.
+
+Total states:
+
+```text
+819
+```
+
+---
+
+## Model trajectory inputs
+
+Each NRLMSIS evaluation uses the corresponding derived trajectory values:
+
+```text
+UTC epoch
+geodetic longitude
+geodetic latitude
+WGS 84 altitude
+```
+
+The model trajectory therefore follows Orion through the complete Phase 2 entry arc.
+
+One final trajectory state has WGS 84 altitude:
+
+```text
+-0.000133 km
+```
+
+Because the atmospheric-model evaluation is not extended below zero altitude, that single state is evaluated at:
+
+```text
+0.000000 km
+```
+
+The original trajectory altitude remains preserved independently.
+
+Number of clipped model states:
+
+```text
+1
+```
+
+---
+
+# Historical Solar and Geomagnetic Drivers
+
+## Driver source
+
+The initial inspection used the historical space-weather driver source consumed by `pymsis`:
+
+```text
+SW-All.csv
+```
+
+Provider:
+
+```text
+CelesTrak
+```
+
+Observed local file size:
+
+```text
+2,890,313 bytes
+```
+
+Observed SHA-256:
+
+```text
+50130BC78F48B02FEC4424DA59098A065D5DE06562DB73BBCC3631BCCBFFBAEE
+```
+
+Because this external source can change over time, normal atmospheric reconstruction should not silently depend on a future revision.
+
+---
+
+## Pinned driver snapshot
+
+Created:
+
+```text
+scripts/ingestion/capture_msis_drivers.py
+```
+
+The ingestion step reconstructs the exact historical model inputs used for every trajectory state and writes:
+
+```text
+data/reference/artemis_ii_msis_drivers.csv
+```
+
+The committed snapshot contains:
+
+```text
+819 records
+```
+
+and preserves:
+
+```text
+F10.7
+81-day F10.7 average
+daily Ap
+current 3-hour Ap
+3-hour prior Ap
+6-hour prior Ap
+9-hour prior Ap
+12–33-hour average Ap
+36–57-hour average Ap
+```
+
+Observed driver-snapshot SHA-256:
+
+```text
+6A688BE48A211CD2426B81EE30148EDD04FDAA28C438DE04066121AC940D21DA
+```
+
+Metadata is stored in:
+
+```text
+data/reference/artemis_ii_msis_environment.json
+```
+
+The source `SW-All.csv` itself is not committed.
+
+Instead, its hash is recorded so the exact source revision used to produce the committed model-input snapshot can be identified.
+
+---
+
+## Driver values during entry
+
+The entry crosses the UTC date boundary from April 10 to April 11.
+
+Observed F10.7 values:
+
+```text
+96.700
+93.700
+```
+
+Observed F10.7a values:
+
+```text
+124.100
+123.800
+```
+
+Observed current 3-hour Ap values:
+
+```text
+5.000
+7.000
+```
+
+First trajectory Ap history vector:
+
+```text
+17.000
+5.000
+22.000
+27.000
+32.000
+9.625
+5.500
+```
+
+Last trajectory Ap history vector:
+
+```text
+12.000
+7.000
+5.000
+22.000
+27.000
+12.500
+5.750
+```
+
+Storm-time geomagnetic mode is used so the full seven-element Ap history vector is supplied to NRLMSIS.
+
+---
+
+# UTC Driver-Boundary Control
+
+## Motivation
+
+The entry crosses:
+
+```text
+00:00 UTC
+```
+
+and the historical F10.7/F10.7a/Ap inputs change at the UTC-date boundary.
+
+The initial trajectory calculation showed a one-step modeled density increase of approximately:
+
+```text
++2.142846275%
+```
+
+between:
+
+```text
+2026-04-10T23:59:59.866000Z
+```
+
+and:
+
+```text
+2026-04-11T00:00:00.866000Z
+```
+
+This could not initially be interpreted as a model-driver discontinuity because Orion also changes altitude substantially during the same second.
+
+A controlled experiment was therefore performed.
+
+---
+
+## Boundary trajectory states
+
+Before UTC midnight:
+
+```text
+UTC:
+2026-04-10T23:59:59.866000Z
+
+altitude:
+47.319239 km
+```
+
+After UTC midnight:
+
+```text
+UTC:
+2026-04-11T00:00:00.866000Z
+
+altitude:
+47.154503 km
+```
+
+Altitude change:
+
+```text
+-164.736 m
+```
+
+Observed modeled densities:
+
+```text
+Before:
+1.423128647730e-03 kg/m^3
+
+After:
+1.453624106944e-03 kg/m^3
+```
+
+Observed one-second density change:
+
+```text
++2.142846275%
+```
+
+---
+
+## Fixed-geometry driver experiment
+
+The spacecraft geometry was held fixed while the pre-midnight and post-midnight space-weather drivers were exchanged.
+
+At the pre-midnight state:
+
+```text
+density with pre-midnight drivers:
+1.423128647730e-03 kg/m^3
+
+density with post-midnight drivers:
+1.423128647730e-03 kg/m^3
+```
+
+Relative driver effect:
+
+```text
++0.000000000000%
+```
+
+At the post-midnight state:
+
+```text
+density with pre-midnight drivers:
+1.453624106944e-03 kg/m^3
+
+density with post-midnight drivers:
+1.453624106944e-03 kg/m^3
+```
+
+Relative driver effect:
+
+```text
++0.000000000000%
+```
+
+---
+
+## Fixed-driver trajectory experiment
+
+The actual geometry/time evolution was evaluated while retaining the pre-midnight model-driver set.
+
+Resulting density change:
+
+```text
++2.142846275%
+```
+
+This is identical at reported precision to the original trajectory density change.
+
+Residual attributable to the UTC driver swap:
+
+```text
+0.000000000000 percentage points
+```
+
+Therefore:
+
+```text
+the apparent midnight density step is caused by
+Orion descending through the atmospheric density gradient
+```
+
+rather than a measurable discontinuity from the F10.7/F10.7a/Ap change at approximately 47 km.
+
+This control is preserved in:
+
+```text
+data/reference/artemis_ii_msis_environment.json
+```
+
+---
+
+# Atmosphere Reconstruction
+
+Created:
+
+```text
+scripts/analysis/build_entry_atmosphere.py
+```
+
+The analysis reads:
+
+```text
+validated entry geometry
++
+pinned model-driver snapshot
+```
+
+and evaluates NRLMSIS 2.0 for all:
+
+```text
+819 states
+```
+
+Generated products:
+
+```text
+data/processed/entry/entry_atmosphere.csv
+data/processed/entry/entry_atmosphere_summary.json
+```
+
+These remain ignored under:
+
+```text
+data/processed/
+```
+
+---
+
+## Entry Interface atmosphere
+
+At:
+
+```text
+2026-04-10T23:53:30.866000Z
+```
+
+with WGS 84 altitude:
+
+```text
+121.919907 km
+```
+
+NRLMSIS 2.0 gives:
+
+```text
+total mass density:
+1.453686149233e-08 kg/m^3
+
+neutral temperature:
+415.921 K
+```
+
+These are MODEL quantities.
+
+---
+
+# Dynamic Pressure Reconstruction
+
+## Definition
+
+Phase 2E.1 defines modeled dynamic pressure as:
+
+\[
+q
+=
+\frac{1}{2}\rho V^2
+\]
+
+where:
+
+```text
+rho = NRLMSIS modeled total mass density
+
+V = Earth-relative trajectory speed
+```
+
+The Earth-relative velocity comes from the ITRF93 trajectory reconstruction.
+
+No independent atmospheric-wind model is currently applied.
+
+Therefore the calculation assumes:
+
+```text
+zero local atmospheric wind
+relative to the rotating Earth-fixed frame
+```
+
+Dynamic pressure is classified:
+
+```text
+MODEL-DERIVED
+```
+
+and not as a directly measured flight quantity.
+
+---
+
+## Entry Interface dynamic pressure
+
+At Entry Interface:
+
+```text
+density:
+1.453686149233e-08 kg/m^3
+
+Earth-relative speed:
+10.632214 km/s
+```
+
+Modeled dynamic pressure:
+
+```text
+0.821652 Pa
+```
+
+or approximately:
+
+```text
+0.017161 psf
+```
+
+The low modeled dynamic pressure is consistent with Entry Interface occurring in the extremely tenuous upper atmosphere.
+
+---
+
+# Double-Peaked Modeled Dynamic-Pressure History
+
+The reconstructed entry contains two dominant local dynamic-pressure peaks.
+
+## Early peak
+
+Derived at:
+
+```text
+2026-04-10T23:55:05.866000Z
+```
+
+or:
+
+```text
+EI + 95.000 s
+```
+
+Altitude:
+
+```text
+60.807901 km
+```
+
+Earth-relative speed:
+
+```text
+9.6205 km/s
+```
+
+Modeled dynamic pressure:
+
+```text
+12.798779 kPa
+```
+
+This occurs approximately one second before the Phase 2C primary peak kinematic-deceleration estimate.
+
+---
+
+## Global peak
+
+Derived at:
+
+```text
+2026-04-11T00:00:41.866000Z
+```
+
+or:
+
+```text
+EI + 431.000 s
+```
+
+Altitude:
+
+```text
+40.042026 km
+```
+
+Earth-relative speed:
+
+```text
+2.587485 km/s
+```
+
+NRLMSIS density:
+
+```text
+3.826211439446e-03 kg/m^3
+```
+
+Neutral temperature:
+
+```text
+253.416 K
+```
+
+Modeled dynamic pressure:
+
+```text
+12.808389 kPa
+```
+
+or:
+
+```text
+267.509 psf
+```
+
+This is the global maximum of the modeled dynamic-pressure history.
+
+---
+
+## Similarity of dominant peaks
+
+The two dominant modeled peaks are:
+
+```text
+12.808389 kPa
+12.798779 kPa
+```
+
+Relative magnitude difference:
+
+```text
+0.075024%
+```
+
+The modeled entry therefore exhibits a pronounced double-peaked dynamic-pressure history over the reconstructed skip-entry trajectory.
+
+This is a derived property of:
+
+```text
+modeled density
++
+flight-derived trajectory speed
+```
+
+No claim is made that NASA directly reported these dynamic-pressure values.
+
+Likewise, the project does not yet assign a guidance or aerodynamic cause solely from the shape of the dynamic-pressure curve.
+
+---
+
+# Atmosphere at Peak Kinematic Deceleration
+
+Phase 2C located the primary 7-sample quadratic kinematic-deceleration peak at:
+
+```text
+2026-04-10T23:55:06.866000Z
+```
+
+or:
+
+```text
+EI + 96.000 s
+```
+
+Altitude:
+
+```text
+60.748759 km
+```
+
+Earth-relative speed:
+
+```text
+9.583217 km/s
+```
+
+Kinematic deceleration:
+
+```text
+37.127215 m/s^2
+```
+
+NRLMSIS modeled density at that state:
+
+```text
+2.786277036648e-04 kg/m^3
+```
+
+Modeled dynamic pressure:
+
+```text
+12.794311 kPa
+```
+
+The peak kinematic-deceleration epoch therefore lies within approximately one second of the early modeled dynamic-pressure peak.
+
+This temporal association is documented.
+
+It is not interpreted as proof of a particular aerodynamic-force decomposition.
+
+---
+
+# Additional Dynamic-Pressure Structure
+
+The five largest local modeled dynamic-pressure maxima are:
+
+```text
+2026-04-11T00:00:41.866000Z
+EI + 431 s
+40.042 km
+12.80839 kPa
+
+2026-04-10T23:55:05.866000Z
+EI + 95 s
+60.808 km
+12.79878 kPa
+
+2026-04-11T00:01:05.866000Z
+EI + 455 s
+35.748 km
+12.11569 kPa
+
+2026-04-11T00:01:07.866000Z
+EI + 457 s
+35.310 km
+12.11339 kPa
+
+2026-04-11T00:02:54.866000Z
+EI + 564 s
+11.975 km
+6.66357 kPa
+```
+
+Later local structure may reflect changing descent regimes, including the recovery sequence already correlated in Phase 2D.
+
+Phase 2E.1 does not assign physical causes to each secondary maximum without further modeling or independent evidence.
+
+---
+
+# NRLMSIS 2.0 / 2.1 Sensitivity Check
+
+The complete 819-state trajectory was also evaluated using NRLMSIS 2.1 as a sensitivity check.
+
+Observed maximum relative total-mass-density difference:
+
+```text
+0.000000000000%
+```
+
+Observed maximum neutral-temperature difference:
+
+```text
+0.000000000000 K
+```
+
+Therefore, for these requested output quantities and these trajectory states under `pymsis 0.12.0`, selecting NRLMSIS 2.0 rather than 2.1 produces no observed difference at reported numerical precision.
+
+The project nevertheless retains NRLMSIS 2.0 as the explicitly selected Phase 2E.1 model.
+
+---
+
+# Reproducibility
+
+The complete model chain is pinned by:
+
+```text
+pymsis:
+0.12.0
+
+NRLMSIS:
+2.0
+
+SW-All.csv SHA-256:
+50130BC78F48B02FEC4424DA59098A065D5DE06562DB73BBCC3631BCCBFFBAEE
+
+driver snapshot SHA-256:
+6A688BE48A211CD2426B81EE30148EDD04FDAA28C438DE04066121AC940D21DA
+```
+
+The committed driver snapshot removes normal analysis dependence on future changes to the external CelesTrak source.
+
+---
+
+# Independent Validation
+
+Created:
+
+```text
+scripts/validation/validate_entry_atmosphere.py
+```
+
+The validator independently:
+
+```text
+loads all 819 geometry states
+loads all 819 pinned driver states
+reruns NRLMSIS 2.0
+reconstructs total mass density
+reconstructs neutral temperature
+recalculates dynamic pressure
+checks the global dynamic-pressure peak
+checks the dominant local peaks
+rechecks NRLMSIS 2.0 versus 2.1
+checks the UTC-boundary control
+checks required deterministic figures
+```
+
+Observed reconstruction errors:
+
+```text
+Maximum density error:
+0.000000000000e+00 kg/m^3
+
+Maximum temperature error:
+0.000000000000e+00 K
+
+Maximum dynamic-pressure error:
+0.000000000000e+00 Pa
+```
+
+Result:
+
+```text
+PASS
+```
+
+---
+
+## Dynamic-pressure validation
+
+Global modeled dynamic-pressure peak:
+
+```text
+UTC:
+2026-04-11T00:00:41.866000Z
+
+altitude:
+40.042026 km
+
+speed:
+2.587485 km/s
+
+dynamic pressure:
+12.808389 kPa
+```
+
+Two dominant local peaks:
+
+```text
+40.042026 km
+12.808389 kPa
+
+60.807901 km
+12.798779 kPa
+```
+
+Relative difference:
+
+```text
+0.075024%
+```
+
+The validator requires the two dominant modeled peaks to remain within:
+
+```text
+1%
+```
+
+of one another.
+
+Result:
+
+```text
+PASS
+```
+
+---
+
+# Documentation Figures
+
+Created:
+
+```text
+docs/assets/entry/phase2e_density.svg
+docs/assets/entry/phase2e_dynamic_pressure.svg
+```
+
+The density figure uses logarithmic vertical scaling because modeled atmospheric density spans many orders of magnitude across the entry trajectory.
+
+The dynamic-pressure figure identifies:
+
+```text
+early modeled q peak
+global modeled q peak
+peak kinematic-deceleration epoch
+```
+
+SVG generation follows the project's deterministic plotting configuration.
+
+---
+
+# Interpretation Limits
+
+Phase 2E.1 does not yet reconstruct:
+
+```text
+atmospheric winds
+true air-relative velocity
+speed of sound
+Mach number
+aerodynamic coefficients
+drag force
+lift force
+angle of attack
+bank angle
+vehicle load factor
+proper acceleration
+crew g-load
+convective heat flux
+radiative heat flux
+stagnation heating
+heat-shield temperature
+TPS material response
+```
+
+NRLMSIS is an empirical atmospheric model.
+
+Its density and temperature outputs are not direct Artemis II atmospheric measurements.
+
+The dynamic-pressure reconstruction assumes zero local atmospheric wind and therefore uses Earth-relative trajectory speed as the atmospheric-relative speed approximation.
+
+At the highest altitudes, rarefied-flow effects also limit how literally continuum aerodynamic quantities should be interpreted.
+
+---
+
+# Phase 2E.1 Status
+
+The project now has a reproducible atmosphere reconstruction covering the complete high-rate entry trajectory:
+
+```text
+flight-derived trajectory
++
+pinned historical model forcing
++
+NRLMSIS 2.0
+→ modeled density
+→ modeled neutral temperature
+→ modeled dynamic pressure
+```
+
+The atmospheric model reproduces a double-peaked modeled dynamic-pressure history:
+
+```text
+early peak:
+12.798779 kPa at EI + 95 s
+
+global peak:
+12.808389 kPa at EI + 431 s
+```
+
+with only:
+
+```text
+0.075024%
+```
+
+difference in peak magnitude.
+
+The apparent modeled-density change at the UTC date boundary was independently shown to arise from trajectory descent rather than the model-driver transition.
+
+Phase 2E.1 status:
+
+```text
+COMPLETE
+```
+
+The next atmospheric/aerothermal step should introduce additional physics only with explicitly documented assumptions.
+
