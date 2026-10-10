@@ -24469,3 +24469,1504 @@ COMPLETE
 ```
 
 Git workflow closure remains pending until the documented implementation is committed, pushed, and the working tree is verified clean.
+
+---
+
+# Phase 2I.1 — Maneuver Plan vs Execution
+
+## Goal
+
+Phase 2I.1 reconstructs the Artemis II trajectory-correction maneuver plan and compares planned maneuvers with actual mission execution.
+
+The central operational question is not simply:
+
+```text
+What burns occurred?
+```
+
+It is:
+
+```text
+What burns were planned?
+Which were still required after trajectory evaluation?
+Which were cancelled?
+Which executed?
+What quantities are actually public?
+```
+
+The phase distinguishes:
+
+```text
+PLANNED
+CANCELLED
+EXECUTED
+```
+
+and preserves a critical mission-operations principle:
+
+```text
+cancelled correction
+!=
+failed correction
+```
+
+A planned trajectory correction can be removed because navigation performance made the burn unnecessary.
+
+---
+
+# Permanent Reference Dataset
+
+Created:
+
+```text
+data/reference/artemis_ii_maneuver_plan_execution.json
+```
+
+Dataset identifier:
+
+```text
+phase2i1_artemis_ii_maneuver_plan_execution
+```
+
+Provenance:
+
+```text
+NASA_AND_ESA_REPORTED_WITH_MISSIONLAB_DERIVED_AGGREGATES
+```
+
+The dataset contains:
+
+```text
+planned outbound corrections
+cancellation decisions
+executed correction burns
+reported durations
+reported delta-v magnitudes
+postflight TLI context
+RTC2 communications context
+propulsion-assignment boundaries
+interpretation guardrails
+```
+
+---
+
+# Maneuver Inventory
+
+Phase 2I.1 contains six trajectory-correction maneuver records:
+
+```text
+OTC1
+OTC2
+OTC3
+RTC1
+RTC2
+RTC3
+```
+
+Total:
+
+```text
+6
+```
+
+Executed:
+
+```text
+4
+```
+
+Cancelled:
+
+```text
+2
+```
+
+---
+
+# Outbound Trajectory Correction Plan
+
+NASA planned three outbound trajectory correction opportunities:
+
+```text
+OTC1
+OTC2
+OTC3
+```
+
+Final mission disposition:
+
+```text
+OTC1    CANCELLED
+OTC2    CANCELLED
+OTC3    EXECUTED
+```
+
+Therefore:
+
+```text
+planned:
+3
+
+cancelled:
+2
+
+executed:
+1
+```
+
+Cancellation fraction:
+
+```text
+2 / 3
+=
+0.666666...
+=
+66.667%
+```
+
+This fraction describes the disposition of planned outbound trajectory corrections.
+
+It is not a propulsion-system failure rate.
+
+---
+
+# OTC1 — Planned Maneuver
+
+Maneuver:
+
+```text
+Outbound Trajectory Correction 1
+```
+
+Planned UTC:
+
+```text
+2026-04-03T22:49:00Z
+```
+
+Precision:
+
+```text
+MINUTE_LEVEL
+```
+
+Planned duration:
+
+```text
+approximately 8 seconds
+```
+
+Planned velocity change:
+
+```text
+0.7 ft/s
+```
+
+Quantity semantics:
+
+```text
+PLANNED
+```
+
+These numbers must not be presented as executed maneuver performance.
+
+---
+
+# OTC1 — Cancellation Decision
+
+Status:
+
+```text
+CANCELLED
+```
+
+Executed:
+
+```text
+FALSE
+```
+
+Reason classification:
+
+```text
+TRAJECTORY_ALREADY_ON_CORRECT_FLIGHT_PATH
+```
+
+Exact cancellation timestamp known:
+
+```text
+FALSE
+```
+
+Executed firing duration:
+
+```text
+NONE
+```
+
+Executed delta-v:
+
+```text
+NONE
+```
+
+The planned:
+
+```text
+0.7 ft/s
+```
+
+is therefore not an executed Orion velocity change.
+
+---
+
+# OTC1 Operational Interpretation
+
+The cancellation indicates that the correction was not needed after flight controllers evaluated Orion's actual trajectory.
+
+Permanent interpretation:
+
+```text
+cancelled burn
+!=
+failed burn
+```
+
+and:
+
+```text
+cancelled burn
+!=
+propulsion anomaly
+```
+
+This is an important mission-operations distinction.
+
+A correction-burn plan contains opportunities to remove navigation error.
+
+If the error is already sufficiently small, executing the originally planned correction can be unnecessary.
+
+---
+
+# OTC2
+
+Maneuver:
+
+```text
+Outbound Trajectory Correction 2
+```
+
+Status:
+
+```text
+CANCELLED
+```
+
+Executed:
+
+```text
+FALSE
+```
+
+Planning precision retained by Phase 2I.1:
+
+```text
+DATE_LEVEL
+```
+
+Decision reason:
+
+```text
+TRAJECTORY_REMAINED_ON_TRACK
+```
+
+Exact cancellation UTC:
+
+```text
+NONE
+```
+
+Public planned duration:
+
+```text
+NONE
+```
+
+Public planned delta-v retained by this dataset:
+
+```text
+NONE
+```
+
+MissionLab does not manufacture missing planned quantities.
+
+---
+
+# OTC2 Parallel Operational Activity
+
+NASA reporting also described a spacecraft-attitude adjustment associated with clearing a wastewater vent line.
+
+MissionLab records this contextual activity as:
+
+```text
+ATTITUDE_ADJUSTMENT_FOR_WASTEWATER_VENT_CLEARING
+```
+
+This activity is retained as operational context.
+
+It is not interpreted as:
+
+```text
+an executed OTC2
+```
+
+and it is not assigned an invented trajectory-correction delta-v.
+
+---
+
+# OTC3
+
+Maneuver:
+
+```text
+Outbound Trajectory Correction 3
+```
+
+Alternate description:
+
+```text
+Final Outbound Trajectory Correction
+```
+
+Status:
+
+```text
+EXECUTED
+```
+
+UTC:
+
+```text
+2026-04-06T03:03:00Z
+```
+
+Precision:
+
+```text
+MINUTE_LEVEL
+```
+
+Reported duration:
+
+```text
+17.5 seconds
+```
+
+Purpose classification:
+
+```text
+REFINE_TRAJECTORY_TOWARD_MOON
+```
+
+Phase 2I.1 public delta-v:
+
+```text
+NONE
+```
+
+---
+
+# OTC3 Missing Delta-v Boundary
+
+The absence of a public delta-v value in the Phase 2I.1 execution source means:
+
+```text
+delta-v not publicly reported in this source set
+```
+
+It does not mean:
+
+```text
+delta-v = 0
+```
+
+Therefore:
+
+```text
+OTC3 missing delta-v
+!=
+zero delta-v
+```
+
+MissionLab keeps the value null rather than inserting an unsupported estimate.
+
+---
+
+# Outbound Plan vs Execution
+
+The outbound sequence is therefore:
+
+```text
+OTC1
+planned
+↓
+trajectory evaluated
+↓
+cancelled
+
+OTC2
+planned
+↓
+trajectory evaluated
+↓
+cancelled
+
+OTC3
+planned
+↓
+required
+↓
+executed
+```
+
+The sequence provides a useful mission-operations example of trajectory correction as an adaptive process rather than a fixed sequence of mandatory firings.
+
+---
+
+# Postflight TLI Context
+
+Postflight ESA reporting provides broader context for the outbound cancellations.
+
+Translunar injection duration:
+
+```text
+350.0 seconds
+```
+
+Engine classification:
+
+```text
+EUROPEAN_SERVICE_MODULE_MAIN_ENGINE
+```
+
+Planned outbound corrections:
+
+```text
+3
+```
+
+Corrections made unnecessary:
+
+```text
+2
+```
+
+Postflight attribution:
+
+```text
+PRECISE TLI
+```
+
+MissionLab preserves this as postflight context.
+
+It does not replace NASA's live operational cancellation reasons.
+
+The two evidence layers answer slightly different questions:
+
+```text
+LIVE NASA REPORTING
+Why did controllers cancel each maneuver at the time?
+
+POSTFLIGHT ESA CONTEXT
+Why were so few outbound corrections ultimately necessary?
+```
+
+---
+
+# Return Trajectory Correction Sequence
+
+Three return corrections were represented:
+
+```text
+RTC1
+RTC2
+RTC3
+```
+
+All three executed.
+
+```text
+planned:
+3
+
+executed:
+3
+```
+
+---
+
+# RTC1
+
+Maneuver:
+
+```text
+Return Trajectory Correction 1
+```
+
+UTC:
+
+```text
+2026-04-08T00:03:00Z
+```
+
+Duration:
+
+```text
+15 seconds
+```
+
+Reported delta-v magnitude:
+
+```text
+1.6 ft/s
+```
+
+Purpose classification:
+
+```text
+REFINE_TRAJECTORY_TOWARD_EARTH
+```
+
+---
+
+# RTC2
+
+Maneuver:
+
+```text
+Return Trajectory Correction 2
+```
+
+UTC:
+
+```text
+2026-04-10T02:53:00Z
+```
+
+Duration:
+
+```text
+9 seconds
+```
+
+Reported delta-v magnitude:
+
+```text
+5.3 ft/s
+```
+
+Purpose classification:
+
+```text
+REFINE_TRAJECTORY_FOR_EARTH_RETURN
+```
+
+---
+
+# RTC2 Cross-Phase Communications Context
+
+Phase 2H established an unexpected return-link communications anomaly before RTC2.
+
+Preburn communications-loss precision:
+
+```text
+APPROXIMATE
+```
+
+Communications recovery precision:
+
+```text
+SEQUENCE_ONLY
+```
+
+The operational sequence established in Phase 2H is:
+
+```text
+unexpected return-link loss
+↓
+communications restored
+↓
+burn preparation resumed
+↓
+RTC2 executed
+```
+
+Phase 2I.1 cross-checks that context.
+
+RTC2 executed after communications recovery:
+
+```text
+TRUE
+```
+
+Communications anomaly implied burn failure:
+
+```text
+FALSE
+```
+
+Therefore:
+
+```text
+preburn communications anomaly
+!=
+failed RTC2
+```
+
+and:
+
+```text
+preburn communications anomaly
+!=
+cancelled RTC2
+```
+
+---
+
+# RTC3
+
+Maneuver:
+
+```text
+Return Trajectory Correction 3
+```
+
+UTC:
+
+```text
+2026-04-10T18:53:00Z
+```
+
+Duration:
+
+```text
+8 seconds
+```
+
+Reported delta-v magnitude:
+
+```text
+4.2 ft/s
+```
+
+Purpose classification:
+
+```text
+FINAL_TRAJECTORY_REFINEMENT_BEFORE_ENTRY
+```
+
+---
+
+# Return Burn Duration Aggregate
+
+Reported return correction durations:
+
+```text
+RTC1    15 s
+RTC2     9 s
+RTC3     8 s
+```
+
+Scalar duration sum:
+
+```text
+15 + 9 + 8
+=
+32 seconds
+```
+
+Therefore:
+
+```text
+combined reported return correction firing time:
+32.0 s
+```
+
+This is a valid scalar duration aggregate.
+
+---
+
+# Return Delta-v Magnitude Aggregate
+
+Reported return correction delta-v magnitudes:
+
+```text
+RTC1    1.6 ft/s
+RTC2    5.3 ft/s
+RTC3    4.2 ft/s
+```
+
+Scalar magnitude sum:
+
+```text
+1.6 + 5.3 + 4.2
+=
+11.1 ft/s
+```
+
+Conversion:
+
+```text
+11.1 × 0.3048
+=
+3.38328 m/s
+```
+
+Therefore:
+
+```text
+scalar sum of reported return delta-v magnitudes:
+
+11.1 ft/s
+3.38328 m/s
+```
+
+---
+
+# Scalar vs Vector Delta-v
+
+The quantity:
+
+```text
+11.1 ft/s
+```
+
+is not Orion's net vector velocity change.
+
+Each trajectory correction has direction.
+
+Without the complete burn-direction vectors:
+
+```text
+Δv1
+Δv2
+Δv3
+```
+
+MissionLab cannot compute:
+
+```text
+Δv_net
+=
+Δv1 + Δv2 + Δv3
+```
+
+as a vector sum.
+
+Therefore the permanent label is:
+
+```text
+SCALAR SUM OF REPORTED DELTA-V MAGNITUDES
+```
+
+not:
+
+```text
+NET DELTA-V
+```
+
+---
+
+# All Executed Correction-Burn Firing Time
+
+Executed correction burns represented in Phase 2I.1:
+
+```text
+OTC3    17.5 s
+RTC1    15.0 s
+RTC2     9.0 s
+RTC3     8.0 s
+```
+
+Known combined firing time:
+
+```text
+17.5 + 15 + 9 + 8
+=
+49.5 seconds
+```
+
+Therefore:
+
+```text
+known combined executed correction-burn firing time:
+49.5 s
+```
+
+---
+
+# Why No All-Burn Delta-v Total Is Reported
+
+OTC3 has no public delta-v retained by the Phase 2I.1 source set.
+
+Therefore MissionLab does not calculate:
+
+```text
+OTC3 + RTC1 + RTC2 + RTC3
+```
+
+delta-v.
+
+Combined executed-correction delta-v computed:
+
+```text
+FALSE
+```
+
+Reason:
+
+```text
+OTC3 DELTA-V NOT PUBLIC IN PHASE 2I.1 SOURCE SET
+```
+
+Even if OTC3 later receives a source-backed magnitude, a scalar total would still require explicit labeling as a magnitude sum rather than a vector net.
+
+---
+
+# Propulsion Assignment Boundary
+
+Phase 2I.1 intentionally does not assign exact propulsion hardware to the executed trajectory corrections.
+
+OTC3 engine assignment:
+
+```text
+UNRESOLVED
+```
+
+RTC1 engine assignment:
+
+```text
+UNRESOLVED
+```
+
+RTC2 engine assignment:
+
+```text
+UNRESOLVED
+```
+
+RTC3 engine assignment:
+
+```text
+UNRESOLVED
+```
+
+This is deliberate.
+
+Generic Orion / European Service Module propulsion architecture does not prove which engine or thruster set executed a specific burn.
+
+---
+
+# Engine-Assignment Rule
+
+Permanent rule:
+
+```text
+propulsion architecture capability
+!=
+burn-specific as-flown assignment
+```
+
+Similarly:
+
+```text
+"thrusters ignited"
+!=
+specific engine identification
+```
+
+Phase 2I.2 will investigate the propulsion architecture and burn-selection evidence separately rather than injecting unsupported assignments into Phase 2I.1.
+
+---
+
+# Permanent Analyzer
+
+Created:
+
+```text
+scripts/analysis/analyze_maneuver_plan_execution.py
+```
+
+The analyzer validates:
+
+```text
+maneuver identities
+maneuver ordering
+planned/executed status
+OTC1 planned quantities
+OTC1 cancellation semantics
+OTC2 cancellation semantics
+Phase 1 executed-burn consistency
+return-burn duration aggregate
+return delta-v magnitude aggregate
+SI conversion
+known combined firing time
+RTC2 communications context
+postflight TLI context
+engine-assignment boundary
+missing-value semantics
+```
+
+---
+
+# Processed Maneuver Table
+
+Generated:
+
+```text
+data/processed/maneuvers/maneuver_plan_execution.csv
+```
+
+Rows:
+
+```text
+6
+```
+
+Columns preserve:
+
+```text
+maneuver identity
+name
+mission leg
+sequence
+planned flag
+status
+executed flag
+timestamp
+timestamp precision
+duration
+duration semantics
+delta-v
+delta-v semantics
+```
+
+The file is reproducibly generated and remains ignored from Git.
+
+---
+
+# Processed Summary
+
+Generated:
+
+```text
+data/processed/maneuvers/maneuver_plan_execution_summary.json
+```
+
+Product identifier:
+
+```text
+phase2i1_maneuver_plan_execution_analysis
+```
+
+The summary preserves:
+
+```text
+maneuver counts
+status counts
+outbound cancellation metrics
+return execution metrics
+scalar delta-v sums
+known firing-time totals
+OTC1 planned-versus-cancelled state
+OTC2 operational context
+RTC2 communications context
+postflight TLI context
+propulsion-assignment boundary
+guardrails
+```
+
+The processed summary remains ignored from Git.
+
+---
+
+# Plan / Execution Figure
+
+Created:
+
+```text
+docs/assets/maneuvers/phase2i1_maneuver_plan_execution.svg
+```
+
+The figure presents:
+
+```text
+OUTBOUND
+
+OTC1      OTC2      OTC3
+  X         X         ●
+CANCEL    CANCEL    EXECUTE
+
+
+RETURN
+
+RTC1      RTC2      RTC3
+  ●         ●         ●
+EXECUTE   EXECUTE   EXECUTE
+```
+
+with the associated duration and delta-v evidence.
+
+The figure also states that:
+
+```text
+cancelled != failed
+```
+
+and that the:
+
+```text
+11.1 ft/s
+```
+
+return quantity is a scalar magnitude sum rather than a vector net.
+
+---
+
+# Independent Validator
+
+Created:
+
+```text
+scripts/validation/validate_maneuver_plan_execution.py
+```
+
+The validator independently checks:
+
+```text
+dataset identity
+summary identity
+maneuver count
+maneuver order
+status flags
+OTC1 planned timestamp
+OTC1 approximate-duration semantics
+OTC1 planned delta-v semantics
+OTC1 cancellation status
+OTC1 missing executed delta-v
+OTC2 cancellation semantics
+executed burn timestamps
+executed burn durations
+RTC delta-v magnitudes
+Phase 1 maneuver consistency
+outbound cancellation fraction
+return duration aggregate
+return scalar delta-v aggregate
+SI conversion
+all-executed firing duration
+RTC2 communications context
+summary integrity
+CSV integrity
+missing-value semantics
+SVG integrity
+guardrail preservation
+```
+
+---
+
+# Independent Validation Result
+
+Maneuvers:
+
+```text
+total:
+6
+
+executed:
+4
+
+cancelled:
+2
+```
+
+Outbound:
+
+```text
+planned:
+3
+
+cancelled:
+2
+
+executed:
+1
+
+cancellation fraction:
+0.666667
+
+cancellation percent:
+66.667%
+```
+
+OTC1:
+
+```text
+planned duration:
+~8 s
+
+planned delta-v:
+0.7 ft/s
+
+executed:
+FALSE
+
+exact cancellation UTC:
+NONE
+```
+
+OTC2:
+
+```text
+executed:
+FALSE
+
+exact cancellation UTC:
+NONE
+```
+
+OTC3:
+
+```text
+executed:
+TRUE
+
+duration:
+17.5 s
+
+public delta-v:
+NONE
+```
+
+Return:
+
+```text
+executed:
+3 of 3
+
+combined firing time:
+32.0 s
+
+scalar delta-v magnitude sum:
+11.1 ft/s
+3.38328 m/s
+
+net vector delta-v:
+NOT COMPUTED
+```
+
+All executed corrections:
+
+```text
+known firing time:
+49.5 s
+
+combined delta-v:
+NOT COMPUTED
+```
+
+RTC2 cross-phase context:
+
+```text
+communications loss:
+APPROXIMATE
+
+communications recovery:
+SEQUENCE_ONLY
+
+RTC2 executed afterward:
+TRUE
+
+burn failure inferred:
+FALSE
+```
+
+Propulsion assignment:
+
+```text
+OTC3:
+UNRESOLVED
+
+RTC1:
+UNRESOLVED
+
+RTC2:
+UNRESOLVED
+
+RTC3:
+UNRESOLVED
+```
+
+Products:
+
+```text
+maneuver CSV rows:
+6
+
+summary:
+PASS
+
+plan/execution figure:
+PASS
+```
+
+Final validation:
+
+```text
+PASS
+```
+
+---
+
+# Interpretation Guardrails
+
+## Guardrail 1
+
+```text
+cancelled correction
+!=
+failed correction
+```
+
+---
+
+## Guardrail 2
+
+```text
+cancelled correction
+!=
+propulsion anomaly
+```
+
+---
+
+## Guardrail 3
+
+```text
+OTC1 planned 0.7 ft/s
+!=
+executed delta-v
+```
+
+because OTC1 did not execute.
+
+---
+
+## Guardrail 4
+
+```text
+OTC1 planned ~8 s
+!=
+executed firing duration
+```
+
+---
+
+## Guardrail 5
+
+```text
+OTC3 missing reported delta-v
+!=
+zero delta-v
+```
+
+---
+
+## Guardrail 6
+
+```text
+11.1 ft/s
+=
+scalar sum of RTC delta-v magnitudes
+```
+
+not:
+
+```text
+net vector delta-v
+```
+
+---
+
+## Guardrail 7
+
+```text
+3.38328 m/s
+```
+
+is only the SI conversion of the same scalar magnitude sum.
+
+---
+
+## Guardrail 8
+
+```text
+49.5 s
+```
+
+is a combined firing-duration total, not a delta-v quantity.
+
+---
+
+## Guardrail 9
+
+Minute-level timestamps represented with:
+
+```text
+:00 seconds
+```
+
+do not imply second-level source precision.
+
+---
+
+## Guardrail 10
+
+Exact OTC1 and OTC2 cancellation timestamps remain:
+
+```text
+UNKNOWN
+```
+
+---
+
+## Guardrail 11
+
+```text
+generic ESM propulsion capability
+!=
+burn-specific engine assignment
+```
+
+---
+
+## Guardrail 12
+
+```text
+Flight Day 9 communications anomaly
+!=
+RTC2 failure
+```
+
+---
+
+# Engineering Significance
+
+Phase 2I.1 changes the maneuver reconstruction from a simple list of burn timestamps into a plan-versus-execution model.
+
+The mission sequence now captures:
+
+```text
+planned maneuver
+        ↓
+trajectory evaluation
+        ↓
+operational decision
+        ↓
+cancel or execute
+```
+
+This matters because trajectory correction is fundamentally adaptive.
+
+A mission plan may contain several correction opportunities without requiring all of them to fire.
+
+For Artemis II:
+
+```text
+3 outbound opportunities
+↓
+2 became unnecessary
+↓
+1 executed
+```
+
+while the return leg required:
+
+```text
+3 planned corrections
+↓
+3 executed
+```
+
+The result gives MissionLab a much stronger mission-operations representation than treating every planned burn as though it necessarily occurred.
+
+---
+
+# Phase 2I.1 Status
+
+Reference dataset:
+
+```text
+PASS
+```
+
+Plan-versus-execution reconstruction:
+
+```text
+PASS
+```
+
+Outbound cancellation semantics:
+
+```text
+PASS
+```
+
+Executed-burn cross-check:
+
+```text
+PASS
+```
+
+Return duration aggregate:
+
+```text
+PASS
+```
+
+Scalar delta-v aggregate:
+
+```text
+PASS
+```
+
+RTC2 communications integration:
+
+```text
+PASS
+```
+
+Missing-value handling:
+
+```text
+PASS
+```
+
+Propulsion-assignment boundary:
+
+```text
+PASS
+```
+
+Independent validation:
+
+```text
+PASS
+```
+
+Phase 2I.1 implementation status:
+
+```text
+COMPLETE
+```
+
+Git workflow closure remains pending until the documented implementation is committed, pushed, and the working tree is verified clean.
