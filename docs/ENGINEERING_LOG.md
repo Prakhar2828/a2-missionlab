@@ -14350,3 +14350,1235 @@ Phase 2F.3 status:
 ```text
 COMPLETE
 ```
+
+---
+
+# Phase 2F.4 — Orion TPS Evidence-to-Physics Boundary
+
+## Goal
+
+Phase 2F.4 defines the explicit boundary between:
+
+```text
+what MissionLab quantitatively reconstructs
+```
+
+and:
+
+```text
+what NASA's Artemis I investigation establishes
+qualitatively about internal Avcoat material response
+```
+
+The purpose of this phase is not to extend the Sutton-Graves model into an unsupported damage model.
+
+Instead it answers:
+
+```text
+Where does the current MissionLab physics model stop?
+```
+
+and:
+
+```text
+What additional material-response physics would be
+required before char loss could be predicted quantitatively?
+```
+
+---
+
+# Why This Phase Is Necessary
+
+By the end of Phase 2F.3, MissionLab had reconstructed:
+
+```text
+trajectory
+atmosphere
+Mach
+rarefaction
+external convective heating
+integrated external heat load
+loft / rebound geometry
+heating-history segmentation
+```
+
+NASA's Artemis I heat-shield investigation, however, describes a mechanism involving:
+
+```text
+internal material temperature
+pyrolysis
+gas generation
+gas transport
+permeability
+internal pressure
+cracking
+char liberation
+```
+
+Those are different physical domains.
+
+Without an explicit boundary, it would be easy to incorrectly imply that:
+
+```text
+external Sutton-Graves heat flux
+```
+
+directly predicts:
+
+```text
+Avcoat damage
+```
+
+Phase 2F.4 permanently prevents that interpretation.
+
+---
+
+# Permanent Boundary Reference
+
+Created:
+
+```text
+data/reference/artemis_tps_physics_boundary.json
+```
+
+Dataset identifier:
+
+```text
+phase2f4_artemis_tps_physics_boundary
+```
+
+Provenance:
+
+```text
+PROJECT_SCOPE_GUARDRAIL_WITH_NASA_REPORTED_MECHANISM
+```
+
+The reference links back to:
+
+```text
+phase2f1_orion_tps_heritage_evidence
+```
+
+and uses:
+
+```text
+14
+```
+
+selected Phase 2F.1 evidence records.
+
+---
+
+# NASA-Reported Mechanism
+
+The Phase 2F.4 reference preserves the NASA-reported Artemis I root-cause sequence exactly as represented in the Phase 2F.1 evidence dataset.
+
+Sequence:
+
+```text
+1. Avcoat heats during atmospheric entry
+
+2. pyrolysis and ablation generate gases
+   inside the material
+
+3. low-permeability Avcoat restricts
+   gas escape
+
+4. internal gas pressure increases
+
+5. cracks form
+
+6. charred material is liberated
+```
+
+The Phase 2F.4 analyzer verifies that this sequence exactly matches the Phase 2F.1 evidence source before generating the processed product.
+
+---
+
+# Evidence vs Prediction
+
+The sequence above represents:
+
+```text
+NASA-reported mechanism evidence
+```
+
+It does not mean MissionLab calculates each stage.
+
+MissionLab currently calculates only the external entry environment.
+
+The distinction is:
+
+```text
+NASA reports the mechanism.
+
+MissionLab does not numerically reproduce
+the complete mechanism.
+```
+
+---
+
+# Eight-Stage Physics Chain
+
+Phase 2F.4 defines eight permanent stages.
+
+## Stage 1 — Trajectory / External Flow
+
+Identifier:
+
+```text
+trajectory_external_flow
+```
+
+Status:
+
+```text
+MISSIONLAB_RECONSTRUCTS
+```
+
+Inside current MissionLab quantitative model:
+
+```text
+TRUE
+```
+
+This stage includes quantities such as:
+
+```text
+trajectory state
+Earth-fixed position
+WGS84 altitude
+Earth-relative speed
+atmospheric density
+Mach
+body-scale Knudsen number
+```
+
+---
+
+# Stage 2 — External Convective Heating
+
+Identifier:
+
+```text
+external_convective_heating
+```
+
+Status:
+
+```text
+MISSIONLAB_MODELS
+```
+
+Inside current MissionLab quantitative model:
+
+```text
+TRUE
+```
+
+This stage includes:
+
+```text
+Sutton-Graves external convective heat flux
+```
+
+and:
+
+```text
+integrated modeled external convective heat load
+```
+
+This is the final stage currently inside MissionLab's quantitative TPS-related physics model.
+
+---
+
+# Current Quantitative Physics Boundary
+
+The permanent MissionLab quantitative frontier is:
+
+```text
+after:
+
+EXTERNAL CONVECTIVE HEATING
+
+and before:
+
+SURFACE / INTERNAL THERMAL RESPONSE
+```
+
+Therefore:
+
+```text
+last stage inside model:
+external_convective_heating
+
+order:
+2
+```
+
+and:
+
+```text
+first stage outside model:
+surface_internal_thermal_response
+
+order:
+3
+```
+
+---
+
+# Stage 3 — Surface / Internal Thermal Response
+
+Identifier:
+
+```text
+surface_internal_thermal_response
+```
+
+Status:
+
+```text
+BOUNDARY_NOT_MODELED
+```
+
+Inside current MissionLab quantitative model:
+
+```text
+FALSE
+```
+
+A material-response solution would be required to convert the external aerothermal boundary condition into quantities such as:
+
+```text
+surface temperature
+through-thickness temperature
+thermal gradients
+stored thermal energy
+```
+
+MissionLab does not currently perform this calculation.
+
+---
+
+# Stage 4 — Pyrolysis / Gas Generation
+
+Identifier:
+
+```text
+pyrolysis_gas_generation
+```
+
+Status:
+
+```text
+NASA_MECHANISM_KNOWN_NOT_MODELED
+```
+
+NASA reports that gases are generated inside Avcoat during entry material response.
+
+MissionLab does not currently calculate:
+
+```text
+pyrolysis rate
+gas-generation rate
+chemical decomposition
+```
+
+---
+
+# Stage 5 — Gas Transport / Permeability
+
+Identifier:
+
+```text
+gas_transport_permeability
+```
+
+Status:
+
+```text
+NASA_MECHANISM_KNOWN_NOT_MODELED
+```
+
+NASA identified:
+
+```text
+low permeability
+```
+
+and:
+
+```text
+restricted gas escape
+```
+
+as central to the Artemis I mechanism.
+
+MissionLab does not currently possess or solve:
+
+```text
+local Avcoat permeability
+gas transport
+porous flow
+spatial permeability variation
+```
+
+---
+
+# Stage 6 — Internal Gas Pressure
+
+Identifier:
+
+```text
+internal_pressure
+```
+
+Status:
+
+```text
+NASA_MECHANISM_KNOWN_NOT_MODELED
+```
+
+NASA reports that restricted gas escape produced:
+
+```text
+internal gas-pressure buildup
+```
+
+MissionLab does not calculate:
+
+```text
+pore pressure
+internal gas pressure
+pressure gradients
+```
+
+---
+
+# Stage 7 — Cracking / Fracture
+
+Identifier:
+
+```text
+cracking_fracture
+```
+
+Status:
+
+```text
+NASA_MECHANISM_KNOWN_NOT_MODELED
+```
+
+NASA reports cracking as part of the Artemis I mechanism.
+
+MissionLab does not currently solve:
+
+```text
+stress
+strain
+fracture mechanics
+crack initiation
+crack propagation
+```
+
+---
+
+# Stage 8 — Char Liberation / Damage
+
+Identifier:
+
+```text
+char_liberation_damage
+```
+
+Status:
+
+```text
+NASA_OBSERVED_OUTCOME_NOT_PREDICTED
+```
+
+NASA observed unexpected Artemis I char liberation.
+
+NASA later reported that Artemis I-type char loss was significantly reduced on Artemis II.
+
+MissionLab does not predict:
+
+```text
+char-loss mass
+char-loss area
+char-loss probability
+damage location
+damage severity
+recession depth
+```
+
+---
+
+# Permanent Physics Boundary
+
+The resulting model structure is:
+
+```text
+TRAJECTORY / EXTERNAL FLOW
+          |
+          v
+EXTERNAL CONVECTIVE HEATING
+          |
+          v
+================================================
+CURRENT MISSIONLAB QUANTITATIVE PHYSICS BOUNDARY
+================================================
+          |
+          v
+SURFACE / INTERNAL THERMAL RESPONSE
+          |
+          v
+PYROLYSIS / GAS GENERATION
+          |
+          v
+GAS TRANSPORT / PERMEABILITY
+          |
+          v
+INTERNAL GAS PRESSURE
+          |
+          v
+CRACKING / FRACTURE
+          |
+          v
+CHAR LIBERATION / DAMAGE
+```
+
+---
+
+# MissionLab Quantitative Products
+
+The boundary reference identifies:
+
+```text
+9
+```
+
+current quantitative or derived MissionLab product categories relevant to the TPS chain.
+
+These include:
+
+```text
+trajectory time history
+WGS84 altitude and Earth-relative speed
+atmospheric density
+free-stream Mach
+body-scale Knudsen number
+external Sutton-Graves heat flux
+integrated external Sutton-Graves heat load
+loft / rebound boundaries
+loft / rebound heating-history segmentation
+```
+
+---
+
+# Material-Response Quantities Not Reconstructed
+
+Phase 2F.4 explicitly inventories:
+
+```text
+17
+```
+
+material-response quantities that are absent from the current model.
+
+These include:
+
+```text
+surface temperature
+through-thickness Avcoat temperature
+thermal conductivity field
+specific heat / enthalpy response
+Avcoat density evolution
+pyrolysis rate
+pyrolysis-gas generation
+gas transport
+local permeability
+internal gas pressure
+thermal stress
+mechanical stress / strain
+crack initiation
+crack propagation
+char-layer structural response
+recession depth
+char-liberation quantity
+```
+
+This inventory is a deliberate modeling limitation rather than an implementation omission hidden from the user.
+
+---
+
+# NASA Investigation Data Not Present as MissionLab Inputs
+
+Phase 2F.4 also identifies:
+
+```text
+7
+```
+
+classes of investigation data unavailable as current MissionLab quantitative inputs.
+
+These include:
+
+```text
+pressure-sensor time series
+strain-gauge time series
+thermocouple time series at multiple Avcoat depths
+internal temperature profiles
+sample-level Avcoat measurements
+detailed arc-jet response data
+full coupled Orion material-response model
+```
+
+The distinction is important because NASA's root-cause analysis had access to evidence that MissionLab does not.
+
+---
+
+# External Environment Context Retained
+
+Phase 2F.4 preserves the Phase 2F.3 external environment only as context.
+
+Stronger-continuum / Mach>=5 modeled SG heat load:
+
+```text
+159.150073328 MJ/m^2
+```
+
+External SG flux at loft start:
+
+```text
+88.222385 W/cm^2
+```
+
+External SG flux at loft end:
+
+```text
+25.574568 W/cm^2
+```
+
+Signed modeled external flux change:
+
+```text
+-71.011249%
+```
+
+These remain:
+
+```text
+external aerothermal model outputs
+```
+
+They do not become internal TPS response quantities.
+
+---
+
+# Prohibited Model Bridge 1
+
+The following direct inference is prohibited:
+
+```text
+external Sutton-Graves heat flux
+→
+Avcoat internal temperature
+```
+
+Reason:
+
+```text
+MissionLab does not solve the
+material thermal-response problem.
+```
+
+---
+
+# Prohibited Model Bridge 2
+
+The following direct inference is prohibited:
+
+```text
+external Sutton-Graves heat load
+→
+pyrolysis rate
+```
+
+Reason:
+
+```text
+No Avcoat pyrolysis kinetics or coupled
+thermal-response model is implemented.
+```
+
+---
+
+# Prohibited Model Bridge 3
+
+The following direct inference is prohibited:
+
+```text
+external Sutton-Graves heat load
+→
+internal gas pressure
+```
+
+Reason:
+
+```text
+gas generation
++
+gas transport
++
+permeability
++
+pressure evolution
+```
+
+are not modeled.
+
+---
+
+# Prohibited Model Bridge 4
+
+The following direct inference is prohibited:
+
+```text
+loft / rebound geometry
+→
+crack probability
+```
+
+MissionLab does not solve the mechanical or fracture-response problem.
+
+---
+
+# Prohibited Model Bridge 5
+
+The following direct inference is prohibited:
+
+```text
+external heating history
+→
+char-loss mass or area
+```
+
+No validated public damage-transfer law has been incorporated into MissionLab.
+
+---
+
+# Prohibited Model Bridge 6
+
+The following direct inference is prohibited:
+
+```text
+external heat-flux decline
+→
+TPS cooling
+```
+
+Internal temperature can lag the external boundary condition due to thermal inertia and through-thickness energy transport.
+
+---
+
+# Prohibited Model Bridge 7
+
+The following direct inference is prohibited:
+
+```text
+Artemis I / Artemis II
+trajectory difference
+→
+numerical char-loss reduction percentage
+```
+
+NASA publicly described Artemis II char loss as significantly reduced.
+
+MissionLab does not convert that qualitative description into an invented percentage.
+
+---
+
+# Model Assertions
+
+Phase 2F.4 permanently records eight Boolean assertions.
+
+All must remain:
+
+```text
+FALSE
+```
+
+Observed:
+
+```text
+avcoat_damage_model_created:
+FALSE
+
+material_properties_invented:
+FALSE
+
+sutton_graves_calibrated_to_char_loss:
+FALSE
+
+internal_tps_temperature_inferred:
+FALSE
+
+pyrolysis_rate_inferred:
+FALSE
+
+internal_pressure_inferred:
+FALSE
+
+crack_probability_inferred:
+FALSE
+
+char_loss_quantity_inferred:
+FALSE
+```
+
+If any of these becomes true in a future phase, that change would require an explicit new physical model, evidence base, validation strategy, and documentation.
+
+---
+
+# Permanent Analyzer
+
+Created:
+
+```text
+scripts/analysis/build_tps_physics_boundary.py
+```
+
+The analyzer verifies:
+
+```text
+Phase 2F.1 source evidence linkage
+NASA mechanism sequence
+eight-stage ordering
+quantitative-model membership
+stage 2 quantitative frontier
+stage 3 boundary start
+all material-response assertions remain false
+```
+
+It then combines the scope reference with the existing Phase 2F.3 external-environment context.
+
+---
+
+# Processed Summary
+
+Generated:
+
+```text
+data/processed/entry/tps_physics_boundary_summary.json
+```
+
+Product identifier:
+
+```text
+phase2f4_tps_physics_boundary_summary
+```
+
+Provenance:
+
+```text
+MIXED_PROJECT_SCOPE_GUARDRAIL_NASA_REPORTED_MECHANISM_MISSIONLAB_DERIVED_CONTEXT
+```
+
+The generated product remains ignored from Git.
+
+---
+
+# Causal-Boundary Figure
+
+Created:
+
+```text
+docs/assets/entry/phase2f_tps_physics_boundary.svg
+```
+
+The figure explicitly places the MissionLab quantitative boundary between:
+
+```text
+EXTERNAL CONVECTIVE HEATING
+```
+
+and:
+
+```text
+SURFACE / INTERNAL THERMAL RESPONSE
+```
+
+The diagram then preserves the remaining NASA-reported mechanism stages below the boundary.
+
+The figure does not imply that MissionLab numerically computes those lower stages.
+
+---
+
+# Independent Validator
+
+Created:
+
+```text
+scripts/validation/validate_tps_physics_boundary.py
+```
+
+The validator independently checks:
+
+```text
+boundary dataset identity
+boundary provenance
+Phase 2F.1 source dataset identity
+14 evidence references
+NASA mechanism sequence
+eight-stage physics chain
+stage ordering
+stage statuses
+quantitative-model membership
+stage 2 quantitative frontier
+stage 3 boundary start
+17 absent material-response quantities
+7 absent NASA investigation-data categories
+7 prohibited model bridges
+8 false model assertions
+processed summary provenance
+Phase 2F.3 external-environment context
+figure identity and validity
+```
+
+---
+
+# Validation Result
+
+Evidence foundation:
+
+```text
+Phase 2F.1 dataset:
+phase2f1_orion_tps_heritage_evidence
+
+source evidence items verified:
+14
+
+NASA root-cause sequence:
+VERIFIED
+```
+
+Quantitative frontier:
+
+```text
+stage 1:
+TRAJECTORY / EXTERNAL FLOW
+MISSIONLAB_RECONSTRUCTS
+
+stage 2:
+EXTERNAL CONVECTIVE HEATING
+MISSIONLAB_MODELS
+```
+
+Boundary:
+
+```text
+stage 3:
+SURFACE / INTERNAL THERMAL RESPONSE
+NOT MODELED
+```
+
+Remaining mechanism:
+
+```text
+pyrolysis / gas generation
+gas transport / permeability
+internal gas pressure
+cracking / fracture
+char liberation / damage
+```
+
+Boundary inventory:
+
+```text
+physics stages:
+8
+
+material-response quantities absent:
+17
+
+investigation-data categories absent:
+7
+
+prohibited model bridges:
+7
+
+prohibited model assertions false:
+8 / 8
+```
+
+Figure:
+
+```text
+1
+PASS
+```
+
+Final result:
+
+```text
+PASS
+```
+
+---
+
+# What Phase 2F.4 Establishes
+
+MissionLab now has a precise answer to the question:
+
+```text
+How far can the public-data reconstruction
+go before it becomes speculative?
+```
+
+The answer is:
+
+```text
+MissionLab can reconstruct the flight
+trajectory and model the external
+aerothermal environment.
+
+MissionLab currently stops before
+internal TPS material response.
+```
+
+NASA's investigation provides authoritative evidence for the mechanism beyond that point, but evidence for a mechanism is not equivalent to possessing a validated quantitative model for that mechanism.
+
+---
+
+# Why This Boundary Improves the Project
+
+Stopping at a justified physics boundary makes the project stronger.
+
+It prevents apparently sophisticated but unsupported calculations such as:
+
+```text
+inventing Avcoat permeability
+estimating internal pressure from SG heat load
+predicting crack probability
+predicting char-loss mass
+assigning numerical Artemis II damage reduction
+```
+
+Those calculations would create false precision.
+
+Instead MissionLab preserves:
+
+```text
+what is measured or NASA-reported
+what is derived
+what is modeled
+what is not available
+what cannot yet be inferred
+```
+
+This is consistent with the project's provenance-first architecture.
+
+---
+
+# Phase 2F.4 Status
+
+NASA mechanism linkage:
+
+```text
+PASS
+```
+
+Quantitative frontier:
+
+```text
+PASS
+```
+
+Physics-stage ordering:
+
+```text
+PASS
+```
+
+Missing-physics inventory:
+
+```text
+PASS
+```
+
+Prohibited model bridges:
+
+```text
+PASS
+```
+
+Model assertions:
+
+```text
+8 / 8 FALSE
+PASS
+```
+
+Causal-boundary figure:
+
+```text
+PASS
+```
+
+Phase 2F.4 status:
+
+```text
+COMPLETE
+```
+
+---
+
+# Phase 2F — Orion TPS & Heat-Shield Heritage Closure
+
+Phase 2F is now composed of four completed subphases.
+
+## Phase 2F.1
+
+```text
+Orion TPS heritage evidence
++
+Artemis I anomaly
++
+root-cause investigation
++
+Artemis II mitigation
++
+postflight outcome
+```
+
+Status:
+
+```text
+COMPLETE
+```
+
+## Phase 2F.2
+
+```text
+Artemis I skip-entry heritage
+versus
+Artemis II modified lofted / no-skip profile
+```
+
+Key result:
+
+```text
+EI inertial speeds differ by only:
+
+8.121 m/s
+0.073880%
+```
+
+while the trajectory structures differ substantially.
+
+Status:
+
+```text
+COMPLETE
+```
+
+## Phase 2F.3
+
+```text
+time-resolved external heating
+through the Artemis II loft / rebound
+```
+
+Key result:
+
+```text
+37.978839%
+```
+
+of the stronger-domain modeled convective heat load accumulates during the loft / rebound interval.
+
+Status:
+
+```text
+COMPLETE
+```
+
+## Phase 2F.4
+
+```text
+explicit evidence-to-physics boundary
+```
+
+Permanent frontier:
+
+```text
+external convective heating
+→
+STOP
+→
+internal material response not modeled
+```
+
+Status:
+
+```text
+COMPLETE
+```
+
+---
+
+# Phase 2F Final Interpretation
+
+Phase 2F establishes the following engineering chain:
+
+```text
+Artemis I identified an abnormal
+Avcoat char-loss mechanism.
+
+NASA's investigation linked that
+mechanism to internal material
+response, permeability, gas pressure,
+and cracking.
+
+Artemis II flew a modified trajectory
+without the Artemis I skip entry.
+
+MissionLab reconstructs that trajectory
+and its modeled external heating history.
+
+The Artemis II loft occurs after peak
+modeled SG heat flux while substantial
+integrated external heating continues.
+
+MissionLab stops before internal Avcoat
+material response and therefore does not
+predict char loss.
+```
+
+This distinction is permanent unless a future phase introduces a separately justified and validated material-response model.
+
+---
+
+# Phase 2F Final Status
+
+```text
+2F.1 TPS evidence and decision thread:
+COMPLETE
+
+2F.2 Artemis I / II entry-profile comparison:
+COMPLETE
+
+2F.3 loft heating-history segmentation:
+COMPLETE
+
+2F.4 TPS evidence-to-physics boundary:
+COMPLETE
+```
+
+Overall Phase 2F status:
+
+```text
+COMPLETE
+```
