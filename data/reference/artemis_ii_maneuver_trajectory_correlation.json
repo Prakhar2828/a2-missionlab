@@ -1,0 +1,346 @@
+{
+  "dataset_id": "phase2i3_artemis_ii_maneuver_trajectory_correlation",
+  "mission": "Artemis II",
+  "scope": "Mission-clock, geometric-phase, communications-context, and public OEM solution-evolution correlation for executed Artemis II trajectory correction maneuvers without interpreting public ephemeris solution differences as burn telemetry, navigation error, or measured maneuver delta-v.",
+  "provenance": "MISSIONLAB_DERIVED_FROM_NASA_REPORTED_EVENTS_AND_NASA_FLIGHT_DERIVED_PUBLIC_OEM_PRODUCTS",
+  "input_dependencies": [
+    {
+      "path": "data/config/mission.json",
+      "role": "MISSION_CLOCK_CONFIGURATION"
+    },
+    {
+      "path": "data/reference/artemis_ii_maneuver_plan_execution.json",
+      "role": "SOURCE_BACKED_MANEUVER_EXECUTION"
+    },
+    {
+      "path": "data/reference/artemis_ii_esm_propulsion_architecture.json",
+      "role": "ENGINE_ASSIGNMENT_BOUNDARY"
+    },
+    {
+      "path": "data/reference/trajectory_events.json",
+      "role": "PHASE_1_MANEUVER_CROSS_CHECK"
+    },
+    {
+      "path": "data/processed/trajectory/mission_phase_summary.json",
+      "role": "DERIVED_LUNAR_GEOMETRY_ANCHORS"
+    },
+    {
+      "path": "data/reference/artemis_ii_entry_events.json",
+      "role": "NASA_REPORTED_ENTRY_AND_SPLASHDOWN_ANCHORS"
+    },
+    {
+      "path": "data/reference/artemis_ii_communications_event_catalog.json",
+      "role": "RTC2_COMMUNICATIONS_CONTEXT"
+    },
+    {
+      "path": "data/processed/trajectory/manifest.json",
+      "role": "PUBLIC_OEM_PRODUCT_INDEX"
+    }
+  ],
+  "precision_policy": {
+    "burn_timestamp_precision": "MINUTE_LEVEL",
+    "burn_timestamp_rule": "Stored :00 seconds for correction-burn UTC values are a representation of minute-level NASA public reporting and do not imply second-level execution timing.",
+    "entry_event_precision": "MINUTE_LEVEL",
+    "entry_event_rule": "Entry Interface and splashdown anchors are minute-level NASA public event reports.",
+    "rtc2_loss_precision": "APPROXIMATE",
+    "rtc2_loss_rule": "The stored return-link-loss anchor is an explicitly non-exact reference clock anchor based on approximately two hours before RTC2.",
+    "derived_geometry_rule": "Lunar SOI entry, pericynthion, and lunar SOI exit are MissionLab derived geometry products and are not NASA telemetry event timestamps.",
+    "derived_interval_rule": "Numerical intervals inherit the weakest precision or provenance of their contributing event anchors."
+  },
+  "mission_anchors": {
+    "launch": {
+      "timestamp_utc": "2026-04-01T22:35:12Z",
+      "provenance": "CONFIGURED_PUBLIC_MISSION_EPOCH"
+    },
+    "lunar_soi_entry": {
+      "timestamp_utc": "2026-04-06T04:38:07.532302Z",
+      "provenance": "MISSIONLAB_DERIVED_GEOMETRY"
+    },
+    "pericynthion": {
+      "timestamp_utc": "2026-04-06T23:00:46.177998Z",
+      "provenance": "MISSIONLAB_DERIVED_GEOMETRY"
+    },
+    "lunar_soi_exit": {
+      "timestamp_utc": "2026-04-07T17:23:41.922211Z",
+      "provenance": "MISSIONLAB_DERIVED_GEOMETRY"
+    },
+    "entry_interface": {
+      "timestamp_utc": "2026-04-10T23:53:00Z",
+      "precision": "MINUTE_LEVEL",
+      "provenance": "NASA_REPORTED"
+    },
+    "splashdown": {
+      "timestamp_utc": "2026-04-11T00:07:00Z",
+      "precision": "MINUTE_LEVEL",
+      "provenance": "NASA_REPORTED"
+    },
+    "rtc2_return_link_loss_reference_anchor": {
+      "timestamp_utc": "2026-04-10T00:53:00Z",
+      "precision": "APPROXIMATE",
+      "anchor_is_not_exact": true,
+      "provenance": "MISSIONLAB_APPROXIMATE_ANCHOR_FROM_NASA_REPORTED_RELATIVE_TIMING"
+    }
+  },
+  "maneuver_correlations": [
+    {
+      "maneuver_id": "otc3",
+      "timestamp_utc": "2026-04-06T03:03:00Z",
+      "timestamp_precision": "MINUTE_LEVEL",
+      "met_anchor": "04:04:27:48.000",
+      "geometric_mission_phase": "OUTBOUND_TRANSIT",
+      "duration_seconds": 17.5,
+      "reported_delta_v_ft_s": null,
+      "engine_assignment_status": "UNRESOLVED_AS_FLOWN",
+      "correlations": [
+        {
+          "target": "lunar_soi_entry",
+          "interval_seconds": 5707.532302,
+          "direction": "MANEUVER_TO_TARGET",
+          "interpretation": "DERIVED_INTERVAL_FROM_MINUTE_LEVEL_BURN_ANCHOR_AND_DERIVED_GEOMETRY"
+        },
+        {
+          "target": "pericynthion",
+          "interval_seconds": 71866.177998,
+          "direction": "MANEUVER_TO_TARGET",
+          "interpretation": "DERIVED_INTERVAL_FROM_MINUTE_LEVEL_BURN_ANCHOR_AND_DERIVED_GEOMETRY"
+        }
+      ]
+    },
+    {
+      "maneuver_id": "rtc1",
+      "timestamp_utc": "2026-04-08T00:03:00Z",
+      "timestamp_precision": "MINUTE_LEVEL",
+      "met_anchor": "06:01:27:48.000",
+      "geometric_mission_phase": "TRANS_EARTH_RETURN",
+      "duration_seconds": 15.0,
+      "reported_delta_v_ft_s": 1.6,
+      "engine_assignment_status": "UNRESOLVED_AS_FLOWN",
+      "correlations": [
+        {
+          "target": "lunar_soi_exit",
+          "interval_seconds": 23958.077789,
+          "direction": "TARGET_TO_MANEUVER",
+          "interpretation": "DERIVED_INTERVAL_FROM_DERIVED_GEOMETRY_AND_MINUTE_LEVEL_BURN_ANCHOR"
+        },
+        {
+          "target": "rtc2",
+          "interval_seconds": 183000.0,
+          "direction": "MANEUVER_TO_TARGET",
+          "interpretation": "DERIVED_FROM_TWO_MINUTE_LEVEL_PUBLIC_BURN_ANCHORS"
+        }
+      ]
+    },
+    {
+      "maneuver_id": "rtc2",
+      "timestamp_utc": "2026-04-10T02:53:00Z",
+      "timestamp_precision": "MINUTE_LEVEL",
+      "met_anchor": "08:04:17:48.000",
+      "geometric_mission_phase": "TRANS_EARTH_RETURN",
+      "duration_seconds": 9.0,
+      "reported_delta_v_ft_s": 5.3,
+      "engine_assignment_status": "UNRESOLVED_AS_FLOWN",
+      "correlations": [
+        {
+          "target": "rtc2_return_link_loss_reference_anchor",
+          "interval_seconds": 7200.0,
+          "direction": "TARGET_TO_MANEUVER",
+          "interpretation": "APPROXIMATE_INTERVAL_ONLY",
+          "exact": false
+        },
+        {
+          "target": "rtc3",
+          "interval_seconds": 57600.0,
+          "direction": "MANEUVER_TO_TARGET",
+          "interpretation": "DERIVED_FROM_TWO_MINUTE_LEVEL_PUBLIC_BURN_ANCHORS"
+        }
+      ]
+    },
+    {
+      "maneuver_id": "rtc3",
+      "timestamp_utc": "2026-04-10T18:53:00Z",
+      "timestamp_precision": "MINUTE_LEVEL",
+      "met_anchor": "08:20:17:48.000",
+      "geometric_mission_phase": "TRANS_EARTH_RETURN",
+      "duration_seconds": 8.0,
+      "reported_delta_v_ft_s": 4.2,
+      "engine_assignment_status": "UNRESOLVED_AS_FLOWN",
+      "correlations": [
+        {
+          "target": "entry_interface",
+          "interval_seconds": 18000.0,
+          "direction": "MANEUVER_TO_TARGET",
+          "interpretation": "DERIVED_FROM_MINUTE_LEVEL_PUBLIC_EVENT_ANCHORS"
+        },
+        {
+          "target": "splashdown",
+          "interval_seconds": 18840.0,
+          "direction": "MANEUVER_TO_TARGET",
+          "interpretation": "DERIVED_FROM_MINUTE_LEVEL_PUBLIC_EVENT_ANCHORS"
+        }
+      ]
+    }
+  ],
+  "oem_creation_time_brackets": [
+    {
+      "maneuver_id": "otc3",
+      "maneuver_timestamp_utc": "2026-04-06T03:03:00Z",
+      "latest_product_created_at_or_before_maneuver": {
+        "product": "Artemis_II_OEM_2026_04_04_to_EI.csv",
+        "creation_utc": "2026-04-03T23:45:26Z",
+        "creation_offset_from_maneuver_seconds": -184654.0,
+        "filename_semantics": [
+          "TO_EI"
+        ]
+      },
+      "earliest_product_created_after_maneuver": {
+        "product": "Artemis_II_OEM_2026_04_06_Pre-OTC3_to_EI.csv",
+        "creation_utc": "2026-04-06T12:18:50Z",
+        "creation_offset_from_maneuver_seconds": 33350.0,
+        "filename_semantics": [
+          "PRE_OTC3",
+          "TO_EI"
+        ]
+      },
+      "same_epoch_solution_difference": {
+        "available": true,
+        "position_difference_km": 169.098527,
+        "velocity_difference_m_s": 1.893541,
+        "semantics": "SOLUTION_TO_SOLUTION_DIFFERENCE_AT_COMMON_MANEUVER_EPOCH",
+        "measured_burn_delta_v": false,
+        "navigation_error": false
+      },
+      "maneuver_assimilation_status": "NOT_ESTABLISHED",
+      "important_audit_note": "The earliest product created after OTC3 is explicitly labeled Pre-OTC3. CREATION_DATE therefore cannot be used as proof that the maneuver was assimilated into the public solution."
+    },
+    {
+      "maneuver_id": "rtc1",
+      "maneuver_timestamp_utc": "2026-04-08T00:03:00Z",
+      "latest_product_created_at_or_before_maneuver": {
+        "product": "Artemis_II_OEM_2026_04_07_Pre-Lunar-Flyby_to_EI.csv",
+        "creation_utc": "2026-04-07T12:47:44Z",
+        "creation_offset_from_maneuver_seconds": -40516.0,
+        "filename_semantics": [
+          "PRE_LUNAR_FLYBY",
+          "TO_EI"
+        ]
+      },
+      "earliest_product_created_after_maneuver": {
+        "product": "Artemis_II_OEM_2026_04_08_Post-ICPS-Sep_to_EI.csv",
+        "creation_utc": "2026-04-08T01:49:15Z",
+        "creation_offset_from_maneuver_seconds": 6375.0,
+        "filename_semantics": [
+          "POST_ICPS_SEP",
+          "TO_EI"
+        ]
+      },
+      "same_epoch_solution_difference": {
+        "available": true,
+        "position_difference_km": 1.443975,
+        "velocity_difference_m_s": 0.068048,
+        "semantics": "SOLUTION_TO_SOLUTION_DIFFERENCE_AT_COMMON_MANEUVER_EPOCH",
+        "measured_burn_delta_v": false,
+        "navigation_error": false
+      },
+      "maneuver_assimilation_status": "NOT_ESTABLISHED"
+    },
+    {
+      "maneuver_id": "rtc2",
+      "maneuver_timestamp_utc": "2026-04-10T02:53:00Z",
+      "latest_product_created_at_or_before_maneuver": {
+        "product": "Artemis_II_OEM_2026_04_09_Post-ICPS-Sep_to_EI.csv",
+        "creation_utc": "2026-04-08T22:20:54Z",
+        "creation_offset_from_maneuver_seconds": -102726.0,
+        "filename_semantics": [
+          "POST_ICPS_SEP",
+          "TO_EI"
+        ]
+      },
+      "earliest_product_created_after_maneuver": {
+        "product": "Artemis_II_OEM_2026_04_10_Post-ICPS-Sep-to-EI.csv",
+        "creation_utc": "2026-04-10T03:22:19Z",
+        "creation_offset_from_maneuver_seconds": 1759.0,
+        "filename_semantics": [
+          "POST_ICPS_SEP"
+        ]
+      },
+      "same_epoch_solution_difference": {
+        "available": true,
+        "position_difference_km": 34.536691,
+        "velocity_difference_m_s": 0.381837,
+        "semantics": "SOLUTION_TO_SOLUTION_DIFFERENCE_AT_COMMON_MANEUVER_EPOCH",
+        "measured_burn_delta_v": false,
+        "navigation_error": false
+      },
+      "maneuver_assimilation_status": "NOT_ESTABLISHED"
+    },
+    {
+      "maneuver_id": "rtc3",
+      "maneuver_timestamp_utc": "2026-04-10T18:53:00Z",
+      "latest_product_created_at_or_before_maneuver": {
+        "product": "Artemis_II_OEM_2026_04_10_Post-ICPS-Sep-to-EI.csv",
+        "creation_utc": "2026-04-10T03:22:19Z",
+        "creation_offset_from_maneuver_seconds": -55841.0,
+        "filename_semantics": [
+          "POST_ICPS_SEP"
+        ]
+      },
+      "earliest_product_created_after_maneuver": null,
+      "same_epoch_solution_difference": {
+        "available": false,
+        "position_difference_km": null,
+        "velocity_difference_m_s": null,
+        "semantics": "NO_LATER_PUBLIC_OEM_AVAILABLE",
+        "measured_burn_delta_v": false,
+        "navigation_error": false
+      },
+      "maneuver_assimilation_status": "NOT_ESTABLISHED"
+    }
+  ],
+  "oem_metadata_audit": {
+    "standard_oem_product_count": 9,
+    "metadata_fields_observed": [
+      "CCSDS_OEM_VERS",
+      "CREATION_DATE",
+      "ORIGINATOR",
+      "OBJECT_NAME",
+      "OBJECT_ID",
+      "CENTER_NAME",
+      "REF_FRAME",
+      "TIME_SYSTEM",
+      "START_TIME",
+      "USEABLE_START_TIME",
+      "USEABLE_STOP_TIME",
+      "STOP_TIME"
+    ],
+    "explicit_maneuver_assimilation_field_observed": false,
+    "creation_date_establishes_maneuver_assimilation": false,
+    "filename_semantics_establish_as_flown_state": false,
+    "audit_conclusion": "Public OEM creation times can provide chronological product brackets but do not establish whether a specific maneuver was assimilated into the trajectory solution."
+  },
+  "analysis_boundary": {
+    "source_backed_burn_duration_and_reported_delta_v_allowed": true,
+    "mission_clock_correlation_allowed": true,
+    "geometric_mission_phase_correlation_allowed": true,
+    "public_oem_solution_evolution_allowed": true,
+    "thrust_derived_correction_performance_allowed": false,
+    "burn_impulse_from_nominal_thrust_allowed": false,
+    "spacecraft_acceleration_from_unresolved_engine_class_allowed": false,
+    "oem_state_difference_as_measured_burn_delta_v_allowed": false,
+    "oem_state_difference_as_navigation_error_allowed": false
+  },
+  "guardrails": [
+    "A public OEM solution-to-solution difference is not a navigation error.",
+    "A public OEM solution-to-solution difference is not measured burn delta-v.",
+    "An OEM product CREATION_DATE after a maneuver does not by itself prove that the maneuver was assimilated into that trajectory solution.",
+    "The Artemis_II_OEM_2026_04_06_Pre-OTC3_to_EI product is explicitly labeled Pre-OTC3 even though its metadata CREATION_DATE is after the reported OTC3 execution minute.",
+    "Filename PRE or POST wording is preserved as product-label evidence and is not silently reinterpreted.",
+    "A public OEM difference may contain navigation-solution, estimation, modeling, maneuver-update, product-generation, or other solution-evolution effects that cannot be separated with the current public evidence.",
+    "Product creation time is not maneuver execution time.",
+    "A later-created OEM evaluated at the maneuver epoch is not raw burn telemetry.",
+    "Minute-level burn and entry-event timestamps do not imply second-level source precision.",
+    "The RTC2 communications-loss reference anchor is approximate and does not establish an exact anomaly timestamp.",
+    "OTC3, RTC1, RTC2, and RTC3 engine assignments remain unresolved as flown.",
+    "No thrust, burn impulse, propellant consumption, or spacecraft acceleration is inferred for OTC3, RTC1, RTC2, or RTC3 from the current public evidence.",
+    "RTC3 has no later standard public OEM in the current nine-product archive, so no direct creation-time bracket comparison is available."
+  ]
+}

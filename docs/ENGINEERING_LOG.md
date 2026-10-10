@@ -27616,3 +27616,1657 @@ COMPLETE
 ```
 
 Git workflow closure remains pending until the documented implementation is committed, pushed, and the working tree is verified clean.
+
+---
+
+# Phase 2I.3 — Maneuver Mission-Clock and Trajectory-Solution Correlation
+
+## Goal
+
+Phase 2I.3 correlates the executed Artemis II trajectory correction maneuvers with:
+
+```text
+mission elapsed time
+geometric mission phase
+lunar SOI geometry
+pericynthion
+entry timing
+splashdown timing
+communications context
+public OEM trajectory-solution evolution
+```
+
+The phase deliberately separates:
+
+```text
+maneuver execution evidence
+```
+
+from:
+
+```text
+public trajectory-solution evolution
+```
+
+because a difference between two public OEM products is not direct propulsion telemetry.
+
+---
+
+# Permanent Reference Dataset
+
+Created:
+
+```text
+data/reference/artemis_ii_maneuver_trajectory_correlation.json
+```
+
+Dataset identifier:
+
+```text
+phase2i3_artemis_ii_maneuver_trajectory_correlation
+```
+
+Provenance:
+
+```text
+MISSIONLAB_DERIVED_FROM_NASA_REPORTED_EVENTS_AND_NASA_FLIGHT_DERIVED_PUBLIC_OEM_PRODUCTS
+```
+
+The dataset integrates:
+
+```text
+Phase 2I.1 maneuver execution
+Phase 2I.2 propulsion-assignment boundaries
+Phase 1 lunar geometry
+Phase 1 public OEM archive
+Phase 2H communications context
+Phase 2 entry-event references
+mission-clock configuration
+```
+
+---
+
+# Mission Clock
+
+Configured launch epoch:
+
+```text
+2026-04-01T22:35:12Z
+```
+
+Primary public OEM:
+
+```text
+Artemis_II_OEM_2026_04_10_Post-ICPS-Sep-to-EI.csv
+```
+
+The public correction-burn timestamps remain minute-level source anchors.
+
+Seconds represented as:
+
+```text
+:00
+```
+
+do not imply second-level source precision.
+
+---
+
+# Mission Geometry Anchors
+
+Derived lunar SOI entry:
+
+```text
+2026-04-06T04:38:07.532302Z
+```
+
+Derived pericynthion:
+
+```text
+2026-04-06T23:00:46.177998Z
+```
+
+Derived lunar SOI exit:
+
+```text
+2026-04-07T17:23:41.922211Z
+```
+
+NASA-reported Entry Interface anchor:
+
+```text
+2026-04-10T23:53:00Z
+```
+
+Precision:
+
+```text
+MINUTE_LEVEL
+```
+
+NASA-reported splashdown anchor:
+
+```text
+2026-04-11T00:07:00Z
+```
+
+Precision:
+
+```text
+MINUTE_LEVEL
+```
+
+---
+
+# OTC3 Mission-Clock Correlation
+
+Maneuver:
+
+```text
+OTC3
+```
+
+UTC:
+
+```text
+2026-04-06T03:03:00Z
+```
+
+MET anchor:
+
+```text
+04:04:27:48.000
+```
+
+Geometric mission phase:
+
+```text
+OUTBOUND_TRANSIT
+```
+
+Duration:
+
+```text
+17.5 s
+```
+
+Reported delta-v in the Phase 2I source set:
+
+```text
+NONE
+```
+
+Engine assignment:
+
+```text
+UNRESOLVED_AS_FLOWN
+```
+
+---
+
+# OTC3 to Lunar SOI Entry
+
+Interval:
+
+```text
+5707.532302 s
+```
+
+Equivalent:
+
+```text
+1 h 35 min 07.532 s
+```
+
+Therefore OTC3 occurred approximately:
+
+```text
+1 hour 35 minutes
+```
+
+before derived lunar SOI entry.
+
+The interval combines:
+
+```text
+minute-level NASA burn timing
++
+MissionLab-derived geometry
+```
+
+and must retain those precision boundaries.
+
+---
+
+# OTC3 to Pericynthion
+
+Interval:
+
+```text
+71866.177998 s
+```
+
+Equivalent:
+
+```text
+19 h 57 min 46.178 s
+```
+
+OTC3 therefore occurred approximately twenty hours before derived lunar closest approach.
+
+---
+
+# RTC1 Mission-Clock Correlation
+
+Maneuver:
+
+```text
+RTC1
+```
+
+UTC:
+
+```text
+2026-04-08T00:03:00Z
+```
+
+MET anchor:
+
+```text
+06:01:27:48.000
+```
+
+Geometric mission phase:
+
+```text
+TRANS_EARTH_RETURN
+```
+
+Duration:
+
+```text
+15 s
+```
+
+Reported delta-v magnitude:
+
+```text
+1.6 ft/s
+```
+
+Engine assignment:
+
+```text
+UNRESOLVED_AS_FLOWN
+```
+
+---
+
+# Lunar SOI Exit to RTC1
+
+Interval:
+
+```text
+23958.077789 s
+```
+
+Equivalent:
+
+```text
+6 h 39 min 18.078 s
+```
+
+RTC1 therefore occurred after Orion had already exited the MissionLab-derived NASA lunar SOI boundary.
+
+Sequence:
+
+```text
+lunar SOI exit
+↓
+6 h 39 min
+↓
+RTC1
+```
+
+---
+
+# RTC1 to RTC2
+
+Interval:
+
+```text
+183000 s
+```
+
+Equivalent:
+
+```text
+2 d 2 h 50 min
+```
+
+This interval is derived from two minute-level NASA public maneuver anchors.
+
+---
+
+# RTC2 Mission-Clock Correlation
+
+Maneuver:
+
+```text
+RTC2
+```
+
+UTC:
+
+```text
+2026-04-10T02:53:00Z
+```
+
+MET anchor:
+
+```text
+08:04:17:48.000
+```
+
+Geometric mission phase:
+
+```text
+TRANS_EARTH_RETURN
+```
+
+Duration:
+
+```text
+9 s
+```
+
+Reported delta-v magnitude:
+
+```text
+5.3 ft/s
+```
+
+Engine assignment:
+
+```text
+UNRESOLVED_AS_FLOWN
+```
+
+---
+
+# RTC2 Communications Context
+
+Phase 2H established an unexpected return-link loss approximately two hours before RTC2.
+
+MissionLab approximate reference anchor:
+
+```text
+2026-04-10T00:53:00Z
+```
+
+Precision:
+
+```text
+APPROXIMATE
+```
+
+Exact anchor:
+
+```text
+FALSE
+```
+
+Approximate interval to RTC2:
+
+```text
+~7200 s
+~2.000 h
+```
+
+This interval must not be promoted into an exact anomaly duration or exact anomaly start time.
+
+---
+
+# RTC2 to RTC3
+
+Interval:
+
+```text
+57600 s
+```
+
+Equivalent:
+
+```text
+16 h
+```
+
+---
+
+# RTC3 Mission-Clock Correlation
+
+Maneuver:
+
+```text
+RTC3
+```
+
+UTC:
+
+```text
+2026-04-10T18:53:00Z
+```
+
+MET anchor:
+
+```text
+08:20:17:48.000
+```
+
+Geometric mission phase:
+
+```text
+TRANS_EARTH_RETURN
+```
+
+Duration:
+
+```text
+8 s
+```
+
+Reported delta-v magnitude:
+
+```text
+4.2 ft/s
+```
+
+Engine assignment:
+
+```text
+UNRESOLVED_AS_FLOWN
+```
+
+---
+
+# RTC3 to Entry Interface
+
+Interval:
+
+```text
+18000 s
+```
+
+Equivalent:
+
+```text
+5 h
+```
+
+Sequence:
+
+```text
+RTC3
+↓
+5 hours
+↓
+Entry Interface
+```
+
+The interval inherits the minute-level precision of the public RTC3 and Entry Interface event anchors.
+
+It must not be represented as a second-accurate physical interval.
+
+---
+
+# RTC3 to Splashdown
+
+Interval:
+
+```text
+18840 s
+```
+
+Equivalent:
+
+```text
+5 h 14 min
+```
+
+Again, the interval inherits minute-level public-event timing.
+
+---
+
+# Public OEM Archive
+
+The standard public trajectory archive contains:
+
+```text
+9 OEM products
+```
+
+Phase 2I.3 audited the metadata of the maneuver-adjacent products.
+
+Observed standard metadata fields include:
+
+```text
+CCSDS_OEM_VERS
+CREATION_DATE
+ORIGINATOR
+OBJECT_NAME
+OBJECT_ID
+CENTER_NAME
+REF_FRAME
+TIME_SYSTEM
+START_TIME
+USEABLE_START_TIME
+USEABLE_STOP_TIME
+STOP_TIME
+```
+
+No explicit field was observed for:
+
+```text
+maneuver assimilated
+post-maneuver solution
+navigation cutoff
+measurement cutoff
+maneuver incorporation
+maneuver update epoch
+```
+
+Therefore:
+
+```text
+explicit maneuver-assimilation metadata:
+NONE
+```
+
+---
+
+# OEM Creation-Time Brackets
+
+Phase 2I.3 defines a chronological bracket around each maneuver using:
+
+```text
+latest covering OEM created at or before maneuver
+```
+
+and:
+
+```text
+earliest covering OEM created after maneuver
+```
+
+This is called a:
+
+```text
+CREATION-TIME BRACKET
+```
+
+It is not called a:
+
+```text
+PRE-BURN / POST-BURN ASSIMILATION BRACKET
+```
+
+because creation time alone does not prove whether a maneuver was incorporated into the solution.
+
+---
+
+# OTC3 OEM Creation-Time Bracket
+
+Latest covering OEM created before OTC3:
+
+```text
+Artemis_II_OEM_2026_04_04_to_EI.csv
+```
+
+Creation:
+
+```text
+2026-04-03T23:45:26Z
+```
+
+Creation offset from OTC3:
+
+```text
+-184654 s
+```
+
+Earliest covering OEM created after OTC3:
+
+```text
+Artemis_II_OEM_2026_04_06_Pre-OTC3_to_EI.csv
+```
+
+Creation:
+
+```text
+2026-04-06T12:18:50Z
+```
+
+Creation offset from OTC3:
+
+```text
++33350 s
+```
+
+Equivalent:
+
+```text
+9 h 15 min 50 s after reported OTC3 minute
+```
+
+---
+
+# OTC3 Metadata Contradiction / Lifecycle Boundary
+
+The later-created product is explicitly named:
+
+```text
+Pre-OTC3
+```
+
+despite having a metadata creation time after the reported OTC3 execution minute.
+
+Therefore:
+
+```text
+CREATION_DATE after maneuver
+!=
+proof maneuver was assimilated
+```
+
+This is one of the most important findings of Phase 2I.3.
+
+The filename and metadata creation timestamp may describe different aspects of the public OEM product lifecycle.
+
+MissionLab does not silently reinterpret either one.
+
+---
+
+# OTC3 Same-Epoch OEM Solution Difference
+
+Both creation-time-bracketing products cover the OTC3 epoch.
+
+Their states were independently interpolated to:
+
+```text
+2026-04-06T03:03:00Z
+```
+
+Position difference magnitude:
+
+```text
+169.098527 km
+```
+
+Velocity difference magnitude:
+
+```text
+1.893541 m/s
+```
+
+Interpretation:
+
+```text
+SOLUTION_TO_SOLUTION_DIFFERENCE_AT_COMMON_MANEUVER_EPOCH
+```
+
+Maneuver assimilation:
+
+```text
+NOT_ESTABLISHED
+```
+
+Measured burn delta-v:
+
+```text
+FALSE
+```
+
+Navigation error:
+
+```text
+FALSE
+```
+
+---
+
+# RTC1 OEM Creation-Time Bracket
+
+Latest covering OEM created before RTC1:
+
+```text
+Artemis_II_OEM_2026_04_07_Pre-Lunar-Flyby_to_EI.csv
+```
+
+Creation:
+
+```text
+2026-04-07T12:47:44Z
+```
+
+Creation offset:
+
+```text
+-40516 s
+```
+
+Earliest covering OEM created after RTC1:
+
+```text
+Artemis_II_OEM_2026_04_08_Post-ICPS-Sep_to_EI.csv
+```
+
+Creation:
+
+```text
+2026-04-08T01:49:15Z
+```
+
+Creation offset:
+
+```text
++6375 s
+```
+
+---
+
+# RTC1 Same-Epoch OEM Solution Difference
+
+Position difference:
+
+```text
+1.443975 km
+```
+
+Velocity difference:
+
+```text
+0.068048 m/s
+```
+
+Interpretation:
+
+```text
+SOLUTION_TO_SOLUTION_DIFFERENCE_AT_COMMON_MANEUVER_EPOCH
+```
+
+Maneuver assimilation:
+
+```text
+NOT_ESTABLISHED
+```
+
+Measured RTC1 delta-v from this comparison:
+
+```text
+FALSE
+```
+
+---
+
+# RTC2 OEM Creation-Time Bracket
+
+Latest covering OEM created before RTC2:
+
+```text
+Artemis_II_OEM_2026_04_09_Post-ICPS-Sep_to_EI.csv
+```
+
+Creation:
+
+```text
+2026-04-08T22:20:54Z
+```
+
+Creation offset:
+
+```text
+-102726 s
+```
+
+Earliest covering OEM created after RTC2:
+
+```text
+Artemis_II_OEM_2026_04_10_Post-ICPS-Sep-to-EI.csv
+```
+
+Creation:
+
+```text
+2026-04-10T03:22:19Z
+```
+
+Creation offset:
+
+```text
++1759 s
+```
+
+Equivalent:
+
+```text
+29 min 19 s
+```
+
+after the minute-level RTC2 anchor.
+
+---
+
+# RTC2 Same-Epoch OEM Solution Difference
+
+Position difference:
+
+```text
+34.536691 km
+```
+
+Velocity difference:
+
+```text
+0.381837 m/s
+```
+
+Interpretation:
+
+```text
+SOLUTION_TO_SOLUTION_DIFFERENCE_AT_COMMON_MANEUVER_EPOCH
+```
+
+Maneuver assimilation:
+
+```text
+NOT_ESTABLISHED
+```
+
+Measured RTC2 delta-v from this comparison:
+
+```text
+FALSE
+```
+
+The NASA-reported RTC2 maneuver magnitude remains independently:
+
+```text
+5.3 ft/s
+```
+
+The OEM velocity-solution difference is not used as a replacement or validation measurement for that reported burn magnitude.
+
+---
+
+# RTC3 OEM Creation-Time Bracket
+
+Latest public OEM created before RTC3:
+
+```text
+Artemis_II_OEM_2026_04_10_Post-ICPS-Sep-to-EI.csv
+```
+
+Creation:
+
+```text
+2026-04-10T03:22:19Z
+```
+
+Creation offset:
+
+```text
+-55841 s
+```
+
+Later standard public OEM:
+
+```text
+NONE
+```
+
+Therefore:
+
+```text
+direct creation-time bracket comparison:
+NOT AVAILABLE
+```
+
+MissionLab does not manufacture a post-RTC3 trajectory product.
+
+---
+
+# What an OEM Solution Difference Means
+
+For two public OEMs evaluated at the same epoch:
+
+```text
+Δr_solution
+=
+r_solution_B
+-
+r_solution_A
+```
+
+and:
+
+```text
+Δv_solution
+=
+v_solution_B
+-
+v_solution_A
+```
+
+MissionLab reports the magnitudes:
+
+```text
+|Δr_solution|
+|Δv_solution|
+```
+
+These quantities measure differences between two released trajectory solutions.
+
+They do not identify why the solutions differ.
+
+---
+
+# What an OEM Solution Difference Does Not Mean
+
+A same-epoch solution difference may contain effects from:
+
+```text
+navigation estimation updates
+new tracking data
+changed modeling
+maneuver planning updates
+maneuver incorporation
+prediction changes
+solution generation changes
+other unavailable flight-dynamics updates
+```
+
+The public OEM archive does not allow those components to be uniquely separated.
+
+Therefore:
+
+```text
+OEM Δstate
+!=
+navigation error
+```
+
+and:
+
+```text
+OEM Δstate
+!=
+measured burn Δv
+```
+
+---
+
+# Creation Date vs Maneuver Assimilation
+
+Permanent rule:
+
+```text
+OEM CREATION_DATE
+!=
+maneuver assimilation proof
+```
+
+A product created after a maneuver may still represent a solution with labels or assumptions associated with a pre-maneuver state.
+
+The OTC3 product provides direct evidence that creation chronology and maneuver-assimilation semantics cannot be treated as equivalent.
+
+---
+
+# Product Filename Semantics
+
+Filename labels such as:
+
+```text
+PRE_OTC3
+PRE_LUNAR_FLYBY
+POST_ICPS_SEP
+TO_EI
+```
+
+are preserved exactly as product-label evidence.
+
+They are not silently converted into:
+
+```text
+confirmed navigation-estimation state
+confirmed maneuver assimilation
+confirmed measurement cutoff
+```
+
+unless an authoritative source explicitly defines them that way.
+
+---
+
+# Propulsion Boundary
+
+Phase 2I.2 established that exact engine assignments remain unresolved for:
+
+```text
+OTC3
+RTC1
+RTC2
+RTC3
+```
+
+Phase 2I.3 preserves that result.
+
+Therefore it does not compute:
+
+```text
+thrust-derived acceleration
+burn impulse
+propellant usage
+specific impulse performance
+engine efficiency
+```
+
+for these correction burns.
+
+---
+
+# No Nominal-Thrust Impulse Calculation
+
+Phase 2I.3 does not use:
+
+```text
+nominal engine thrust × burn duration
+```
+
+because the actual engine class and firing configuration remain unresolved.
+
+Therefore:
+
+```text
+burn impulse from nominal thrust:
+NOT COMPUTED
+```
+
+---
+
+# Processed Mission-Clock Table
+
+Generated:
+
+```text
+data/processed/maneuvers/maneuver_mission_clock_correlation.csv
+```
+
+Rows:
+
+```text
+4
+```
+
+The table contains:
+
+```text
+maneuver ID
+UTC
+timestamp precision
+MET anchor
+geometric mission phase
+duration
+reported delta-v
+engine assignment status
+```
+
+The file remains ignored from Git.
+
+---
+
+# Processed OEM Bracket Table
+
+Generated:
+
+```text
+data/processed/maneuvers/maneuver_oem_solution_brackets.csv
+```
+
+Rows:
+
+```text
+4
+```
+
+The table preserves:
+
+```text
+maneuver epoch
+latest OEM created at/before maneuver
+creation time
+creation offset
+filename semantics
+earliest OEM created after maneuver
+creation time
+creation offset
+filename semantics
+same-epoch position difference
+same-epoch velocity difference
+comparison semantics
+maneuver-assimilation status
+measured-delta-v flag
+navigation-error flag
+```
+
+The file remains ignored from Git.
+
+---
+
+# Processed Summary
+
+Generated:
+
+```text
+data/processed/maneuvers/maneuver_trajectory_correlation_summary.json
+```
+
+Product identifier:
+
+```text
+phase2i3_maneuver_trajectory_correlation_analysis
+```
+
+The summary includes:
+
+```text
+mission-clock correlations
+mission-event intervals
+RTC2 communications context
+OEM archive audit
+creation-time brackets
+same-epoch solution comparisons
+analysis boundaries
+interpretation guardrails
+```
+
+The file remains ignored from Git.
+
+---
+
+# Mission-Clock Figure
+
+Created:
+
+```text
+docs/assets/maneuvers/phase2i3_maneuver_mission_clock.svg
+```
+
+The figure places:
+
+```text
+OTC3
+RTC1
+RTC2
+RTC3
+```
+
+against:
+
+```text
+SOI entry
+pericynthion
+SOI exit
+Entry Interface
+splashdown
+```
+
+on the common Artemis II mission clock.
+
+---
+
+# OEM Solution-Bracket Figure
+
+Created:
+
+```text
+docs/assets/maneuvers/phase2i3_oem_solution_brackets.svg
+```
+
+The figure compares the chronological public OEM brackets for each maneuver and explicitly states:
+
+```text
+creation-time bracket
+!=
+maneuver-assimilation bracket
+```
+
+and:
+
+```text
+OEM solution difference
+!=
+navigation error
+!=
+measured burn delta-v
+```
+
+---
+
+# Independent Validator
+
+Created:
+
+```text
+scripts/validation/validate_maneuver_trajectory_correlation.py
+```
+
+The validator independently checks:
+
+```text
+dataset identity
+summary identity
+launch epoch
+lunar SOI anchors
+pericynthion
+Entry Interface anchor
+splashdown anchor
+event precision
+RTC2 communications precision
+maneuver identities
+maneuver timestamps
+MET anchors
+mission phases
+durations
+reported delta-v values
+unresolved engine assignments
+mission-event intervals
+nine-product OEM archive
+creation-time bracket identities
+OEM creation offsets
+independent Hermite interpolation
+same-epoch position differences
+same-epoch velocity differences
+RTC3 missing later OEM
+OTC3 PRE_OTC3 contradiction
+metadata-assimilation boundary
+CSV integrity
+summary integrity
+SVG integrity
+guardrail preservation
+```
+
+---
+
+# Independent Validation Result
+
+Mission phases:
+
+```text
+OTC3:
+OUTBOUND_TRANSIT
+
+RTC1:
+TRANS_EARTH_RETURN
+
+RTC2:
+TRANS_EARTH_RETURN
+
+RTC3:
+TRANS_EARTH_RETURN
+```
+
+Mission intervals:
+
+```text
+OTC3 -> SOI entry:
+5707.532302 s
+
+OTC3 -> pericynthion:
+71866.177998 s
+
+SOI exit -> RTC1:
+23958.077789 s
+
+RTC1 -> RTC2:
+183000.0 s
+
+RTC2 -> RTC3:
+57600.0 s
+
+RTC3 -> Entry Interface:
+18000.0 s
+
+RTC3 -> splashdown:
+18840.0 s
+
+approximate communications-loss anchor -> RTC2:
+~7200.0 s
+```
+
+OEM archive:
+
+```text
+standard products:
+9
+
+explicit maneuver-assimilation field:
+NONE
+
+CREATION_DATE proves assimilation:
+FALSE
+```
+
+Same-epoch public OEM differences:
+
+```text
+OTC3:
+169.098527 km
+1.893541 m/s
+assimilation NOT_ESTABLISHED
+
+RTC1:
+1.443975 km
+0.068048 m/s
+assimilation NOT_ESTABLISHED
+
+RTC2:
+34.536691 km
+0.381837 m/s
+assimilation NOT_ESTABLISHED
+
+RTC3:
+later public OEM NONE
+comparison NOT AVAILABLE
+```
+
+OTC3 audit:
+
+```text
+later-created OEM label:
+PRE_OTC3
+
+creation time proves assimilation:
+FALSE
+```
+
+Interpretation boundary:
+
+```text
+OEM difference = solution-to-solution:
+PASS
+
+OEM difference = navigation error:
+FALSE
+
+OEM difference = measured burn delta-v:
+FALSE
+
+unresolved engine assignments preserved:
+PASS
+
+thrust-derived performance computed:
+FALSE
+
+nominal-thrust impulse computed:
+FALSE
+```
+
+Products:
+
+```text
+mission-clock CSV rows:
+4
+
+OEM bracket CSV rows:
+4
+
+summary:
+PASS
+
+mission-clock figure:
+PASS
+
+OEM bracket figure:
+PASS
+```
+
+Final validation:
+
+```text
+PASS
+```
+
+---
+
+# Interpretation Guardrails
+
+## Guardrail 1
+
+```text
+OEM solution difference
+!=
+navigation error
+```
+
+---
+
+## Guardrail 2
+
+```text
+OEM solution difference
+!=
+measured burn delta-v
+```
+
+---
+
+## Guardrail 3
+
+```text
+CREATION_DATE after burn
+!=
+maneuver assimilation proof
+```
+
+---
+
+## Guardrail 4
+
+The later-created OTC3-adjacent product remains explicitly labeled:
+
+```text
+PRE_OTC3
+```
+
+and this contradiction is preserved rather than hidden.
+
+---
+
+## Guardrail 5
+
+```text
+product creation time
+!=
+maneuver execution time
+```
+
+---
+
+## Guardrail 6
+
+```text
+later-created solution evaluated at maneuver epoch
+!=
+raw maneuver telemetry
+```
+
+---
+
+## Guardrail 7
+
+Filename semantics are retained but are not automatically converted into navigation-state semantics.
+
+---
+
+## Guardrail 8
+
+Minute-level public event anchors do not gain second-level precision merely because calculations produce decimal seconds.
+
+---
+
+## Guardrail 9
+
+The RTC2 communications anchor remains:
+
+```text
+APPROXIMATE
+```
+
+---
+
+## Guardrail 10
+
+```text
+OTC3
+RTC1
+RTC2
+RTC3
+```
+
+engine assignments remain unresolved.
+
+---
+
+## Guardrail 11
+
+No thrust-derived:
+
+```text
+acceleration
+impulse
+propellant consumption
+performance efficiency
+```
+
+is inferred for the correction burns.
+
+---
+
+## Guardrail 12
+
+RTC3 has no later standard public OEM and therefore no direct chronological two-product bracket.
+
+---
+
+# Engineering Significance
+
+Phase 2I.3 connects propulsion operations to the mission timeline without overstating what the public trajectory products reveal.
+
+The project can now answer:
+
+```text
+When did each executed correction occur?
+
+Where was Orion in the mission geometry?
+
+How long before or after major mission events did each burn occur?
+
+How did chronologically adjacent public trajectory solutions differ
+at the maneuver epoch?
+
+What can those differences legitimately tell us?
+```
+
+The answer to the final question is deliberately constrained:
+
+```text
+They show public solution evolution.
+```
+
+They do not independently reveal:
+
+```text
+measured maneuver performance
+navigation error
+engine identity
+burn impulse
+```
+
+This makes the maneuver reconstruction suitable for mission-operations analysis while preserving the distinction between public flight-derived ephemeris products and unavailable onboard or ground-system telemetry.
+
+---
+
+# Phase 2I.3 Status
+
+Mission-clock correlation:
+
+```text
+PASS
+```
+
+Geometric-phase correlation:
+
+```text
+PASS
+```
+
+Communications correlation:
+
+```text
+PASS
+```
+
+Entry timing correlation:
+
+```text
+PASS
+```
+
+OEM archive audit:
+
+```text
+PASS
+```
+
+Creation-time bracket reconstruction:
+
+```text
+PASS
+```
+
+Independent same-epoch state comparison:
+
+```text
+PASS
+```
+
+OTC3 metadata contradiction handling:
+
+```text
+PASS
+```
+
+Maneuver-assimilation uncertainty:
+
+```text
+PASS
+```
+
+Propulsion non-inference boundary:
+
+```text
+PASS
+```
+
+Independent validation:
+
+```text
+PASS
+```
+
+Phase 2I.3 implementation status:
+
+```text
+COMPLETE
+```
+
+Git workflow closure remains pending until the documented implementation is committed, pushed, and the working tree is verified clean.
