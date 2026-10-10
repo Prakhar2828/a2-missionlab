@@ -31049,3 +31049,1702 @@ READY TO CLOSE
 ```
 
 Git workflow closure remains pending until the documented implementation is committed, pushed, and the working tree is verified clean.
+
+---
+
+# Phase 2J.1 — GNC Architecture and Evidence Model
+
+## Goal
+
+Phase 2J.1 establishes the public-evidence architecture for Artemis II guidance, navigation, and control.
+
+The objective is to distinguish three different functions:
+
+```text
+NAVIGATION
+Where am I, how am I moving, and which way am I pointed?
+
+GUIDANCE
+Where should the spacecraft go or point next?
+
+CONTROL
+How does the spacecraft make the commanded motion happen?
+```
+
+This phase also establishes what public Artemis II evidence is actually available before later phases attempt any deeper navigation, piloting, or guidance reconstruction.
+
+The most important boundary is:
+
+```text
+SYSTEM CAPABILITY
+!=
+AS-FLOWN MEASUREMENT HISTORY
+```
+
+---
+
+# Permanent Reference Dataset
+
+Created:
+
+```text
+data/reference/artemis_ii_gnc_architecture.json
+```
+
+Dataset identifier:
+
+```text
+phase2j1_artemis_ii_gnc_architecture
+```
+
+Provenance:
+
+```text
+NASA_REPORTED_WITH_MISSIONLAB_CROSS_PHASE_ARCHITECTURE_CORRELATION
+```
+
+The dataset contains:
+
+```text
+GNC domain model
+GNC&P flight-software architecture
+onboard navigation sensors
+external navigation support
+manual-control interfaces
+control effectors
+Artemis II operational anchors
+public-source availability boundaries
+cross-phase interpretation boundaries
+guardrails
+```
+
+---
+
+# GNC Domain Separation
+
+## Navigation
+
+Question:
+
+```text
+Where am I?
+How am I moving?
+Which way am I pointed?
+```
+
+MissionLab classification:
+
+```text
+ESTIMATE_SPACECRAFT_POSITION_VELOCITY_ATTITUDE_AND_RELEVANT_RELATIVE_GEOMETRY
+```
+
+Navigation is not guidance.
+
+Navigation is not control.
+
+---
+
+## Guidance
+
+Question:
+
+```text
+Where should Orion go or point next?
+```
+
+MissionLab classification:
+
+```text
+DETERMINE_OR_RECEIVE_TRAJECTORY_ATTITUDE_AND_MISSION_OBJECTIVES
+```
+
+Guidance can consume navigation knowledge and produce objectives or commands, but Phase 2J.1 does not claim access to the complete Orion guidance algorithm.
+
+---
+
+## Control
+
+Question:
+
+```text
+How does Orion follow the commanded trajectory or attitude?
+```
+
+MissionLab classification:
+
+```text
+CONVERT_COMMANDS_AND_ERRORS_INTO_EFFECTOR_ACTION
+```
+
+Control can include:
+
+```text
+crew hand-controller inputs
+flight-software command processing
+thruster or engine effectors
+automated spacecraft control
+```
+
+but public system architecture does not expose the complete as-flown control-command history.
+
+---
+
+# GNC&P Flight Software
+
+The public architecture supports:
+
+```text
+navigation-sensor inputs:
+TRUE
+
+pilot-control inputs:
+TRUE
+
+crew commands:
+TRUE
+
+ground commands:
+TRUE
+
+manual mode:
+TRUE
+
+automated mode:
+TRUE
+
+spacecraft-effector commanding:
+TRUE
+```
+
+The software executes on:
+
+```text
+VEHICLE_MANAGEMENT_COMPUTERS
+```
+
+---
+
+# Flight-Software Evidence Boundary
+
+The current public MissionLab source set does not contain:
+
+```text
+flight-software source code
+complete guidance algorithm
+complete control law
+complete guidance target history
+complete controller input history
+```
+
+Therefore:
+
+```text
+public GNC architecture
+!=
+flight-software implementation
+```
+
+and:
+
+```text
+manual-control mode name
+!=
+control-law reconstruction
+```
+
+---
+
+# Onboard Navigation Architecture
+
+Phase 2J.1 identifies six onboard navigation sensor classes:
+
+```text
+1. Star Tracker
+2. Inertial Measurement Unit
+3. GPS Receiver
+4. Barometric Altimeter Assembly
+5. Optical Navigation Camera
+6. Sun Sensor
+```
+
+The architecture is publicly documented.
+
+The raw Artemis II histories from these systems are not present in the current curated source set.
+
+---
+
+# Star Tracker
+
+Sensor ID:
+
+```text
+star_tracker
+```
+
+Measurement domain:
+
+```text
+ATTITUDE
+```
+
+Role:
+
+```text
+COMPARE_STAR_FIELD_IMAGES_WITH_STAR_CATALOG_TO_ESTIMATE_SPACECRAFT_ORIENTATION
+```
+
+Public architecture:
+
+```text
+AVAILABLE
+```
+
+Raw Artemis II star-tracker measurement history:
+
+```text
+NOT AVAILABLE IN CURRENT SOURCE SET
+```
+
+Therefore:
+
+```text
+star-tracker capability
+!=
+as-flown attitude measurement history
+```
+
+---
+
+# Inertial Measurement Unit
+
+Sensor ID:
+
+```text
+imu
+```
+
+Measurement domain:
+
+```text
+ROTATION_RATE_AND_BODY_ACCELERATION
+```
+
+Each public-described IMU includes:
+
+```text
+3 gyro axes
+3 accelerometer axes
+```
+
+The inertial measurements support onboard navigation quantities including:
+
+```text
+position
+velocity
+attitude
+```
+
+Raw Artemis II IMU history:
+
+```text
+NOT AVAILABLE IN CURRENT SOURCE SET
+```
+
+Therefore MissionLab does not reconstruct:
+
+```text
+gyro time history
+accelerometer time history
+IMU biases
+navigation filter propagation
+IMU covariance
+```
+
+from architecture descriptions alone.
+
+---
+
+# GPS Receiver
+
+Sensor ID:
+
+```text
+gps_receiver
+```
+
+Measurement domain:
+
+```text
+POSITION_AND_VELOCITY
+```
+
+Public mission-phase role includes:
+
+```text
+ASCENT
+LOW_EARTH_ORBIT
+REENTRY
+```
+
+Deep-space primary-navigation role:
+
+```text
+FALSE
+```
+
+Raw Artemis II GPS history:
+
+```text
+NOT AVAILABLE IN CURRENT SOURCE SET
+```
+
+---
+
+# Barometric Altimeter Assembly
+
+Sensor ID:
+
+```text
+barometric_altimeter
+```
+
+Measurement domain:
+
+```text
+ALTITUDE_FROM_ATMOSPHERIC_PRESSURE
+```
+
+Role:
+
+```text
+BACKUP_ALTITUDE_VALUE_FOR_ENTRY_DEPLOYMENT_EVENTS
+```
+
+Mission contexts include:
+
+```text
+ASCENT
+REENTRY
+```
+
+Raw Artemis II barometric-altimeter history:
+
+```text
+NOT AVAILABLE IN CURRENT SOURCE SET
+```
+
+This sensor is part of the public navigation architecture but is not used in Phase 2J.1 to reconstruct an entry altitude profile.
+
+Detailed entry reconstruction remains separated from this architectural phase.
+
+---
+
+# Optical Navigation Camera
+
+Sensor ID:
+
+```text
+optical_navigation_camera
+```
+
+Measurement domain:
+
+```text
+CELESTIAL_RANGE_AND_BEARING
+```
+
+Public role:
+
+```text
+USE_EARTH_AND_MOON_IMAGE_SIZE_AND_POSITION_FOR_RANGE_AND_BEARING_INFORMATION
+```
+
+Emergency-return role:
+
+```text
+TRUE
+```
+
+Autonomous lost-communications role reported:
+
+```text
+TRUE
+```
+
+Raw Artemis II optical-navigation measurements:
+
+```text
+NOT AVAILABLE IN CURRENT SOURCE SET
+```
+
+Therefore MissionLab does not derive an as-flown optical-navigation solution from architecture documentation.
+
+---
+
+# Sun Sensor
+
+Sensor ID:
+
+```text
+sun_sensor
+```
+
+Measurement domain:
+
+```text
+SUN_DIRECTION
+```
+
+Role:
+
+```text
+DETERMINE_SUN_DIRECTION_DURING_EMERGENCY_SAFE_MODE_FOR_POWER_POSITIVE_POINTING
+```
+
+Primary trajectory navigation sensor:
+
+```text
+FALSE
+```
+
+Raw Artemis II Sun-sensor history:
+
+```text
+NOT AVAILABLE IN CURRENT SOURCE SET
+```
+
+---
+
+# External Navigation Support
+
+System:
+
+```text
+DEEP_SPACE_NETWORK_TRACKING
+```
+
+Measurement domain:
+
+```text
+GROUND_BASED_DEEP_SPACE_ORBIT_DETERMINATION
+```
+
+Onboard sensor:
+
+```text
+FALSE
+```
+
+Public role:
+
+```text
+SENSITIVE_COMMUNICATION_SIGNAL_MEASUREMENTS_SUPPORT_SPACECRAFT_LOCATION_DETERMINATION_OUTSIDE_GPS_RANGE
+```
+
+Raw Artemis II DSN tracking observables in the current curated source set:
+
+```text
+NOT AVAILABLE
+```
+
+Permanent boundary:
+
+```text
+DSN orbit determination
+!=
+onboard sensor measurement
+```
+
+---
+
+# AROW / OEM Navigation Boundary
+
+MissionLab already contains NASA flight-derived public OEM trajectory products.
+
+These products provide:
+
+```text
+public trajectory state solutions
+```
+
+They do not provide:
+
+```text
+Orion onboard navigation filter state history
+```
+
+Permanent rule:
+
+```text
+AROW/OEM state vector
+!=
+onboard navigation-filter state vector
+```
+
+This distinction is critical for future Phase 2J.3 work.
+
+---
+
+# Manual-Control Architecture
+
+Two crew control interfaces are represented.
+
+---
+
+# Rotational Hand Controller
+
+Short name:
+
+```text
+RHC
+```
+
+Command domain:
+
+```text
+ATTITUDE
+```
+
+Commanded axes:
+
+```text
+ROLL
+PITCH
+YAW
+```
+
+The RHC is not modeled as a direct thruster switch.
+
+Instead:
+
+```text
+RHC input
+↓
+GNC flight software
+↓
+effector selection
+```
+
+---
+
+# Translational Hand Controller
+
+Short name:
+
+```text
+THC
+```
+
+Command domain:
+
+```text
+TRANSLATION
+```
+
+Commanded axes:
+
+```text
+FORWARD / BACK
+UP / DOWN
+LEFT / RIGHT
+```
+
+Again:
+
+```text
+THC input
+!=
+direct individual thruster command
+```
+
+The command is processed through GNC flight software.
+
+---
+
+# Manual-Control Command Path
+
+MissionLab represents the public architecture as:
+
+```text
+CREW_CONTROLLER_INPUT
+↓
+GNC_FLIGHT_SOFTWARE
+↓
+EFFECTOR_SELECTION
+↓
+RCS_THRUSTER_COMMAND
+```
+
+This architecture does not provide:
+
+```text
+controller deflection time history
+individual thruster command history
+control-law gains
+control-error history
+attitude-error history
+```
+
+---
+
+# Control Effectors
+
+Phase 2J.1 cross-checks Phase 2I propulsion architecture.
+
+## Main Engine
+
+```text
+OMS-E
+count = 1
+```
+
+Role:
+
+```text
+MAJOR_IN_SPACE_VELOCITY_CHANGE
+```
+
+Burn-specific trajectory-correction assignment implied:
+
+```text
+FALSE
+```
+
+---
+
+## Auxiliary Engines
+
+```text
+R-4D-11
+count = 8
+```
+
+Role:
+
+```text
+ORBITAL_AND_TRAJECTORY_CORRECTION_CAPABILITY
+```
+
+Burn-specific correction assignment implied:
+
+```text
+FALSE
+```
+
+---
+
+## Reaction-Control System
+
+```text
+RCS
+count = 24
+```
+
+Role:
+
+```text
+ATTITUDE_TRANSLATION_AND_FINE_CONTROL
+```
+
+Exact as-flown thruster sequence available:
+
+```text
+FALSE
+```
+
+---
+
+# Phase 2I Boundary Preservation
+
+Phase 2I ended with four unresolved correction-burn engine assignments:
+
+```text
+OTC3
+RTC1
+RTC2
+RTC3
+```
+
+Phase 2J.1 does not resolve them.
+
+Permanent rule:
+
+```text
+GNC architecture
+!=
+burn-specific propulsion assignment
+```
+
+Therefore:
+
+```text
+correction-burn engine assignment resolved by GNC architecture:
+FALSE
+```
+
+---
+
+# Artemis II Operational Anchor 1 — Proximity Operations
+
+Event:
+
+```text
+proximity_operations_demonstration
+```
+
+Execution:
+
+```text
+COMPLETED
+```
+
+Date:
+
+```text
+2026-04-01
+```
+
+Duration:
+
+```text
+APPROXIMATELY 70 MINUTES
+```
+
+Authority:
+
+```text
+CREW_MANUAL_CONTROL
+```
+
+Reference target:
+
+```text
+DETACHED ICPS
+```
+
+Activities:
+
+```text
+CONTROLLED APPROACH
+CONTROLLED RETREAT
+```
+
+Onboard navigation sensors used:
+
+```text
+TRUE
+```
+
+Reaction-control thrusters used:
+
+```text
+TRUE
+```
+
+Automated departure burn afterward:
+
+```text
+TRUE
+```
+
+---
+
+# Proximity-Operations Evidence Boundary
+
+The public report establishes that:
+
+```text
+manual relative maneuvering occurred
+onboard navigation sensors were used
+RCS thrusters were used
+automated departure followed
+```
+
+It does not expose:
+
+```text
+sensor measurement history
+relative-state filter history
+exact controller inputs
+exact individual thruster sequence
+complete approach guidance law
+complete departure guidance law
+```
+
+---
+
+# Docking-Camera Measurement Context
+
+The proximity-operations public evidence also includes docking-camera measurements during departure.
+
+MissionLab classifies this as:
+
+```text
+ENGINEERING POSITIONING MEASUREMENT CONTEXT
+```
+
+for future rendezvous-navigation knowledge.
+
+Phase 2J.1 does not promote the docking camera to:
+
+```text
+CONFIRMED PRIMARY CLOSED_LOOP ARTEMIS II NAVIGATION SENSOR
+```
+
+without explicit evidence that it served that role.
+
+Permanent boundary:
+
+```text
+engineering measurement context
+!=
+confirmed closed-loop navigation input
+```
+
+---
+
+# Artemis II Operational Anchor 2 — Flight Day 4 Manual Piloting
+
+Event:
+
+```text
+flight_day_4_manual_piloting
+```
+
+Execution:
+
+```text
+COMPLETED
+```
+
+Date:
+
+```text
+2026-04-04
+```
+
+Duration:
+
+```text
+41 MINUTES
+```
+
+Crew participants represented in the source-backed dataset:
+
+```text
+Christina Koch
+Jeremy Hansen
+```
+
+Control modes tested:
+
+```text
+SIX_DEGREES_OF_FREEDOM
+THREE_DEGREES_OF_FREEDOM
+```
+
+---
+
+# 6-DOF / 3-DOF Boundary
+
+The public event establishes that these control modes were tested.
+
+It does not expose:
+
+```text
+mode implementation
+control-law gains
+rate-command logic
+attitude-command logic
+translation-command logic
+thruster allocation algorithm
+individual firing sequence
+```
+
+Therefore:
+
+```text
+6-DOF / 3-DOF mode name
+!=
+reconstructed control algorithm
+```
+
+---
+
+# Artemis II Operational Anchor 3 — Flight Day 8
+
+Event:
+
+```text
+flight_day_8_manual_piloting
+```
+
+Planned date:
+
+```text
+2026-04-08
+```
+
+Planned objectives included:
+
+```text
+CENTER_DESIGNATED_TARGET
+GUIDE_TO_TAIL_TO_SUN_ATTITUDE
+```
+
+Execution status:
+
+```text
+FOREGONE
+```
+
+Performed:
+
+```text
+FALSE
+```
+
+Permanent rule:
+
+```text
+planned activity
+!=
+executed activity
+```
+
+MissionLab must never present this manual-control demonstration as flown.
+
+---
+
+# Current Public Source-Set Availability
+
+Available:
+
+```text
+sensor architecture
+sensor roles
+GNC&P flight-software architecture
+manual-control architecture
+as-flown manual-control event sequence
+6-DOF / 3-DOF execution evidence
+```
+
+Not available in the current curated source set:
+
+```text
+exact thruster command history
+attitude time series
+raw IMU history
+raw star-tracker history
+raw GPS history
+raw barometric-altimeter history
+raw optical-navigation history
+raw Sun-sensor history
+raw DSN tracking observables
+full navigation-filter state history
+navigation covariance history
+guidance-target history
+complete flight-control law
+manual controller input history
+Flight Director GNC rationale tree
+```
+
+---
+
+# Important Meaning of "Not Available"
+
+In Phase 2J.1:
+
+```text
+NOT AVAILABLE
+```
+
+means:
+
+```text
+NOT ESTABLISHED IN THE CURRENT CURATED MISSIONLAB PUBLIC SOURCE SET
+```
+
+It does not mean:
+
+```text
+NO SUCH RECORD EXISTS ANYWHERE
+```
+
+This distinction is preserved in the evidence-boundary figure.
+
+---
+
+# Cross-Phase Boundaries
+
+## Boundary 1
+
+```text
+AROW/OEM state vector
+!=
+onboard navigation-filter state
+```
+
+Status:
+
+```text
+FALSE equivalence
+```
+
+---
+
+## Boundary 2
+
+```text
+DSN orbit determination
+!=
+onboard sensor measurement
+```
+
+Status:
+
+```text
+FALSE equivalence
+```
+
+---
+
+## Boundary 3
+
+```text
+propulsion architecture
+!=
+exact as-flown control-effector history
+```
+
+Status:
+
+```text
+FALSE equivalence
+```
+
+---
+
+## Boundary 4
+
+```text
+trajectory-correction outcome
+!=
+guidance-command history
+```
+
+Status:
+
+```text
+FALSE equivalence
+```
+
+---
+
+## Boundary 5
+
+```text
+GNC architecture
+!=
+correction-burn engine assignment
+```
+
+Status:
+
+```text
+FALSE equivalence
+```
+
+---
+
+# Processed Architecture Table
+
+Generated:
+
+```text
+data/processed/gnc/gnc_architecture_components.csv
+```
+
+Rows:
+
+```text
+13
+```
+
+Composition:
+
+```text
+1 GNC&P flight-software architecture row
+6 onboard navigation sensor rows
+1 external DSN support row
+2 crew controller rows
+3 control-effector rows
+```
+
+The processed file remains ignored from Git.
+
+---
+
+# Evidence-Boundary Table
+
+Generated:
+
+```text
+data/processed/gnc/gnc_evidence_boundaries.csv
+```
+
+Rows:
+
+```text
+21
+```
+
+Each row records whether a particular evidence category is available in the current public MissionLab source set.
+
+The processed file remains ignored from Git.
+
+---
+
+# Processed Summary
+
+Generated:
+
+```text
+data/processed/gnc/gnc_architecture_summary.json
+```
+
+Product identifier:
+
+```text
+phase2j1_gnc_architecture_analysis
+```
+
+The summary contains:
+
+```text
+domain counts
+sensor counts
+external-support counts
+manual-controller counts
+effector counts
+operational anchors
+source-set boundaries
+cross-phase boundaries
+guardrails
+output paths
+```
+
+The processed file remains ignored from Git.
+
+---
+
+# GNC Architecture Figure
+
+Created:
+
+```text
+docs/assets/gnc/phase2j1_gnc_architecture.svg
+```
+
+The figure separates:
+
+```text
+NAVIGATION
+GUIDANCE
+CONTROL
+```
+
+and shows the high-level information flow:
+
+```text
+navigation knowledge
+↓
+guidance objectives
+↓
+control / effector action
+```
+
+It explicitly states that architecture does not establish the complete as-flown histories.
+
+---
+
+# Evidence-Boundary Figure
+
+Created:
+
+```text
+docs/assets/gnc/phase2j1_gnc_evidence_boundary.svg
+```
+
+The figure displays the availability status for the 21 evidence categories used in this phase.
+
+It also explicitly defines:
+
+```text
+NOT AVAILABLE
+```
+
+as referring only to the current curated public MissionLab source set.
+
+---
+
+# Independent Validator
+
+Created:
+
+```text
+scripts/validation/validate_gnc_architecture.py
+```
+
+The validator independently checks:
+
+```text
+dataset identity
+summary identity
+seven curated NASA sources
+canonical NASA URLs
+GNC domain decomposition
+flight-software architecture
+six onboard sensor classes
+GPS deep-space boundary
+OpNav emergency-return role
+Sun-sensor role
+DSN external-navigation boundary
+RHC command domain
+THC command domain
+manual-controller software path
+propulsion-effector counts
+OMS-E non-generalization
+three operational anchors
+proximity-operations completion
+proximity-operations duration semantics
+Flight Day 4 completion
+41-minute manual test
+6-DOF / 3-DOF evidence
+Flight Day 8 foregone status
+docking-camera evidence boundary
+21 evidence-availability categories
+Phase 2I engine-assignment preservation
+component CSV integrity
+boundary CSV integrity
+summary integrity
+SVG integrity
+cross-phase non-inference guardrails
+```
+
+---
+
+# Independent Validation Result
+
+GNC decomposition:
+
+```text
+navigation:
+PASS
+
+guidance:
+PASS
+
+control:
+PASS
+```
+
+GNC&P flight software:
+
+```text
+navigation-sensor inputs:
+PASS
+
+pilot-control inputs:
+PASS
+
+crew commands:
+PASS
+
+ground commands:
+PASS
+
+manual + automated modes:
+PASS
+
+effector commanding:
+PASS
+```
+
+Onboard navigation architecture:
+
+```text
+sensor classes:
+6
+
+star tracker:
+PASS
+
+IMU:
+PASS
+
+GPS:
+PASS
+
+barometric altimeter:
+PASS
+
+optical navigation camera:
+PASS
+
+Sun sensor:
+PASS
+```
+
+External support:
+
+```text
+DSN tracking:
+PASS
+
+onboard sensor:
+FALSE
+```
+
+Manual control:
+
+```text
+RHC -> attitude:
+PASS
+
+THC -> translation:
+PASS
+
+direct thruster switches:
+FALSE
+
+exact controller history public:
+FALSE
+
+exact thruster history public:
+FALSE
+```
+
+Control-effectors cross-check:
+
+```text
+OMS-E:
+1
+
+auxiliary:
+8
+
+RCS:
+24
+
+correction engine assignment inferred:
+FALSE
+```
+
+Operational anchors:
+
+```text
+Proximity operations:
+COMPLETED
+approximately 70 min
+
+Flight Day 4:
+COMPLETED
+41 min
+6-DOF / 3-DOF PASS
+
+Flight Day 8:
+FOREGONE
+```
+
+Evidence boundaries:
+
+```text
+raw sensor histories:
+NOT AVAILABLE
+
+attitude time series:
+NOT AVAILABLE
+
+navigation-filter state history:
+NOT AVAILABLE
+
+navigation covariance:
+NOT AVAILABLE
+
+guidance-target history:
+NOT AVAILABLE
+
+complete control law:
+NOT AVAILABLE
+
+manual controller time history:
+NOT AVAILABLE
+```
+
+Cross-phase interpretation:
+
+```text
+AROW/OEM state = onboard filter state:
+FALSE
+
+DSN tracking = onboard sensor:
+FALSE
+
+propulsion architecture = exact effector history:
+FALSE
+
+maneuver outcome = guidance command history:
+FALSE
+
+Phase 2I unresolved assignments preserved:
+PASS
+```
+
+Products:
+
+```text
+architecture component CSV rows:
+13
+
+evidence boundary CSV rows:
+21
+
+summary:
+PASS
+
+architecture figure:
+PASS
+
+evidence-boundary figure:
+PASS
+```
+
+Final validation:
+
+```text
+PASS
+```
+
+---
+
+# Phase 2J.1 Permanent Guardrails
+
+## Guardrail 1
+
+```text
+sensor capability
+!=
+as-flown sensor measurement
+```
+
+## Guardrail 2
+
+```text
+AROW/OEM state vector
+!=
+onboard navigation-filter state
+```
+
+## Guardrail 3
+
+```text
+DSN orbit determination
+!=
+onboard sensor measurement
+```
+
+## Guardrail 4
+
+```text
+crew controller command
+!=
+published thruster-firing history
+```
+
+## Guardrail 5
+
+```text
+RCS architecture
+!=
+exact as-flown thruster sequence
+```
+
+## Guardrail 6
+
+```text
+manual piloting demonstration
+!=
+complete control-law disclosure
+```
+
+## Guardrail 7
+
+```text
+6-DOF / 3-DOF mode name
+!=
+reconstructed control algorithm
+```
+
+## Guardrail 8
+
+```text
+planned Flight Day 8 manual demonstration
+!=
+executed demonstration
+```
+
+## Guardrail 9
+
+```text
+trajectory-correction result
+!=
+public guidance-command history
+```
+
+## Guardrail 10
+
+```text
+public GNC architecture
+!=
+flight-software source code
+```
+
+## Guardrail 11
+
+```text
+public sensor descriptions
+!=
+navigation covariance history
+```
+
+## Guardrail 12
+
+```text
+public mission sequence
+!=
+Flight Director GNC rationale tree
+```
+
+## Guardrail 13
+
+```text
+docking-camera engineering measurements
+!=
+confirmed primary closed-loop navigation input
+```
+
+## Guardrail 14
+
+```text
+GNC architecture
+!=
+OTC3 / RTC1 / RTC2 / RTC3 engine assignment
+```
+
+---
+
+# Engineering Significance
+
+Phase 2J.1 gives MissionLab a defensible systems-level GNC model.
+
+The project can now explain:
+
+```text
+what Navigation does
+what Guidance does
+what Control does
+which sensors Orion carries
+which navigation support comes from the ground
+how crew controllers interface with the flight software
+which propulsion effectors are available
+which manual-control demonstrations actually occurred
+which planned demonstration did not occur
+what public evidence remains unavailable
+```
+
+without pretending to possess:
+
+```text
+raw sensor telemetry
+onboard navigation-filter state history
+flight-software internals
+navigation covariance
+guidance-target history
+controller histories
+individual thruster firing logs
+```
+
+This is the required evidence foundation for the next two GNC subphases.
+
+---
+
+# Phase 2J.1 Status
+
+GNC domain model:
+
+```text
+PASS
+```
+
+GNC&P architecture:
+
+```text
+PASS
+```
+
+Onboard navigation architecture:
+
+```text
+PASS
+```
+
+External DSN boundary:
+
+```text
+PASS
+```
+
+Manual-control architecture:
+
+```text
+PASS
+```
+
+Propulsion cross-phase integration:
+
+```text
+PASS
+```
+
+Operational anchors:
+
+```text
+PASS
+```
+
+Evidence-availability model:
+
+```text
+PASS
+```
+
+Cross-phase interpretation boundaries:
+
+```text
+PASS
+```
+
+Independent validation:
+
+```text
+PASS
+```
+
+Phase 2J.1 implementation status:
+
+```text
+COMPLETE
+```
+
+Git workflow closure remains pending until the documented implementation is committed, pushed, and the working tree is verified clean.
