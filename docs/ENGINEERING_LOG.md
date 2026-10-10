@@ -18204,3 +18204,1565 @@ COMPLETE
 
 Git workflow closure remains pending until the documented implementation is committed, pushed, and the working tree is verified clean.
 
+---
+
+# Phase 2H.1 — Operational Communications Event Catalog
+
+## Goal
+
+Phase 2H.1 begins the operational communications reconstruction portion of A2 MissionLab.
+
+Phase 2G reconstructed the physical communications geometry:
+
+```text
+2G.1
+geocentric lunar occultation
+
+2G.2
+topocentric DSN reference-station geometry
+```
+
+Phase 2H moves from:
+
+```text
+what geometry permits
+```
+
+to:
+
+```text
+what NASA publicly reported happened operationally
+```
+
+The first requirement is therefore a communications event catalog that preserves the actual precision and semantics of the public evidence.
+
+The central rule is:
+
+```text
+Do not turn imprecise public reporting
+into artificially precise mission telemetry.
+```
+
+---
+
+# Permanent Reference Dataset
+
+Created:
+
+```text
+data/reference/artemis_ii_communications_event_catalog.json
+```
+
+Dataset identifier:
+
+```text
+phase2h1_artemis_ii_communications_event_catalog
+```
+
+Provenance:
+
+```text
+NASA_AND_NASA_JPL_REPORTED_WITH_MISSIONLAB_APPROXIMATE_ANCHORS
+```
+
+The catalog contains:
+
+```text
+16 events
+```
+
+spanning:
+
+```text
+RF communications
+optical communications
+geometric communications context
+network transition context
+planned events
+reported events
+anomaly events
+recovery events
+```
+
+---
+
+# Why a Precision Taxonomy Is Required
+
+NASA public mission reporting does not use one uniform timing convention.
+
+Different communications events are described using phrases such as:
+
+```text
+6:44 p.m.
+just after noon
+about two hours before
+after translunar injection
+shortly afterward
+moments after Earthrise
+```
+
+These statements do not all support the same timestamp precision.
+
+MissionLab therefore preserves source precision as part of the data model.
+
+---
+
+# Precision Classes
+
+## EXACT
+
+Definition:
+
+```text
+The source provides sufficient explicit
+precision to treat the event timestamp
+as an exact event value.
+```
+
+Phase 2H.1 count:
+
+```text
+0
+```
+
+No public communications event in this first catalog is promoted to this class.
+
+---
+
+## MINUTE_LEVEL
+
+Definition:
+
+```text
+The source identifies a specific minute.
+
+Seconds are stored as zero only as a
+representation convention.
+
+The source does not support second-level
+measurement precision.
+```
+
+Phase 2H.1 count:
+
+```text
+7
+```
+
+Examples include:
+
+```text
+planned Earthset
+reported Earthset
+planned blackout start
+reported blackout start
+planned Earthrise
+reported Earthrise
+planned DSN reacquisition
+```
+
+---
+
+## APPROXIMATE
+
+Definition:
+
+```text
+The source provides approximate timing.
+
+A computational reference anchor may be
+constructed, but the anchor is explicitly
+marked non-exact.
+```
+
+Phase 2H.1 count:
+
+```text
+2
+```
+
+Events:
+
+```text
+O2O 100 GB downlink milestone
+unexpected Flight Day 9 return-link loss
+```
+
+---
+
+## DATE_LEVEL
+
+Definition:
+
+```text
+The source establishes the calendar date
+but does not justify assigning a useful
+time of day.
+```
+
+Phase 2H.1 count:
+
+```text
+3
+```
+
+Events include:
+
+```text
+early Madrid DSN communications evidence
+deep-space emergency communications test
+O2O links to two U.S. ground stations
+```
+
+---
+
+## SEQUENCE_ONLY
+
+Definition:
+
+```text
+The source establishes ordering relative
+to another mission event or phase but does
+not support assigning a timestamp.
+```
+
+Phase 2H.1 count:
+
+```text
+4
+```
+
+Examples:
+
+```text
+NSN leads communications soon after launch
+NSN-to-DSN support transition after TLI
+DSN reacquisition moments after Earthrise
+two-way communications restored shortly
+after the Flight Day 9 return-link loss
+```
+
+These events intentionally receive no invented UTC or MET timestamp.
+
+---
+
+# Event-State Taxonomy
+
+The catalog also separates event timing precision from event semantics.
+
+## PLANNED
+
+NASA-published expected or scheduled event.
+
+## OBSERVED_REPORTED
+
+NASA or NASA/JPL reporting states that the event occurred.
+
+## REPORTED
+
+NASA reports an event or anomaly, but the available public evidence does not justify a more precise observed event timestamp.
+
+## SEQUENCE_REPORTED
+
+NASA establishes event ordering but not a defensible absolute timestamp.
+
+This separation allows MissionLab to preserve distinctions such as:
+
+```text
+planned Earthset
+versus
+reported Earthset
+```
+
+rather than collapsing them into one event.
+
+---
+
+# Catalog Composition
+
+Total events:
+
+```text
+16
+```
+
+Precision counts:
+
+```text
+EXACT:
+0
+
+MINUTE_LEVEL:
+7
+
+APPROXIMATE:
+2
+
+DATE_LEVEL:
+3
+
+SEQUENCE_ONLY:
+4
+```
+
+Domain counts:
+
+```text
+GEOMETRIC_CONTEXT:
+4
+
+OPTICAL:
+2
+
+RF:
+10
+```
+
+---
+
+# Near Space Network Initial Support
+
+Catalog event:
+
+```text
+nsn_leads_initial_orion_communications
+```
+
+Precision:
+
+```text
+SEQUENCE_ONLY
+```
+
+Ordering:
+
+```text
+SOON_AFTER_LAUNCH_BEFORE_DSN_HANDOFF
+```
+
+MissionLab does not assign a fabricated handoff timestamp.
+
+The evidence establishes that the Near Space Network initially led Orion communications and that support later transitioned toward the Deep Space Network.
+
+---
+
+# Early Deep Space Network Evidence
+
+Catalog event:
+
+```text
+dsn_madrid_early_mission_signal_acquisition
+```
+
+Precision:
+
+```text
+DATE_LEVEL
+```
+
+Date:
+
+```text
+2026-04-01
+```
+
+Associated DSN assets:
+
+```text
+DSS-54
+DSS-56
+```
+
+The source demonstrates early Artemis II communications activity from Madrid.
+
+It does not provide a source-supported event time suitable for MissionLab.
+
+---
+
+# NSN-to-DSN Primary Support Transition
+
+Catalog event:
+
+```text
+primary_support_transition_nsn_to_dsn
+```
+
+Precision:
+
+```text
+SEQUENCE_ONLY
+```
+
+Ordering:
+
+```text
+AFTER_TRANSLUNAR_INJECTION
+```
+
+This is intentionally not represented using an exact or approximate handoff timestamp.
+
+The public evidence supports mission sequence but not a defensible transition epoch.
+
+---
+
+# Emergency Communications Test
+
+Catalog event:
+
+```text
+dsn_emergency_communications_test
+```
+
+Final precision classification:
+
+```text
+DATE_LEVEL
+```
+
+Event state:
+
+```text
+OBSERVED_REPORTED
+```
+
+Date:
+
+```text
+2026-04-03
+```
+
+The initial NASA reporting described the test as planned for later in Flight Day 3.
+
+A later NASA update reported that the crew had been testing Orion's emergency communications system in deep space.
+
+Therefore the permanent catalog records:
+
+```text
+the test occurred
+```
+
+but does not invent:
+
+```text
+an execution timestamp
+```
+
+---
+
+# O2O Ground-Station Activity
+
+Catalog event:
+
+```text
+o2o_two_us_ground_station_links
+```
+
+Domain:
+
+```text
+OPTICAL
+```
+
+Precision:
+
+```text
+DATE_LEVEL
+```
+
+Date:
+
+```text
+2026-04-03
+```
+
+NASA reported O2O connecting to two U.S.-based optical ground stations and transmitting:
+
+```text
+high-definition video
+mission data
+```
+
+The event is preserved separately from RF network availability.
+
+---
+
+# O2O 100 GB Milestone
+
+Catalog event:
+
+```text
+o2o_100_gb_downlink_milestone
+```
+
+Precision:
+
+```text
+APPROXIMATE
+```
+
+NASA timing language:
+
+```text
+just after 12 p.m. EDT
+```
+
+MissionLab computational anchor:
+
+```text
+2026-04-04T16:00:00Z
+```
+
+Mission elapsed time at anchor:
+
+```text
+02:17:24:48
+```
+
+The anchor semantics are explicitly:
+
+```text
+REFERENCE_CLOCK_ANCHOR_FOR_JUST_AFTER_12_PM_EDT
+```
+
+and:
+
+```text
+anchor_is_not_exact = TRUE
+```
+
+Therefore:
+
+```text
+16:00 UTC
+```
+
+must never be presented as the observed exact milestone time.
+
+---
+
+# Flight Day 6 Planned Earthset
+
+Catalog event:
+
+```text
+lunar_earthset_planned
+```
+
+UTC:
+
+```text
+2026-04-06T22:45:00Z
+```
+
+Precision:
+
+```text
+MINUTE_LEVEL
+```
+
+State:
+
+```text
+PLANNED
+```
+
+---
+
+# Flight Day 6 Reported Earthset
+
+Catalog event:
+
+```text
+lunar_earthset_reported
+```
+
+UTC:
+
+```text
+2026-04-06T22:41:00Z
+```
+
+MET:
+
+```text
+05:00:05:48
+```
+
+Precision:
+
+```text
+MINUTE_LEVEL
+```
+
+State:
+
+```text
+OBSERVED_REPORTED
+```
+
+Difference from planned Earthset:
+
+```text
+-240 s
+```
+
+or:
+
+```text
+4 minutes earlier
+```
+
+This distinction is retained permanently rather than replacing the plan with the later report.
+
+---
+
+# Planned Lunar Blackout Start
+
+Catalog event:
+
+```text
+lunar_blackout_start_planned
+```
+
+UTC:
+
+```text
+2026-04-06T22:44:00Z
+```
+
+Precision:
+
+```text
+MINUTE_LEVEL
+```
+
+State:
+
+```text
+PLANNED
+```
+
+---
+
+# Reported Lunar Blackout Start
+
+Catalog event:
+
+```text
+lunar_blackout_start_reported
+```
+
+UTC:
+
+```text
+2026-04-06T22:44:00Z
+```
+
+MET:
+
+```text
+05:00:08:48
+```
+
+Precision:
+
+```text
+MINUTE_LEVEL
+```
+
+State:
+
+```text
+OBSERVED_REPORTED
+```
+
+Difference from planned blackout:
+
+```text
+0 s
+```
+
+at the available minute-level precision.
+
+---
+
+# Earthset-to-Blackout Separation
+
+Reported Earthset:
+
+```text
+22:41 UTC
+```
+
+Reported blackout start:
+
+```text
+22:44 UTC
+```
+
+Separation:
+
+```text
+180 s
+3 min
+```
+
+This reinforces the Phase 2G principle that:
+
+```text
+geometric Earth disappearance
+```
+
+and:
+
+```text
+operational RF communications loss
+```
+
+are related but not interchangeable mission events.
+
+---
+
+# Planned Lunar Earthrise
+
+Catalog event:
+
+```text
+lunar_earthrise_planned
+```
+
+UTC:
+
+```text
+2026-04-06T23:25:00Z
+```
+
+Precision:
+
+```text
+MINUTE_LEVEL
+```
+
+State:
+
+```text
+PLANNED
+```
+
+---
+
+# Reported Lunar Earthrise
+
+Catalog event:
+
+```text
+lunar_earthrise_reported
+```
+
+UTC:
+
+```text
+2026-04-06T23:24:00Z
+```
+
+MET:
+
+```text
+05:00:48:48
+```
+
+Precision:
+
+```text
+MINUTE_LEVEL
+```
+
+State:
+
+```text
+OBSERVED_REPORTED
+```
+
+Difference from planned Earthrise:
+
+```text
+-60 s
+```
+
+or:
+
+```text
+1 minute earlier
+```
+
+---
+
+# Planned DSN Reacquisition
+
+Catalog event:
+
+```text
+dsn_reacquisition_planned
+```
+
+UTC:
+
+```text
+2026-04-06T23:25:00Z
+```
+
+MET:
+
+```text
+05:00:49:48
+```
+
+Precision:
+
+```text
+MINUTE_LEVEL
+```
+
+State:
+
+```text
+PLANNED
+```
+
+---
+
+# Live DSN Reacquisition Report
+
+Catalog event:
+
+```text
+dsn_reacquisition_live_report
+```
+
+Precision:
+
+```text
+SEQUENCE_ONLY
+```
+
+Ordering:
+
+```text
+MOMENTS_AFTER_REPORTED_EARTHRISE
+```
+
+NASA's public live reporting establishes that the DSN reacquired Orion after Earthrise.
+
+It does not establish a source-supported exact reacquisition timestamp suitable for MissionLab.
+
+Therefore the live event receives no invented UTC or MET.
+
+---
+
+# Earthrise-to-Public-AOS Separation
+
+Reported Earthrise:
+
+```text
+23:24 UTC
+```
+
+Planned public AOS:
+
+```text
+23:25 UTC
+```
+
+Separation:
+
+```text
+60 s
+1 min
+```
+
+The live reacquisition itself remains:
+
+```text
+SEQUENCE_ONLY
+```
+
+rather than being silently converted to exactly 23:25 UTC.
+
+---
+
+# Phase 2G Cross-Check
+
+The Phase 2H.1 blackout reference was cross-checked against the Phase 2G communications reference.
+
+Phase 2G LOS:
+
+```text
+2026-04-06T22:44:00Z
+```
+
+Phase 2H planned blackout:
+
+```text
+2026-04-06T22:44:00Z
+```
+
+Phase 2H reported blackout:
+
+```text
+2026-04-06T22:44:00Z
+```
+
+Result:
+
+```text
+PASS
+```
+
+Phase 2G AOS reference:
+
+```text
+2026-04-06T23:25:00Z
+```
+
+Phase 2H planned AOS:
+
+```text
+2026-04-06T23:25:00Z
+```
+
+Result:
+
+```text
+PASS
+```
+
+This keeps the communications geometry and operational-event datasets internally consistent without conflating their meanings.
+
+---
+
+# Flight Day 9 Unexpected Return-Link Loss
+
+Catalog event:
+
+```text
+unexpected_return_link_loss
+```
+
+Domain:
+
+```text
+RF
+```
+
+Precision:
+
+```text
+APPROXIMATE
+```
+
+NASA reported the event occurred:
+
+```text
+about two hours before RTC2
+```
+
+Existing MissionLab RTC2 reference:
+
+```text
+2026-04-10T02:53:00Z
+```
+
+MissionLab approximate computational anchor:
+
+```text
+~2026-04-10T00:53:00Z
+```
+
+Approximate MET:
+
+```text
+~08:02:17:48
+```
+
+Anchor-to-RTC2 separation:
+
+```text
+~7200 s
+~2.000 h
+```
+
+The catalog explicitly records:
+
+```text
+anchor_is_not_exact = TRUE
+```
+
+Therefore:
+
+```text
+00:53 UTC
+```
+
+must never be described as NASA's exact observed outage time.
+
+It exists only to place the phrase:
+
+```text
+about two hours before RTC2
+```
+
+approximately on the common MissionLab clock.
+
+---
+
+# Flight Day 9 Communications Recovery
+
+Catalog event:
+
+```text
+two_way_communications_reestablished
+```
+
+Precision:
+
+```text
+SEQUENCE_ONLY
+```
+
+Ordering:
+
+```text
+SHORTLY_AFTER_UNEXPECTED_RETURN_LINK_LOSS_BEFORE_RTC2
+```
+
+NASA's report establishes:
+
+```text
+unexpected return-link LOS
+        ↓
+communications recovery
+        ↓
+RTC2 preparations continue
+```
+
+but does not support assigning an exact recovery timestamp.
+
+MissionLab therefore preserves the sequence without inventing one.
+
+---
+
+# Timeline Builder
+
+Created:
+
+```text
+scripts/analysis/build_communications_event_timeline.py
+```
+
+The builder performs:
+
+```text
+catalog validation
+mission-clock loading
+UTC parsing
+MET conversion
+precision enforcement
+planned-versus-reported comparison
+Phase 2G cross-checking
+RTC2 anchor correlation
+approximate-anchor handling
+domain counting
+precision counting
+state counting
+timeline CSV generation
+summary JSON generation
+deterministic SVG generation
+```
+
+---
+
+# Permanent Timeline Product
+
+Generated:
+
+```text
+data/processed/communications/communications_event_timeline.csv
+```
+
+Rows:
+
+```text
+16
+```
+
+The CSV includes:
+
+```text
+event ID
+event name
+domain
+network
+event state
+precision
+time representation
+source timestamp
+approximate anchor
+date
+MET
+approximate-MET flag
+ordering
+source ID
+provenance
+```
+
+The generated file remains ignored from Git.
+
+---
+
+# Permanent Summary Product
+
+Generated:
+
+```text
+data/processed/communications/communications_event_summary.json
+```
+
+Product identifier:
+
+```text
+phase2h1_communications_event_timeline
+```
+
+The summary includes:
+
+```text
+event counts
+precision counts
+domain counts
+event-state counts
+time-representation counts
+planned-versus-reported differences
+Flight Day 6 separations
+Flight Day 9 approximate anchor
+RTC2 reference
+precision guardrails
+output paths
+```
+
+The generated file remains ignored from Git.
+
+---
+
+# Permanent Figure
+
+Created:
+
+```text
+docs/assets/communications/phase2h1_communications_event_timeline.svg
+```
+
+The figure places only events with defensible timeline positions on the UTC axis.
+
+Marker semantics:
+
+```text
+circle
+reported event
+
+square
+planned event
+
+x
+approximate anchor
+```
+
+Events classified as:
+
+```text
+DATE_LEVEL
+SEQUENCE_ONLY
+```
+
+are intentionally not assigned an artificial position on the time axis.
+
+---
+
+# Independent Validator
+
+Created:
+
+```text
+scripts/validation/validate_communications_event_timeline.py
+```
+
+The validator independently checks:
+
+```text
+dataset identity
+product identity
+16-event catalog
+exact event ID set
+source references
+precision semantics
+minute-level timestamp integrity
+approximate-anchor guardrails
+precision counts
+domain counts
+planned-versus-reported Earthset difference
+planned-versus-reported blackout difference
+planned-versus-reported Earthrise difference
+Earthset-to-blackout separation
+Earthrise-to-planned-AOS separation
+Phase 2G timing consistency
+RTC2 identity
+Flight Day 9 approximate anchor
+emergency communications test precision
+NSN-to-DSN handoff precision
+live DSN reacquisition precision
+mission launch epoch
+summary contents
+16-row CSV
+absence of invented MET values
+timeline SVG
+guardrails
+```
+
+---
+
+# Independent Validation Result
+
+Catalog:
+
+```text
+events:
+16
+```
+
+Precision:
+
+```text
+EXACT:
+0
+
+MINUTE_LEVEL:
+7
+
+APPROXIMATE:
+2
+
+DATE_LEVEL:
+3
+
+SEQUENCE_ONLY:
+4
+```
+
+Flight Day 6:
+
+```text
+reported Earthset - planned:
+-240 s
+
+reported blackout - planned:
+0 s
+
+reported Earthrise - planned:
+-60 s
+
+reported Earthset -> blackout:
+180 s
+
+reported Earthrise -> planned AOS:
+60 s
+```
+
+Flight Day 9:
+
+```text
+RTC2:
+2026-04-10T02:53:00Z
+
+approximate return-link-loss anchor:
+~2026-04-10T00:53:00Z
+
+separation:
+~2.000 h
+```
+
+Precision guardrails:
+
+```text
+NSN-to-DSN handoff:
+SEQUENCE_ONLY
+
+emergency communications test:
+DATE_LEVEL
+
+live DSN reacquisition:
+SEQUENCE_ONLY
+
+return-link-loss anchor:
+APPROXIMATE
+```
+
+Products:
+
+```text
+timeline CSV rows:
+16
+
+summary:
+PASS
+
+timeline figure:
+PASS
+```
+
+Final independent validation:
+
+```text
+PASS
+```
+
+---
+
+# Interpretation Guardrails
+
+## Guardrail 1
+
+```text
+Minute-level timestamp
+!=
+second-level measurement
+```
+
+A stored `:00` second does not imply the event occurred exactly at zero seconds past the minute.
+
+---
+
+## Guardrail 2
+
+```text
+Approximate anchor
+!=
+observed timestamp
+```
+
+This applies especially to:
+
+```text
+O2O 100 GB milestone
+Flight Day 9 return-link loss
+```
+
+---
+
+## Guardrail 3
+
+```text
+DATE_LEVEL
+!=
+known time of day
+```
+
+No artificial time is assigned to date-only evidence.
+
+---
+
+## Guardrail 4
+
+```text
+SEQUENCE_ONLY
+!=
+timestamped event
+```
+
+No artificial timestamp or MET is assigned.
+
+---
+
+## Guardrail 5
+
+```text
+PLANNED
+!=
+OBSERVED_REPORTED
+```
+
+Planned and live-reported mission events remain separate catalog objects.
+
+---
+
+## Guardrail 6
+
+```text
+Earthset / Earthrise
+!=
+RF LOS / AOS
+```
+
+Geometric context remains distinct from communications-system state.
+
+---
+
+## Guardrail 7
+
+```text
+O2O optical activity
+!=
+primary RF network availability
+```
+
+Optical and RF systems remain distinct communications domains.
+
+---
+
+## Guardrail 8
+
+Phase 2H.1 does not infer:
+
+```text
+antenna assignment
+link margin
+signal strength
+network schedule
+receiver lock threshold
+transmitter configuration
+unreported outage duration
+unreported recovery timestamp
+```
+
+---
+
+# Engineering Significance
+
+Phase 2H.1 establishes a provenance-safe operational communications timeline.
+
+The communications model now contains distinct representations for:
+
+```text
+physical geometry
+planned operations
+reported events
+approximate reports
+date-only evidence
+sequence-only evidence
+RF systems
+optical systems
+communications anomalies
+communications recovery
+```
+
+The Flight Day 6 sequence now demonstrates explicitly:
+
+```text
+reported Earthset
+22:41
+        ↓
+reported communications blackout
+22:44
+        ↓
+reported Earthrise
+23:24
+        ↓
+DSN reacquisition
+moments afterward
+```
+
+This provides an operational complement to the Phase 2G geometric reconstruction.
+
+The Flight Day 9 event adds a different communications failure mode:
+
+```text
+not lunar occultation
+not planned
+
+data-rate change
+        ↓
+unexpected return-link LOS
+        ↓
+communications recovery
+        ↓
+RTC2
+```
+
+That gives MissionLab both:
+
+```text
+planned geometry-driven communications loss
+```
+
+and:
+
+```text
+unplanned communications-system anomaly
+```
+
+on the same mission evidence framework.
+
+---
+
+# Phase 2H.1 Status
+
+Source catalog:
+
+```text
+PASS
+```
+
+Precision taxonomy:
+
+```text
+PASS
+```
+
+Event-state taxonomy:
+
+```text
+PASS
+```
+
+Planned-versus-reported separation:
+
+```text
+PASS
+```
+
+Mission-clock integration:
+
+```text
+PASS
+```
+
+Phase 2G cross-check:
+
+```text
+PASS
+```
+
+Flight Day 9 approximate anchoring:
+
+```text
+PASS
+```
+
+Non-invention guardrails:
+
+```text
+PASS
+```
+
+Independent validation:
+
+```text
+PASS
+```
+
+Phase 2H.1 implementation status:
+
+```text
+COMPLETE
+```
+
+Git workflow closure remains pending until the documented implementation is committed, pushed, and the working tree is verified clean.
+
