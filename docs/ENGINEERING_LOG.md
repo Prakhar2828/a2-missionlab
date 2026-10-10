@@ -25970,3 +25970,1649 @@ COMPLETE
 ```
 
 Git workflow closure remains pending until the documented implementation is committed, pushed, and the working tree is verified clean.
+
+---
+
+# Phase 2I.2 — European Service Module Propulsion Architecture and Burn-Selection Evidence
+
+## Goal
+
+Phase 2I.2 reconstructs the Artemis II Orion European Service Module propulsion architecture and establishes the evidence boundary for assigning propulsion hardware to individual trajectory correction burns.
+
+The central engineering question is:
+
+```text
+What propulsion hardware exists?
+What is each propulsion class designed to do?
+What does public mission-planning guidance say?
+What does operational guidance say?
+What propulsion hardware can actually be confirmed as flown?
+```
+
+The permanent evidence rule is:
+
+```text
+architecture capability
+!=
+burn-specific as-flown assignment
+```
+
+---
+
+# Permanent Reference Dataset
+
+Created:
+
+```text
+data/reference/artemis_ii_esm_propulsion_architecture.json
+```
+
+Dataset identifier:
+
+```text
+phase2i2_artemis_ii_esm_propulsion_architecture
+```
+
+Provenance:
+
+```text
+NASA_AND_ESA_REPORTED_WITH_MISSIONLAB_DERIVED_ARCHITECTURE_METRICS
+```
+
+The dataset preserves:
+
+```text
+ESM propulsion architecture
+engine classes
+engine counts
+nominal thrust
+hardware roles
+confirmed major-maneuver assignments
+NASA premission correction-burn planning evidence
+ESA operational correction-selection guidance
+as-flown correction-burn wording
+selection boundaries
+source-layer differences
+derived architecture ratios
+interpretation guardrails
+```
+
+---
+
+# Orion European Service Module Propulsion Architecture
+
+The Artemis II European Service Module propulsion system is represented with:
+
+```text
+3 engine classes
+33 engines total
+```
+
+Composition:
+
+```text
+1 main engine
+8 auxiliary engines
+24 reaction-control engines
+```
+
+Arithmetic:
+
+```text
+1 + 8 + 24
+=
+33
+```
+
+---
+
+# Main Engine
+
+Engine class:
+
+```text
+main_engine_oms_e
+```
+
+Display name:
+
+```text
+Orbital Maneuvering System Engine
+```
+
+Short name:
+
+```text
+OMS-E
+```
+
+Count:
+
+```text
+1
+```
+
+Nominal thrust:
+
+```text
+25,700 N
+25.7 kN
+```
+
+Gimballed:
+
+```text
+TRUE
+```
+
+Primary role:
+
+```text
+MAJOR_IN_SPACE_MANEUVERS
+```
+
+Artemis II role classification:
+
+```text
+LARGE_VELOCITY_CHANGE
+```
+
+The main engine provides the highest per-engine thrust of the three ESM propulsion classes represented here.
+
+---
+
+# Auxiliary Engines
+
+Engine class:
+
+```text
+auxiliary_r4d11
+```
+
+Model:
+
+```text
+R-4D-11
+```
+
+Count:
+
+```text
+8
+```
+
+Nominal thrust per engine:
+
+```text
+490 N
+```
+
+Fixed:
+
+```text
+TRUE
+```
+
+Primary role:
+
+```text
+ORBITAL_AND_TRAJECTORY_CORRECTIONS
+```
+
+Main-engine backup:
+
+```text
+TRUE
+```
+
+The auxiliary engines therefore occupy an intermediate propulsion role between:
+
+```text
+large main-engine maneuvers
+```
+
+and:
+
+```text
+fine reaction-control corrections
+```
+
+---
+
+# Reaction Control System
+
+Engine class:
+
+```text
+reaction_control_system
+```
+
+Count:
+
+```text
+24
+```
+
+Pod count:
+
+```text
+6
+```
+
+Engines per pod:
+
+```text
+4
+```
+
+Arithmetic:
+
+```text
+6 × 4
+=
+24
+```
+
+Nominal thrust per engine:
+
+```text
+220 N
+```
+
+Primary role:
+
+```text
+ATTITUDE_AND_FINE_CONTROL
+```
+
+The RCS architecture supports spacecraft orientation and fine-control activity.
+
+Phase 2I.2 does not treat all 24 engines as simultaneously producing thrust in one direction.
+
+---
+
+# Per-Engine Nominal Thrust Ratios
+
+MissionLab derives architecture-level per-engine comparisons.
+
+## Main vs Auxiliary
+
+```text
+25,700 / 490
+=
+52.448979...
+```
+
+Therefore:
+
+```text
+52.449x
+```
+
+---
+
+# Auxiliary vs RCS
+
+```text
+490 / 220
+=
+2.227272...
+```
+
+Therefore:
+
+```text
+2.227x
+```
+
+---
+
+# Main vs RCS
+
+```text
+25,700 / 220
+=
+116.818181...
+```
+
+Therefore:
+
+```text
+116.818x
+```
+
+---
+
+# Thrust-Ratio Interpretation
+
+These values are:
+
+```text
+PER-ENGINE NOMINAL THRUST RATIOS
+```
+
+They are architecture context only.
+
+They are not:
+
+```text
+spacecraft acceleration ratios
+maneuver delta-v ratios
+burn impulse ratios
+flight-performance ratios
+```
+
+because those would require additional information including:
+
+```text
+actual engine selection
+number of engines fired
+thrust direction
+spacecraft mass
+burn duty cycle
+burn duration
+```
+
+---
+
+# Confirmed As-Flown Main-Engine Example 1 — Perigee Raise
+
+Maneuver:
+
+```text
+PERIGEE_RAISE
+```
+
+Engine:
+
+```text
+MAIN_ENGINE_OMS_E
+```
+
+Assignment status:
+
+```text
+CONFIRMED_AS_FLOWN
+```
+
+Duration:
+
+```text
+43.0 seconds
+```
+
+This is a burn-specific public identification.
+
+Therefore Phase 2I.2 may confidently assign:
+
+```text
+Perigee Raise -> OMS-E
+```
+
+---
+
+# Confirmed As-Flown Main-Engine Example 2 — Translunar Injection
+
+Maneuver:
+
+```text
+TLI
+```
+
+Engine:
+
+```text
+MAIN_ENGINE_OMS_E
+```
+
+Assignment status:
+
+```text
+CONFIRMED_AS_FLOWN
+```
+
+Duration:
+
+```text
+350.0 seconds
+```
+
+This is also burn-specific as-flown evidence.
+
+Therefore:
+
+```text
+TLI -> OMS-E
+```
+
+is confirmed.
+
+---
+
+# Correction-Burn Selection Evidence
+
+Trajectory correction burns have a weaker and more complicated public evidence chain.
+
+Phase 2I.2 preserves two important but different source layers.
+
+---
+
+# NASA Premission Outbound-Correction Plan
+
+Evidence stage:
+
+```text
+PREMISSION_PLAN
+```
+
+Scope:
+
+```text
+THREE_PLANNED_OUTBOUND_TRAJECTORY_CORRECTIONS
+```
+
+NASA premission engine claim:
+
+```text
+OMS_E
+```
+
+Burn-specific as-flown assignment:
+
+```text
+FALSE
+```
+
+This source describes the planned propulsion approach before execution.
+
+It does not establish what actually fired during OTC3.
+
+OTC1 and OTC2 were ultimately cancelled, so their premission engine plan cannot become an executed engine assignment.
+
+---
+
+# ESA Mission Operational Explanation
+
+Evidence stage:
+
+```text
+MISSION_OPERATIONAL_EXPLANATION
+```
+
+Scope:
+
+```text
+TRAJECTORY_CORRECTION_MANEUVERS
+```
+
+ESA operational selection rule:
+
+```text
+larger correction
+→
+AUXILIARY
+
+finer correction
+→
+RCS
+```
+
+Selection mechanism:
+
+```text
+FLIGHT_RULES_AND_REQUIRED_CORRECTION
+```
+
+Burn-specific as-flown assignment:
+
+```text
+FALSE
+```
+
+This provides operational logic for how propulsion classes can be selected.
+
+It does not provide an as-flown propulsion record for OTC3, RTC1, RTC2, or RTC3.
+
+---
+
+# NASA / ESA Source Relationship
+
+Permanent classification:
+
+```text
+SOURCE_SCOPE_OR_PLAN_DIFFERENCE_PRESERVED
+```
+
+NASA premission claim:
+
+```text
+THREE_PLANNED_OUTBOUND_CORRECTIONS_USE_OMS_E
+```
+
+ESA operational claim:
+
+```text
+CORRECTION_ENGINE_SELECTED_FROM_SMALLER_ENGINES
+BY_FLIGHT_RULES_AND_REQUIRED_CORRECTION
+```
+
+Treated as identical:
+
+```text
+FALSE
+```
+
+Forced reconciliation:
+
+```text
+FALSE
+```
+
+Burn-specific resolution available:
+
+```text
+FALSE
+```
+
+MissionLab intentionally preserves both source descriptions.
+
+Possible explanations could include:
+
+```text
+different source scope
+different planning assumptions
+different mission-planning maturity
+different operational description level
+evolving execution planning
+```
+
+but Phase 2I.2 does not claim which explanation is correct because the public evidence does not establish that.
+
+---
+
+# Why the Sources Are Not Silently Reconciled
+
+It would be tempting to choose one of these statements:
+
+```text
+all outbound corrections use OMS-E
+```
+
+or:
+
+```text
+trajectory corrections use auxiliary/RCS
+```
+
+and apply it to the executed mission.
+
+That would overstate the evidence.
+
+Instead MissionLab maintains:
+
+```text
+NASA PREMISSION PLAN
+        ↓
+planned engine concept
+
+ESA OPERATIONAL GUIDANCE
+        ↓
+selection logic / capability
+
+NASA AS-FLOWN REPORT
+        ↓
+actual burn execution wording
+```
+
+Only the last category can resolve a specific executed burn if it names the actual engine class.
+
+---
+
+# OTC3 As-Flown Assignment
+
+Maneuver:
+
+```text
+OTC3
+```
+
+Duration:
+
+```text
+17.5 seconds
+```
+
+Public delta-v retained from Phase 2I.1:
+
+```text
+NONE
+```
+
+As-flown engine class:
+
+```text
+UNRESOLVED
+```
+
+Assignment status:
+
+```text
+UNRESOLVED_AS_FLOWN
+```
+
+The public execution report does not provide enough burn-specific evidence to resolve the engine class.
+
+---
+
+# RTC1 As-Flown Assignment
+
+Maneuver:
+
+```text
+RTC1
+```
+
+Duration:
+
+```text
+15 seconds
+```
+
+Reported delta-v:
+
+```text
+1.6 ft/s
+```
+
+NASA wording:
+
+```text
+IGNITED_ITS_THRUSTERS
+```
+
+Exact engine class:
+
+```text
+UNRESOLVED
+```
+
+The term:
+
+```text
+thrusters
+```
+
+does not prove:
+
+```text
+AUXILIARY
+```
+
+and does not prove:
+
+```text
+RCS
+```
+
+---
+
+# RTC2 As-Flown Assignment
+
+Maneuver:
+
+```text
+RTC2
+```
+
+Duration:
+
+```text
+9 seconds
+```
+
+Reported delta-v:
+
+```text
+5.3 ft/s
+```
+
+NASA wording:
+
+```text
+IGNITED_ITS_THRUSTERS
+```
+
+Exact engine class:
+
+```text
+UNRESOLVED
+```
+
+The larger reported delta-v compared with RTC1 does not establish a different propulsion class.
+
+---
+
+# RTC3 As-Flown Assignment
+
+Maneuver:
+
+```text
+RTC3
+```
+
+Duration:
+
+```text
+8 seconds
+```
+
+Reported delta-v:
+
+```text
+4.2 ft/s
+```
+
+NASA wording:
+
+```text
+IGNITED_ITS_THRUSTERS
+```
+
+Exact engine class:
+
+```text
+UNRESOLVED
+```
+
+Again, neither burn duration nor reported delta-v independently identifies the engine hardware.
+
+---
+
+# Correction Assignment Totals
+
+Correction burns represented:
+
+```text
+4
+```
+
+Resolved engine assignments:
+
+```text
+0
+```
+
+Unresolved engine assignments:
+
+```text
+4
+```
+
+Therefore:
+
+```text
+OTC3    UNRESOLVED
+RTC1    UNRESOLVED
+RTC2    UNRESOLVED
+RTC3    UNRESOLVED
+```
+
+---
+
+# Burn-Selection Public Boundary
+
+Flight rules influence engine selection:
+
+```text
+TRUE
+```
+
+Required correction magnitude influences engine selection:
+
+```text
+TRUE
+```
+
+Larger corrections may use:
+
+```text
+AUXILIARY
+```
+
+Finer corrections may use:
+
+```text
+RCS
+```
+
+Exact public selection threshold:
+
+```text
+NONE
+```
+
+Exact public selection algorithm:
+
+```text
+NONE
+```
+
+Therefore MissionLab cannot derive rules such as:
+
+```text
+if Δv > X ft/s
+use auxiliary
+```
+
+or:
+
+```text
+if burn duration < Y seconds
+use RCS
+```
+
+No public threshold of that kind has been established.
+
+---
+
+# Burn Duration Is Not Engine Identification
+
+Observed durations:
+
+```text
+OTC3    17.5 s
+RTC1    15 s
+RTC2     9 s
+RTC3     8 s
+```
+
+These values alone cannot determine the engine class.
+
+For example:
+
+```text
+short burn
+!=
+RCS proof
+```
+
+and:
+
+```text
+longer correction burn
+!=
+auxiliary proof
+```
+
+because firing duration depends on more than engine class.
+
+---
+
+# Delta-v Is Not Engine Identification
+
+Reported return correction magnitudes:
+
+```text
+RTC1    1.6 ft/s
+RTC2    5.3 ft/s
+RTC3    4.2 ft/s
+```
+
+Those values also cannot independently identify engine class.
+
+The missing information includes:
+
+```text
+vehicle mass
+thrust-vector geometry
+number of engines fired
+duty cycle
+exact commanded impulse
+flight-rule threshold
+```
+
+Therefore:
+
+```text
+delta-v magnitude alone
+!=
+engine assignment
+```
+
+---
+
+# Impulse Calculation Boundary
+
+Phase 2I.2 deliberately does not compute maneuver impulse using:
+
+```text
+nominal thrust × reported burn duration
+```
+
+for OTC3 or RTC1–3.
+
+That calculation would first require knowing:
+
+```text
+which engine class fired
+how many engines fired
+whether firing was continuous
+whether nominal thrust applies to the entire event
+thrust-vector orientation
+```
+
+Those values are unresolved.
+
+Permanent rule:
+
+```text
+unresolved engine assignment
+→
+no burn-specific nominal-thrust impulse estimate
+```
+
+---
+
+# Installed RCS Thrust Boundary
+
+The ESM has:
+
+```text
+24 RCS engines
+```
+
+at:
+
+```text
+220 N each
+```
+
+But MissionLab does not calculate:
+
+```text
+24 × 220 N
+=
+5280 N
+```
+
+and call that usable translational thrust.
+
+The RCS engines are distributed around the service module for different control directions.
+
+Therefore:
+
+```text
+installed engine count × per-engine thrust
+!=
+simultaneous one-direction available thrust
+```
+
+---
+
+# Confirmed vs Unresolved Engine Assignment Model
+
+The architecture now supports two clearly separated categories.
+
+## Confirmed
+
+```text
+Perigee Raise
+→ OMS-E
+
+TLI
+→ OMS-E
+```
+
+## Unresolved
+
+```text
+OTC3
+→ UNKNOWN
+
+RTC1
+→ UNKNOWN
+
+RTC2
+→ UNKNOWN
+
+RTC3
+→ UNKNOWN
+```
+
+This prevents architecture knowledge from being promoted into unsupported as-flown claims.
+
+---
+
+# Permanent Analyzer
+
+Created:
+
+```text
+scripts/analysis/analyze_esm_propulsion_architecture.py
+```
+
+The analyzer verifies:
+
+```text
+engine-class count
+total engine count
+RCS pod arithmetic
+engine identity
+nominal thrust
+OMS-E gimbal property
+R-4D-11 identity
+derived per-engine thrust ratios
+confirmed perigee-raise assignment
+confirmed TLI assignment
+NASA premission evidence layer
+ESA operational evidence layer
+source relationship
+Phase 2I.1 correction consistency
+four unresolved correction assignments
+public engine-selection boundary
+derived-metric guardrails
+```
+
+---
+
+# Processed Architecture Table
+
+Generated:
+
+```text
+data/processed/maneuvers/esm_propulsion_architecture.csv
+```
+
+Rows:
+
+```text
+3
+```
+
+Each row represents one propulsion class:
+
+```text
+OMS-E
+Auxiliary R-4D-11
+RCS
+```
+
+The processed file remains ignored from Git.
+
+---
+
+# Processed Burn-Selection Evidence Table
+
+Generated:
+
+```text
+data/processed/maneuvers/burn_selection_evidence.csv
+```
+
+Rows:
+
+```text
+6
+```
+
+Evidence rows include:
+
+```text
+NASA premission outbound plan
+ESA operational selection explanation
+OTC3 as-flown report
+RTC1 as-flown report
+RTC2 as-flown report
+RTC3 as-flown report
+```
+
+This provides a direct comparison between:
+
+```text
+planning evidence
+operational guidance
+as-flown evidence
+```
+
+The processed file remains ignored from Git.
+
+---
+
+# Processed Summary
+
+Generated:
+
+```text
+data/processed/maneuvers/esm_propulsion_architecture_summary.json
+```
+
+Product identifier:
+
+```text
+phase2i2_esm_propulsion_architecture_analysis
+```
+
+The summary preserves:
+
+```text
+architecture counts
+nominal thrust values
+derived thrust ratios
+confirmed major-maneuver assignments
+correction-selection evidence
+source relationship
+resolved/unresolved assignment counts
+selection boundary
+derived-metric policy
+guardrails
+output paths
+```
+
+The file remains ignored from Git.
+
+---
+
+# Propulsion Architecture Figure
+
+Created:
+
+```text
+docs/assets/maneuvers/phase2i2_esm_propulsion_architecture.svg
+```
+
+The figure presents:
+
+```text
+OMS-E
+1 × 25.7 kN
+
+Auxiliary
+8 × 490 N
+
+RCS
+24 × 220 N
+6 pods × 4
+```
+
+along with the derived per-engine nominal thrust ratios.
+
+The figure explicitly marks the ratios as:
+
+```text
+ARCHITECTURE CONTEXT ONLY
+```
+
+---
+
+# Burn-Selection Evidence Figure
+
+Created:
+
+```text
+docs/assets/maneuvers/phase2i2_burn_selection_evidence.svg
+```
+
+The figure compares:
+
+```text
+NASA premission planning
+ESA operational guidance
+NASA as-flown OTC3
+NASA as-flown RTC1
+NASA as-flown RTC2
+NASA as-flown RTC3
+```
+
+and shows that the exact correction-burn engine assignments remain unresolved.
+
+---
+
+# Independent Validator
+
+Created:
+
+```text
+scripts/validation/validate_esm_propulsion_architecture.py
+```
+
+The validator independently checks:
+
+```text
+reference dataset ID
+summary product ID
+engine-class count
+total engine count
+engine-class identity
+1 / 8 / 24 counts
+RCS 6 × 4 pod arrangement
+OMS-E thrust
+auxiliary thrust
+RCS thrust
+OMS-E gimbal property
+R-4D-11 identity
+derived thrust ratios
+perigee-raise OMS-E assignment
+perigee-raise duration
+TLI OMS-E assignment
+TLI duration
+NASA premission evidence semantics
+ESA operational evidence semantics
+source-layer separation
+unresolved OTC3 assignment
+unresolved RTC1 assignment
+unresolved RTC2 assignment
+unresolved RTC3 assignment
+Phase 2I.1 burn consistency
+public-selection boundary
+derived-metric guardrails
+architecture CSV
+selection CSV
+summary
+architecture SVG
+selection-evidence SVG
+guardrail preservation
+```
+
+---
+
+# Independent Validation Result
+
+Architecture:
+
+```text
+engine classes:
+3
+
+total engines:
+33
+
+main engine:
+1
+
+auxiliary engines:
+8
+
+RCS engines:
+24
+
+RCS arrangement:
+6 pods × 4
+```
+
+Nominal thrust:
+
+```text
+OMS-E:
+25.7 kN
+
+auxiliary:
+490 N each
+
+RCS:
+220 N each
+```
+
+Per-engine ratios:
+
+```text
+main / auxiliary:
+52.449x
+
+auxiliary / RCS:
+2.227x
+
+main / RCS:
+116.818x
+```
+
+Architecture-only interpretation:
+
+```text
+PASS
+```
+
+Confirmed major maneuvers:
+
+```text
+perigee raise -> OMS-E:
+PASS
+
+perigee raise duration -> 43.0 s:
+PASS
+
+TLI -> OMS-E:
+PASS
+
+TLI duration -> 350.0 s:
+PASS
+```
+
+Correction-selection evidence:
+
+```text
+NASA premission OMS-E plan:
+PASS
+
+ESA auxiliary/RCS flight-rule explanation:
+PASS
+
+evidence layers kept separate:
+PASS
+
+forced reconciliation:
+FALSE
+```
+
+As-flown corrections:
+
+```text
+OTC3:
+UNRESOLVED
+
+RTC1:
+UNRESOLVED
+
+RTC2:
+UNRESOLVED
+
+RTC3:
+UNRESOLVED
+```
+
+Totals:
+
+```text
+resolved:
+0
+
+unresolved:
+4
+```
+
+Public selection boundary:
+
+```text
+flight rules influence selection:
+TRUE
+
+required correction influences selection:
+TRUE
+
+exact public thresholds:
+NONE
+
+exact public algorithm:
+NONE
+```
+
+Products:
+
+```text
+architecture CSV rows:
+3
+
+selection-evidence CSV rows:
+6
+
+summary:
+PASS
+
+architecture figure:
+PASS
+
+selection-evidence figure:
+PASS
+```
+
+Final validation:
+
+```text
+PASS
+```
+
+---
+
+# Interpretation Guardrails
+
+## Guardrail 1
+
+```text
+propulsion architecture
+!=
+burn-specific assignment
+```
+
+---
+
+## Guardrail 2
+
+```text
+NASA premission OMS-E plan
+!=
+proof OTC3 used OMS-E
+```
+
+---
+
+## Guardrail 3
+
+```text
+ESA auxiliary/RCS flight-rule guidance
+!=
+proof of a specific executed engine class
+```
+
+---
+
+## Guardrail 4
+
+```text
+"ignited its thrusters"
+!=
+auxiliary-engine identification
+```
+
+---
+
+## Guardrail 5
+
+```text
+"ignited its thrusters"
+!=
+RCS identification
+```
+
+---
+
+## Guardrail 6
+
+```text
+burn duration
+!=
+engine-class identification
+```
+
+---
+
+## Guardrail 7
+
+```text
+delta-v magnitude
+!=
+engine-class identification
+```
+
+---
+
+## Guardrail 8
+
+```text
+nominal thrust ratio
+!=
+spacecraft acceleration ratio
+```
+
+---
+
+## Guardrail 9
+
+```text
+24 × 220 N
+!=
+one-direction usable RCS thrust
+```
+
+---
+
+## Guardrail 10
+
+```text
+nominal thrust × burn duration
+```
+
+is not computed for unresolved correction burns.
+
+---
+
+## Guardrail 11
+
+NASA and ESA source differences are:
+
+```text
+PRESERVED
+```
+
+not hidden.
+
+---
+
+## Guardrail 12
+
+Confirmed OMS-E use for:
+
+```text
+Perigee Raise
+TLI
+```
+
+must not automatically be generalized to:
+
+```text
+OTC3
+RTC1
+RTC2
+RTC3
+```
+
+---
+
+# Engineering Significance
+
+Phase 2I.2 establishes an evidence hierarchy for propulsion reconstruction.
+
+The project can now answer:
+
+```text
+What propulsion classes exist?
+What are their thrust levels?
+What roles are they designed for?
+Which major burns are confirmed OMS-E?
+What public rules influence correction-engine selection?
+Which correction-burn assignments remain unknown?
+```
+
+without falsely claiming information that public reporting does not reveal.
+
+The resulting hierarchy is:
+
+```text
+SYSTEM ARCHITECTURE
+        ↓
+what hardware exists
+
+MISSION PLANNING
+        ↓
+what was expected to be used
+
+OPERATIONAL GUIDANCE
+        ↓
+how propulsion may be selected
+
+AS-FLOWN REPORT
+        ↓
+what can actually be confirmed
+```
+
+This is especially important for a mission-operations reconstruction because operational configuration should not be inferred solely from vehicle capability.
+
+---
+
+# Phase 2I.2 Status
+
+ESM architecture:
+
+```text
+PASS
+```
+
+Engine counts:
+
+```text
+PASS
+```
+
+Nominal thrust values:
+
+```text
+PASS
+```
+
+Confirmed OMS-E major maneuvers:
+
+```text
+PASS
+```
+
+NASA premission evidence:
+
+```text
+PASS
+```
+
+ESA operational evidence:
+
+```text
+PASS
+```
+
+Source-layer separation:
+
+```text
+PASS
+```
+
+As-flown correction assignment boundary:
+
+```text
+PASS
+```
+
+Derived thrust-ratio boundary:
+
+```text
+PASS
+```
+
+Independent validation:
+
+```text
+PASS
+```
+
+Phase 2I.2 implementation status:
+
+```text
+COMPLETE
+```
+
+Git workflow closure remains pending until the documented implementation is committed, pushed, and the working tree is verified clean.
