@@ -2283,3 +2283,682 @@ COMPLETE
 The project now has a validated temporal and geometric mission backbone
 
 capable of supporting later Artemis II engineering subsystems.
+
+# Phase 2 — Entry, Reentry, and Recovery Reconstruction
+
+Phase 2 begins with the separate high-rate trajectory product that was intentionally excluded from the Phase 1 mission-backbone analysis.
+
+The purpose of this phase is to reconstruct the Artemis II atmospheric-entry and recovery portion of the mission using public NASA data while preserving strict distinctions between source data, derived quantities, models, and interpretation.
+
+---
+
+# Phase 2A — High-Rate Entry Trajectory Ingestion
+
+## Goal
+
+Understand, parse, and validate the separate NASA Artemis II high-rate trajectory product:
+
+```text
+2026.04.10 - Post-RTC3 to EI.zip
+```
+
+before performing entry-dynamics analysis.
+
+Unlike the Phase 1 CCSDS OEM trajectory products, this file uses a different trajectory format, coordinate-frame label, unit system, and sampling cadence.
+
+No parser was written until the raw format had first been inspected.
+
+## Source archive
+
+The product is contained inside:
+
+```text
+data/raw/arow/all-artemis-ii-oem-files.zip
+```
+
+Nested archive:
+
+```text
+2026.04.10 - Post-RTC3 to EI.zip
+```
+
+Nested trajectory file:
+
+```text
+2026.04.10 - Post-RTC3 to EI
+```
+
+Observed source-file size:
+
+```text
+98,357 bytes
+```
+
+Observed line count:
+
+```text
+821
+```
+
+The file contains:
+
+```text
+2 header lines
+819 trajectory records
+```
+
+Raw source data remain outside Git under:
+
+```text
+/data/raw/
+```
+
+Generated processed data remain outside Git under:
+
+```text
+/data/processed/
+```
+
+---
+
+## Raw format inspection
+
+The first two source lines are:
+
+```text
+PROP_MAN 11.0
+2026   7857312.084    782298.782       817.975  M50 FT FPS SEC
+```
+
+The source therefore directly declares:
+
+```text
+format identifier: PROP_MAN
+format version:    11.0
+year:              2026
+reference value:   7857312.084
+start offset:      782298.782
+duration:          817.975
+frame label:       M50
+position units:    FT
+velocity units:    FPS
+time units:        SEC
+```
+
+The exact operational meaning of `PROP_MAN 11.0` has not yet been established from authoritative documentation.
+
+The frame label `M50` is preserved exactly as supplied by the source.
+
+No M50-to-EME2000/J2000 transformation is performed in Phase 2A.
+
+---
+
+## Record structure
+
+Inspection showed that each trajectory row contains eight numeric fields:
+
+```text
+time
+x
+y
+z
+vx
+vy
+vz
+auxiliary scalar
+```
+
+The first source state is:
+
+```text
+8639610.866
+12738551.496674
+15710657.850539
+6736409.861772
+-29308.691241
+10998.064485
+17957.749576
+22855.0
+```
+
+The first seven fields are interpreted structurally using the source header as:
+
+```text
+time     seconds
+x y z    feet
+vx vy vz feet per second
+```
+
+The eighth numeric field is currently stored as:
+
+```text
+auxiliary_scalar_raw
+```
+
+Its physical meaning and units remain unresolved.
+
+No mass, weight, propellant, or other physical interpretation is assigned without supporting documentation.
+
+---
+
+## Time reconstruction
+
+The source header contains:
+
+```text
+year = 2026
+
+reference epoch seconds of year =
+7857312.084
+
+start offset =
+782298.782 seconds
+```
+
+The reference value converts to:
+
+```text
+2026-04-01T22:35:12.084000Z
+```
+
+The first trajectory time satisfies:
+
+```text
+7857312.084
++
+782298.782
+=
+8639610.866
+```
+
+exactly.
+
+Therefore the first state occurs at:
+
+```text
+2026-04-10T23:53:30.866000Z
+```
+
+The final state occurs at:
+
+```text
+2026-04-11T00:07:08.841000Z
+```
+
+Observed trajectory duration:
+
+```text
+817.975 seconds
+```
+
+Header duration:
+
+```text
+817.975 seconds
+```
+
+Difference:
+
+```text
+approximately 0 seconds
+```
+
+This exact agreement strongly supports the reconstructed timing relationship.
+
+### Phase 1 epoch distinction
+
+The Phase 1 project mission epoch is:
+
+```text
+2026-04-01T22:35:12Z
+```
+
+The high-rate trajectory header reconstructs a reference epoch of:
+
+```text
+2026-04-01T22:35:12.084Z
+```
+
+The values differ by:
+
+```text
+0.084 seconds
+```
+
+The Phase 2 source value is preserved as supplied.
+
+The two epochs will not be silently forced to match.
+
+---
+
+## Sampling cadence
+
+There are:
+
+```text
+819 states
+818 time intervals
+```
+
+Observed cadence:
+
+```text
+minimum: 0.975 s
+maximum: 1.000 s
+median:  1.000 s
+```
+
+All non-terminal intervals are:
+
+```text
+1.000 seconds
+```
+
+The final interval is:
+
+```text
+0.975 seconds
+```
+
+This final fractional interval allows the record span to terminate exactly at the header duration of:
+
+```text
+817.975 seconds
+```
+
+---
+
+## Parser
+
+Created:
+
+```text
+scripts/ingestion/parse_entry_trajectory.py
+```
+
+The parser:
+
+1. opens the existing NASA AROW archive;
+2. locates the nested high-rate trajectory ZIP;
+3. verifies that it contains one trajectory file;
+4. parses the two-line header;
+5. extracts eight numeric fields from every state record;
+6. preserves the original raw state values;
+7. converts feet to kilometers;
+8. converts feet per second to kilometers per second;
+9. reconstructs UTC timestamps;
+10. derives Earth-center distance;
+11. derives inertial speed;
+12. preserves the unidentified eighth field without assigning physical meaning;
+13. writes processed CSV and metadata products.
+
+Generated files:
+
+```text
+data/processed/entry/entry_trajectory_m50.csv
+data/processed/entry/entry_trajectory_metadata.json
+```
+
+These generated products remain ignored by Git.
+
+---
+
+## Numeric parsing challenge
+
+Near the end of the source file, some adjacent numeric fields appear without whitespace between them.
+
+Example:
+
+```text
+11112442.914583-1294.795611
+```
+
+A parser based only on whitespace splitting could therefore interpret this incorrectly as one token.
+
+The parser instead extracts signed numeric values using a numeric regular expression.
+
+This preserves eight numeric fields per trajectory record even when adjacent signed values are not separated by whitespace.
+
+---
+
+## Derived unit conversions
+
+Exact conversion used:
+
+\[
+1\ \mathrm{ft}
+=
+0.0003048\ \mathrm{km}
+\]
+
+Therefore:
+
+\[
+x_{km}
+=
+x_{ft}(0.0003048)
+\]
+
+and similarly for the remaining position components.
+
+Velocity conversion:
+
+\[
+v_{km/s}
+=
+v_{ft/s}(0.0003048)
+\]
+
+Earth-center distance:
+
+\[
+r
+=
+\sqrt{x^2+y^2+z^2}
+\]
+
+Inertial speed:
+
+\[
+v
+=
+\sqrt{v_x^2+v_y^2+v_z^2}
+\]
+
+These magnitudes are invariant to axis rotation, so they can be examined before the M50 frame is transformed into the Phase 1 EME2000/J2000 frame.
+
+---
+
+## Parsed result
+
+Observed parser output:
+
+```text
+Artemis II High-Rate Entry Trajectory Parser
+--------------------------------
+Source: 2026.04.10 - Post-RTC3 to EI
+Format: PROP_MAN 11.0
+Frame: M50
+Units: FT FPS SEC
+
+Records: 819
+Start:   2026-04-10T23:53:30.866000Z
+Stop:    2026-04-11T00:07:08.841000Z
+Duration: 817.975 s
+
+First Earth-center distance: 6497.852 km
+First inertial speed:        11.000019 km/s
+
+Last Earth-center distance:  6372.054 km
+Last inertial speed:         0.398304 km/s
+
+Auxiliary scalar: UNRESOLVED
+```
+
+The trajectory therefore spans a region where inertial speed falls from approximately:
+
+```text
+11.000 km/s
+```
+
+to:
+
+```text
+0.398 km/s
+```
+
+during approximately:
+
+```text
+13 minutes 38 seconds
+```
+
+This strongly indicates that the source contains substantial atmospheric-entry dynamics.
+
+However, the exact mission-event meaning of the archive name `Post-RTC3 to EI` is not inferred from the filename alone.
+
+---
+
+## Validator
+
+Created:
+
+```text
+scripts/validation/validate_entry_trajectory.py
+```
+
+The validator independently rereads the raw NASA source rather than trusting only the parser output.
+
+It checks:
+
+### Source structure
+
+- `PROP_MAN 11.0` header;
+- `M50 FT FPS SEC` declaration;
+- eight numeric fields per state;
+- finite raw numeric values;
+- exactly 819 records.
+
+### Raw-state preservation
+
+Every source value is compared against the preserved processed representation.
+
+This includes:
+
+```text
+time
+x
+y
+z
+vx
+vy
+vz
+auxiliary scalar
+```
+
+### Timing
+
+The validator checks:
+
+```text
+first time =
+reference epoch + start offset
+```
+
+and:
+
+```text
+last time - first time =
+header duration
+```
+
+It also verifies strict temporal monotonicity.
+
+### Cadence
+
+Expected:
+
+```text
+817 intervals of 1.000 s
+1 final interval of 0.975 s
+```
+
+### Unit conversion
+
+Every raw position and velocity component is independently converted and compared with the processed values.
+
+### Derived magnitudes
+
+Earth-center distance is independently reconstructed from:
+
+```text
+x, y, z
+```
+
+and inertial speed is independently reconstructed from:
+
+```text
+vx, vy, vz
+```
+
+---
+
+## Initial validator failure
+
+The first validator implementation attempted to convert every CSV field to a floating-point value.
+
+The processed CSV also contains a UTC timestamp such as:
+
+```text
+2026-04-10T23:53:30.866000Z
+```
+
+This caused:
+
+```text
+ValueError:
+could not convert string to float:
+'2026-04-10T23:53:30.866000Z'
+```
+
+The validator was corrected to define the numeric columns explicitly and validate `timestamp_utc` separately as an ISO timestamp.
+
+### Learning
+
+Schemas containing mixed numeric and textual fields should validate each field according to its intended data type rather than attempting blanket numeric conversion.
+
+---
+
+## Final validation result
+
+Observed:
+
+```text
+Artemis II Entry Trajectory Validation
+--------------------------------
+Records checked: 819
+
+Start: 2026-04-10T23:53:30.866000Z
+Stop:  2026-04-11T00:07:08.841000Z
+Duration: 817.975 s
+
+Cadence:
+  Regular intervals: 1.000 s
+  Terminal interval: 0.975 s
+
+Earth-center distance:
+  First: 6497.852 km
+  Last:  6372.054 km
+
+Inertial speed:
+  First: 11.000019 km/s
+  Last:  0.398304 km/s
+
+Auxiliary scalar (meaning unresolved):
+  First: 22855.000
+  Last:  20476.300
+
+Maximum raw-to-km position conversion error:
+  0.000000000000e+00 km
+
+Maximum raw-to-km/s velocity conversion error:
+  0.000000000000e+00 km/s
+
+Maximum radius reconstruction error:
+  9.094947017729e-13 km
+
+Maximum speed reconstruction error:
+  1.776356839400e-15 km/s
+
+OK: high-rate entry trajectory structure, timing, units, raw-state preservation, and numeric conversion validated.
+```
+
+The position and velocity conversion comparisons reproduced exactly to stored floating-point precision.
+
+The remaining radius and speed reconstruction differences are approximately:
+
+```text
+1e-13 km
+1e-15 km/s
+```
+
+respectively.
+
+These are consistent with floating-point roundoff.
+
+---
+
+## Auxiliary scalar behavior
+
+Observed:
+
+```text
+first:   22855.0
+last:    20476.3
+minimum: 20476.3
+maximum: 22855.0
+net change: -2378.7
+```
+
+The field changes substantially throughout the entry trajectory.
+
+Its physical interpretation remains:
+
+```text
+UNRESOLVED
+```
+
+No units or physical meaning are assigned in Phase 2A.
+
+---
+
+## Interpretation limits
+
+Phase 2A establishes the file structure and internal consistency of the high-rate trajectory.
+
+It does NOT yet establish:
+
+- geodetic altitude;
+- latitude or longitude;
+- ground track;
+- flight-path angle;
+- atmospheric density;
+- aerodynamic acceleration;
+- lift or drag;
+- bank angle;
+- heating rate;
+- heat-shield temperature;
+- dynamic pressure;
+- g-load;
+- landing location;
+- exact Entry Interface event time;
+- physical meaning of the eighth field;
+- exact operational meaning of `PROP_MAN 11.0`;
+- equivalence between the M50 source coordinates and Phase 1 EME2000 coordinates.
+
+Earth-center distance is not Earth altitude.
+
+The high-rate trajectory will not be directly subtracted from the Phase 1 EME2000 trajectory until the coordinate-frame relationship is explicitly handled.
+
+---
+
+## Phase 2A status
+
+The high-rate entry trajectory has now been:
+
+```text
+inspected
+→ structurally understood
+→ parsed
+→ unit converted
+→ time reconstructed
+→ independently validated
+```
+
+Phase 2A ingestion status:
+
+```text
+COMPLETE
+```
+
+The next engineering problem is to connect this high-rate M50 trajectory to the Phase 1 mission backbone and determine a defensible Earth/entry geometry before calculating atmospheric-entry quantities.
