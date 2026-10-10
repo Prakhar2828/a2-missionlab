@@ -8708,3 +8708,884 @@ COMPLETE
 
 Before using the highest-altitude Mach estimates for aerothermal interpretation, the next step should evaluate rarefaction and continuum validity.
 
+---
+
+# Phase 2E.3 — Body-Scale Rarefaction and Continuum Validity
+
+## Goal
+
+Determine where the Artemis II reconstructed entry transitions from rarefied flow toward body-scale continuum behavior before applying any continuum aerothermal heating correlation.
+
+Previous Phase 2E work established:
+
+```text
+flight-derived trajectory
++
+NRLMSIS atmosphere
+→ modeled density
+→ modeled dynamic pressure
+→ modeled free-stream Mach
+```
+
+Phase 2E.3 adds:
+
+```text
+modeled thermal particle number density
++
+reference collision model
++
+Orion characteristic length
+→ mean free path
+→ body-scale Knudsen number
+→ rarefaction classification
+```
+
+This phase does not calculate heating.
+
+Its purpose is to determine where continuum-based aerodynamic or aerothermal interpretations become increasingly defensible at the whole-vehicle scale.
+
+---
+
+# Provenance
+
+Thermal particle number density originates from the NRLMSIS-based thermal mixture reconstructed in Phase 2E.2.
+
+It is:
+
+```text
+MODEL-DERIVED
+```
+
+The reference hard-sphere mean free path is:
+
+```text
+MODEL
+```
+
+The body-scale Knudsen number and flow-regime classification are:
+
+```text
+MODEL-DERIVED
+```
+
+No Knudsen number in Phase 2E.3 is a NASA-reported flight quantity.
+
+---
+
+# Characteristic Length
+
+Phase 2E.3 uses:
+
+```text
+L = 5.0 m
+```
+
+as the characteristic body scale.
+
+This corresponds to the approximately:
+
+```text
+16.5 ft / 5 m
+```
+
+diameter of the Orion crew module and heat shield reported by NASA.
+
+The resulting Knudsen number is therefore explicitly called:
+
+```text
+BODY-SCALE KNUDSEN NUMBER
+```
+
+rather than a universal or local Knudsen number.
+
+---
+
+# Mean-Free-Path Approximation
+
+The Phase 2E.3 reference mean free path uses the hard-sphere kinetic-theory relation:
+
+\[
+\lambda
+=
+\frac{
+1
+}{
+\sqrt{2}
+\pi
+d^2
+n
+}
+\]
+
+where:
+
+```text
+lambda = reference mean free path
+d      = effective hard-sphere collision diameter
+n      = modeled thermal particle number density
+```
+
+Reference effective collision diameter:
+
+```text
+d = 3.7e-10 m
+```
+
+or:
+
+```text
+3.7 Å
+```
+
+This is an approximate effective collision diameter for air.
+
+The model does not calculate multicomponent collision integrals or species-dependent collision cross sections.
+
+---
+
+# Body-Scale Knudsen Number
+
+The body-scale Knudsen number is:
+
+\[
+Kn
+=
+\frac{\lambda}{L}
+\]
+
+with:
+
+```text
+L = 5.0 m
+```
+
+The Phase 2E.3 descriptive classifications are:
+
+```text
+Kn < 0.01
+CONTINUUM
+
+0.01 <= Kn < 0.1
+SLIP
+
+0.1 <= Kn < 10
+TRANSITION
+
+Kn >= 10
+FREE MOLECULAR
+```
+
+A supplementary:
+
+```text
+Kn = 0.001
+```
+
+threshold is retained as a deeper-continuum reference.
+
+---
+
+# Entry Interface
+
+At:
+
+```text
+2026-04-10T23:53:30.866000Z
+```
+
+with altitude:
+
+```text
+121.919907 km
+```
+
+and modeled free-stream Mach:
+
+```text
+24.384670
+```
+
+the modeled thermal particle number density is:
+
+```text
+3.355249486709e+17 m^-3
+```
+
+The reference mean free path is:
+
+```text
+4.900121659 m
+```
+
+Using the 5 m Orion characteristic length:
+
+```text
+Kn = 0.980024332
+```
+
+Classification:
+
+```text
+TRANSITION
+```
+
+Therefore Entry Interface is not treated as body-scale continuum flow under the Phase 2E.3 model.
+
+---
+
+# Maximum Formal Mach State
+
+Phase 2E.2 identified its maximum formal free-stream Mach at:
+
+```text
+UTC:
+2026-04-10T23:53:50.866000Z
+
+EI elapsed:
+20.000 s
+
+Altitude:
+101.215372 km
+
+Mach:
+38.589162
+```
+
+At this state:
+
+```text
+thermal particle number density:
+1.032751434043e+19 m^-3
+
+reference mean free path:
+0.159197365 m
+
+body-scale Kn:
+0.031839473
+```
+
+Classification:
+
+```text
+SLIP
+```
+
+This substantially improves the interpretation of the Phase 2E.2 result.
+
+The value:
+
+```text
+Mach 38.589162
+```
+
+occurs before the reconstructed entry reaches the nominal body-scale continuum threshold.
+
+It should therefore remain described as:
+
+```text
+MAXIMUM FORMAL FREE-STREAM MACH
+```
+
+rather than as an unrestricted continuum-flow aerodynamic Mach condition.
+
+---
+
+# Rarefaction Threshold Timeline
+
+## Transition to Slip
+
+The descending:
+
+```text
+Kn = 0.1
+```
+
+crossing occurs at:
+
+```text
+UTC:
+2026-04-10T23:53:44.603030Z
+
+EI elapsed:
+13.737030 s
+
+Altitude:
+107.309481 km
+
+Mach:
+36.256967
+
+Mean free path:
+0.500000000 m
+```
+
+This marks the Phase 2E.3 body-scale:
+
+```text
+TRANSITION → SLIP
+```
+
+boundary.
+
+---
+
+## Slip to Continuum
+
+The descending:
+
+```text
+Kn = 0.01
+```
+
+crossing occurs at:
+
+```text
+UTC:
+2026-04-10T23:53:58.784054Z
+
+EI elapsed:
+27.918054 s
+
+Altitude:
+94.025448 km
+
+Mach:
+37.793429
+
+Mean free path:
+0.050000000 m
+```
+
+This marks the nominal Phase 2E.3 body-scale:
+
+```text
+SLIP → CONTINUUM
+```
+
+boundary.
+
+The label is intentionally body-scale only.
+
+It does not establish continuum validity for every local shock-layer or boundary-layer gradient.
+
+---
+
+## Deep-Continuum Reference
+
+The descending:
+
+```text
+Kn = 0.001
+```
+
+crossing occurs at:
+
+```text
+UTC:
+2026-04-10T23:54:16.115112Z
+
+EI elapsed:
+45.249112 s
+
+Altitude:
+80.330899 km
+
+Mach:
+38.262468
+
+Mean free path:
+0.005000000 m
+```
+
+Phase 2E.3 retains this as a:
+
+```text
+DEEP CONTINUUM REFERENCE
+```
+
+rather than a separate fundamental flow-regime boundary.
+
+---
+
+# Selected Rarefaction Evolution
+
+The read-only inspection produced the following representative body-scale behavior:
+
+```text
+120 km
+Kn = 7.906652e-01
+TRANSITION
+
+110 km
+Kn = 1.667895e-01
+TRANSITION
+
+100 km
+Kn = 2.589168e-02
+SLIP
+
+90 km
+Kn = 5.286801e-03
+CONTINUUM
+
+80 km
+Kn = 9.445916e-04
+CONTINUUM
+
+70 km
+Kn = 1.942004e-04
+CONTINUUM
+
+60 km
+Kn = 5.242558e-05
+CONTINUUM
+
+50 km
+Kn = 1.546611e-05
+CONTINUUM
+
+40 km
+Kn = 4.107885e-06
+CONTINUUM
+```
+
+The model therefore shows a rapid reduction in body-scale rarefaction through the upper entry corridor.
+
+---
+
+# Collision-Diameter Sensitivity
+
+The hard-sphere collision diameter is an approximation.
+
+Phase 2E.3 therefore evaluates the nominal continuum boundary using:
+
+```text
+3.5 Å
+3.7 Å
+4.0 Å
+```
+
+collision diameters.
+
+Observed:
+
+```text
+d = 3.5e-10 m
+Kn = 0.01 altitude:
+93.303912 km
+```
+
+```text
+d = 3.7e-10 m
+Kn = 0.01 altitude:
+94.025448 km
+```
+
+```text
+d = 4.0e-10 m
+Kn = 0.01 altitude:
+95.029468 km
+```
+
+Total altitude spread:
+
+```text
+1.725556 km
+```
+
+The nominal body-scale continuum threshold is therefore relatively insensitive to this reasonable collision-diameter range for the intended Phase 2E.3 interpretation.
+
+---
+
+# Dynamic-Pressure Peak Context
+
+Phase 2E.1 reconstructed two nearly equal dominant modeled dynamic-pressure peaks.
+
+Phase 2E.3 evaluates body-scale Knudsen number at both.
+
+## Global modeled dynamic-pressure peak
+
+At:
+
+```text
+2026-04-11T00:00:41.866000Z
+```
+
+with:
+
+```text
+Altitude:
+40.042026 km
+
+Mach:
+8.102942
+
+Dynamic pressure:
+12.808389 kPa
+```
+
+the body-scale Knudsen number is:
+
+```text
+4.132698035660e-06
+```
+
+Classification:
+
+```text
+CONTINUUM
+```
+
+---
+
+## Early modeled dynamic-pressure peak
+
+At:
+
+```text
+2026-04-10T23:55:05.866000Z
+```
+
+with:
+
+```text
+Altitude:
+60.807901 km
+
+Mach:
+30.911621
+
+Dynamic pressure:
+12.798779 kPa
+```
+
+the body-scale Knudsen number is:
+
+```text
+5.717446655451e-05
+```
+
+Classification:
+
+```text
+CONTINUUM
+```
+
+Both dominant modeled dynamic-pressure peaks therefore occur far below:
+
+```text
+Kn = 0.01
+```
+
+and also below:
+
+```text
+Kn = 0.001
+```
+
+under the Phase 2E.3 whole-body model.
+
+This substantially strengthens the continuum interpretation of those dynamic-pressure states compared with the highest-altitude portion of the trajectory.
+
+---
+
+# Permanent Implementation
+
+Created:
+
+```text
+data/reference/artemis_ii_rarefaction_model.json
+```
+
+This file defines:
+
+```text
+characteristic length
+reference collision diameter
+collision-diameter sensitivity range
+body-scale regime thresholds
+model interpretation limits
+source provenance
+```
+
+Created:
+
+```text
+scripts/analysis/build_entry_rarefaction.py
+```
+
+The analysis:
+
+1. loads the Phase 2E.2 Mach reconstruction;
+2. loads the permanent rarefaction-model definition;
+3. calculates reference hard-sphere mean free path;
+4. calculates body-scale Knudsen number;
+5. classifies body-scale rarefaction regime;
+6. reconstructs Kn threshold crossings;
+7. performs collision-diameter sensitivity analysis;
+8. evaluates rarefaction at the maximum formal Mach state;
+9. evaluates rarefaction at the two dominant dynamic-pressure peaks;
+10. creates deterministic documentation figures.
+
+Generated processed products:
+
+```text
+data/processed/entry/entry_rarefaction.csv
+data/processed/entry/entry_rarefaction_summary.json
+```
+
+These remain ignored.
+
+---
+
+# Documentation Figures
+
+Created:
+
+```text
+docs/assets/entry/phase2e_knudsen_history.svg
+docs/assets/entry/phase2e_knudsen_altitude.svg
+```
+
+The first figure shows body-scale Knudsen number through time.
+
+The second shows body-scale Knudsen number as a function of trajectory altitude.
+
+Both use logarithmic Knudsen scaling because the modeled quantity changes across many orders of magnitude.
+
+---
+
+# Independent Validation
+
+Created:
+
+```text
+scripts/validation/validate_entry_rarefaction.py
+```
+
+The validator independently recalculates:
+
+```text
+mean free path
+body-scale Knudsen number
+rarefaction classification
+Kn threshold crossings
+collision-diameter sensitivity
+dynamic-pressure-peak rarefaction
+```
+
+Observed reconstruction errors:
+
+```text
+Maximum mean-free-path error:
+0.000000000000e+00 m
+
+Maximum Knudsen-number error:
+0.000000000000e+00
+```
+
+Result:
+
+```text
+PASS
+```
+
+---
+
+# Threshold Validation
+
+Independently reconstructed:
+
+```text
+Kn = 0.1
+EI + 13.737030 s
+107.309481 km
+```
+
+```text
+Kn = 0.01
+EI + 27.918054 s
+94.025448 km
+```
+
+```text
+Kn = 0.001
+EI + 45.249112 s
+80.330899 km
+```
+
+All lie within the permanent validation windows.
+
+Result:
+
+```text
+PASS
+```
+
+---
+
+# Sensitivity Validation
+
+Observed `Kn=0.01` altitude spread over the permanent collision-diameter sensitivity range:
+
+```text
+1.725556 km
+```
+
+Validation requirement:
+
+```text
+< 2 km
+```
+
+Result:
+
+```text
+PASS
+```
+
+---
+
+# Dynamic-Pressure Peak Validation
+
+The validator requires both dominant dynamic-pressure peaks to satisfy:
+
+```text
+Kn < 0.001
+```
+
+Observed:
+
+```text
+Global q peak:
+4.132698035660e-06
+
+Early q peak:
+5.717446655451e-05
+```
+
+Both pass by a large margin.
+
+Result:
+
+```text
+PASS
+```
+
+---
+
+# Permanent Validation Result
+
+Observed:
+
+```text
+OK: body-scale mean free path,
+Knudsen number,
+rarefaction classification,
+and sensitivity validated.
+```
+
+---
+
+# Interpretation Limits
+
+The Phase 2E.3 result is explicitly a:
+
+```text
+BODY-SCALE RAREFACTION INDICATOR
+```
+
+It is not:
+
+```text
+a local gradient-length Knudsen number
+a shock-layer breakdown parameter
+a boundary-layer Knudsen number
+a DSMC solution
+a Navier-Stokes validity proof
+a chemical-nonequilibrium model
+```
+
+The reference mean free path uses a single effective hard-sphere collision diameter rather than a full multicomponent collision-integral treatment.
+
+The 5 m characteristic length represents the full Orion crew-module / heat-shield body scale.
+
+Local flow structures can have much smaller characteristic gradient lengths and therefore larger local Knudsen numbers.
+
+Consequently:
+
+```text
+Kn < 0.01
+```
+
+in Phase 2E.3 should be interpreted as:
+
+```text
+nominal whole-body continuum behavior
+```
+
+rather than universal local continuum validity.
+
+---
+
+# Phase 2E.3 Status
+
+The reconstructed entry now contains a body-scale rarefaction timeline:
+
+```text
+Entry Interface
+121.9 km
+Kn ≈ 0.98
+TRANSITION
+
+→
+
+Kn = 0.1
+107.3 km
+transition → slip
+
+→
+
+Maximum formal Mach
+101.2 km
+Mach ≈ 38.59
+Kn ≈ 0.0318
+SLIP
+
+→
+
+Kn = 0.01
+94.0 km
+nominal body-scale continuum threshold
+
+→
+
+Kn = 0.001
+80.3 km
+deep-continuum reference
+
+→
+
+Early dynamic-pressure peak
+60.8 km
+Mach ≈ 30.91
+Kn ≈ 5.72e-05
+CONTINUUM
+
+→
+
+Global dynamic-pressure peak
+40.0 km
+Mach ≈ 8.10
+Kn ≈ 4.13e-06
+CONTINUUM
+```
+
+Phase 2E.3 status:
+
+```text
+COMPLETE
+```
+
+The next aerothermal phase may now apply continuum-based correlations only inside an explicitly bounded region rather than blindly extending them to Entry Interface.
+
