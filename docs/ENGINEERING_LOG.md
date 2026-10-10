@@ -15582,3 +15582,1117 @@ Overall Phase 2F status:
 ```text
 COMPLETE
 ```
+
+---
+
+# Phase 2G.1 — Geocentric Lunar Occultation Reconstruction
+
+## Goal
+
+Phase 2G.1 begins the communications-geometry portion of A2 MissionLab.
+
+The objective is to determine whether the existing Artemis II trajectory reconstruction can independently reproduce the lunar-flyby communications blackout reported by NASA using first-principles Earth-Moon-Orion geometry.
+
+The specific question is:
+
+```text
+From the center of Earth, when does the solid Moon
+intersect the direct Earth-to-Orion line of sight?
+```
+
+This phase intentionally solves only the geometric occultation problem.
+
+It does not yet model:
+
+```text
+individual Deep Space Network stations
+ground-station elevation constraints
+antenna masks
+RF link margin
+received signal strength
+network scheduling
+tracking handovers
+communications-system state
+or O2O optical-link availability
+```
+
+---
+
+# NASA Public Communications Reference
+
+NASA publicly reported a planned lunar-flyby communications blackout during Artemis II Flight Day 6.
+
+Reference public timing:
+
+```text
+Loss of signal:
+2026-04-06T22:44:00Z
+
+Acquisition of signal:
+2026-04-06T23:25:00Z
+```
+
+Duration from the public minute-level timestamps:
+
+```text
+2460 s
+41.000 min
+```
+
+NASA described the loss of communications as occurring while Orion passed behind the Moon and the lunar body blocked the radio path to the Deep Space Network.
+
+These NASA timestamps are treated as:
+
+```text
+NASA_REPORTED
+PUBLIC_TIMELINE_MINUTE_LEVEL
+```
+
+They are not treated as exact geometric lunar-limb contact measurements.
+
+---
+
+# Communications Architecture Context
+
+The Phase 2G.1 reference preserves the broader Artemis II communications architecture.
+
+Primary public radio-frequency architecture includes:
+
+```text
+Near Space Network
+Deep Space Network
+```
+
+NASA reports that communications support transitioned toward the Deep Space Network for deep-space portions of the mission.
+
+Artemis II also carried:
+
+```text
+O2O
+Orion Artemis II Optical Communications System
+```
+
+O2O is retained as mission context only in Phase 2G.1.
+
+Optical communications availability requires additional geometry and operational constraints and is therefore not inferred from the RF lunar-occultation calculation.
+
+---
+
+# Permanent Reference
+
+Created:
+
+```text
+data/reference/artemis_ii_communications_events.json
+```
+
+Dataset identifier:
+
+```text
+phase2g1_artemis_ii_communications_reference
+```
+
+Provenance:
+
+```text
+NASA_REPORTED
+```
+
+The reference contains:
+
+```text
+public lunar LOS
+public lunar AOS
+communications architecture
+source provenance
+geometric-model assumptions
+validation thresholds
+interpretation guardrails
+```
+
+---
+
+# Geometry Definition
+
+Let:
+
+```text
+O = Earth-center to Orion position vector
+M = Earth-center to Moon position vector
+```
+
+Both are represented in:
+
+```text
+J2000
+```
+
+The closest point on the Earth-Orion infinite line to the Moon center is found using the projection parameter:
+
+```text
+u = (M dot O) / (O dot O)
+```
+
+The projected point is:
+
+```text
+P = u O
+```
+
+The perpendicular Moon-center distance to the Earth-Orion line is:
+
+```text
+d = |M - P|
+```
+
+The Moon is geometrically between Earth and Orion when:
+
+```text
+0 < u < 1
+```
+
+The adopted lunar-limb clearance is:
+
+```text
+C = d - R_moon
+```
+
+where:
+
+```text
+R_moon = SPICE mean lunar radius
+```
+
+Therefore:
+
+```text
+C > 0
+Earth-Orion LOS clears the spherical Moon
+
+C = 0
+geometric lunar-limb contact
+
+C < 0
+the spherical Moon intersects the Earth-Orion LOS
+```
+
+The occultation state is therefore:
+
+```text
+0 < u < 1
+AND
+C < 0
+```
+
+---
+
+# Lunar Radius
+
+The analyzer obtains the Moon radii directly from SPICE.
+
+Mean adopted radius:
+
+```text
+1737.400000 km
+```
+
+No locally varying lunar topography is modeled.
+
+This means the derived contacts represent crossings of a:
+
+```text
+spherical mean-radius lunar limb
+```
+
+rather than the true local terrain limb.
+
+---
+
+# Orion Trajectory Source
+
+Phase 2G.1 uses:
+
+```text
+data/processed/trajectory/primary_trajectory.csv
+```
+
+Trajectory states:
+
+```text
+3262
+```
+
+Mission interval:
+
+```text
+2026-04-02T01:57:37.084Z
+through
+2026-04-10T23:53:16.723Z
+```
+
+Trajectory cadence:
+
+```text
+minimum:
+60.000 s
+
+median:
+240.000 s
+
+maximum:
+296.550 s
+```
+
+The primary trajectory originates from NASA flight-derived Artemis II public OEM products processed through the Phase 1 mission-backbone pipeline.
+
+---
+
+# Orion Interpolation
+
+The public OEM states are not sampled finely enough to define occultation contact times directly.
+
+The permanent implementation therefore uses:
+
+```text
+piecewise cubic Hermite interpolation
+```
+
+using both:
+
+```text
+position
+and
+velocity
+```
+
+from adjacent public OEM states.
+
+For interpolation parameter:
+
+```text
+s = (t - t0) / (t1 - t0)
+```
+
+the position is reconstructed using the standard cubic Hermite basis:
+
+```text
+r(t) =
+h00 r0
++
+h10 Delta_t v0
++
+h01 r1
++
+h11 Delta_t v1
+```
+
+with:
+
+```text
+h00 = 2s^3 - 3s^2 + 1
+
+h10 = s^3 - 2s^2 + s
+
+h01 = -2s^3 + 3s^2
+
+h11 = s^3 - s^2
+```
+
+This is more physically appropriate than linearly interpolating the already-derived lunar-limb-clearance scalar.
+
+---
+
+# Moon Ephemeris
+
+The Moon state is evaluated directly at each requested calculation time using:
+
+```text
+SPICE DE440S
+```
+
+with:
+
+```text
+target:
+MOON
+
+observer:
+EARTH
+
+frame:
+J2000
+
+aberration correction:
+NONE
+```
+
+This preserves the Phase 1 Earth/Moon geometry convention.
+
+---
+
+# Aberration and Light-Time Boundary
+
+The occultation calculation uses:
+
+```text
+aberration correction = NONE
+```
+
+The geometry is therefore a simultaneous geometric state comparison.
+
+It does not attempt to reproduce a complete radio-signal light-time solution.
+
+One-way Earth-Orion light time is calculated only as useful mission context:
+
+```text
+Earth-Orion range / speed of light
+```
+
+and is not applied as an aberration correction to the occultation geometry.
+
+---
+
+# Exploratory Inspection
+
+Before permanent implementation, Phase 2G.1 ran a read-only inspection using sampled trajectory geometry and linear interpolation of the derived lunar-limb-clearance scalar.
+
+Exploratory contacts:
+
+```text
+Ingress:
+2026-04-06T22:41:44.101648Z
+
+Egress:
+2026-04-06T23:21:34.918123Z
+
+Duration:
+2390.816 s
+39.847 min
+```
+
+This was already broadly consistent with NASA's approximately 41-minute public communications window.
+
+---
+
+# Permanent Refined Contacts
+
+The permanent implementation replaces scalar interpolation with:
+
+```text
+cubic-Hermite Orion interpolation
++
+direct SPICE Moon evaluation
++
+iterative root refinement
+```
+
+Refined Earth-center geometric ingress:
+
+```text
+2026-04-06T22:41:43.652252Z
+```
+
+Refined Earth-center geometric egress:
+
+```text
+2026-04-06T23:21:35.489288Z
+```
+
+Derived duration:
+
+```text
+2391.837 s
+39.864 min
+```
+
+The permanent result differs only slightly from the exploratory calculation.
+
+Approximate exploratory-to-permanent shifts:
+
+```text
+Ingress:
+about -0.45 s
+
+Egress:
+about +0.57 s
+
+Duration:
+about +1.02 s
+```
+
+This demonstrates that the initial sampled reconstruction was already stable while the permanent implementation provides a more defensible interpolation method.
+
+---
+
+# NASA Comparison
+
+NASA public LOS:
+
+```text
+2026-04-06T22:44:00Z
+```
+
+MissionLab Earth-center geometric ingress:
+
+```text
+2026-04-06T22:41:43.652252Z
+```
+
+Difference:
+
+```text
+-136.348 s
+```
+
+The MissionLab Earth-center limb crossing occurs approximately:
+
+```text
+2.272 min earlier
+```
+
+than the NASA public LOS time.
+
+NASA public AOS:
+
+```text
+2026-04-06T23:25:00Z
+```
+
+MissionLab Earth-center geometric egress:
+
+```text
+2026-04-06T23:21:35.489288Z
+```
+
+Difference:
+
+```text
+-204.511 s
+```
+
+The MissionLab Earth-center limb crossing occurs approximately:
+
+```text
+3.409 min earlier
+```
+
+than the NASA public AOS time.
+
+---
+
+# Duration Comparison
+
+MissionLab geocentric duration:
+
+```text
+2391.837 s
+39.864 min
+```
+
+NASA public duration:
+
+```text
+2460.000 s
+41.000 min
+```
+
+Difference:
+
+```text
+-68.163 s
+```
+
+or approximately:
+
+```text
+-1.136 min
+```
+
+The derived geocentric occultation therefore reproduces the reported approximate communications-blackout duration to within a little over one minute.
+
+---
+
+# Window Overlap
+
+The derived geometric interval and NASA public communications interval overlap by:
+
+```text
+0.868716
+```
+
+or:
+
+```text
+86.8716%
+```
+
+under the interval-over-union comparison used by Phase 2G.1.
+
+This provides a quantitative consistency measure while preserving the distinction between:
+
+```text
+Earth-center geometry
+```
+
+and:
+
+```text
+operational network contact timing
+```
+
+---
+
+# Why the Contacts Should Not Match Exactly
+
+An exact match is neither required nor expected.
+
+MissionLab Phase 2G.1 uses:
+
+```text
+observer:
+Earth center
+```
+
+Actual Deep Space Network support is topocentric.
+
+The DSN consists of geographically separated ground complexes, so a real antenna's line of sight originates from:
+
+```text
+Earth surface
+```
+
+rather than:
+
+```text
+Earth center
+```
+
+The contact geometry can therefore shift by minutes near lunar occultation.
+
+Additional operational effects can include:
+
+```text
+station selection
+ground-station horizon
+antenna tracking constraints
+link margin
+network scheduling
+handover criteria
+communications-system configuration
+```
+
+None of these are part of the Phase 2G.1 calculation.
+
+---
+
+# Deepest Geometric Occultation
+
+The analyzer minimizes lunar-limb clearance within the refined occultation interval using a continuous scalar search.
+
+Derived deepest geometric occultation:
+
+```text
+UTC:
+2026-04-06T23:01:39.567083Z
+```
+
+Lunar-limb clearance:
+
+```text
+-1156.057 km
+```
+
+A negative value means the Earth-Orion LOS penetrates the adopted spherical lunar disk by that amount in projected radial clearance.
+
+Earth-Orion range:
+
+```text
+413143.655 km
+```
+
+One-way light time:
+
+```text
+1.378099 s
+```
+
+This time is not identical to pericynthion because:
+
+```text
+minimum Orion-Moon distance
+```
+
+and:
+
+```text
+minimum projected Moon-to-Earth-Orion-LOS distance
+```
+
+are different geometric optimization problems.
+
+---
+
+# Pericynthion Context
+
+Refined MissionLab pericynthion:
+
+```text
+2026-04-06T23:00:46.177998Z
+```
+
+Phase 2G.1 independently verifies:
+
+```text
+inside geocentric occultation:
+TRUE
+
+geometrically occulted:
+TRUE
+```
+
+This is an important mission-level consistency result.
+
+The project's independently reconstructed closest lunar approach occurs inside the independently reconstructed lunar communications blackout geometry.
+
+---
+
+# Mission-Operations Interpretation
+
+The geometry produces a direct mission-operations relationship:
+
+```text
+lunar flyby
++
+Earth-Moon-Orion alignment
+→
+lunar occultation
+→
+loss of direct Earth-Orion RF line of sight
+```
+
+This is fundamentally different from an arbitrary communications outage.
+
+The communication interruption is geometrically driven by the mission trajectory.
+
+That relationship is especially relevant to mission-control interpretation because the blackout can be placed directly on the common mission clock alongside:
+
+```text
+lunar SOI
+pericynthion
+trajectory state
+maneuvers
+science observations
+and later communications events
+```
+
+---
+
+# Sampled Communications Geometry Product
+
+Generated:
+
+```text
+data/processed/communications/lunar_occultation_geometry.csv
+```
+
+Rows:
+
+```text
+3262
+```
+
+Each trajectory sample includes:
+
+```text
+UTC
+MET
+Earth-Orion range
+Earth-Moon range
+one-way light time
+projection fraction
+Moon-between-Earth-and-Orion flag
+Moon-center distance to LOS
+lunar-limb clearance
+Earth-center Moon-Orion angular separation
+geometric occultation flag
+```
+
+This product remains ignored from Git because it is reproducibly generated.
+
+---
+
+# Processed Summary
+
+Generated:
+
+```text
+data/processed/communications/lunar_occultation_summary.json
+```
+
+Product identifier:
+
+```text
+phase2g1_geocentric_lunar_occultation
+```
+
+Provenance:
+
+```text
+MISSIONLAB_DERIVED_GEOMETRY_WITH_NASA_REPORTED_VALIDATION_REFERENCE
+```
+
+The processed summary remains ignored from Git.
+
+---
+
+# Permanent Figure
+
+Created:
+
+```text
+docs/assets/communications/phase2g_lunar_occultation_geometry.svg
+```
+
+The figure shows:
+
+```text
+Earth-center lunar-limb clearance
+geometric zero-clearance boundary
+MissionLab ingress
+MissionLab egress
+NASA public LOS
+NASA public AOS
+```
+
+The figure therefore makes the distinction between the geometric reconstruction and NASA's operational communications timing visually explicit.
+
+---
+
+# Permanent Analyzer
+
+Created:
+
+```text
+scripts/analysis/build_lunar_occultation_geometry.py
+```
+
+The analyzer performs:
+
+```text
+trajectory ingestion
+SPICE Moon-state evaluation
+Hermite Orion interpolation
+Earth-Orion LOS construction
+Moon projection onto LOS
+lunar-limb-clearance calculation
+sampled occultation classification
+contact bracketing
+sub-sample root refinement
+deepest-occultation search
+pericynthion correlation
+NASA-window comparison
+light-time context
+deterministic figure generation
+processed-product generation
+```
+
+---
+
+# Independent Validator
+
+Created:
+
+```text
+scripts/validation/validate_lunar_occultation_geometry.py
+```
+
+The validator independently reconstructs the geometry rather than trusting the analyzer output.
+
+It verifies:
+
+```text
+3262 trajectory states
+NASA LOS reference
+NASA AOS reference
+Earth-center model definition
+SPICE lunar radius
+two occultation contact brackets
+independently refined ingress
+independently refined egress
+occultation duration
+NASA timing consistency
+window-overlap threshold
+pericynthion containment
+pericynthion occultation state
+processed summary
+3262-row communications geometry CSV
+SVG existence and validity
+interpretation guardrails
+```
+
+---
+
+# Validation Thresholds
+
+Phase 2G.1 intentionally uses broad operational-consistency thresholds because the validation target is minute-level NASA communications reporting, while the model is Earth-centered geometry.
+
+Maximum absolute contact offset:
+
+```text
+300 s
+```
+
+Maximum duration difference:
+
+```text
+180 s
+```
+
+Minimum interval overlap:
+
+```text
+0.8
+```
+
+Expected geometric duration range:
+
+```text
+35 to 45 min
+```
+
+Pericynthion must lie inside the occultation interval:
+
+```text
+TRUE
+```
+
+Observed values satisfy all thresholds.
+
+---
+
+# Independent Validation Result
+
+Independent ingress:
+
+```text
+2026-04-06T22:41:43.652252Z
+```
+
+Independent egress:
+
+```text
+2026-04-06T23:21:35.489288Z
+```
+
+Duration:
+
+```text
+2391.837 s
+39.864 min
+```
+
+NASA comparison:
+
+```text
+Ingress offset:
+-136.348 s
+
+Egress offset:
+-204.511 s
+
+Duration difference:
+-68.163 s
+
+Window overlap:
+0.868716
+```
+
+Pericynthion:
+
+```text
+inside derived occultation:
+TRUE
+
+geometrically occulted:
+TRUE
+```
+
+Generated products:
+
+```text
+sampled geometry:
+PASS
+
+summary:
+PASS
+
+figure:
+PASS
+```
+
+Final independent validator result:
+
+```text
+PASS
+```
+
+---
+
+# Interpretation Guardrails
+
+Phase 2G.1 permanently preserves the following distinctions.
+
+## Guardrail 1
+
+```text
+Geometric lunar occultation
+!=
+actual Deep Space Network link availability
+```
+
+## Guardrail 2
+
+```text
+Earth-center line-of-sight geometry
+!=
+topocentric geometry from an individual DSN antenna
+```
+
+## Guardrail 3
+
+```text
+NASA public LOS/AOS minute-level timestamps
+!=
+exact lunar-limb contact measurements
+```
+
+## Guardrail 4
+
+```text
+RF lunar occultation geometry
+!=
+O2O optical-link availability
+```
+
+## Guardrail 5
+
+Geometric occultation alone does not provide:
+
+```text
+received signal strength
+antenna gain
+link margin
+network schedule
+tracking state
+communications performance
+```
+
+---
+
+# Engineering Significance
+
+Phase 2G.1 provides the first MissionLab communications reconstruction tied directly to independently reconstructed flight geometry.
+
+The chain is now:
+
+```text
+NASA flight-derived trajectory
+        ↓
+MissionLab Earth-Moon-Orion geometry
+        ↓
+Earth-Orion line of sight
+        ↓
+lunar-limb intersection
+        ↓
+derived lunar occultation window
+        ↓
+comparison with NASA-reported communications blackout
+```
+
+The agreement is strong enough to demonstrate that the public trajectory products contain sufficient information to reproduce the dominant geometric cause of the reported lunar-flyby communications blackout.
+
+At the same time, the remaining several-minute timing difference demonstrates why:
+
+```text
+geometric visibility
+```
+
+must not be automatically relabeled as:
+
+```text
+operational communications availability
+```
+
+That distinction becomes the foundation for the next communications phases.
+
+---
+
+# Phase 2G.1 Status
+
+Reference evidence:
+
+```text
+PASS
+```
+
+Geometric model:
+
+```text
+PASS
+```
+
+Hermite trajectory interpolation:
+
+```text
+PASS
+```
+
+SPICE Moon geometry:
+
+```text
+PASS
+```
+
+Ingress refinement:
+
+```text
+PASS
+```
+
+Egress refinement:
+
+```text
+PASS
+```
+
+NASA public-window consistency:
+
+```text
+PASS
+```
+
+Pericynthion containment:
+
+```text
+PASS
+```
+
+Independent validation:
+
+```text
+PASS
+```
+
+Interpretation guardrails:
+
+```text
+PASS
+```
+
+Phase 2G.1 implementation status:
+
+```text
+COMPLETE
+```
+
+Git workflow closure remains pending until the documented implementation is committed, pushed, and the working tree is verified clean.
