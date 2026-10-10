@@ -9589,3 +9589,1331 @@ COMPLETE
 
 The next aerothermal phase may now apply continuum-based correlations only inside an explicitly bounded region rather than blindly extending them to Entry Interface.
 
+---
+
+# Phase 2E.4 — Sutton–Graves Stagnation-Point Convective Heating
+
+## Goal
+
+Add a bounded low-fidelity aerothermal reconstruction to the Artemis II entry analysis after establishing:
+
+```text
+trajectory
+→ Earth-fixed geometry
+→ atmospheric state
+→ dynamic pressure
+→ free-stream Mach
+→ body-scale rarefaction
+```
+
+Phase 2E.4 introduces a stagnation-point convective-heating engineering correlation while explicitly restricting primary interpretation to the portion of the trajectory where:
+
+```text
+body-scale Kn < 0.01
+AND
+Mach >= 5
+```
+
+The stronger continuum sensitivity region is:
+
+```text
+body-scale Kn < 0.001
+AND
+Mach >= 5
+```
+
+The full-trajectory mathematical integral is retained only as a diagnostic quantity.
+
+---
+
+# Provenance
+
+Input trajectory velocity:
+
+```text
+DERIVED_FROM_NASA_FLIGHT_DERIVED_EPHEMERIS
+```
+
+Atmospheric density:
+
+```text
+MODEL
+NRLMSIS 2.0
+```
+
+Sutton–Graves heat flux:
+
+```text
+MODEL_DERIVED
+```
+
+Integrated convective heat load:
+
+```text
+MODEL_DERIVED
+```
+
+The resulting heating history is not NASA flight telemetry and is not an Artemis II measured TPS heat-flux history.
+
+---
+
+# Permanent Model Definition
+
+Created:
+
+```text
+data/reference/artemis_ii_convective_heating_model.json
+```
+
+The model definition permanently records:
+
+```text
+Sutton–Graves Earth constant
+Orion reference nose radius
+density provenance
+velocity assumption
+continuum/hypersonic domain gates
+nose-radius sensitivity definition
+source provenance
+interpretation limits
+```
+
+No Artemis II-specific calibration multiplier is applied.
+
+---
+
+# Sutton–Graves Correlation
+
+The permanent low-fidelity convective-heating model uses:
+
+\[
+\dot q
+=
+k
+\sqrt{
+\frac{\rho_\infty}{R_n}
+}
+V_\infty^3
+\]
+
+where:
+
+```text
+q_dot = stagnation-point convective heat flux
+k     = Earth Sutton–Graves constant
+rho   = modeled free-stream atmospheric density
+Rn    = reference nose radius
+V     = free-stream velocity approximation
+```
+
+Permanent Earth constant:
+
+```text
+k = 1.74153e-4
+```
+
+with the SI implementation used in the model producing:
+
+```text
+W/m²
+```
+
+from:
+
+```text
+rho in kg/m³
+Rn in m
+V in m/s
+```
+
+The correlation is treated as a:
+
+```text
+cold-wall engineering stagnation-point correlation
+```
+
+rather than a high-fidelity Orion aerothermal solution.
+
+---
+
+# Orion Reference Geometry
+
+Phase 2E.4 uses:
+
+```text
+Rn = 6.035 m
+```
+
+as the reference nose radius.
+
+The value comes from NASA Orion EFT-1 heritage/reference geometry.
+
+The project therefore labels it:
+
+```text
+ORION_EFT1_HERITAGE_REFERENCE
+```
+
+and explicitly does not claim:
+
+```text
+6.035 m = Artemis II as-flown effective stagnation radius
+```
+
+until an Artemis II-specific authoritative geometry source is identified.
+
+---
+
+# Velocity Assumption
+
+The Sutton–Graves relation uses the same free-stream velocity approximation established earlier in Phase 2E:
+
+```text
+V_free-stream ≈ V_Earth-relative
+```
+
+No local atmospheric wind model is applied.
+
+Therefore:
+
+```text
+Earth-relative trajectory velocity
+```
+
+is used as the velocity input to the heating correlation.
+
+---
+
+# Density Input
+
+Atmospheric density is:
+
+```text
+NRLMSIS 2.0 modeled total mass density
+```
+
+from Phase 2E.1.
+
+It is not measured atmospheric density along the Artemis II trajectory.
+
+---
+
+# Entry Interface
+
+At Entry Interface:
+
+```text
+UTC:
+2026-04-10T23:53:30.866000Z
+
+Altitude:
+121.919907 km
+
+Mach:
+24.384670
+
+Body-scale Kn:
+0.980024332
+
+Density:
+1.453686149233e-08 kg/m³
+
+Velocity:
+10.632214 km/s
+```
+
+The formal Sutton–Graves result is:
+
+```text
+1.027304 W/cm²
+```
+
+However:
+
+```text
+Kn ≈ 0.98
+```
+
+places Entry Interface in the Phase 2E.3 body-scale transition regime.
+
+Therefore this value is retained only as a:
+
+```text
+FORMAL DIAGNOSTIC RESULT
+```
+
+and is not continuum-qualified.
+
+---
+
+# Maximum Formal Mach State
+
+Phase 2E.2 identified maximum formal free-stream Mach at:
+
+```text
+UTC:
+2026-04-10T23:53:50.866000Z
+
+EI elapsed:
+20.000 s
+
+Altitude:
+101.215372 km
+
+Mach:
+38.589162
+
+Body-scale Kn:
+0.031839473
+```
+
+Formal Sutton–Graves heat flux:
+
+```text
+5.951922 W/cm²
+```
+
+The state remains in the Phase 2E.3:
+
+```text
+SLIP
+```
+
+regime.
+
+It is therefore not used as a primary continuum-qualified heating state.
+
+---
+
+# Continuum Gates
+
+## Nominal body-scale continuum boundary
+
+The descending:
+
+```text
+Kn = 0.01
+```
+
+boundary occurs at:
+
+```text
+UTC:
+2026-04-10T23:53:58.784054Z
+
+EI elapsed:
+27.918054 s
+
+Altitude:
+94.025448 km
+
+Mach:
+37.793429
+```
+
+Interpolated Sutton–Graves heat flux:
+
+```text
+10.740910 W/cm²
+```
+
+This boundary defines the start of the permanent:
+
+```text
+PRIMARY HEATING DOMAIN
+```
+
+subject also to:
+
+```text
+Mach >= 5
+```
+
+---
+
+## Stronger continuum boundary
+
+The descending:
+
+```text
+Kn = 0.001
+```
+
+boundary occurs at:
+
+```text
+UTC:
+2026-04-10T23:54:16.115112Z
+
+EI elapsed:
+45.249112 s
+
+Altitude:
+80.330899 km
+
+Mach:
+38.262468
+```
+
+Interpolated Sutton–Graves heat flux:
+
+```text
+34.071681 W/cm²
+```
+
+This defines the start of the:
+
+```text
+STRONGER CONTINUUM SENSITIVITY DOMAIN
+```
+
+subject again to:
+
+```text
+Mach >= 5
+```
+
+---
+
+# Qualified Sutton–Graves Peak
+
+The maximum formal Sutton–Graves heat flux occurs at:
+
+```text
+UTC:
+2026-04-10T23:54:55.866000Z
+
+EI elapsed:
+85.000 s
+
+Altitude:
+61.878469 km
+
+Earth-relative speed:
+9.984103 km/s
+
+Mach:
+32.285653
+
+Body-scale Kn:
+6.547686230258e-05
+
+NRLMSIS density:
+2.414985356154e-04 kg/m³
+```
+
+Sutton–Graves heat flux:
+
+```text
+109.641953 W/cm²
+```
+
+The same state is simultaneously:
+
+```text
+global formal SG peak
+primary-domain SG peak
+stronger-continuum-domain SG peak
+```
+
+because:
+
+```text
+Kn << 0.001
+```
+
+and:
+
+```text
+Mach >> 5
+```
+
+at the peak.
+
+Therefore the reconstructed peak itself does not depend on extrapolating the continuum correlation into the high-altitude rarefied-flow portion of the trajectory.
+
+---
+
+# Heating Peak Versus Dynamic-Pressure Peaks
+
+Phase 2E.1 identified two nearly equal dominant dynamic-pressure peaks.
+
+Phase 2E.4 shows that their aerothermal conditions are dramatically different.
+
+## Early dynamic-pressure peak
+
+At:
+
+```text
+UTC:
+2026-04-10T23:55:05.866000Z
+
+EI elapsed:
+95.000 s
+
+Altitude:
+60.807901 km
+
+Mach:
+30.911621
+
+Dynamic pressure:
+12.798779 kPa
+```
+
+the Sutton–Graves heat flux is:
+
+```text
+104.975953 W/cm²
+```
+
+This occurs:
+
+```text
++10.000 s
+```
+
+after the Sutton–Graves heating peak.
+
+The early dynamic-pressure maximum therefore occurs near the main convective-heating pulse.
+
+---
+
+## Global dynamic-pressure peak
+
+At:
+
+```text
+UTC:
+2026-04-11T00:00:41.866000Z
+
+EI elapsed:
+431.000 s
+
+Altitude:
+40.042026 km
+
+Mach:
+8.102942
+
+Dynamic pressure:
+12.808389 kPa
+```
+
+the Sutton–Graves heat flux is only:
+
+```text
+7.596440 W/cm²
+```
+
+This occurs:
+
+```text
++346.000 s
+```
+
+after the Sutton–Graves peak.
+
+Although the two dynamic-pressure maxima differ by only approximately:
+
+```text
+0.075%
+```
+
+their Sutton–Graves heating levels differ by more than an order of magnitude.
+
+This follows naturally from the different functional dependencies.
+
+Dynamic pressure behaves as:
+
+\[
+q
+\propto
+\rho V^2
+\]
+
+while the Sutton–Graves correlation behaves as:
+
+\[
+\dot q
+\propto
+\sqrt{\rho}V^3
+\]
+
+The much stronger velocity dependence causes convective heating to peak earlier in entry while the vehicle retains substantially greater speed.
+
+---
+
+# Final Hypersonic Boundary
+
+Phase 2E.2 identified the final descending:
+
+```text
+Mach = 5
+```
+
+crossing at:
+
+```text
+UTC:
+2026-04-11T00:01:15.681771Z
+
+EI elapsed:
+464.815771 s
+```
+
+Sutton–Graves heat flux at this boundary:
+
+```text
+2.595809202 W/cm²
+```
+
+The permanent primary and stronger heating domains terminate here.
+
+This prevents the hypersonic stagnation-heating correlation from being presented as physically meaningful throughout parachute descent and recovery.
+
+---
+
+# Integrated Convective Heat Load
+
+Heat load is calculated by numerical integration:
+
+\[
+Q
+=
+\int
+\dot q\,dt
+\]
+
+using trapezoidal integration across the reconstructed high-rate entry history.
+
+---
+
+## Formal full-trajectory diagnostic integral
+
+Mathematically integrating Sutton–Graves over the entire trajectory gives:
+
+```text
+164.401704626 MJ/m²
+```
+
+This value is retained for accounting and sensitivity only.
+
+It is not the project's primary reported convective heat load because the integration includes regions outside the intended continuum/hypersonic interpretation domain.
+
+---
+
+## Contribution before nominal continuum
+
+Formal contribution prior to:
+
+```text
+Kn = 0.01
+```
+
+is:
+
+```text
+1.192062485 MJ/m²
+```
+
+or:
+
+```text
+0.725091317%
+```
+
+of the formal full-trajectory integral.
+
+Therefore the rarefied upper-entry section contributes less than one percent of the formal Sutton–Graves integral.
+
+---
+
+# Primary Convective Heat Load
+
+Permanent primary domain:
+
+```text
+Kn < 0.01
+AND
+Mach >= 5
+```
+
+Integrated convective heat load:
+
+```text
+162.686370921 MJ/m²
+```
+
+Fraction of formal full-trajectory integral:
+
+```text
+98.956620487%
+```
+
+This is the project's principal Phase 2E.4 low-fidelity convective heat-load result.
+
+It should always be reported with its model and domain qualifiers.
+
+---
+
+# Stronger Continuum Sensitivity
+
+Stronger interpretation domain:
+
+```text
+Kn < 0.001
+AND
+Mach >= 5
+```
+
+Integrated convective heat load:
+
+```text
+159.150073328 MJ/m²
+```
+
+Fraction of formal full-trajectory integral:
+
+```text
+96.805610191%
+```
+
+Difference from the primary-domain result:
+
+```text
+3.536297593 MJ/m²
+```
+
+or approximately:
+
+```text
+2.17%
+```
+
+of the primary-domain value.
+
+This demonstrates that the bulk of the reconstructed Sutton–Graves convective heat load is accumulated after the trajectory is already well inside the Phase 2E.3 body-scale continuum regime.
+
+---
+
+# Post-Hypersonic Diagnostic Contribution
+
+Formal contribution after the final Mach 5 crossing:
+
+```text
+0.523271220 MJ/m²
+```
+
+or:
+
+```text
+0.318288196%
+```
+
+of the formal full-trajectory integral.
+
+Therefore nearly all of the formal Sutton–Graves integral is accumulated during the selected continuum/hypersonic interval.
+
+This justifies terminating the permanent physical interpretation at the final Mach 5 crossing.
+
+---
+
+# Permanent Domain-Gating Decision
+
+Phase 2E.4 permanently adopts:
+
+```text
+PRIMARY REPORTED DOMAIN
+
+Kn < 0.01
+AND
+Mach >= 5
+```
+
+with:
+
+```text
+162.686370921 MJ/m²
+```
+
+as the primary modeled convective heat load.
+
+The stronger sensitivity is:
+
+```text
+Kn < 0.001
+AND
+Mach >= 5
+```
+
+with:
+
+```text
+159.150073328 MJ/m²
+```
+
+The:
+
+```text
+164.401704626 MJ/m²
+```
+
+full-trajectory integral remains:
+
+```text
+DIAGNOSTIC ONLY
+```
+
+---
+
+# Nose-Radius Sensitivity
+
+The Sutton–Graves relation contains:
+
+\[
+\dot q
+\propto
+R_n^{-1/2}
+\]
+
+A numerical:
+
+```text
+±10%
+```
+
+radius sensitivity was evaluated.
+
+This is explicitly:
+
+```text
+NOT
+an asserted Orion geometry uncertainty
+```
+
+and exists only to characterize model sensitivity.
+
+Cases:
+
+```text
+Rn = 5.431500 m
+-10%
+
+Peak:
+115.572766 W/cm²
+```
+
+```text
+Rn = 6.035000 m
+reference
+
+Peak:
+109.641953 W/cm²
+```
+
+```text
+Rn = 6.638500 m
++10%
+
+Peak:
+104.539500 W/cm²
+```
+
+The behavior follows the expected inverse-square-root radius dependence.
+
+---
+
+# Why No Artemis II Calibration Factor Was Applied
+
+Phase 2E.4 intentionally does not tune the reconstructed heating history to:
+
+```text
+Orion EFT-1
+Artemis I
+or another Orion mission
+```
+
+reported heat-flux values.
+
+Those missions differ in:
+
+```text
+entry trajectory
+entry speed
+flight-path geometry
+atmospheric history
+guidance history
+wall conditions
+TPS state
+aerothermal modeling assumptions
+```
+
+A numerical correction factor derived from another mission would imply an unsupported level of Artemis II-specific accuracy.
+
+Therefore the permanent model remains:
+
+```text
+Sutton–Graves
++
+NRLMSIS density
++
+Earth-relative velocity
++
+6.035 m Orion heritage radius
+```
+
+with no artificial mission calibration.
+
+---
+
+# Heritage Context
+
+Historical Orion aerothermal results may be used only as broad engineering-scale context.
+
+They are not treated as validation targets for the Artemis II reconstruction.
+
+Phase 2E.4 therefore distinguishes:
+
+```text
+heritage sanity scale
+```
+
+from:
+
+```text
+mission-specific validation
+```
+
+The latter would require authoritative Artemis II aerothermal data.
+
+---
+
+# Permanent Implementation
+
+Created:
+
+```text
+scripts/analysis/build_entry_heating.py
+```
+
+The analysis:
+
+```text
+loads Phase 2E.3 rarefaction states
+loads the permanent heating model
+computes Sutton–Graves heat flux at all 819 states
+identifies the formal/global heating peak
+verifies that the peak lies in both qualified domains
+reconstructs the Kn=0.01 boundary
+reconstructs the Kn=0.001 boundary
+reconstructs the final Mach 5 boundary
+integrates primary heat load
+integrates stronger-continuum heat load
+integrates diagnostic excluded regions
+evaluates nose-radius sensitivity
+compares heating timing with dynamic-pressure peaks
+writes deterministic documentation figures
+```
+
+Generated processed products:
+
+```text
+data/processed/entry/entry_heating.csv
+data/processed/entry/entry_heating_summary.json
+```
+
+These remain ignored under:
+
+```text
+data/processed/
+```
+
+---
+
+# Output Fields
+
+The generated heating trajectory adds:
+
+```text
+sg_convective_heat_flux_w_m2
+sg_convective_heat_flux_w_cm2
+sg_formal_cumulative_heat_load_j_m2
+sg_primary_domain
+sg_stronger_continuum_domain
+```
+
+to the upstream reconstructed entry state.
+
+---
+
+# Documentation Figures
+
+Created:
+
+```text
+docs/assets/entry/phase2e_sutton_graves_heat_flux.svg
+docs/assets/entry/phase2e_sutton_graves_heat_load.svg
+```
+
+The heat-flux figure identifies the permanent domain boundaries and the Sutton–Graves heating peak.
+
+The heat-load figure shows accumulation of the formal diagnostic integral while marking the continuum and hypersonic boundaries used for physical interpretation.
+
+SVG generation follows the deterministic plotting configuration established in earlier phases.
+
+---
+
+# Independent Validation
+
+Created:
+
+```text
+scripts/validation/validate_entry_heating.py
+```
+
+The validator independently reconstructs:
+
+```text
+Sutton–Graves heat flux
+peak heating state
+Kn=0.01 gate
+Kn=0.001 gate
+final Mach 5 gate
+full formal heat load
+primary-domain heat load
+stronger-continuum heat load
+excluded-domain contributions
+nose-radius sensitivity ordering
+```
+
+---
+
+# Numerical Reconstruction Validation
+
+Records checked:
+
+```text
+819
+```
+
+Maximum independently reconstructed heat-flux error:
+
+```text
+0.000000000000e+00 W/m²
+```
+
+Result:
+
+```text
+PASS
+```
+
+---
+
+# Qualified Peak Validation
+
+Independently reconstructed:
+
+```text
+UTC:
+2026-04-10T23:54:55.866000Z
+
+EI elapsed:
+85.000 s
+
+Altitude:
+61.878469 km
+
+Heat flux:
+109.641953 W/cm²
+
+Body-scale Kn:
+6.547686230258e-05
+```
+
+Permanent regression requirements include:
+
+```text
+peak time:
+EI + 80 to 90 s
+
+peak altitude:
+58 to 65 km
+
+peak heat flux:
+100 to 120 W/cm²
+
+peak Kn:
+< 0.001
+```
+
+Result:
+
+```text
+PASS
+```
+
+---
+
+# Heat-Load Validation
+
+Independently reconstructed:
+
+```text
+Primary:
+162.686370921 MJ/m²
+
+Stronger continuum:
+159.150073328 MJ/m²
+
+Formal full trajectory:
+164.401704626 MJ/m²
+```
+
+The primary-domain result contains:
+
+```text
+98.956620487%
+```
+
+of the formal total.
+
+The validator requires:
+
+```text
+> 98%
+```
+
+Result:
+
+```text
+PASS
+```
+
+---
+
+# Excluded-Domain Validation
+
+Before:
+
+```text
+Kn = 0.01
+```
+
+the formal integral contributes:
+
+```text
+0.725091317%
+```
+
+Validator requirement:
+
+```text
+< 1%
+```
+
+Result:
+
+```text
+PASS
+```
+
+After final:
+
+```text
+Mach 5
+```
+
+the formal integral contributes:
+
+```text
+0.318288196%
+```
+
+Validator requirement:
+
+```text
+< 1%
+```
+
+Result:
+
+```text
+PASS
+```
+
+---
+
+# Radius-Sensitivity Validation
+
+The validator requires:
+
+```text
+smaller nose radius
+→ higher heat flux
+
+reference radius
+→ intermediate heat flux
+
+larger nose radius
+→ lower heat flux
+```
+
+Observed:
+
+```text
+115.572766
+>
+109.641953
+>
+104.539500 W/cm²
+```
+
+Result:
+
+```text
+PASS
+```
+
+---
+
+# Permanent Validation Result
+
+Observed:
+
+```text
+OK: Sutton-Graves heat flux,
+continuum/hypersonic domain gating,
+integrated heat load,
+and radius sensitivity validated.
+```
+
+---
+
+# Interpretation Limits
+
+The Phase 2E.4 reconstruction is:
+
+```text
+LOW-FIDELITY
+MODEL-DERIVED
+COLD-WALL
+STAGNATION-POINT
+CONVECTIVE HEATING
+```
+
+It does not include:
+
+```text
+radiative heating
+finite wall temperature
+Avcoat ablation
+Avcoat pyrolysis
+blowing
+surface recession
+catalytic effects
+shock-layer chemical nonequilibrium
+dissociation
+ionization
+detailed CFD
+DSMC
+TPS conduction
+internal material temperature
+bondline temperature
+structural thermal response
+```
+
+The 6.035 m radius is:
+
+```text
+ORION EFT-1 HERITAGE GEOMETRY
+```
+
+and is not currently claimed to be:
+
+```text
+ARTEMIS II AS-FLOWN EFFECTIVE STAGNATION RADIUS
+```
+
+The model therefore should not be presented as a prediction of actual Artemis II TPS temperatures or heat-shield material response.
+
+---
+
+# Phase 2E.4 Status
+
+The reconstructed Artemis II entry now contains a bounded low-fidelity aerothermal timeline:
+
+```text
+Entry Interface
+Kn ≈ 0.98
+formal SG only
+
+→
+
+Kn = 0.01
+EI + 27.918 s
+94.025 km
+primary model domain begins
+
+→
+
+Kn = 0.001
+EI + 45.249 s
+80.331 km
+stronger continuum domain begins
+
+→
+
+Qualified SG peak
+EI + 85 s
+61.878 km
+Mach ≈ 32.29
+Kn ≈ 6.55e-05
+109.642 W/cm²
+
+→
+
+Early q peak
+EI + 95 s
+60.808 km
+SG ≈ 104.976 W/cm²
+
+→
+
+Global q peak
+EI + 431 s
+40.042 km
+SG ≈ 7.596 W/cm²
+
+→
+
+Mach 5
+EI + 464.816 s
+SG ≈ 2.596 W/cm²
+primary model domain ends
+```
+
+Permanent primary heat load:
+
+```text
+162.686370921 MJ/m²
+```
+
+Stronger continuum sensitivity:
+
+```text
+159.150073328 MJ/m²
+```
+
+Formal full-trajectory diagnostic:
+
+```text
+164.401704626 MJ/m²
+```
+
+Phase 2E.4 status:
+
+```text
+COMPLETE
+```
