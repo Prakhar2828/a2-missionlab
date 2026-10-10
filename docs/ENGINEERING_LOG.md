@@ -4376,3 +4376,1090 @@ The project now has a defensible physical coordinate system for atmospheric-entr
 
 The next phase can use this geometry to reconstruct the evolution of the entry itself rather than only its coordinate representation.
 
+---
+
+# Phase 2C — Entry Dynamics Reconstruction
+
+## Goal
+
+Use the validated Earth-fixed Artemis II entry trajectory to reconstruct the time evolution of entry dynamics directly from public trajectory states before introducing any atmospheric, aerodynamic, thermal, or guidance model.
+
+Phase 2B established:
+
+```text
+NASA high-rate trajectory
+→ M50
+→ B1950 analysis proxy
+→ J2000
+→ ITRF93
+→ WGS 84
+→ Earth-relative velocity geometry
+```
+
+Phase 2C uses that foundation to derive:
+
+```text
+altitude evolution
+Earth-relative speed evolution
+vertical motion
+flight-path-angle evolution
+kinematic speed deceleration
+skip/rebound geometry
+entry milestones
+```
+
+The analysis deliberately separates kinematic quantities from sensed or aerodynamic acceleration.
+
+---
+
+## Source
+
+Input:
+
+```text
+data/processed/entry/entry_geometry.csv
+```
+
+The input contains:
+
+```text
+819 states
+```
+
+covering:
+
+```text
+2026-04-10T23:53:30.866000Z
+through
+2026-04-11T00:07:08.841000Z
+```
+
+Elapsed duration:
+
+```text
+817.975 seconds
+```
+
+Entry Interface is treated as:
+
+```text
+EI + 0 s
+=
+2026-04-10T23:53:30.866000Z
+```
+
+because Phase 2B independently reconstructed the first state at approximately the 400,000-ft Orion Entry Interface altitude.
+
+---
+
+## Overall trajectory evolution
+
+Beginning of high-rate entry trajectory:
+
+```text
+WGS 84 altitude:
+121.919907 km
+
+Earth-relative speed:
+10.632214 km/s
+
+flight-path angle:
+-6.077956 deg
+```
+
+Terminal trajectory state:
+
+```text
+WGS 84 altitude:
+-0.000133 km
+
+Earth-relative speed:
+0.009130 km/s
+
+flight-path angle:
+-57.400158 deg
+```
+
+The trajectory therefore spans the atmospheric-entry arc from Entry Interface to a terminal near-surface state.
+
+---
+
+## Kinematic deceleration definition
+
+The Earth-relative speed magnitude is:
+
+\[
+V
+=
+\left\|
+\mathbf v_{ITRF93}
+\right\|
+\]
+
+The scalar kinematic speed deceleration is defined as:
+
+\[
+a_k
+=
+-\frac{dV}{dt}
+\]
+
+Positive values therefore indicate decreasing Earth-relative speed.
+
+This quantity is labeled:
+
+```text
+kinematic deceleration
+```
+
+It is NOT automatically:
+
+```text
+crew g-load
+proper acceleration
+accelerometer output
+aerodynamic drag acceleration
+normal acceleration
+seat acceleration
+```
+
+Standard gravity is used only as a unit scale:
+
+\[
+g_0
+=
+9.80665\ \mathrm{m/s^2}
+\]
+
+and:
+
+\[
+a_{g0}
+=
+\frac{a_k}{g_0}
+\]
+
+The resulting value is therefore called:
+
+```text
+g0-equivalent scale
+```
+
+rather than crew g-load.
+
+---
+
+## Initial finite-difference inspection
+
+A direct numerical derivative using:
+
+```python
+numpy.gradient
+```
+
+produced a peak kinematic deceleration at:
+
+```text
+2026-04-10T23:55:06.866000Z
+```
+
+or:
+
+```text
+EI + 96.000 s
+```
+
+Observed:
+
+```text
+Altitude:
+60.748759 km
+
+Earth-relative speed:
+9.583217 km/s
+
+-dV/dt:
+37.158887 m/s^2
+
+g0-equivalent:
+3.789152
+
+flight-path angle:
+-0.337479 deg
+```
+
+The surrounding samples formed a smooth peak rather than an isolated numerical spike.
+
+Examples:
+
+```text
+EI+93 s   37.027 m/s^2
+EI+94 s   37.116 m/s^2
+EI+95 s   37.147 m/s^2
+EI+96 s   37.159 m/s^2
+EI+97 s   37.114 m/s^2
+EI+98 s   37.091 m/s^2
+EI+99 s   37.013 m/s^2
+```
+
+This motivated a derivative-robustness analysis rather than accepting a single finite-difference estimate without testing.
+
+---
+
+## Derivative robustness methodology
+
+A local quadratic polynomial was fitted to Earth-relative speed around each trajectory state.
+
+For local time coordinate \(\tau\):
+
+\[
+V(\tau)
+=
+a\tau^2+b\tau+c
+\]
+
+The derivative at the center of the fitting window is:
+
+\[
+\left.
+\frac{dV}{dt}
+\right|_{\tau=0}
+=
+b
+\]
+
+Therefore:
+
+\[
+a_k=-b
+\]
+
+The analysis tested odd symmetric windows containing:
+
+```text
+5
+7
+9
+11
+15
+```
+
+trajectory samples.
+
+Because nominal cadence is approximately one second, these represent increasingly broad local smoothing windows.
+
+No SciPy dependency is required.
+
+---
+
+## Derivative robustness result
+
+Observed peaks:
+
+```text
+5 samples:
+EI + 95.000 s
+37.139616 m/s^2
+
+7 samples:
+EI + 96.000 s
+37.127215 m/s^2
+
+9 samples:
+EI + 96.000 s
+37.099682 m/s^2
+
+11 samples:
+EI + 96.000 s
+37.074627 m/s^2
+
+15 samples:
+EI + 96.000 s
+36.999241 m/s^2
+```
+
+Peak-time spread:
+
+```text
+1.000 s
+```
+
+Peak-magnitude spread:
+
+```text
+0.140374 m/s^2
+```
+
+Relative spread compared with the approximately 37.1 m/s² peak is small.
+
+This indicates that the inferred peak is stable across reasonable local derivative windows rather than being driven by one differencing choice.
+
+---
+
+## Primary derivative choice
+
+A2 MissionLab uses the:
+
+```text
+7-sample local quadratic derivative
+```
+
+as the primary reported kinematic derivative.
+
+Reason:
+
+```text
+small local window
++
+central estimate
++
+suppresses single-sample numerical variation
++
+peak remains consistent with both smaller and larger windows
+```
+
+The raw `numpy.gradient` result is also preserved for transparency.
+
+The primary result is therefore:
+
+```text
+UTC:
+2026-04-10T23:55:06.866000Z
+
+EI elapsed:
+96.000 s
+
+WGS 84 altitude:
+60.748759 km
+
+Earth-relative speed:
+9.583217 km/s
+
+kinematic deceleration:
+37.127215 m/s^2
+
+g0-equivalent scale:
+3.785922
+```
+
+This is a DERIVED kinematic quantity.
+
+It is not labeled as actual crew g-load.
+
+---
+
+## Altitude-rate consistency check
+
+The numerical time derivative of WGS 84 altitude was compared with the independently derived local ENU vertical velocity.
+
+Numerical altitude derivative:
+
+\[
+\dot h_{num}
+=
+\frac{dh}{dt}
+\]
+
+Comparison quantity:
+
+\[
+\Delta v_U
+=
+\dot h_{num}
+-
+v_U
+\]
+
+Initial inspection showed a maximum discrepancy of approximately:
+
+```text
+4.499963 m/s
+```
+
+at the first trajectory sample.
+
+This first-sample discrepancy is explained by the endpoint derivative, where `numpy.gradient` cannot use a symmetric central difference.
+
+The interior trajectory was therefore evaluated separately.
+
+Observed interior differences:
+
+```text
+median absolute:
+0.026379 m/s
+
+95th percentile absolute:
+0.177064 m/s
+
+maximum absolute:
+1.892779 m/s
+```
+
+The worst interior sample occurred at:
+
+```text
+2026-04-11T00:03:24.866000Z
+```
+
+or:
+
+```text
+EI + 594.000 s
+```
+
+The strong agreement between independently derived ENU vertical velocity and numerical altitude rate provides another internal consistency check on the Earth-fixed geometry.
+
+---
+
+# Phase 2C.1 — Derived Skip/Rebound Geometry
+
+## Initial observation
+
+The entry altitude is not monotonic.
+
+Observed intervals with increasing altitude:
+
+```text
+128
+```
+
+The trajectory contains one significant local altitude minimum followed by one significant local altitude maximum.
+
+Discrete trajectory extrema:
+
+```text
+local minimum:
+
+2026-04-10T23:55:22.866000Z
+EI + 112 s
+60.350003 km
+```
+
+followed by:
+
+```text
+local maximum:
+
+2026-04-10T23:57:30.866000Z
+EI + 240 s
+64.211911 km
+```
+
+This indicated a possible skip/rebound trajectory segment.
+
+---
+
+## Turning-event refinement
+
+Altitude extrema were refined using local vertical velocity rather than discrete altitude samples.
+
+A local altitude turning event occurs when:
+
+\[
+v_U=0
+\]
+
+where:
+
+```text
+v_U < 0
+descending
+
+v_U > 0
+climbing
+```
+
+Linear interpolation between adjacent vertical-velocity samples was used to estimate the zero-crossing epoch.
+
+---
+
+## First turning event
+
+Vertical velocity changes:
+
+```text
+negative
+→
+positive
+```
+
+therefore:
+
+```text
+DESCENT -> CLIMB
+```
+
+Derived event:
+
+```text
+EI + 112.294128 s
+```
+
+UTC:
+
+```text
+2026-04-10T23:55:23.160128Z
+```
+
+Interpolated altitude:
+
+```text
+60.350128 km
+```
+
+Interpolated Earth-relative speed:
+
+```text
+8.993741 km/s
+```
+
+Interpolated flight-path angle:
+
+```text
+approximately 0 deg
+```
+
+---
+
+## Second turning event
+
+Vertical velocity changes:
+
+```text
+positive
+→
+negative
+```
+
+therefore:
+
+```text
+CLIMB -> DESCENT
+```
+
+Derived event:
+
+```text
+EI + 239.647374 s
+```
+
+UTC:
+
+```text
+2026-04-10T23:57:30.513374Z
+```
+
+Interpolated altitude:
+
+```text
+64.211808 km
+```
+
+Interpolated Earth-relative speed:
+
+```text
+6.479165 km/s
+```
+
+Interpolated flight-path angle:
+
+```text
+approximately 0 deg
+```
+
+---
+
+## Skip/rebound segment
+
+Derived duration:
+
+\[
+239.647374
+-
+112.294128
+=
+127.353246\ \mathrm{s}
+\]
+
+Altitude recovery:
+
+\[
+64.211808
+-
+60.350128
+=
+3.861680\ \mathrm{km}
+\]
+
+Earth-relative speed loss during the rebound interval:
+
+\[
+8.993741
+-
+6.479165
+=
+2.514577\ \mathrm{km/s}
+\]
+
+Therefore the public trajectory directly supports a geometric sequence:
+
+```text
+descent
+→ local minimum
+→ climb
+→ local maximum
+→ renewed descent
+```
+
+A2 MissionLab labels this:
+
+```text
+DERIVED SKIP/REBOUND GEOMETRY
+```
+
+This terminology describes the observed trajectory shape.
+
+It does NOT by itself establish:
+
+```text
+guidance mode
+bank-reversal command
+lift command
+specific onboard guidance logic
+targeting decision
+control-system cause
+```
+
+Those require additional evidence.
+
+---
+
+## Positive flight-path angle
+
+The Earth-relative flight-path angle becomes positive during the rebound.
+
+Observed maximum:
+
+```text
++0.402796 deg
+```
+
+at:
+
+```text
+2026-04-10T23:56:43.866000Z
+```
+
+approximately:
+
+```text
+EI + 193 s
+```
+
+at altitude:
+
+```text
+62.767375 km
+```
+
+The positive flight-path angle independently confirms that the spacecraft is locally climbing during the rebound segment.
+
+---
+
+## Maximum descent rate
+
+The largest downward ENU velocity in the available trajectory occurs at Entry Interface:
+
+```text
+2026-04-10T23:53:30.866000Z
+```
+
+Observed:
+
+```text
+vertical velocity:
+-1125.755 m/s
+
+Earth-relative speed:
+10.632214 km/s
+```
+
+This describes local Earth-relative vertical motion and is not equivalent to total spacecraft speed.
+
+---
+
+## Altitude milestones
+
+The trajectory crosses major descending-altitude thresholds approximately as follows:
+
+```text
+100 km
+EI + 22 s
+V ≈ 10.652 km/s
+
+80 km
+EI + 46 s
+V ≈ 10.647 km/s
+
+60 km
+EI + 311 s
+V ≈ 5.675 km/s
+
+50 km
+EI + 374 s
+V ≈ 4.400 km/s
+
+40 km
+EI + 432 s
+V ≈ 2.554 km/s
+
+30 km
+EI + 481 s
+V ≈ 1.079 km/s
+
+20 km
+EI + 526 s
+V ≈ 0.345 km/s
+
+10 km
+EI + 576 s
+V ≈ 0.175 km/s
+
+5 km
+EI + 619 s
+V ≈ 0.067 km/s
+
+2 km
+EI + 669 s
+V ≈ 0.056 km/s
+
+1 km
+EI + 693 s
+V ≈ 0.017 km/s
+```
+
+Because the trajectory contains a skip/rebound, altitude thresholds can in principle be crossed more than once.
+
+The milestone analysis records the first descending crossing unless otherwise specified.
+
+---
+
+## Speed milestones
+
+Approximate first descending speed crossings include:
+
+```text
+10 km/s
+EI + 85 s
+
+9 km/s
+EI + 113 s
+
+8 km/s
+EI + 147 s
+
+7 km/s
+EI + 198 s
+
+6 km/s
+EI + 285 s
+
+5 km/s
+EI + 350 s
+
+4 km/s
+EI + 388 s
+
+3 km/s
+EI + 419 s
+
+2 km/s
+EI + 450 s
+
+1 km/s
+EI + 485 s
+
+0.5 km/s
+EI + 512 s
+
+0.2 km/s
+EI + 566 s
+
+0.1 km/s
+EI + 601 s
+
+0.05 km/s
+EI + 679 s
+```
+
+Permanent processing uses interpolation between neighboring samples rather than assigning the threshold to the next discrete sample.
+
+---
+
+## Implementation
+
+Created:
+
+```text
+scripts/analysis/analyze_entry_dynamics.py
+```
+
+The analysis:
+
+1. loads the validated Earth-fixed entry geometry;
+2. defines Entry Interface as elapsed time zero;
+3. computes raw Earth-relative speed derivatives;
+4. computes local quadratic derivatives;
+5. evaluates derivative robustness across multiple window lengths;
+6. identifies the primary kinematic-deceleration peak;
+7. compares numerical altitude rate with ENU vertical velocity;
+8. locates vertical-velocity zero crossings;
+9. reconstructs skip/rebound geometry;
+10. interpolates altitude and speed milestones;
+11. writes state-by-state derived dynamics;
+12. writes a structured summary;
+13. produces deterministic documentation figures.
+
+Generated processed products:
+
+```text
+data/processed/entry/entry_dynamics.csv
+data/processed/entry/entry_dynamics_summary.json
+```
+
+These remain ignored by Git.
+
+---
+
+## Documentation figures
+
+Created:
+
+```text
+docs/assets/entry/phase2c_entry_altitude.svg
+docs/assets/entry/phase2c_entry_speed.svg
+docs/assets/entry/phase2c_entry_kinematic_deceleration.svg
+docs/assets/entry/phase2c_entry_flight_path_angle.svg
+```
+
+The SVG output uses the project's deterministic figure configuration:
+
+```text
+fixed SVG hash salt
+generation-date metadata removed
+trailing whitespace normalized
+```
+
+so repeated analysis runs should not generate unnecessary Git differences.
+
+---
+
+## Independent validator
+
+Created:
+
+```text
+scripts/validation/validate_entry_dynamics.py
+```
+
+The validator independently reconstructs:
+
+```text
+raw speed derivative
+7-sample quadratic derivative
+primary deceleration peak
+derivative robustness
+vertical-velocity zero crossings
+skip/rebound duration
+altitude-rate consistency
+```
+
+It also confirms the expected documentation figures exist.
+
+---
+
+## Validation result
+
+Observed:
+
+```text
+Artemis II Entry Dynamics Validation
+--------------------------------
+Records checked: 819
+```
+
+Primary derivative:
+
+```text
+7-sample local quadratic fit
+
+Peak:
+EI + 96.000 s
+
+37.127215 m/s^2
+
+g0-equivalent:
+3.785922
+```
+
+Derivative reconstruction error:
+
+```text
+Raw:
+0.000000000000e+00 m/s^2
+
+Smoothed:
+0.000000000000e+00 m/s^2
+```
+
+Derivative robustness:
+
+```text
+Peak-time spread:
+1.000 s
+
+Peak-magnitude spread:
+0.140374 m/s^2
+```
+
+Skip/rebound:
+
+```text
+Start:
+EI + 112.294128 s
+
+End:
+EI + 239.647374 s
+
+Duration:
+127.353246 s
+
+Altitude recovery:
+3.861680 km
+
+Speed loss:
+2.514577 km/s
+```
+
+Altitude-rate consistency:
+
+```text
+Interior median absolute:
+0.026379 m/s
+
+Interior p95 absolute:
+0.177064 m/s
+
+Interior maximum absolute:
+1.892779 m/s
+```
+
+Final result:
+
+```text
+OK: entry dynamics, derivative robustness,
+and skip/rebound geometry validated.
+```
+
+---
+
+## Provenance
+
+The underlying trajectory remains:
+
+```text
+FLIGHT DATA
+```
+
+The following Phase 2C products are:
+
+```text
+DERIVED
+```
+
+- EI elapsed time;
+- Earth-relative speed derivative;
+- kinematic deceleration;
+- g0-equivalent scale;
+- skip/rebound turning times;
+- skip/rebound altitude recovery;
+- skip/rebound speed loss;
+- altitude milestones;
+- speed milestones;
+- altitude-rate consistency statistics.
+
+No aerodynamic or atmospheric quantities are introduced in Phase 2C.
+
+---
+
+## Interpretation limits
+
+The derived kinematic deceleration:
+
+\[
+-\frac{dV}{dt}
+\]
+
+is a scalar rate of change of Earth-relative speed.
+
+It is not automatically:
+
+```text
+proper acceleration
+crew g-load
+aerodynamic acceleration
+drag acceleration
+lift acceleration
+normal load factor
+accelerometer measurement
+```
+
+The g0-equivalent value:
+
+```text
+3.785922
+```
+
+means only:
+
+```text
+37.127215 m/s^2 divided by standard gravity
+```
+
+It should not be presented as:
+
+```text
+the crew experienced 3.79 g
+```
+
+without additional force/acceleration evidence.
+
+Likewise, the derived skip/rebound geometry demonstrates the trajectory shape but does not identify the specific guidance commands or control logic responsible for it.
+
+---
+
+## Phase 2C status
+
+The project has now reconstructed:
+
+```text
+Entry Interface
+→ initial atmospheric descent
+→ peak kinematic speed deceleration region
+→ descent-to-climb turning event
+→ skip/rebound climb
+→ climb-to-descent turning event
+→ continued atmospheric descent
+→ low-altitude terminal trajectory
+```
+
+from public trajectory states.
+
+Phase 2C status:
+
+```text
+COMPLETE
+```
+
+The next analysis should correlate the derived trajectory with independently reported NASA entry events before assigning operational labels to later trajectory transitions such as parachute deployment or splashdown.
+
