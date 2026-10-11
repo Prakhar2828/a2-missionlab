@@ -1,0 +1,572 @@
+{
+  "dataset_id": "phase2j4_artemis_ii_gnc_operational_threads",
+  "mission": "Artemis II",
+  "scope": "Integrated operational reconstruction of publicly supportable Artemis II guidance, navigation, and control threads across proximity operations, crew manual piloting, deep-space navigation, trajectory-correction operations, and the final correction-to-entry handoff. The dataset connects Phase 2J architecture and as-flown evidence with Phase 2I maneuver operations while explicitly excluding unavailable onboard filter histories, complete guidance laws, control laws, controller deflections, individual thruster histories, complete targeting logic, and flight-control console decision histories.",
+  "provenance": "NASA_REPORTED_WITH_MISSIONLAB_CROSS_PHASE_OPERATIONAL_INTEGRATION",
+  "input_dependencies": [
+    {
+      "path": "data/reference/artemis_ii_gnc_architecture.json",
+      "role": "PHASE_2J1_GNC_ARCHITECTURE_AND_EVIDENCE_BOUNDARIES"
+    },
+    {
+      "path": "data/reference/artemis_ii_manual_piloting_control_modes.json",
+      "role": "PHASE_2J2_MANUAL_CONTROL_AND_PROXIMITY_OPERATIONS"
+    },
+    {
+      "path": "data/reference/artemis_ii_navigation_state_estimation.json",
+      "role": "PHASE_2J3_NAVIGATION_AND_STATE_PRODUCT_BOUNDARIES"
+    },
+    {
+      "path": "data/reference/artemis_ii_maneuver_operational_threads.json",
+      "role": "PHASE_2I4_MANEUVER_AND_ENTRY_HANDOFF_CONTEXT"
+    }
+  ],
+  "integration_policy": {
+    "operational_thread_is_not_console_log": true,
+    "public_architecture_is_not_as_flown_time_history": true,
+    "capability_is_not_measurement_history": true,
+    "manual_controller_input_is_not_direct_thruster_switching": true,
+    "reported_effector_use_is_not_individual_thruster_history": true,
+    "mode_label_is_not_control_law_disclosure": true,
+    "arow_public_state_vector_is_not_proven_onboard_filter_state": true,
+    "ground_navigation_is_not_onboard_navigation_filter": true,
+    "oem_solution_difference_is_not_navigation_error": true,
+    "oem_solution_difference_is_not_measured_burn_delta_v": true,
+    "oem_creation_time_is_not_maneuver_assimilation_proof": true,
+    "maneuver_execution_is_not_guidance_law_disclosure": true,
+    "final_correction_to_entry_handoff_is_not_entry_guidance_reconstruction": true,
+    "absence_from_current_public_sources_is_not_proof_record_never_existed": true
+  },
+  "gnc_domain_model": {
+    "navigation": {
+      "question": "WHERE_AM_I_AND_HOW_AM_I_MOVING_OR_POINTED",
+      "phase2j_status": "RECONSTRUCTED_TO_PUBLIC_EVIDENCE_LIMIT"
+    },
+    "guidance": {
+      "question": "WHERE_SHOULD_I_GO_OR_POINT_NEXT",
+      "phase2j_status": "ARCHITECTURE_AND_OPERATIONAL_CONTEXT_ONLY",
+      "complete_as_flown_algorithm_public": false
+    },
+    "control": {
+      "question": "HOW_DO_I_COMMAND_THE_REQUIRED_MOTION",
+      "phase2j_status": "ARCHITECTURE_AND_SELECTED_AS_FLOWN_CONTEXT_ONLY",
+      "complete_as_flown_control_law_public": false
+    }
+  },
+  "core_architecture": {
+    "onboard_navigation_sensor_ids": [
+      "star_tracker",
+      "imu",
+      "gps_receiver",
+      "barometric_altimeter",
+      "optical_navigation_camera",
+      "sun_sensor"
+    ],
+    "onboard_navigation_sensor_count": 6,
+    "external_navigation_support": {
+      "support_id": "deep_space_network_tracking",
+      "onboard_sensor": false
+    },
+    "manual_control": {
+      "rotational_hand_controller_domain": "ATTITUDE",
+      "translational_hand_controller_domain": "TRANSLATION",
+      "hand_controller_is_direct_thruster_switch": false,
+      "command_path": [
+        "CREW_CONTROLLER_INPUT",
+        "GNC_FLIGHT_SOFTWARE",
+        "EFFECTOR_SELECTION",
+        "RCS_THRUSTER_COMMAND"
+      ]
+    },
+    "control_effectors": [
+      {
+        "effector_id": "main_engine_oms_e",
+        "count": 1
+      },
+      {
+        "effector_id": "auxiliary_r4d11",
+        "count": 8
+      },
+      {
+        "effector_id": "reaction_control_system",
+        "count": 24
+      }
+    ],
+    "correction_burn_engine_assignments_resolved": 0,
+    "correction_burn_engine_assignments_unresolved": 4,
+    "unresolved_correction_burns": [
+      "otc3",
+      "rtc1",
+      "rtc2",
+      "rtc3"
+    ]
+  },
+  "state_product_boundary": {
+    "taxonomy_is_missionlab_normalization": true,
+    "products": [
+      "ONBOARD_NAVIGATION_STATE",
+      "GROUND_ORBIT_DETERMINATION",
+      "AROW_PUBLIC_STATE_VECTOR"
+    ],
+    "statement": "ONBOARD_NAVIGATION_STATE != GROUND_ORBIT_DETERMINATION != AROW_PUBLIC_STATE_VECTOR",
+    "arow_equals_onboard_filter_state_proven": false,
+    "arow_equals_complete_ground_navigation_solution_proven": false
+  },
+  "operational_threads": [
+    {
+      "thread_id": "proximity_operations_gnc",
+      "name": "Proximity operations GNC",
+      "classification": "CREW_MANUAL_FLIGHT_TEST_WITH_AUTOMATED_DEPARTURE",
+      "anomaly": false,
+      "execution_status": "COMPLETED",
+      "duration_minutes": 70.0,
+      "duration_semantics": "APPROXIMATELY",
+      "reference_target": "DETACHED_ICPS",
+      "purpose": "Integrate the public proximity-operations evidence into one GNC thread connecting onboard navigation sensors, crew manual control, GNC flight software, reaction-control thrusters, and automated departure.",
+      "operational_sequence": [
+        {
+          "order": 1,
+          "step_id": "automated_pre_manual_context",
+          "gnc_domain": "GUIDANCE_NAVIGATION_CONTROL",
+          "authority": "AUTOMATED_PRE_MANUAL_PROXIMITY_OPERATIONS",
+          "evidence_scope": "PREMISSION_ARCHITECTURE_AND_PLAN",
+          "exact_transition_utc": null
+        },
+        {
+          "order": 2,
+          "step_id": "onboard_navigation_sensor_use",
+          "gnc_domain": "NAVIGATION",
+          "status": "AS_FLOWN_CONFIRMED",
+          "onboard_navigation_sensors_used": true,
+          "specific_sensor_set_publicly_identified": false,
+          "complete_relative_state_history_public": false
+        },
+        {
+          "order": 3,
+          "step_id": "crew_manual_proximity_control",
+          "gnc_domain": "CONTROL",
+          "authority": "CREW_MANUAL_PROXIMITY_OPERATIONS",
+          "status": "AS_FLOWN_CONFIRMED",
+          "controlled_approach_confirmed": true,
+          "controlled_retreat_confirmed": true
+        },
+        {
+          "order": 4,
+          "step_id": "crew_control_input_path",
+          "gnc_domain": "CONTROL",
+          "command_path": [
+            "CREW_CONTROLLER_INPUT",
+            "GNC_FLIGHT_SOFTWARE",
+            "EFFECTOR_SELECTION",
+            "RCS_THRUSTER_COMMAND"
+          ],
+          "direct_individual_thruster_switching": false
+        },
+        {
+          "order": 5,
+          "step_id": "reaction_control_thruster_use",
+          "gnc_domain": "CONTROL",
+          "status": "AS_FLOWN_CONFIRMED",
+          "reaction_control_thrusters_used": true,
+          "individual_thruster_firing_history_public": false
+        },
+        {
+          "order": 6,
+          "step_id": "automated_departure",
+          "gnc_domain": "GUIDANCE_CONTROL",
+          "authority": "AUTOMATED_DEPARTURE",
+          "status": "AS_FLOWN_CONFIRMED",
+          "exact_transition_utc": null
+        }
+      ],
+      "evidence_boundaries": {
+        "all_17_premission_steps_confirmed_as_flown": false,
+        "planned_ranges_promoted_to_measured_flight_ranges": false,
+        "exact_relative_range_history_public": false,
+        "exact_relative_velocity_history_public": false,
+        "exact_attitude_history_public": false,
+        "exact_rhc_history_public": false,
+        "exact_thc_history_public": false,
+        "exact_individual_thruster_history_public": false,
+        "exact_manual_to_automatic_transition_time_public": false
+      }
+    },
+    {
+      "thread_id": "flight_day_4_manual_piloting",
+      "name": "Flight Day 4 manual piloting",
+      "classification": "CREW_MANUAL_CONTROL_DEMONSTRATION",
+      "anomaly": false,
+      "execution_status": "COMPLETED",
+      "reported_local_start": "2026-04-04T21:09:00-04:00",
+      "derived_start_utc": "2026-04-05T01:09:00Z",
+      "derived_start_met": "03:02:33:48",
+      "duration_minutes": 41,
+      "derived_end_utc": "2026-04-05T01:50:00Z",
+      "derived_end_met": "03:03:14:48",
+      "crew_members": [
+        "Christina Koch",
+        "Jeremy Hansen"
+      ],
+      "purpose": "Integrate the publicly reported crew manual-piloting demonstration into the GNC architecture while preserving the distinction between public control-mode labels and unavailable internal control laws.",
+      "operational_sequence": [
+        {
+          "order": 1,
+          "step_id": "crew_assumes_manual_control",
+          "gnc_domain": "CONTROL",
+          "authority": "CREW_MANUAL_CONTROL",
+          "exact_authority_transition_utc_public": false
+        },
+        {
+          "order": 2,
+          "step_id": "six_dof_mode_test",
+          "gnc_domain": "CONTROL",
+          "mode_label": "SIX_DEGREES_OF_FREEDOM",
+          "status": "AS_FLOWN_CONFIRMED",
+          "complete_control_algorithm_public": false
+        },
+        {
+          "order": 3,
+          "step_id": "three_dof_mode_test",
+          "gnc_domain": "CONTROL",
+          "mode_label": "THREE_DEGREES_OF_FREEDOM",
+          "status": "AS_FLOWN_CONFIRMED",
+          "complete_control_algorithm_public": false
+        }
+      ],
+      "evidence_boundaries": {
+        "controller_gains_public": false,
+        "axis_coupling_logic_public": false,
+        "command_shaping_public": false,
+        "thruster_allocation_logic_public": false,
+        "controller_deflection_history_public": false,
+        "individual_thruster_history_public": false
+      }
+    },
+    {
+      "thread_id": "deep_space_navigation",
+      "name": "Deep-space navigation",
+      "classification": "ONBOARD_AND_GROUND_NAVIGATION_WITH_PUBLIC_STATE_PRODUCTS",
+      "anomaly": false,
+      "purpose": "Represent how onboard navigation architecture, optical navigation, Deep Space Network support, and public AROW state products coexist without being treated as identical state solutions.",
+      "operational_sequence": [
+        {
+          "order": 1,
+          "step_id": "earth_proximate_navigation_context",
+          "gnc_domain": "NAVIGATION",
+          "gps_role": "EARTH_PROXIMATE_POSITION_AND_VELOCITY_UPDATES",
+          "gps_primary_deep_space_navigation_sensor": false
+        },
+        {
+          "order": 2,
+          "step_id": "onboard_inertial_attitude_navigation",
+          "gnc_domain": "NAVIGATION",
+          "onboard_sensor_classes": [
+            "star_tracker",
+            "imu",
+            "optical_navigation_camera",
+            "sun_sensor"
+          ],
+          "complete_sensor_time_histories_public": false
+        },
+        {
+          "order": 3,
+          "step_id": "optical_navigation_imagery",
+          "gnc_domain": "NAVIGATION",
+          "status": "AS_FLOWN_CONFIRMED",
+          "earth_images_captured": true,
+          "moon_images_captured": true,
+          "flight_day_1_earth_image_publicly_identified_as_opnav": true,
+          "image_capture_proves_specific_filter_update": false
+        },
+        {
+          "order": 4,
+          "step_id": "deep_space_network_support",
+          "gnc_domain": "NAVIGATION",
+          "support_type": "GROUND_NAVIGATION_SUPPORT",
+          "onboard_sensor": false,
+          "role": "DEEP_SPACE_GROUND_LOCATION_DETERMINATION_OUTSIDE_GPS_RANGE",
+          "complete_ground_navigation_solution_history_public": false
+        },
+        {
+          "order": 5,
+          "step_id": "arow_public_state_product",
+          "gnc_domain": "PUBLIC_MISSION_DATA",
+          "state_vectors_public": true,
+          "downloadable_ephemeris_public": true,
+          "proven_equal_to_onboard_filter_state": false,
+          "proven_equal_to_complete_ground_navigation_solution": false
+        }
+      ],
+      "critical_boundary": "ONBOARD_NAVIGATION_STATE != GROUND_ORBIT_DETERMINATION != AROW_PUBLIC_STATE_VECTOR",
+      "evidence_boundaries": {
+        "complete_onboard_filter_state_history_public": false,
+        "complete_ground_orbit_determination_solution_history_public": false,
+        "navigation_covariance_history_public": false,
+        "filter_gain_history_public": false,
+        "measurement_innovation_history_public": false,
+        "sensor_bias_state_history_public": false,
+        "measurement_accept_reject_history_public": false,
+        "exact_sensor_selection_history_public": false,
+        "exact_opnav_estimator_update_history_public": false
+      }
+    },
+    {
+      "thread_id": "trajectory_correction_gnc",
+      "name": "Trajectory-correction GNC operations",
+      "classification": "NAVIGATION_MONITORING_AND_TRAJECTORY_CORRECTION_EXECUTION",
+      "anomaly": false,
+      "purpose": "Integrate selected public navigation-monitoring evidence with the four executed trajectory corrections while preserving unresolved engine assignments, unavailable targeting logic, and the distinction between public OEM solution evolution and onboard navigation state.",
+      "operational_sequence": [
+        {
+          "order": 1,
+          "step_id": "otc3_preburn_monitoring_context",
+          "maneuver_id": "otc3",
+          "evidence_semantics": "PRE_BURN_OPERATIONAL_CONTEXT",
+          "navigation_data_monitoring_reported": true,
+          "spacecraft_configuration_monitoring_reported": true,
+          "promoted_to_complete_as_flown_display_history": false
+        },
+        {
+          "order": 2,
+          "step_id": "otc3_execution",
+          "maneuver_id": "otc3",
+          "timestamp_utc": "2026-04-06T03:03:00Z",
+          "precision": "MINUTE_LEVEL",
+          "duration_seconds": 17.5,
+          "reported_delta_v_ft_s": null,
+          "engine_assignment_status": "UNRESOLVED_AS_FLOWN"
+        },
+        {
+          "order": 3,
+          "step_id": "rtc1_navigation_monitoring",
+          "maneuver_id": "rtc1",
+          "timestamp_utc": "2026-04-08T00:03:00Z",
+          "evidence_semantics": "AS_FLOWN_CONFIRMED",
+          "navigation_data_monitored": true,
+          "spacecraft_configuration_monitored": true
+        },
+        {
+          "order": 4,
+          "step_id": "rtc1_execution",
+          "maneuver_id": "rtc1",
+          "timestamp_utc": "2026-04-08T00:03:00Z",
+          "duration_seconds": 15.0,
+          "reported_delta_v_ft_s": 1.6,
+          "engine_assignment_status": "UNRESOLVED_AS_FLOWN"
+        },
+        {
+          "order": 5,
+          "step_id": "rtc2_preburn_gnc_monitoring_context",
+          "maneuver_id": "rtc2",
+          "evidence_semantics": "PRE_BURN_OPERATIONAL_CONTEXT",
+          "guidance_navigation_propulsion_monitoring_reported": true,
+          "promoted_to_complete_as_flown_display_history": false
+        },
+        {
+          "order": 6,
+          "step_id": "rtc2_execution",
+          "maneuver_id": "rtc2",
+          "timestamp_utc": "2026-04-10T02:53:00Z",
+          "duration_seconds": 9.0,
+          "reported_delta_v_ft_s": 5.3,
+          "communications_recovered_before_burn": true,
+          "engine_assignment_status": "UNRESOLVED_AS_FLOWN"
+        },
+        {
+          "order": 7,
+          "step_id": "rtc3_navigation_monitoring",
+          "maneuver_id": "rtc3",
+          "timestamp_utc": "2026-04-10T18:53:00Z",
+          "evidence_semantics": "AS_FLOWN_CONFIRMED",
+          "navigation_data_monitored": true,
+          "spacecraft_configuration_monitored": true
+        },
+        {
+          "order": 8,
+          "step_id": "rtc3_execution",
+          "maneuver_id": "rtc3",
+          "timestamp_utc": "2026-04-10T18:53:00Z",
+          "duration_seconds": 8.0,
+          "reported_delta_v_ft_s": 4.2,
+          "engine_assignment_status": "UNRESOLVED_AS_FLOWN"
+        }
+      ],
+      "public_oem_context": {
+        "maneuver_brackets_audited": 4,
+        "same_epoch_solution_comparisons_available": 3,
+        "same_epoch_comparisons_are_navigation_error": false,
+        "same_epoch_comparisons_are_measured_burn_delta_v": false,
+        "creation_time_proves_maneuver_assimilation": false,
+        "maneuver_assimilation_status": "NOT_ESTABLISHED"
+      },
+      "evidence_boundaries": {
+        "exact_displayed_navigation_variables_public": false,
+        "display_values_proven_equal_to_complete_onboard_filter_state": false,
+        "complete_navigation_display_time_history_public": false,
+        "complete_maneuver_targeting_logic_public": false,
+        "burn_vector_directions_public": false,
+        "complete_guidance_command_history_public": false,
+        "correction_engine_assignment_publicly_resolved": false
+      }
+    },
+    {
+      "thread_id": "final_correction_to_entry_handoff",
+      "name": "Final correction to entry handoff",
+      "classification": "NOMINAL_GNC_TO_ENTRY_HANDOFF",
+      "anomaly": false,
+      "purpose": "Close the Phase 2 GNC reconstruction at the final public trajectory-correction-to-entry boundary without prematurely reconstructing detailed entry guidance that belongs to Phase 4.",
+      "operational_sequence": [
+        {
+          "order": 1,
+          "step_id": "rtc3",
+          "gnc_context": "FINAL_RETURN_TRAJECTORY_CORRECTION",
+          "timestamp_utc": "2026-04-10T18:53:00Z",
+          "precision": "MINUTE_LEVEL"
+        },
+        {
+          "order": 2,
+          "step_id": "rtc3_to_entry_interval",
+          "step_type": "DERIVED_PUBLIC_CLOCK_INTERVAL",
+          "interval_seconds": 18000.0,
+          "interval_display": "05 h 00 min",
+          "precision_interpretation": "INHERITS_MINUTE_LEVEL_PUBLIC_EVENT_ANCHORS"
+        },
+        {
+          "order": 3,
+          "step_id": "entry_interface",
+          "timestamp_utc": "2026-04-10T23:53:00Z",
+          "precision": "MINUTE_LEVEL",
+          "phase_boundary": "PHASE_4_ENTRY_RECONSTRUCTION_START_CONTEXT"
+        }
+      ],
+      "phase2j_boundary": {
+        "final_correction_to_entry_clock_relationship_established": true,
+        "complete_final_navigation_state_vector_public": false,
+        "complete_entry_targeting_covariance_public": false,
+        "complete_entry_targeting_algorithm_public": false,
+        "complete_entry_guidance_command_history_public": false,
+        "complete_bank_command_history_public": false,
+        "complete_entry_control_command_history_public": false
+      }
+    }
+  ],
+  "phase2j_cross_phase_closure": {
+    "phase2j1": {
+      "name": "GNC Architecture & Evidence Model",
+      "status": "COMPLETE"
+    },
+    "phase2j2": {
+      "name": "Manual Piloting & Control-Mode Reconstruction",
+      "status": "COMPLETE"
+    },
+    "phase2j3": {
+      "name": "Navigation & State-Estimation Reconstruction",
+      "status": "COMPLETE"
+    },
+    "phase2j4": {
+      "name": "GNC Operational Threads & Closure",
+      "status": "COMPLETE"
+    }
+  },
+  "phase2j_reconstructable": [
+    "GNC_DOMAIN_DECOMPOSITION",
+    "ONBOARD_NAVIGATION_SENSOR_ARCHITECTURE",
+    "EXTERNAL_DSN_NAVIGATION_SUPPORT_ROLE",
+    "ONBOARD_VS_GROUND_VS_PUBLIC_STATE_PRODUCT_BOUNDARY",
+    "MANUAL_CONTROLLER_COMMAND_DOMAINS",
+    "CREW_CONTROLLER_TO_GNC_TO_RCS_COMMAND_PATH",
+    "CONTROL_EFFECTOR_ARCHITECTURE",
+    "PROXIMITY_OPERATIONS_CONTROL_AUTHORITY_SEQUENCE",
+    "AS_FLOWN_PROXIMITY_NAVIGATION_SENSOR_USE",
+    "AS_FLOWN_REACTION_CONTROL_THRUSTER_USE",
+    "FLIGHT_DAY_4_MANUAL_PILOTING_CONTEXT",
+    "SIX_DOF_AND_THREE_DOF_PUBLIC_MODE_LABELS",
+    "AS_FLOWN_OPTICAL_NAVIGATION_IMAGERY",
+    "SELECTED_AS_FLOWN_CORRECTION_BURN_NAVIGATION_MONITORING",
+    "TRAJECTORY_CORRECTION_OPERATIONAL_SEQUENCE",
+    "PUBLIC_OEM_SOLUTION_EVOLUTION_BOUNDARY",
+    "FINAL_CORRECTION_TO_ENTRY_PUBLIC_CLOCK_HANDOFF"
+  ],
+  "phase2j_not_reconstructable": [
+    "COMPLETE_ONBOARD_NAVIGATION_FILTER_STATE_HISTORY",
+    "COMPLETE_GROUND_ORBIT_DETERMINATION_SOLUTION_HISTORY",
+    "RAW_NAVIGATION_SENSOR_TIME_HISTORIES",
+    "FILTER_COVARIANCE_HISTORY",
+    "FILTER_GAIN_HISTORY",
+    "FILTER_INNOVATION_HISTORY",
+    "FILTER_BIAS_STATE_HISTORY",
+    "MEASUREMENT_ACCEPT_REJECT_HISTORY",
+    "EXACT_SENSOR_SELECTION_HISTORY",
+    "COMPLETE_GUIDANCE_ALGORITHM",
+    "COMPLETE_GUIDANCE_COMMAND_HISTORY",
+    "COMPLETE_MANUAL_CONTROL_LAW",
+    "COMPLETE_AUTOMATIC_CONTROL_LAW",
+    "CONTROLLER_GAIN_HISTORY",
+    "CONTROLLER_DEFLECTION_HISTORY",
+    "THRUSTER_ALLOCATION_LOGIC",
+    "INDIVIDUAL_THRUSTER_FIRING_HISTORY",
+    "CORRECTION_BURN_ENGINE_ASSIGNMENTS",
+    "COMPLETE_MANEUVER_TARGETING_LOGIC",
+    "BURN_VECTOR_DIRECTIONS",
+    "COMPLETE_CREW_NAVIGATION_DISPLAY_HISTORY",
+    "FLIGHT_CONTROL_CONSOLE_DECISION_HISTORY",
+    "FLIGHT_DIRECTOR_RATIONALE_TREE",
+    "DETAILED_AS_FLOWN_ENTRY_GUIDANCE"
+  ],
+  "deferred_scope": {
+    "phase4_entry_descent_splashdown_recovery": [
+      "DETAILED_AS_FLOWN_ENTRY_GUIDANCE_WHERE_PUBLIC_EVIDENCE_SUPPORTS_IT",
+      "ENTRY_EVENT_RECONSTRUCTION",
+      "ATMOSPHERIC_ENTRY_MODELING",
+      "PARACHUTE_SEQUENCE",
+      "SPLASHDOWN_AND_RECOVERY"
+    ],
+    "phase7_mission_control_engineering_perspectives": [
+      "FLIGHT_CONTROL_DISCIPLINE_LENSES",
+      "CONSOLE_ROLE_INTERPRETATION",
+      "DECISION_THREADS",
+      "POSTFLIGHT_ENGINEERING_TIMELINE"
+    ]
+  },
+  "closure_criteria": {
+    "phase2j1_dependency_integrated": true,
+    "phase2j2_dependency_integrated": true,
+    "phase2j3_dependency_integrated": true,
+    "phase2i4_maneuver_context_integrated": true,
+    "navigation_guidance_control_domains_preserved": true,
+    "manual_control_boundary_preserved": true,
+    "dsn_onboard_boundary_preserved": true,
+    "state_product_boundary_preserved": true,
+    "correction_engine_assignment_uncertainty_preserved": true,
+    "oem_non_inference_boundary_preserved": true,
+    "entry_guidance_scope_deferred_to_phase4": true,
+    "mission_control_decision_scope_deferred_to_phase7": true,
+    "unsupported_telemetry_fabricated": false
+  },
+  "guardrails": [
+    "A GNC operational thread is not a console log.",
+    "Public GNC architecture is not a complete as-flown time history.",
+    "Navigation-sensor capability is not a raw measurement history.",
+    "Crew hand-controller input is not direct individual-thruster switching.",
+    "Reported RCS use is not an individual thruster-firing history.",
+    "A six-DOF or three-DOF mode label is not disclosure of the underlying control law.",
+    "Deep Space Network tracking is ground navigation support and is not an onboard navigation sensor.",
+    "Ground navigation support is not the Orion onboard navigation filter.",
+    "AROW public state vectors are not proven to be Orion's onboard navigation-filter state.",
+    "AROW public state vectors are not proven to be the complete ground navigation solution.",
+    "An optical-navigation image is not an estimator residual or filter innovation.",
+    "Optical-navigation image capture does not prove a specific filter measurement update.",
+    "Crew monitoring of navigation data does not expose the complete onboard navigation state.",
+    "Pre-burn monitoring language is not silently promoted to a complete as-flown display history.",
+    "Correction-burn execution does not disclose the complete guidance or targeting algorithm.",
+    "Correction-burn engine assignments remain unresolved for OTC3, RTC1, RTC2, and RTC3.",
+    "A public OEM is a trajectory product and is not raw spacecraft telemetry.",
+    "An OEM solution difference is not navigation error.",
+    "An OEM solution difference is not measured maneuver delta-v.",
+    "OEM creation time does not prove maneuver or measurement assimilation.",
+    "The RTC3-to-Entry-Interface public clock relationship does not reconstruct the detailed entry guidance law.",
+    "Detailed entry guidance remains deferred to Phase 4.",
+    "Flight-control console rationale and decision trees remain deferred to Phase 7.",
+    "Absence from the current curated public source set is not proof that a record never existed."
+  ]
+}

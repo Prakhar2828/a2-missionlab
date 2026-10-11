@@ -34247,3 +34247,25 @@ Phase 2J.3 reconstructs the public Artemis II / Orion navigation architecture an
 onboard navigation
 ground navigation support
 public trajectory products
+
+@'
+
+---
+
+# Phase 2J.4 — GNC Operational Threads & Closure
+
+## Goal
+
+Phase 2J.4 integrates the completed Phase 2J architecture, manual-control, and navigation reconstructions into mission-facing Artemis II GNC operational threads.
+
+The phase connects:
+
+```text
+navigation
+guidance
+control
+crew manual authority
+ground navigation support
+propulsion context
+trajectory corrections
+entry handoff
