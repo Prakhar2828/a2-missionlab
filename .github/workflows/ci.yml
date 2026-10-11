@@ -28,3 +28,6 @@ jobs:
 
       - name: Validate Phase 9B public web
         run: python scripts/validation/validate_publication_web.py
+
+      - name: Validate final MissionLab release
+        run: python scripts/validation/validate_release.py

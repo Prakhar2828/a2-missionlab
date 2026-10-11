@@ -1,0 +1,56 @@
+{
+  "dataset_id": "phase9c_artemis_ii_release_manifest",
+  "mission": "Artemis II",
+  "phase": "9C",
+  "status": "RELEASE_CANDIDATE_COMPLETE",
+  "mission_clock": {
+    "launch_epoch_utc": "2026-04-01T22:35:12Z",
+    "source": "data/config/mission.json"
+  },
+  "validated_metrics": {
+    "datasets": 25,
+    "sources": 81,
+    "events": 24,
+    "decision_threads": 10,
+    "postflight_records": 6,
+    "searchable_records": 146,
+    "tools": 8,
+    "answer_routes": 8
+  },
+  "phase_completion": {
+    "phase_0": "COMPLETE",
+    "phase_1": "COMPLETE",
+    "phase_2": "COMPLETE",
+    "phase_3": "COMPLETE",
+    "phase_4": "COMPLETE",
+    "phase_5": "COMPLETE",
+    "phase_6": "COMPLETE",
+    "phase_7": "COMPLETE",
+    "phase_8": "COMPLETE",
+    "phase_9": "COMPLETE"
+  },
+  "release_outputs": [
+    "README.md",
+    "docs/ROADMAP.md",
+    "docs/assets/a2-missionlab-release-overview.svg",
+    "index.html",
+    "app.js",
+    "styles.css",
+    ".github/workflows/ci.yml",
+    ".github/workflows/pages.yml",
+    "scripts/validation/validate_release.py"
+  ],
+  "release_principles": {
+    "public_evidence_only": true,
+    "unknowns_remain_unknown": true,
+    "no_paid_model_dependency": true,
+    "no_private_nasa_material": true,
+    "no_new_mission_reconstruction_in_phase9": true
+  },
+  "deployment": {
+    "platform": "GitHub Pages",
+    "workflow": ".github/workflows/pages.yml",
+    "trigger_branch": "main",
+    "state": "CONFIGURED_FOR_MAIN_BRANCH_DEPLOYMENT"
+  }
+}

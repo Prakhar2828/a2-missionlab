@@ -61203,3 +61203,173 @@ NEXT
 ```
 
 ---
+
+---
+
+# Phase 9C — Final Cross-Phase Release Validation
+
+## Goal
+
+Close the A2 MissionLab roadmap with final publication validation across the validated Phase 0-9 project state.
+
+## Finalization Outputs
+
+```text
+README.md
+docs/ROADMAP.md
+docs/assets/a2-missionlab-release-overview.svg
+.github/workflows/ci.yml
+scripts/publication/finalize_release.py
+scripts/validation/validate_release.py
+data/reference/artemis_ii_release_manifest.json
+```
+
+## Release State
+
+```text
+Phase 0: COMPLETE
+Phase 1: COMPLETE
+Phase 2: COMPLETE
+Phase 3: COMPLETE
+Phase 4: COMPLETE
+Phase 5: COMPLETE
+Phase 6: COMPLETE
+Phase 7: COMPLETE
+Phase 8: COMPLETE
+Phase 9: COMPLETE
+```
+
+## Validated Release Scale
+
+```text
+indexed reference datasets: 25
+normalized public sources: 81
+shared mission events: 24
+decision threads: 10
+postflight engineering records: 6
+unified searchable records: 146
+deterministic analyst tools: 8
+deterministic answer routes: 8
+```
+
+## Publication Closure
+
+```text
+README final status: PASS
+README demo media: PASS
+release overview SVG: PASS
+
+roadmap phases 0-9 present: PASS
+roadmap Phase 9 closure: PASS
+demo-media roadmap requirement: PASS
+
+public interface current status: PASS
+validated timeline source: PASS
+Phase 0 seed dependency absent: PASS
+```
+
+## CI and Deployment
+
+```text
+Phase 9A validation in CI: PASS
+Phase 9B validation in CI: PASS
+final release validation in CI: PASS
+GitHub Pages main-branch deployment: PASS
+```
+
+## Evidence Boundaries
+
+```text
+public evidence only: PASS
+unknowns remain unknown: PASS
+no paid-model dependency: PASS
+no private NASA material: PASS
+no new Phase 9 mission reconstruction: PASS
+core evidence boundaries preserved: PASS
+```
+
+Critical rules remain:
+
+```text
+MISSIONLAB DERIVED
+!=
+NASA REPORTED
+```
+
+```text
+TEMPORAL SEQUENCE
+!=
+CAUSATION
+```
+
+```text
+UNKNOWN PUBLIC FACT
+!=
+PERMISSION TO INVENT
+```
+
+## Final Validation
+
+```text
+Mission identity and launch epoch: PASS
+Phase 8 analyst dependency: PASS
+Phase 9A documentation dependency: PASS
+Phase 9B web/CI dependency: PASS
+Phase 9C release manifest identity: PASS
+
+25 indexed datasets: PASS
+81 normalized sources: PASS
+24 mission events: PASS
+10 decision threads: PASS
+6 postflight records: PASS
+146 searchable records: PASS
+8 deterministic tools: PASS
+8 answer routes: PASS
+
+README final status: PASS
+README demo media: PASS
+Release overview SVG: PASS
+
+Roadmap phases 0-9 present: PASS
+Roadmap Phase 9 closure: PASS
+Demo-media roadmap requirement: PASS
+
+Public interface current status: PASS
+Validated timeline source: PASS
+Phase 0 seed dependency absent: PASS
+
+Phase 9A validation in CI: PASS
+Phase 9B validation in CI: PASS
+Final release validation in CI: PASS
+GitHub Pages main-branch deployment: PASS
+
+Public evidence only: PASS
+Unknowns remain unknown: PASS
+No paid-model dependency: PASS
+No private NASA material: PASS
+No new Phase 9 mission reconstruction: PASS
+
+Core evidence boundaries preserved: PASS
+```
+
+Final result:
+
+```text
+PHASE 9C RELEASE VALIDATION PASSED
+MISSIONLAB RELEASE CANDIDATE COMPLETE
+```
+
+## Project Status
+
+```text
+A2 MissionLab Phase 0-9 roadmap:
+COMPLETE
+
+Release candidate:
+COMPLETE
+
+Next repository action:
+merge phase-9-publication-quality into main
+```
+
+---

@@ -8,7 +8,7 @@ A2 MissionLab is an independent open-source engineering project that reconstruct
 
 ## Project status
 
-**Phases 0 through 8 are complete relative to defensible public evidence. Phase 9 publication hardening is in progress.**
+**Phases 0 through 9 are complete relative to defensible public evidence and the validated MissionLab publication scope.**
 
 | Capability | Count |
 |---|---:|
@@ -172,6 +172,12 @@ Ask a mission question:
 ```powershell
 .\.venv\Scripts\python.exe scripts\analyst\answer_mission_question.py ask "Did the return link loss cause RTC2?"
 ```
+
+## Demo media
+
+![A2 MissionLab release overview](docs/assets/a2-missionlab-release-overview.svg)
+
+The release overview summarizes the project evidence spine from public mission data through deterministic engineering analysis, Mission Control perspectives, and the citation-first Mission Analyst.
 
 ## Documentation
 
