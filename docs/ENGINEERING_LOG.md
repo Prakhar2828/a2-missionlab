@@ -57307,3 +57307,1711 @@ analyst-ready outputs
 Phase 8 should consume the validated products from Phases 1 through 7 rather than recreating them.
 
 ---
+
+---
+
+# Phase 8A — Artemis II Evidence-Grounded Mission Analyst: Structured Retrieval and Deterministic Tools
+
+## Goal
+
+Build the deterministic evidence-access layer for the Artemis II MissionLab analyst.
+
+Phase 8A implements the first half of the Phase 8 roadmap:
+
+```text
+structured retrieval over events / data / sources
+
+deterministic calculations exposed as tools
+
+citation-bearing retrieval
+
+zero paid-model dependency
+```
+
+Phase 8A intentionally does not yet implement:
+
+```text
+citation-first natural-language answer composition
+
+optional local / browser LLM integration
+```
+
+Those remain Phase 8B.
+
+---
+
+# Analyst Runtime
+
+Created:
+
+```text
+scripts/analyst/mission_analyst.py
+```
+
+Created independent validator:
+
+```text
+scripts/validation/validate_mission_analyst.py
+```
+
+Generated:
+
+```text
+data/reference/artemis_ii_mission_analyst_index.json
+
+data/processed/analyst/artemis_ii_mission_analyst_index.json
+```
+
+Dataset:
+
+```text
+phase8a_artemis_ii_mission_analyst_index
+```
+
+Status:
+
+```text
+STRUCTURED_RETRIEVAL_AND_DETERMINISTIC_TOOLS_COMPLETE
+```
+
+---
+
+# Core Dependencies
+
+Phase 8A directly consumes:
+
+```text
+phase7a_artemis_ii_mission_control_perspectives
+
+phase7b_artemis_ii_mission_control_decision_threads
+```
+
+These provide:
+
+```text
+shared mission timeline
+
+discipline priorities
+
+mission-event identities
+
+decision threads
+
+postflight engineering records
+
+evidence boundaries
+```
+
+Validation:
+
+```text
+Phase 7A dependency
+PASS
+
+Phase 7B dependency
+PASS
+```
+
+---
+
+# Mission Clock
+
+Authoritative mission configuration:
+
+```text
+data/config/mission.json
+```
+
+Launch epoch:
+
+```text
+2026-04-01T22:35:12Z
+```
+
+The analyst uses this mission configuration as the only UTC / MET conversion anchor.
+
+Validation:
+
+```text
+Mission clock configuration
+PASS
+
+Launch epoch preservation
+PASS
+```
+
+---
+
+# Structured Dataset Registry
+
+Phase 8A indexed:
+
+```text
+25 reference datasets
+```
+
+The registry includes major validated MissionLab products across:
+
+```text
+Phase 2
+flight dynamics
+GNC
+propulsion
+communications
+navigation
+
+Phase 3
+waste-management
+thermal / TPS evidence
+
+Phase 4
+entry
+descent
+recovery
+
+Phase 5
+space weather / radiation interface
+
+Phase 6
+lunar science and observations
+
+Phase 7
+mission-control perspectives
+decision threads
+```
+
+Each dataset record contains:
+
+```text
+dataset_id
+
+mission
+
+phase
+
+status
+
+title / purpose
+
+reference path
+
+top-level keys
+
+local artifact citation
+```
+
+The Phase 8A index excludes itself from its own input dataset registry.
+
+Validation:
+
+```text
+25 reference datasets
+PASS
+
+Dataset-ID uniqueness
+PASS
+
+Major Phase 2-7 products indexed
+PASS
+
+Analyst self-index exclusion
+PASS
+
+Dataset citations
+PASS
+```
+
+---
+
+# Normalized Public Source Registry
+
+Phase 8A normalized:
+
+```text
+81 public sources
+```
+
+The analyst scans validated reference datasets and consolidates source metadata by:
+
+```text
+source_id
+```
+
+Normalized fields include:
+
+```text
+publisher
+
+title
+
+publication date
+
+URL
+
+source type
+
+role / claim
+
+local dataset occurrences
+```
+
+Where available, original public URLs are preserved.
+
+Validation:
+
+```text
+81 normalized public sources
+PASS
+
+Source-ID uniqueness
+PASS
+
+Public source occurrence tracking
+PASS
+
+Source URL preservation
+PASS
+```
+
+---
+
+# Shared Mission Event Registry
+
+Phase 8A indexed:
+
+```text
+24 mission events
+```
+
+These are inherited from the validated Phase 7A shared mission timeline.
+
+Each event includes:
+
+```text
+event_id
+
+order
+
+name
+
+timestamp UTC when defensible
+
+date
+
+MET when defensible
+
+time precision
+
+evidence class
+
+classification
+
+summary
+
+source dependency
+
+primary discipline lenses
+
+discipline priorities
+
+citation
+```
+
+Validation:
+
+```text
+24 shared mission events
+PASS
+
+Event-ID uniqueness
+PASS
+
+Mission-event ordering
+PASS
+
+Event citations
+PASS
+```
+
+---
+
+# Evidence Precision Preservation
+
+Phase 8A preserves the evidence-state and timing boundaries established in earlier phases.
+
+Examples:
+
+```text
+A2_PERICYNTHION
+=
+MISSIONLAB_DERIVED_GEOMETRY
+```
+
+It is not relabeled:
+
+```text
+NASA_REPORTED
+```
+
+Entry blackout retains:
+
+```text
+timestamp_utc = null
+```
+
+because no exact public UTC was defensibly established.
+
+Unexpected return-link loss retains:
+
+```text
+APPROXIMATE_PUBLIC_ANCHOR
+```
+
+rather than being promoted to exact telemetry.
+
+Validation:
+
+```text
+Reported timing preservation
+PASS
+
+Derived geometry labeling preservation
+PASS
+
+Unknown-time non-inference
+PASS
+
+Approximate-time precision preservation
+PASS
+```
+
+---
+
+# Decision Thread Registry
+
+Phase 8A indexed:
+
+```text
+10 decision threads
+```
+
+Each thread contains:
+
+```text
+thread_id
+
+title
+
+classification
+
+anomaly state
+
+primary discipline lenses
+
+anchor mission events
+
+seven decision stages
+
+guardrails
+
+decision maturity
+
+citation
+```
+
+Validated examples include:
+
+```text
+OUTBOUND_TRAJECTORY_ADAPTATION
+
+FD1_UWMS_FAULT_RECOVERY
+
+FD4_WASTEWATER_VENT_RESPONSE
+
+LUNAR_COMMUNICATIONS_CONSTRAINT
+
+LUNAR_SCIENCE_EXECUTION
+
+RETURN_LINK_ANOMALY_RTC2
+
+TPS_RISK_MITIGATION_CLOSURE
+
+FINAL_CORRECTION_ENTRY_HANDOFF
+
+ENTRY_BLACKOUT_REACQUISITION
+
+DESCENT_SPLASHDOWN_RECOVERY
+```
+
+Validation:
+
+```text
+10 decision threads
+PASS
+
+Decision-thread ID uniqueness
+PASS
+
+Decision-thread citations
+PASS
+```
+
+---
+
+# Decision Boundary Preservation
+
+Phase 8A successfully preserves the critical Phase 7 distinctions.
+
+Unexpected return-link thread:
+
+```text
+RETURN_LINK_ANOMALY_RTC2
+```
+
+remains:
+
+```text
+anomaly = true
+```
+
+and retains:
+
+```text
+TEMPORAL_SEQUENCE
+!=
+CAUSATION
+```
+
+Lunar communications occultation remains:
+
+```text
+anomaly = false
+```
+
+Entry plasma blackout remains:
+
+```text
+anomaly = false
+```
+
+TPS thread retains:
+
+```text
+7 publicly established stages
+```
+
+Validation:
+
+```text
+RTC2 anomaly boundary preservation
+PASS
+
+Lunar communications constraint boundary
+PASS
+
+Entry blackout constraint boundary
+PASS
+
+TPS decision maturity preservation
+PASS
+```
+
+---
+
+# Postflight Engineering Registry
+
+Phase 8A indexed:
+
+```text
+6 postflight engineering records
+```
+
+These include:
+
+```text
+recovery transition
+
+initial Orion postflight assessment
+
+urine vent-line investigation
+
+Mission and Fault Management analysis
+
+TPS engineering knowledge update
+
+October lunar-science release
+```
+
+Open public investigations remain open.
+
+Urine vent-line investigation:
+
+```text
+open_issue = true
+```
+
+Mission and Fault Management analysis:
+
+```text
+open_issue = true
+```
+
+Validation:
+
+```text
+6 postflight records
+PASS
+
+Urine vent investigation remains open
+PASS
+
+Mission/Fault Management analysis remains open
+PASS
+
+October lunar-science record
+PASS
+```
+
+---
+
+# Unified Retrieval Index
+
+Phase 8A combines:
+
+```text
+events
+
+decision threads
+
+postflight records
+
+public sources
+
+reference datasets
+```
+
+into one structured searchable registry.
+
+Unified searchable records:
+
+```text
+146
+```
+
+Record types:
+
+```text
+event
+
+decision_thread
+
+postflight_record
+
+source
+
+dataset
+```
+
+The count is exactly equal to:
+
+```text
+24 events
++
+10 decision threads
++
+6 postflight records
++
+81 sources
++
+25 datasets
+=
+146 unified records
+```
+
+Validation:
+
+```text
+146 unified searchable records
+PASS
+
+Unified record-count arithmetic
+PASS
+
+5 analyst record types
+PASS
+```
+
+---
+
+# Search Tokenization
+
+Each unified record receives normalized search tokens derived from:
+
+```text
+record identity
+
+title
+
+summary
+
+payload content
+```
+
+Search tokens are:
+
+```text
+deduplicated
+
+lowercase
+
+sorted
+```
+
+Validation:
+
+```text
+Normalized search-token registry
+PASS
+```
+
+---
+
+# Citation-Bearing Retrieval
+
+Every indexed record carries an explicit local artifact citation.
+
+Citation structure:
+
+```text
+dataset_id
+
+path
+
+locator
+
+evidence_class
+
+citation_text
+```
+
+Example:
+
+```text
+data/reference/artemis_ii_decision_threads.json
+::
+decision_threads[thread_id=RETURN_LINK_ANOMALY_RTC2]
+```
+
+Event example:
+
+```text
+data/reference/artemis_ii_mission_control_perspectives.json
+::
+shared_timeline[event_id=A2_RTC2]
+```
+
+The citation is returned directly with retrieval output rather than being generated afterward.
+
+Validation:
+
+```text
+Citation payload on every unified record
+PASS
+
+Citation-return policy
+PASS
+```
+
+---
+
+# Retrieval Tools
+
+Phase 8A exposes eight deterministic analyst tools:
+
+```text
+search
+
+event_lookup
+
+decision_thread_lookup
+
+source_lookup
+
+dataset_lookup
+
+utc_to_met
+
+met_to_utc
+
+elapsed_time
+```
+
+Validation:
+
+```text
+8 deterministic analyst tools
+PASS
+
+Search tool registry
+PASS
+
+Exact lookup tool registry
+PASS
+
+Mission-time calculation tool registry
+PASS
+```
+
+---
+
+# Exact Event Lookup
+
+Tool:
+
+```text
+event_lookup
+```
+
+Exact-ID retrieval can return events such as:
+
+```text
+A2_RTC2
+```
+
+Validated RTC2 UTC:
+
+```text
+2026-04-10T02:53:00Z
+```
+
+The returned object includes its local evidence citation.
+
+Validation:
+
+```text
+event_lookup execution
+PASS
+```
+
+---
+
+# Exact Decision-Thread Lookup
+
+Tool:
+
+```text
+decision_thread_lookup
+```
+
+Validated lookup:
+
+```text
+RETURN_LINK_ANOMALY_RTC2
+```
+
+Returned anomaly state:
+
+```text
+true
+```
+
+Validation:
+
+```text
+decision_thread_lookup execution
+PASS
+```
+
+---
+
+# Exact Dataset Lookup
+
+Tool:
+
+```text
+dataset_lookup
+```
+
+Validated lookup:
+
+```text
+phase7b_artemis_ii_mission_control_decision_threads
+```
+
+Resolved artifact:
+
+```text
+data/reference/artemis_ii_decision_threads.json
+```
+
+Validation:
+
+```text
+dataset_lookup execution
+PASS
+```
+
+---
+
+# Exact Source Lookup
+
+Tool:
+
+```text
+source_lookup
+```
+
+Validated example:
+
+```text
+NASA_INITIAL_POSTFLIGHT_ASSESSMENT_2026_04_20
+```
+
+The analyst returns:
+
+```text
+normalized source metadata
+
+public URL
+
+local reference occurrence
+
+local citation
+```
+
+Validation:
+
+```text
+source_lookup execution
+PASS
+```
+
+---
+
+# Keyword Search
+
+Tool:
+
+```text
+search
+```
+
+Search operates across all unified records.
+
+Smoke-test query:
+
+```text
+return link RTC2
+```
+
+Retrieved:
+
+```text
+RETURN_LINK_ANOMALY_RTC2
+
+A2_RTC2
+
+FINAL_CORRECTION_ENTRY_HANDOFF
+```
+
+Top result:
+
+```text
+decision_thread
+RETURN_LINK_ANOMALY_RTC2
+```
+
+Citation:
+
+```text
+data/reference/artemis_ii_decision_threads.json
+::
+decision_threads[thread_id=RETURN_LINK_ANOMALY_RTC2]
+```
+
+Validation:
+
+```text
+Unified keyword search execution
+PASS
+
+Return-link / RTC2 retrieval
+PASS
+```
+
+---
+
+# Record-Type Filtering
+
+Search can be constrained to:
+
+```text
+event
+
+decision_thread
+
+postflight_record
+
+source
+
+dataset
+```
+
+Validated filtered search:
+
+```text
+query:
+entry interface
+
+record_type:
+event
+```
+
+Result includes:
+
+```text
+A2_ENTRY_INTERFACE
+```
+
+and excludes non-event records.
+
+Validation:
+
+```text
+Record-type filtered search
+PASS
+```
+
+---
+
+# Deterministic Mission-Time Tool — UTC to MET
+
+Tool:
+
+```text
+utc_to_met
+```
+
+Input:
+
+```text
+2026-04-06T03:03:00Z
+```
+
+Launch:
+
+```text
+2026-04-01T22:35:12Z
+```
+
+Result:
+
+```text
+MET
+04:04:27:48
+```
+
+Elapsed seconds:
+
+```text
+361668
+```
+
+Validation:
+
+```text
+UTC -> MET execution
+PASS
+
+OTC3 MET = 04:04:27:48
+PASS
+```
+
+---
+
+# Deterministic Mission-Time Tool — MET to UTC
+
+Tool:
+
+```text
+met_to_utc
+```
+
+Input:
+
+```text
+04:04:27:48
+```
+
+Result:
+
+```text
+2026-04-06T03:03:00Z
+```
+
+Validation:
+
+```text
+MET -> UTC execution
+PASS
+
+UTC/MET round-trip
+PASS
+```
+
+---
+
+# Pericynthion Mission Clock Test
+
+Input:
+
+```text
+2026-04-06T23:00:46.177998Z
+```
+
+Calculated MET:
+
+```text
+05:00:25:34.178
+```
+
+Validation:
+
+```text
+Pericynthion MET calculation
+PASS
+```
+
+---
+
+# Deterministic Elapsed-Time Tool
+
+Tool:
+
+```text
+elapsed_time
+```
+
+Smoke test:
+
+```text
+Earthset
+2026-04-06T22:41:00Z
+
+Earthrise
+2026-04-06T23:22:00Z
+```
+
+Elapsed:
+
+```text
+2460 seconds
+
+41 minutes
+
+00:00:41:00
+```
+
+Validation:
+
+```text
+Elapsed-time execution
+PASS
+
+Earthset -> Earthrise = 41 minutes
+PASS
+```
+
+---
+
+# Retrieval Policy
+
+Phase 8A enforces:
+
+```text
+structured local artifacts first
+```
+
+Supported:
+
+```text
+exact ID lookup
+
+keyword search
+
+record-type filtering
+
+citation return
+
+source URL preservation
+```
+
+Forbidden:
+
+```text
+invent unsupported facts
+
+promote MissionLab-derived values to NASA-reported
+
+assign exact UTC to events without exact public timing
+```
+
+Validation:
+
+```text
+Structured-local-artifact-first policy
+PASS
+
+Exact-ID retrieval policy
+PASS
+
+Keyword retrieval policy
+PASS
+
+Record-type filtering policy
+PASS
+
+Citation-return policy
+PASS
+
+Unsupported-fact invention prohibition
+PASS
+
+MissionLab/NASA provenance separation
+PASS
+
+Unknown-time exact-UTC prohibition
+PASS
+```
+
+---
+
+# Deterministic Calculation Policy
+
+Phase 8A calculation rules:
+
+```text
+UTC / MET conversion uses mission.json
+
+elapsed-time calculation is deterministic
+
+network access is not required
+
+LLM access is not required
+
+paid model access is not required
+```
+
+Validation:
+
+```text
+Mission-clock deterministic calculation policy
+PASS
+
+Elapsed-time deterministic policy
+PASS
+
+No calculation network dependency
+PASS
+
+No paid-model dependency
+PASS
+
+No LLM dependency
+PASS
+```
+
+---
+
+# Zero-Cost Runtime Boundary
+
+The Phase 8A analyst has no dependency on:
+
+```text
+OpenAI SDK
+
+Anthropic SDK
+
+Gemini SDK
+```
+
+Validation:
+
+```text
+No OpenAI SDK dependency
+PASS
+
+No Anthropic SDK dependency
+PASS
+
+No Gemini SDK dependency
+PASS
+```
+
+The deterministic analyst therefore remains usable without:
+
+```text
+API keys
+
+paid inference
+
+external model subscriptions
+```
+
+---
+
+# Independent Validation
+
+Created:
+
+```text
+scripts/validation/validate_mission_analyst.py
+```
+
+Validation result:
+
+```text
+Analysis identity
+PASS
+
+Reference / processed index consistency
+PASS
+
+Mission clock configuration
+PASS
+
+Launch epoch preservation
+PASS
+
+Phase 7A dependency
+PASS
+
+Phase 7B dependency
+PASS
+
+25 reference datasets
+PASS
+
+Dataset-ID uniqueness
+PASS
+
+Major Phase 2-7 products indexed
+PASS
+
+Analyst self-index exclusion
+PASS
+
+Dataset citations
+PASS
+
+81 normalized public sources
+PASS
+
+Source-ID uniqueness
+PASS
+
+Public source occurrence tracking
+PASS
+
+Source URL preservation
+PASS
+
+24 shared mission events
+PASS
+
+Event-ID uniqueness
+PASS
+
+Mission-event ordering
+PASS
+
+Reported timing preservation
+PASS
+
+Derived geometry labeling preservation
+PASS
+
+Unknown-time non-inference
+PASS
+
+Approximate-time precision preservation
+PASS
+
+Event citations
+PASS
+
+10 decision threads
+PASS
+
+Decision-thread ID uniqueness
+PASS
+
+RTC2 anomaly boundary preservation
+PASS
+
+Lunar communications constraint boundary
+PASS
+
+Entry blackout constraint boundary
+PASS
+
+TPS decision maturity preservation
+PASS
+
+Decision-thread citations
+PASS
+
+6 postflight records
+PASS
+
+Urine vent investigation remains open
+PASS
+
+Mission/Fault Management analysis remains open
+PASS
+
+October lunar-science record
+PASS
+
+146 unified searchable records
+PASS
+
+Unified record-count arithmetic
+PASS
+
+5 analyst record types
+PASS
+
+Normalized search-token registry
+PASS
+
+Citation payload on every unified record
+PASS
+
+8 deterministic analyst tools
+PASS
+
+Search tool registry
+PASS
+
+Exact lookup tool registry
+PASS
+
+Mission-time calculation tool registry
+PASS
+
+No network-required analyst tools
+PASS
+
+Structured-local-artifact-first policy
+PASS
+
+Exact-ID retrieval policy
+PASS
+
+Keyword retrieval policy
+PASS
+
+Record-type filtering policy
+PASS
+
+Citation-return policy
+PASS
+
+Unsupported-fact invention prohibition
+PASS
+
+MissionLab/NASA provenance separation
+PASS
+
+Unknown-time exact-UTC prohibition
+PASS
+
+Mission-clock deterministic calculation policy
+PASS
+
+Elapsed-time deterministic policy
+PASS
+
+No calculation network dependency
+PASS
+
+No paid-model dependency
+PASS
+
+No LLM dependency
+PASS
+
+event_lookup execution
+PASS
+
+decision_thread_lookup execution
+PASS
+
+dataset_lookup execution
+PASS
+
+source_lookup execution
+PASS
+
+Unified keyword search execution
+PASS
+
+Return-link / RTC2 retrieval
+PASS
+
+Record-type filtered search
+PASS
+
+Search-result citation return
+PASS
+
+UTC -> MET execution
+PASS
+
+MET -> UTC execution
+PASS
+
+UTC/MET round-trip
+PASS
+
+Elapsed-time execution
+PASS
+
+OTC3 MET = 04:04:27:48
+PASS
+
+Earthset -> Earthrise = 41 minutes
+PASS
+
+Pericynthion MET calculation
+PASS
+
+No OpenAI SDK dependency
+PASS
+
+No Anthropic SDK dependency
+PASS
+
+No Gemini SDK dependency
+PASS
+
+Structured retrieval roadmap item
+PASS
+
+Deterministic-tools roadmap item
+PASS
+
+Citation-first answers correctly left to 8B
+PASS
+
+Optional local/browser LLM correctly left to 8B
+PASS
+
+No-paid-model roadmap requirement
+PASS
+
+Output registry
+PASS
+```
+
+Final result:
+
+```text
+PHASE 8A VALIDATION PASSED
+```
+
+---
+
+# Phase 8A Final Status
+
+Structured retrieval:
+
+```text
+COMPLETE
+```
+
+Reference datasets indexed:
+
+```text
+25
+```
+
+Normalized public sources:
+
+```text
+81
+```
+
+Shared mission events:
+
+```text
+24
+```
+
+Decision threads:
+
+```text
+10
+```
+
+Postflight records:
+
+```text
+6
+```
+
+Unified searchable records:
+
+```text
+146
+```
+
+Deterministic analyst tools:
+
+```text
+8
+```
+
+Citation-bearing retrieval:
+
+```text
+COMPLETE
+```
+
+Mission-clock calculations:
+
+```text
+COMPLETE
+```
+
+Exact-ID lookup:
+
+```text
+COMPLETE
+```
+
+Keyword search:
+
+```text
+COMPLETE
+```
+
+Record-type filtering:
+
+```text
+COMPLETE
+```
+
+Provenance preservation:
+
+```text
+COMPLETE
+```
+
+Unknown-time protection:
+
+```text
+COMPLETE
+```
+
+Open-investigation preservation:
+
+```text
+COMPLETE
+```
+
+Network dependency:
+
+```text
+NONE
+```
+
+LLM dependency:
+
+```text
+NONE
+```
+
+Paid-model dependency:
+
+```text
+NONE
+```
+
+Overall:
+
+```text
+PHASE 8A
+COMPLETE
+```
+
+---
+
+# Phase 8B Handoff
+
+Remaining Phase 8 roadmap items:
+
+```text
+citation-first answers
+
+optional local/browser LLM
+
+no paid model dependency
+```
+
+Phase 8B should build the answer layer on top of the validated deterministic analyst rather than bypassing it.
+
+Required architecture:
+
+```text
+user question
+↓
+structured analyst retrieval
+↓
+evidence bundle
+↓
+claim selection
+↓
+provenance / known-unknown enforcement
+↓
+citation-first answer composition
+↓
+optional local/browser LLM presentation
+```
+
+The deterministic MissionLab index remains authoritative.
+
+Any optional LLM must operate only on retrieved evidence bundles and must not become a required dependency.
+
+Phase 8B should include:
+
+```text
+citation-first answer composer
+
+question-class routing
+
+mission-event answers
+
+decision-thread answers
+
+discipline-aware answers
+
+mission-clock calculation answers
+
+known / unknown responses
+
+provenance labels
+
+local evidence citations
+
+optional browser-compatible LLM handoff
+
+optional local-model handoff
+
+deterministic fallback with no LLM
+
+Phase 8 closure validation
+```
+
+---
