@@ -1,0 +1,152 @@
+{
+  "dataset_id": "phase8b_artemis_ii_mission_analyst_interface",
+  "mission": "Artemis II",
+  "phase": "8B",
+  "status": "CITATION_FIRST_MISSION_ANALYST_COMPLETE",
+  "purpose": "Compose evidence-grounded Artemis II answers from the Phase 8A retrieval layer, with claim-level citations and optional local/browser LLM presentation handoff.",
+  "dependencies": [
+    {
+      "dataset_id": "phase8a_artemis_ii_mission_analyst_index",
+      "path": "data/reference/artemis_ii_mission_analyst_index.json",
+      "role": "structured retrieval and deterministic tools"
+    },
+    {
+      "dataset_id": "phase7a_artemis_ii_mission_control_perspectives",
+      "path": "data/reference/artemis_ii_mission_control_perspectives.json",
+      "role": "discipline registry and shared event priorities"
+    },
+    {
+      "dataset_id": "phase7b_artemis_ii_mission_control_decision_threads",
+      "path": "data/reference/artemis_ii_decision_threads.json",
+      "role": "decision threads and known/unknown boundaries"
+    }
+  ],
+  "question_router": {
+    "routes": [
+      "EVENT_TIME",
+      "EVENT",
+      "DECISION_THREAD",
+      "DECISION_THREAD_CAUSATION",
+      "DISCIPLINE",
+      "DETERMINISTIC_ELAPSED_TIME",
+      "KNOWN_UNKNOWN",
+      "SEARCH_SYNTHESIS"
+    ],
+    "deterministic": true,
+    "llm_used_for_routing": false
+  },
+  "answer_contract": {
+    "citation_first": true,
+    "claim_level_citations_required": true,
+    "unsupported_fact_invention_allowed": false,
+    "known_unknown_state_supported": true,
+    "provenance_labels_required": true,
+    "deterministic_tools_may_be_used": true,
+    "llm_required": false,
+    "paid_model_required": false
+  },
+  "optional_llm_adapters": [
+    {
+      "adapter_id": "LOCAL_LLM_PROMPT_HANDOFF",
+      "target": "local",
+      "optional": true,
+      "execution_embedded": false,
+      "api_key_required": false,
+      "paid_model_required": false,
+      "description": "Export a locked evidence bundle and formatting prompt for an optional local model."
+    },
+    {
+      "adapter_id": "BROWSER_LLM_PROMPT_HANDOFF",
+      "target": "browser",
+      "optional": true,
+      "execution_embedded": false,
+      "api_key_required": false,
+      "paid_model_required": false,
+      "description": "Export the same locked evidence bundle for optional browser-side model presentation."
+    }
+  ],
+  "authority_model": {
+    "deterministic_retrieval_is_authoritative": true,
+    "deterministic_calculations_are_authoritative": true,
+    "llm_may_rewrite_locked_claims": true,
+    "llm_may_add_new_facts": false,
+    "llm_may_override_evidence_boundaries": false,
+    "llm_may_change_provenance": false,
+    "llm_may_invent_citations": false
+  },
+  "known_unknown_policy": {
+    "unknowns_are_answerable": true,
+    "unknown_answer_must_state_boundary": true,
+    "hypothesis_may_be_promoted_to_fact": false,
+    "open_investigation_may_be_forced_closed": false,
+    "missing_exact_time_may_be_invented": false
+  },
+  "sample_answer_count": 6,
+  "sample_answers": [
+    {
+      "question": "When was RTC2?",
+      "route": "EVENT_TIME",
+      "answer_status": "SUPPORTED",
+      "claim_count": 3,
+      "citation_count": 1
+    },
+    {
+      "question": "Did the return link loss cause RTC2?",
+      "route": "DECISION_THREAD_CAUSATION",
+      "answer_status": "SUPPORTED_WITH_CAUSATION_BOUNDARY",
+      "claim_count": 3,
+      "citation_count": 1
+    },
+    {
+      "question": "What was the root cause of the urine vent-line issue?",
+      "route": "KNOWN_UNKNOWN",
+      "answer_status": "UNKNOWN_IN_CURATED_PUBLIC_EVIDENCE",
+      "claim_count": 3,
+      "citation_count": 2
+    },
+    {
+      "question": "How long was it between Earthset and Earthrise?",
+      "route": "DETERMINISTIC_ELAPSED_TIME",
+      "answer_status": "SUPPORTED",
+      "claim_count": 3,
+      "citation_count": 2
+    },
+    {
+      "question": "What does the SCIENCE perspective focus on?",
+      "route": "DISCIPLINE",
+      "answer_status": "SUPPORTED",
+      "claim_count": 3,
+      "citation_count": 6
+    },
+    {
+      "question": "What happened with the Artemis II heat shield?",
+      "route": "DECISION_THREAD",
+      "answer_status": "SUPPORTED",
+      "claim_count": 4,
+      "citation_count": 1
+    }
+  ],
+  "phase8_roadmap_assessment": {
+    "structured_retrieval_over_events_data_sources": "COMPLETE_PHASE8A",
+    "deterministic_calculations_exposed_as_tools": "COMPLETE_PHASE8A",
+    "citation_first_answers": "COMPLETE_PHASE8B",
+    "optional_local_browser_llm": "COMPLETE_AS_OPTIONAL_HANDOFF_PHASE8B",
+    "no_paid_model_dependency": "COMPLETE",
+    "phase8_overall": "COMPLETE_RELATIVE_TO_VALIDATED_MISSIONLAB_EVIDENCE"
+  },
+  "critical_non_equivalences": [
+    "LLM_PRESENTATION != EVIDENCE_AUTHORITY",
+    "RETRIEVAL_MATCH != FACT_NOT_SUPPORTED_BY_RECORD",
+    "MISSIONLAB_DERIVED != NASA_REPORTED",
+    "TEMPORAL_SEQUENCE != CAUSATION",
+    "HYPOTHESIS != CONFIRMED_ROOT_CAUSE",
+    "UNKNOWN_PUBLIC_FACT != PERMISSION_TO_INVENT",
+    "DISCIPLINE_RELEVANCE != DECISION_AUTHORITY",
+    "OPTIONAL_LLM_HANDOFF != REQUIRED_MODEL_DEPENDENCY"
+  ],
+  "outputs": {
+    "reference_json": "data/reference/artemis_ii_mission_analyst_interface.json",
+    "processed_json": "data/processed/analyst/artemis_ii_mission_analyst_interface.json",
+    "smoke_answers_json": "data/processed/analyst/phase8b_smoke_answers.json"
+  }
+}

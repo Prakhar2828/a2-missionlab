@@ -59015,3 +59015,1843 @@ Phase 8 closure validation
 ```
 
 ---
+
+---
+
+# Phase 8B — Artemis II Citation-First Mission Analyst and Phase 8 Closure
+
+## Goal
+
+Complete the Evidence-Grounded Mission Analyst by adding a deterministic question router, citation-first answer composition, known/unknown handling, causation guardrails, discipline-aware answers, and optional local/browser LLM presentation handoff.
+
+Phase 8B builds on the validated Phase 8A retrieval layer.
+
+Architecture:
+
+```text
+user question
+↓
+deterministic question classification
+↓
+structured MissionLab retrieval
+↓
+validated evidence bundle
+↓
+claim construction
+↓
+provenance enforcement
+↓
+claim-level citations
+↓
+deterministic answer
+↓
+optional locked-claim LLM presentation handoff
+```
+
+The deterministic MissionLab evidence layer remains authoritative.
+
+An LLM is never required for retrieval, calculations, routing, factual reasoning, or answer generation.
+
+---
+
+# Phase 8B Runtime
+
+Created:
+
+```text
+scripts/analyst/answer_mission_question.py
+```
+
+Created independent validator:
+
+```text
+scripts/validation/validate_mission_analyst_interface.py
+```
+
+Generated:
+
+```text
+data/reference/artemis_ii_mission_analyst_interface.json
+
+data/processed/analyst/artemis_ii_mission_analyst_interface.json
+
+data/processed/analyst/phase8b_smoke_answers.json
+```
+
+Dataset:
+
+```text
+phase8b_artemis_ii_mission_analyst_interface
+```
+
+Status:
+
+```text
+CITATION_FIRST_MISSION_ANALYST_COMPLETE
+```
+
+---
+
+# Dependencies
+
+Phase 8B consumes:
+
+```text
+phase8a_artemis_ii_mission_analyst_index
+
+phase7a_artemis_ii_mission_control_perspectives
+
+phase7b_artemis_ii_mission_control_decision_threads
+```
+
+Roles:
+
+```text
+Phase 8A
+structured retrieval and deterministic tools
+
+Phase 7A
+discipline registry and shared mission priorities
+
+Phase 7B
+decision threads and known / unknown evidence boundaries
+```
+
+Validation:
+
+```text
+Phase 8A dependency
+PASS
+
+Phase 7A dependency
+PASS
+
+Phase 7B dependency
+PASS
+```
+
+---
+
+# Deterministic Question Router
+
+Phase 8B implements eight routes:
+
+```text
+EVENT_TIME
+
+EVENT
+
+DECISION_THREAD
+
+DECISION_THREAD_CAUSATION
+
+DISCIPLINE
+
+DETERMINISTIC_ELAPSED_TIME
+
+KNOWN_UNKNOWN
+
+SEARCH_SYNTHESIS
+```
+
+Routing is deterministic.
+
+No LLM participates in classification.
+
+Validation:
+
+```text
+8-route deterministic question router
+PASS
+
+EVENT_TIME route
+PASS
+
+EVENT route
+PASS
+
+DECISION_THREAD route
+PASS
+
+DECISION_THREAD_CAUSATION route
+PASS
+
+DISCIPLINE route
+PASS
+
+DETERMINISTIC_ELAPSED_TIME route
+PASS
+
+KNOWN_UNKNOWN route
+PASS
+
+SEARCH_SYNTHESIS route
+PASS
+
+LLM-free routing
+PASS
+```
+
+---
+
+# Routing Correction During Validation
+
+Initial validation identified one narrow routing defect.
+
+The router correctly classified:
+
+```text
+What happened at Entry Interface?
+```
+
+as:
+
+```text
+EVENT
+```
+
+but the answer-composition function changed the route to:
+
+```text
+EVENT_TIME
+```
+
+solely because the event contained a timestamp.
+
+This violated separation between:
+
+```text
+question intent
+```
+
+and:
+
+```text
+available event metadata
+```
+
+The implementation was corrected so that:
+
+```text
+classifier chooses route
+↓
+answer composer preserves route
+```
+
+Now:
+
+```text
+What happened at Entry Interface?
+→ EVENT
+```
+
+while:
+
+```text
+When was Entry Interface?
+→ EVENT_TIME
+```
+
+Independent validation after the correction:
+
+```text
+Runtime event answer execution
+PASS
+```
+
+---
+
+# Citation-First Answer Contract
+
+Every factual claim must include at least one citation.
+
+Answer objects contain:
+
+```text
+question
+
+route
+
+answer_status
+
+answer_text
+
+claims
+
+citations
+
+evidence_bundle
+
+deterministic_tools
+
+citation_first
+
+unsupported_fact_invention
+
+llm_required
+
+paid_model_required
+```
+
+Every claim contains:
+
+```text
+statement
+
+provenance
+
+confidence
+
+citation_ids
+```
+
+Validation:
+
+```text
+Citation-first answer contract
+PASS
+
+Claim-level citation requirement
+PASS
+
+Provenance-label requirement
+PASS
+
+Known/unknown answer support
+PASS
+
+Unsupported-fact invention prohibition
+PASS
+
+No LLM requirement
+PASS
+
+No paid-model requirement
+PASS
+```
+
+---
+
+# Citation Rendering
+
+Citation identifiers are generated deterministically:
+
+```text
+[C1]
+
+[C2]
+
+[C3]
+...
+```
+
+Each citation maps to:
+
+```text
+dataset_id
+
+local artifact path
+
+structured locator
+
+evidence class
+
+optional public URL
+```
+
+Example event locator:
+
+```text
+data/reference/artemis_ii_mission_control_perspectives.json
+::
+shared_timeline[event_id=A2_RTC2]
+```
+
+Example decision-thread locator:
+
+```text
+data/reference/artemis_ii_decision_threads.json
+::
+decision_threads[thread_id=RETURN_LINK_ANOMALY_RTC2]
+```
+
+The textual answer must contain every citation ID used by its claims.
+
+Validation:
+
+```text
+Smoke-answer citation integrity
+PASS
+
+Citation-preserving handoff
+PASS
+```
+
+---
+
+# EVENT_TIME Answers
+
+Example question:
+
+```text
+When was RTC2?
+```
+
+Route:
+
+```text
+EVENT_TIME
+```
+
+Validated answer anchor:
+
+```text
+RTC2
+2026-04-10T02:53:00Z
+```
+
+The answer also preserves its MissionLab mission-clock context and supporting event summary.
+
+Validation:
+
+```text
+RTC2 event-time smoke answer
+PASS
+
+Runtime EVENT_TIME answer execution
+PASS
+```
+
+---
+
+# EVENT Answers
+
+Example:
+
+```text
+What happened at Entry Interface?
+```
+
+Route:
+
+```text
+EVENT
+```
+
+The answer provides the event summary rather than treating the question as merely a request for timestamp information.
+
+Validation:
+
+```text
+Runtime event answer execution
+PASS
+```
+
+This preserves the distinction:
+
+```text
+EVENT QUESTION
+!=
+EVENT TIME QUESTION
+```
+
+---
+
+# DECISION_THREAD Answers
+
+Example:
+
+```text
+What happened with the Artemis II heat shield?
+```
+
+Route:
+
+```text
+DECISION_THREAD
+```
+
+Retrieved thread:
+
+```text
+TPS_RISK_MITIGATION_CLOSURE
+```
+
+The answer is constructed from:
+
+```text
+thread classification
+
+detection
+
+action
+
+outcome
+```
+
+and preserves the established Phase 7 engineering evidence chain.
+
+Validation:
+
+```text
+TPS decision-thread smoke answer
+PASS
+
+Runtime decision-thread answer execution
+PASS
+```
+
+---
+
+# DECISION_THREAD_CAUSATION Answers
+
+Example:
+
+```text
+Did the return link loss cause RTC2?
+```
+
+Route:
+
+```text
+DECISION_THREAD_CAUSATION
+```
+
+Answer status:
+
+```text
+SUPPORTED_WITH_CAUSATION_BOUNDARY
+```
+
+The analyst states:
+
+```text
+public evidence does not establish
+that return-link loss caused RTC2
+or changed its targeting
+```
+
+Supported public sequence:
+
+```text
+return-link interruption
+↓
+communications recovery
+↓
+burn preparation resumed
+↓
+RTC2 execution
+```
+
+MissionLab guardrail:
+
+```text
+TEMPORAL_SEQUENCE
+!=
+CAUSATION
+```
+
+Validation:
+
+```text
+RTC2 causation-boundary smoke answer
+PASS
+
+Runtime causation answer execution
+PASS
+
+return-link loss -> RTC2 causation claimed
+NO
+
+temporal sequence != causation
+PRESERVED
+```
+
+---
+
+# KNOWN_UNKNOWN Answers
+
+MissionLab can answer questions whose correct answer is:
+
+```text
+not publicly known
+```
+
+rather than fabricating a conclusion.
+
+Example:
+
+```text
+What was the root cause of the urine vent-line issue?
+```
+
+Route:
+
+```text
+KNOWN_UNKNOWN
+```
+
+Status:
+
+```text
+UNKNOWN_IN_CURATED_PUBLIC_EVIDENCE
+```
+
+The answer preserves:
+
+```text
+POSSIBLE_ICE
+!=
+CONFIRMED_ICE
+```
+
+and:
+
+```text
+troubleshooting action
+!=
+confirmed root cause
+```
+
+Validation:
+
+```text
+Vent-line known/unknown smoke answer
+PASS
+
+Runtime KNOWN_UNKNOWN answer execution
+PASS
+
+urine vent-line root cause
+UNKNOWN
+
+possible ice != confirmed ice
+PRESERVED
+```
+
+---
+
+# Open Investigation Protection
+
+Known/unknown policy requires:
+
+```text
+unknowns are answerable
+```
+
+but:
+
+```text
+unknown answer must state the evidence boundary
+```
+
+Forbidden:
+
+```text
+hypothesis → fact promotion
+
+open investigation → forced closure
+
+missing exact time → invented exact time
+```
+
+Validation:
+
+```text
+Known/unknown policy
+PASS
+
+Unknown boundary requirement
+PASS
+
+Hypothesis / fact separation
+PASS
+
+Open-investigation preservation
+PASS
+
+Missing-time non-inference
+PASS
+```
+
+---
+
+# Deterministic Calculation Answers
+
+Phase 8B can call Phase 8A deterministic tools when a question requires calculation.
+
+Example:
+
+```text
+How long was it between Earthset and Earthrise?
+```
+
+Inputs:
+
+```text
+Earthset
+2026-04-06T22:41:00Z
+
+Earthrise
+2026-04-06T23:22:00Z
+```
+
+Result:
+
+```text
+41 minutes
+```
+
+Formatted:
+
+```text
+00:00:41:00
+```
+
+The answer also preserves the evidence boundary:
+
+```text
+reported-image interval
+!=
+full-occultation duration
+```
+
+Validation:
+
+```text
+Earthset/Earthrise calculation smoke answer
+PASS
+
+Runtime deterministic elapsed-time answer
+PASS
+
+Earthset -> Earthrise reported-image interval
+41 min
+
+reported-image interval != full-occultation duration
+PASS
+```
+
+---
+
+# DISCIPLINE Answers
+
+Example:
+
+```text
+What does the SCIENCE perspective focus on?
+```
+
+Route:
+
+```text
+DISCIPLINE
+```
+
+The analyst returns:
+
+```text
+discipline role context
+
+MissionLab focus areas
+
+selected PRIMARY-priority mission events
+
+supporting citations
+```
+
+SCIENCE focus includes:
+
+```text
+lunar targeting
+
+crew observations
+
+science imaging
+
+impact flashes
+
+terminator terrain
+
+eclipse observations
+
+LRO context
+```
+
+Validation:
+
+```text
+SCIENCE discipline smoke answer
+PASS
+
+Runtime discipline answer execution
+PASS
+```
+
+---
+
+# SEARCH_SYNTHESIS Fallback
+
+Questions that do not match a specialized route use:
+
+```text
+SEARCH_SYNTHESIS
+```
+
+The analyst queries the Phase 8A unified evidence index.
+
+If matching evidence exists:
+
+```text
+top evidence records
+→ cited synthesis
+```
+
+If no sufficient indexed evidence exists:
+
+```text
+INSUFFICIENT_INDEXED_EVIDENCE
+```
+
+with an explicit boundary statement.
+
+The fallback does not invent facts merely because a question was asked.
+
+Validation:
+
+```text
+Runtime search-synthesis fallback
+PASS
+```
+
+---
+
+# Deterministic Retrieval Authority
+
+Phase 8 establishes a strict authority hierarchy.
+
+Authoritative:
+
+```text
+validated MissionLab reference artifacts
+
+deterministic retrieval
+
+deterministic calculations
+```
+
+Optional presentation layer:
+
+```text
+local LLM
+
+browser LLM
+```
+
+The optional presentation layer may:
+
+```text
+rewrite locked claims for readability
+```
+
+It may not:
+
+```text
+add facts
+
+override evidence boundaries
+
+change provenance
+
+invent citations
+```
+
+Validation:
+
+```text
+Deterministic retrieval authority
+PASS
+
+Deterministic calculation authority
+PASS
+
+LLM new-fact prohibition
+PASS
+
+LLM provenance-change prohibition
+PASS
+
+LLM citation-invention prohibition
+PASS
+
+LLM evidence-boundary override prohibition
+PASS
+```
+
+---
+
+# Optional Local LLM Handoff
+
+Adapter:
+
+```text
+LOCAL_LLM_PROMPT_HANDOFF
+```
+
+The adapter exports:
+
+```text
+question
+
+locked claims
+
+claim provenance
+
+claim confidence
+
+citation IDs
+
+citation registry
+
+deterministic answer
+
+strict formatting rules
+```
+
+It does not execute a model.
+
+Properties:
+
+```text
+optional = true
+
+execution_performed = false
+
+network_call_performed = false
+
+API key required = false
+
+paid model required = false
+```
+
+Validation:
+
+```text
+Local LLM handoff adapter
+PASS
+
+Live local LLM handoff construction
+PASS
+```
+
+---
+
+# Optional Browser LLM Handoff
+
+Adapter:
+
+```text
+BROWSER_LLM_PROMPT_HANDOFF
+```
+
+The same locked evidence bundle can be exported for optional browser-side presentation.
+
+Properties:
+
+```text
+optional = true
+
+execution_performed = false
+
+network_call_performed = false
+
+API key required = false
+
+paid model required = false
+```
+
+Validation:
+
+```text
+Browser LLM handoff adapter
+PASS
+
+Live browser LLM handoff construction
+PASS
+```
+
+---
+
+# Locked-Claim LLM Policy
+
+Optional LLM prompt explicitly requires:
+
+```text
+Use ONLY supplied locked claims and citations.
+
+Do not add facts.
+
+Do not invent timestamps.
+
+Do not invent causes.
+
+Do not invent root causes.
+
+Do not infer private controller actions.
+
+Do not infer private Mission Control dialogue.
+
+Do not convert MissionLab-derived information
+into NASA-reported fact.
+
+Preserve evidence limitations.
+
+Every factual sentence must use
+the supplied citations.
+```
+
+Additional handoff guardrails:
+
+```text
+Do not infer undisclosed decision authority.
+
+Do not convert temporal order into causation.
+
+Do not promote hypotheses to root causes.
+
+Preserve MissionLab-derived vs NASA-reported provenance.
+```
+
+Validation:
+
+```text
+Locked-claim handoff
+PASS
+
+Citation-preserving handoff
+PASS
+
+No handoff model execution
+PASS
+
+No handoff network call
+PASS
+```
+
+---
+
+# Zero-Cost Runtime
+
+Phase 8B contains no dependency on:
+
+```text
+OpenAI SDK
+
+Anthropic SDK
+
+Gemini SDK
+```
+
+and performs no embedded HTTP model request.
+
+Validation:
+
+```text
+No OpenAI SDK dependency
+PASS
+
+No Anthropic SDK dependency
+PASS
+
+No Gemini SDK dependency
+PASS
+
+No embedded HTTP model call
+PASS
+```
+
+Therefore:
+
+```text
+API key required
+NONE
+
+paid model dependency
+NONE
+
+embedded model execution
+NONE
+```
+
+---
+
+# Persisted Smoke Answers
+
+Phase 8B stores six smoke-test answers.
+
+Questions:
+
+```text
+When was RTC2?
+
+Did the return link loss cause RTC2?
+
+What was the root cause of the urine vent-line issue?
+
+How long was it between Earthset and Earthrise?
+
+What does the SCIENCE perspective focus on?
+
+What happened with the Artemis II heat shield?
+```
+
+Validated routes:
+
+```text
+EVENT_TIME
+
+DECISION_THREAD_CAUSATION
+
+KNOWN_UNKNOWN
+
+DETERMINISTIC_ELAPSED_TIME
+
+DISCIPLINE
+
+DECISION_THREAD
+```
+
+Validation:
+
+```text
+6 persisted smoke answers
+PASS
+
+Smoke-answer citation integrity
+PASS
+
+RTC2 event-time smoke answer
+PASS
+
+RTC2 causation-boundary smoke answer
+PASS
+
+Vent-line known/unknown smoke answer
+PASS
+
+Earthset/Earthrise calculation smoke answer
+PASS
+
+SCIENCE discipline smoke answer
+PASS
+
+TPS decision-thread smoke answer
+PASS
+```
+
+---
+
+# Persisted LLM Handoff Tests
+
+The smoke artifact also contains:
+
+```text
+local_llm_handoff
+
+browser_llm_handoff
+```
+
+Validation:
+
+```text
+Persisted local LLM handoff
+PASS
+
+Persisted browser LLM handoff
+PASS
+```
+
+---
+
+# Critical Non-Equivalences
+
+Phase 8B validates eight critical analyst boundaries.
+
+```text
+LLM_PRESENTATION
+!=
+EVIDENCE_AUTHORITY
+```
+
+```text
+RETRIEVAL_MATCH
+!=
+FACT_NOT_SUPPORTED_BY_RECORD
+```
+
+```text
+MISSIONLAB_DERIVED
+!=
+NASA_REPORTED
+```
+
+```text
+TEMPORAL_SEQUENCE
+!=
+CAUSATION
+```
+
+```text
+HYPOTHESIS
+!=
+CONFIRMED_ROOT_CAUSE
+```
+
+```text
+UNKNOWN_PUBLIC_FACT
+!=
+PERMISSION_TO_INVENT
+```
+
+```text
+DISCIPLINE_RELEVANCE
+!=
+DECISION_AUTHORITY
+```
+
+```text
+OPTIONAL_LLM_HANDOFF
+!=
+REQUIRED_MODEL_DEPENDENCY
+```
+
+Validation:
+
+```text
+8 critical non-equivalences
+PASS
+
+LLM presentation / evidence authority boundary
+PASS
+
+Retrieval match / unsupported fact boundary
+PASS
+
+MissionLab-derived / NASA-reported boundary
+PASS
+
+Temporal-sequence / causation boundary
+PASS
+
+Hypothesis / root-cause boundary
+PASS
+
+Unknown-public-fact / invention boundary
+PASS
+
+Discipline-relevance / authority boundary
+PASS
+
+Optional-handoff / required-model boundary
+PASS
+```
+
+---
+
+# Independent Validation
+
+Created:
+
+```text
+scripts/validation/validate_mission_analyst_interface.py
+```
+
+Final validation:
+
+```text
+Analysis identity
+PASS
+
+Reference / processed interface consistency
+PASS
+
+Phase 8A dependency
+PASS
+
+Phase 7A dependency
+PASS
+
+Phase 7B dependency
+PASS
+
+8-route deterministic question router
+PASS
+
+EVENT_TIME route
+PASS
+
+EVENT route
+PASS
+
+DECISION_THREAD route
+PASS
+
+DECISION_THREAD_CAUSATION route
+PASS
+
+DISCIPLINE route
+PASS
+
+DETERMINISTIC_ELAPSED_TIME route
+PASS
+
+KNOWN_UNKNOWN route
+PASS
+
+SEARCH_SYNTHESIS route
+PASS
+
+LLM-free routing
+PASS
+
+Citation-first answer contract
+PASS
+
+Claim-level citation requirement
+PASS
+
+Provenance-label requirement
+PASS
+
+Known/unknown answer support
+PASS
+
+Unsupported-fact invention prohibition
+PASS
+
+No LLM requirement
+PASS
+
+No paid-model requirement
+PASS
+
+Deterministic retrieval authority
+PASS
+
+Deterministic calculation authority
+PASS
+
+LLM new-fact prohibition
+PASS
+
+LLM provenance-change prohibition
+PASS
+
+LLM citation-invention prohibition
+PASS
+
+LLM evidence-boundary override prohibition
+PASS
+
+Known/unknown policy
+PASS
+
+Unknown boundary requirement
+PASS
+
+Hypothesis / fact separation
+PASS
+
+Open-investigation preservation
+PASS
+
+Missing-time non-inference
+PASS
+
+2 optional LLM handoff adapters
+PASS
+
+Local LLM handoff adapter
+PASS
+
+Browser LLM handoff adapter
+PASS
+
+Embedded model execution disabled
+PASS
+
+API-key requirement
+NONE
+
+Paid-model requirement
+NONE
+
+6 persisted smoke answers
+PASS
+
+Smoke-answer citation integrity
+PASS
+
+RTC2 event-time smoke answer
+PASS
+
+RTC2 causation-boundary smoke answer
+PASS
+
+Vent-line known/unknown smoke answer
+PASS
+
+Earthset/Earthrise calculation smoke answer
+PASS
+
+SCIENCE discipline smoke answer
+PASS
+
+TPS decision-thread smoke answer
+PASS
+
+Persisted local LLM handoff
+PASS
+
+Persisted browser LLM handoff
+PASS
+
+Runtime EVENT_TIME answer execution
+PASS
+
+Runtime causation answer execution
+PASS
+
+Runtime KNOWN_UNKNOWN answer execution
+PASS
+
+Runtime deterministic elapsed-time answer
+PASS
+
+Runtime discipline answer execution
+PASS
+
+Runtime decision-thread answer execution
+PASS
+
+Runtime event answer execution
+PASS
+
+Runtime search-synthesis fallback
+PASS
+
+Live local LLM handoff construction
+PASS
+
+Live browser LLM handoff construction
+PASS
+
+Locked-claim handoff
+PASS
+
+Citation-preserving handoff
+PASS
+
+No handoff model execution
+PASS
+
+No handoff network call
+PASS
+
+No OpenAI SDK dependency
+PASS
+
+No Anthropic SDK dependency
+PASS
+
+No Gemini SDK dependency
+PASS
+
+No embedded HTTP model call
+PASS
+
+8 critical non-equivalences
+PASS
+
+Structured retrieval roadmap coverage
+PASS
+
+Deterministic tools roadmap coverage
+PASS
+
+Citation-first answers roadmap coverage
+PASS
+
+Optional local/browser LLM roadmap coverage
+PASS
+
+No-paid-model roadmap coverage
+PASS
+
+Phase 8 roadmap coverage
+PASS
+
+Output registry
+PASS
+```
+
+Final result:
+
+```text
+PHASE 8B VALIDATION PASSED
+
+PHASE 8 ROADMAP COVERAGE PASSED
+```
+
+---
+
+# Phase 8 Architecture Final State
+
+Deterministic retrieval:
+
+```text
+AUTHORITATIVE
+```
+
+Deterministic calculations:
+
+```text
+AUTHORITATIVE
+```
+
+Citation-first answer composer:
+
+```text
+COMPLETE
+```
+
+Claim-level citations:
+
+```text
+COMPLETE
+```
+
+Known/unknown handling:
+
+```text
+COMPLETE
+```
+
+Causation guardrails:
+
+```text
+COMPLETE
+```
+
+Discipline-aware answers:
+
+```text
+COMPLETE
+```
+
+Mission-event answers:
+
+```text
+COMPLETE
+```
+
+Decision-thread answers:
+
+```text
+COMPLETE
+```
+
+Mission-clock answers:
+
+```text
+COMPLETE
+```
+
+Search fallback:
+
+```text
+COMPLETE
+```
+
+Optional local LLM handoff:
+
+```text
+COMPLETE
+```
+
+Optional browser LLM handoff:
+
+```text
+COMPLETE
+```
+
+Embedded LLM execution:
+
+```text
+NONE
+```
+
+Network model dependency:
+
+```text
+NONE
+```
+
+API-key dependency:
+
+```text
+NONE
+```
+
+Paid-model dependency:
+
+```text
+NONE
+```
+
+---
+
+# Phase 8 Roadmap Closure
+
+## Structured Retrieval Over Events / Data / Sources
+
+```text
+COMPLETE
+```
+
+Implemented in:
+
+```text
+Phase 8A
+```
+
+Coverage:
+
+```text
+25 datasets
+
+81 normalized public sources
+
+24 mission events
+
+10 decision threads
+
+6 postflight records
+
+146 unified searchable records
+```
+
+---
+
+## Deterministic Calculations Exposed as Tools
+
+```text
+COMPLETE
+```
+
+Tools include:
+
+```text
+UTC -> MET
+
+MET -> UTC
+
+elapsed time
+```
+
+plus deterministic retrieval tools.
+
+---
+
+## Citation-First Answers
+
+```text
+COMPLETE
+```
+
+Every claim requires citations.
+
+Unsupported facts cannot be silently introduced.
+
+---
+
+## Optional Local / Browser LLM
+
+```text
+COMPLETE AS OPTIONAL HANDOFF
+```
+
+The LLM layer is:
+
+```text
+presentation-only
+
+non-authoritative
+
+optional
+
+zero-cost compatible
+```
+
+---
+
+## No Paid Model Dependency
+
+```text
+COMPLETE
+```
+
+Required paid APIs:
+
+```text
+NONE
+```
+
+---
+
+# Phase 8 Final Status
+
+```text
+PHASE 8 — EVIDENCE-GROUNDED MISSION ANALYST
+```
+
+Structured retrieval:
+
+```text
+COMPLETE
+```
+
+Deterministic tools:
+
+```text
+COMPLETE
+```
+
+Citation-bearing retrieval:
+
+```text
+COMPLETE
+```
+
+Citation-first answers:
+
+```text
+COMPLETE
+```
+
+Known / unknown handling:
+
+```text
+COMPLETE
+```
+
+Provenance enforcement:
+
+```text
+COMPLETE
+```
+
+Causation protection:
+
+```text
+COMPLETE
+```
+
+Root-cause protection:
+
+```text
+COMPLETE
+```
+
+MissionLab-derived / NASA-reported separation:
+
+```text
+COMPLETE
+```
+
+Discipline-aware analysis:
+
+```text
+COMPLETE
+```
+
+Optional LLM presentation:
+
+```text
+COMPLETE
+```
+
+Zero-cost deterministic fallback:
+
+```text
+COMPLETE
+```
+
+Independent validation:
+
+```text
+PASS
+```
+
+Overall:
+
+```text
+PHASE 8
+COMPLETE RELATIVE TO VALIDATED MISSIONLAB EVIDENCE
+```
+
+---
+
+# Phase 9 Handoff
+
+Next roadmap phase:
+
+```text
+PHASE 9 — PUBLICATION QUALITY
+```
+
+Phase 9 should not add major new mission reconstruction.
+
+Its role is to turn the validated MissionLab engineering system into a publication-quality public project.
+
+The work should focus on:
+
+```text
+repository architecture documentation
+
+final README
+
+mission-data provenance guide
+
+methodology documentation
+
+validation summary
+
+engineering-boundary documentation
+
+Phase 1-8 results summary
+
+key figures and visual products
+
+analyst usage guide
+
+reproducibility instructions
+
+installation instructions
+
+public demo workflow
+
+final technical narrative
+
+portfolio / recruiter-facing project explanation
+
+repository cleanup
+
+final cross-phase validation
+
+publication-quality release
+```
+
+The Phase 9 publication layer must preserve all established evidence boundaries and should consume the validated Phase 1-8 products rather than recreate them.
+
+---
