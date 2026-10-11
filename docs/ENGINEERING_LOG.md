@@ -37709,3 +37709,476 @@ Phase 2 now provides the mission-clock, trajectory, entry, communications, maneu
 Phase 3 will begin with inspection of the existing repository and current public evidence before creating any new permanent datasets or analyses.
 
 ---
+
+---
+
+# Phase 3A.1 — Orion Environment Data Ingestion and Normalization
+
+## Goal
+
+Establish the first Artemis II Phase 3 spacecraft-environment dataset by ingesting the publicly released NASA Planetary Data System Orion environmental logger products and normalizing them against the MissionLab Artemis II mission clock.
+
+The Phase 3A.1 scope is limited to direct measurements released in the Artemis II PDS Orion Environment Data collection.
+
+The measurements characterize local storage-locker environments inside Orion.
+
+They are not interpreted as a complete reconstruction of the Orion cabin environment or the Environmental Control and Life Support System telemetry stream.
+
+---
+
+## NASA PDS Source Acquisition
+
+Created:
+
+```text
+scripts/ingestion/download_orion_environment_data.py
+```
+
+Source:
+
+```text
+NASA Planetary Data System
+Artemis II Mission Bundle
+Orion Environment Data
+```
+
+Released environmental loggers:
+
+```text
+SN 1104
+SN 1105
+```
+
+Instrument class:
+
+```text
+Onset HOBO MX1101
+```
+
+Measured quantities:
+
+```text
+temperature
+relative humidity
+dew point
+```
+
+Nominal sampling cadence:
+
+```text
+60 seconds
+```
+
+The downloader retrieved:
+
+```text
+art002_086-162546_111-205046_hobo1104_raw_v01.csv
+art002_086-162546_111-205046_hobo1104_raw_v01.xml
+
+art002_086-162926_111-203826_hobo1105_raw_v01.csv
+art002_086-162926_111-203826_hobo1105_raw_v01.xml
+
+collection_data_orion_environment.xml
+collection_data_orion_environment_inventory.csv
+```
+
+The NASA PDS bundle checksum manifest was also retrieved:
+
+```text
+urn-nasa-pds-artemis2_mission.md5
+```
+
+---
+
+## Source Integrity Validation
+
+All six downloaded products passed checksum validation against the NASA PDS bundle manifest.
+
+Observed MD5 values:
+
+```text
+SN 1104 CSV
+ef6a42e7d2189ab2329121995d8446f1
+
+SN 1104 XML
+8b32527433bed7cb659a7778f9893c12
+
+SN 1105 CSV
+f5ed3754e04d8a216955d5dea838986a
+
+SN 1105 XML
+d5ef9dd100cf3a5320e321f6d482264d
+
+Collection XML
+a8a8bc216ccc0bff37b57d9c0f90d183
+
+Collection inventory CSV
+ea7e81b6d9733ce6a6bda8c75d60b74f
+```
+
+Downloader result:
+
+```text
+ORION ENVIRONMENT DOWNLOAD COMPLETE
+```
+
+Products downloaded:
+
+```text
+6 / 6
+```
+
+---
+
+## Environment Normalization
+
+Created:
+
+```text
+scripts/processing/normalize_orion_environment.py
+```
+
+Generated:
+
+```text
+data/processed/eclss/orion_environment_normalized.csv
+
+data/processed/eclss/orion_environment_metadata.json
+```
+
+The normalization layer converts the released logger timestamps into UTC and correlates every sample with the existing Artemis II MissionLab launch epoch:
+
+```text
+2026-04-01T22:35:12Z
+```
+
+The normalized dataset preserves:
+
+```text
+logger serial number
+
+source sample number
+
+original CDT timestamp
+
+normalized UTC timestamp
+
+Mission Elapsed Time in seconds
+
+formatted Mission Elapsed Time
+
+mission-period classification
+
+temperature in degrees Celsius
+
+relative humidity in percent
+
+dew point in degrees Celsius
+
+source provenance
+
+source filename
+```
+
+---
+
+## Logger SN 1104
+
+Normalized records:
+
+```text
+37,706
+```
+
+Start:
+
+```text
+2026-03-26T16:25:46Z
+```
+
+Stop:
+
+```text
+2026-04-21T20:50:46Z
+```
+
+Sample-number discontinuities:
+
+```text
+0
+```
+
+Non-60-second sampling intervals:
+
+```text
+0
+```
+
+Result:
+
+```text
+CONTINUOUS 60-SECOND SERIES
+```
+
+---
+
+## Logger SN 1105
+
+Normalized records:
+
+```text
+37,690
+```
+
+Start:
+
+```text
+2026-03-26T16:29:26Z
+```
+
+Stop:
+
+```text
+2026-04-21T20:38:26Z
+```
+
+Sample-number discontinuities:
+
+```text
+0
+```
+
+Non-60-second sampling intervals:
+
+```text
+0
+```
+
+Result:
+
+```text
+CONTINUOUS 60-SECOND SERIES
+```
+
+---
+
+## Combined Dataset
+
+Combined normalized records:
+
+```text
+75,396
+```
+
+Mission-period distribution:
+
+```text
+PRELAUNCH
+18,016 records
+
+IN_FLIGHT
+26,104 records
+
+POSTFLIGHT
+31,276 records
+```
+
+Total:
+
+```text
+75,396 records
+```
+
+Mission-period labels are MissionLab-derived classifications based on the normalized UTC timestamp relative to the Artemis II mission clock.
+
+They are not fields contained in the original PDS CSV files.
+
+---
+
+## Independent Validation
+
+Created:
+
+```text
+scripts/validation/validate_orion_environment_normalization.py
+```
+
+Independent validation result:
+
+```text
+Metadata identity: PASS
+Raw NASA PDS source counts: PASS
+Normalized CSV schema: PASS
+Combined record count: PASS
+Record-level numeric fields: PASS
+CDT to UTC conversion: PASS
+Mission elapsed time: PASS
+Mission-period classification: PASS
+Provenance preservation: PASS
+Combined temporal ordering: PASS
+```
+
+Logger SN 1104:
+
+```text
+record count: PASS
+start/stop UTC: PASS
+60-second cadence: PASS
+sample continuity: PASS
+```
+
+Logger SN 1105:
+
+```text
+record count: PASS
+start/stop UTC: PASS
+60-second cadence: PASS
+sample continuity: PASS
+```
+
+Source and mission metadata:
+
+```text
+NASA PDS source metadata: PASS
+Mission-clock metadata: PASS
+```
+
+Generated products:
+
+```text
+normalized CSV: PASS
+metadata JSON: PASS
+```
+
+Final validator result:
+
+```text
+PHASE 3A.1 VALIDATION PASSED
+```
+
+---
+
+# Phase 3A.1 Evidence Boundaries
+
+## Direct Measurements
+
+The following fields originate directly from the released NASA PDS logger records:
+
+```text
+temperature
+relative humidity
+dew point
+sample number
+source timestamp
+```
+
+These values retain:
+
+```text
+NASA_PDS_FLIGHT_SENSOR_DATA
+```
+
+provenance.
+
+---
+
+## MissionLab-Derived Fields
+
+The following fields are derived by MissionLab:
+
+```text
+UTC conversion
+
+Mission Elapsed Time
+
+mission-period classification
+```
+
+Therefore:
+
+```text
+MISSIONLAB-DERIVED TIME CONTEXT
+!=
+NASA-REPORTED SENSOR FIELD
+```
+
+---
+
+## Storage-Locker Environment
+
+The HOBO instruments characterize environmental conditions at their physical logger locations.
+
+Therefore:
+
+```text
+HOBO STORAGE-LOCKER ENVIRONMENT
+!=
+COMPLETE ORION CABIN ENVIRONMENT
+```
+
+and:
+
+```text
+HOBO STORAGE-LOCKER ENVIRONMENT
+!=
+COMPLETE ORION ECLSS TELEMETRY
+```
+
+The dataset may be used to analyze publicly released local environmental trends and their relationship to mission events.
+
+It must not be presented as a full spacecraft atmospheric-control telemetry record.
+
+---
+
+## Measurement versus Interpretation
+
+Direct temperature, relative-humidity, and dew-point values are public sensor measurements.
+
+Any later:
+
+```text
+change point
+
+anomaly score
+
+trend classification
+
+event correlation
+
+operational interpretation
+```
+
+must be explicitly labeled as MissionLab-derived analysis unless independently supported by a NASA source.
+
+---
+
+# Phase 3A.1 Status
+
+```text
+DOWNLOAD: COMPLETE
+
+NASA PDS CHECKSUM VALIDATION: PASS
+
+NORMALIZATION: COMPLETE
+
+75,396 RECORDS NORMALIZED
+
+LOGGER CONTINUITY: PASS
+
+MISSION-CLOCK CORRELATION: PASS
+
+INDEPENDENT VALIDATION: PASS
+
+PHASE 3A.1: COMPLETE
+```
+
+Next:
+
+```text
+Phase 3A.2
+Orion Environmental Trend Reconstruction
+```
+
+Phase 3A.2 will quantify the released environmental measurements across prelaunch, inflight, and postflight periods and establish the baseline environmental behavior required before any project-derived change-point or anomaly analysis.
+
+---
