@@ -53539,3 +53539,1536 @@ postflight engineering timeline
 ```
 
 ---
+
+---
+
+# Phase 7A — Artemis II Mission Control Discipline Perspectives
+
+## Goal
+
+Build discipline-specific Mission Control / engineering perspectives over the already validated Artemis II evidence spine.
+
+Phase 7A does not reconstruct private console loops.
+
+It creates analytical views for:
+
+```text
+FLIGHT
+
+FDO
+
+FAO
+
+EECOM
+
+COMM
+
+SCIENCE
+
+ENGINEERING_SUPPORT
+```
+
+using the same underlying public and MissionLab-derived mission evidence.
+
+---
+
+# Analysis
+
+Created:
+
+```text
+scripts/analysis/build_mission_control_perspectives.py
+```
+
+Created independent validator:
+
+```text
+scripts/validation/validate_mission_control_perspectives.py
+```
+
+Generated:
+
+```text
+data/reference/artemis_ii_mission_control_perspectives.json
+
+data/processed/mission_control/artemis_ii_mission_control_perspectives.json
+
+data/processed/mission_control/artemis_ii_discipline_prioritized_timeline.csv
+
+docs/assets/mission_control/phase7a_discipline_priority_matrix.svg
+```
+
+Dataset:
+
+```text
+phase7a_artemis_ii_mission_control_perspectives
+```
+
+Status:
+
+```text
+DISCIPLINE_LENSES_AND_SHARED_TIMELINE_COMPLETE
+```
+
+---
+
+# Cross-Phase Evidence Dependencies
+
+Phase 7A integrates six previously validated evidence products:
+
+```text
+PHASE2_INTEGRATED_OPERATIONS
+
+WASTE_MANAGEMENT_EVIDENCE
+
+TPS_EVIDENCE
+
+PHASE4_ENTRY_RECOVERY_EVIDENCE
+
+PHASE5_RADIATION_INTERFACE
+
+PHASE6_LUNAR_OBSERVATIONS
+```
+
+These provide:
+
+```text
+flight dynamics
+
+maneuvers
+
+GNC
+
+communications
+
+propulsion
+
+crew-environment troubleshooting
+
+thermal-protection evidence
+
+entry / descent / recovery
+
+space-weather / radiation boundaries
+
+lunar science observations
+```
+
+Validation:
+
+```text
+6 cross-phase dependencies
+PASS
+```
+
+---
+
+# Public Mission-Control Role Grounding
+
+Phase 7A records four NASA role-source references supporting the discipline framework.
+
+Validated source categories include:
+
+```text
+NASA JSC Mission Control Center
+
+NASA Artemis I Mission Control at a Glance
+
+NASA Artemis II Science Officers
+
+NASA Artemis II flight-control leadership material
+```
+
+Validation:
+
+```text
+4 public role sources
+PASS
+
+NASA mission-control role grounding
+PASS
+```
+
+---
+
+# FLIGHT Perspective
+
+Classification:
+
+```text
+OFFICIAL_MISSION_CONTROL_ROLE_USED_AS_MISSIONLAB_LENS
+```
+
+MissionLab focus:
+
+```text
+overall mission state
+
+crew safety
+
+mission objectives
+
+cross-discipline integration
+
+risk and constraint visibility
+
+decision readiness
+```
+
+The FLIGHT lens asks primarily:
+
+```text
+What changed in the integrated mission state?
+
+Does the condition threaten crew safety or mission success?
+
+Which disciplines require coordination?
+
+Is a decision or contingency posture required?
+```
+
+Validation:
+
+```text
+FLIGHT role classification
+PASS
+
+FLIGHT prioritized view
+PASS
+```
+
+---
+
+# FDO Perspective
+
+Classification:
+
+```text
+OFFICIAL_MISSION_CONTROL_ROLE_USED_AS_MISSIONLAB_LENS
+```
+
+MissionLab focus:
+
+```text
+trajectory
+
+maneuver timing
+
+orbit-determination context
+
+lunar geometry
+
+entry-targeting context
+
+dynamic flight phases
+```
+
+Validation:
+
+```text
+FDO role classification
+PASS
+
+FDO prioritized view
+PASS
+```
+
+---
+
+# FAO Perspective
+
+Classification:
+
+```text
+OFFICIAL_MISSION_CONTROL_ROLE_USED_AS_MISSIONLAB_LENS
+```
+
+MissionLab focus:
+
+```text
+mission timeline
+
+crew activities
+
+schedule changes
+
+science windows
+
+contingency activities
+
+planned-activity handoffs
+```
+
+Validation:
+
+```text
+FAO role classification
+PASS
+
+FAO prioritized view
+PASS
+```
+
+---
+
+# EECOM Perspective
+
+Classification:
+
+```text
+ORION_FLIGHT_CONTROL_ROLE_USED_AS_MISSIONLAB_LENS
+```
+
+MissionLab focus:
+
+```text
+crew environment
+
+life support
+
+waste management
+
+consumables
+
+thermal state
+
+crew habitability
+
+contingency posture
+```
+
+This lens is especially important for:
+
+```text
+Flight Day 1 toilet fault indication
+
+restoration to normal toilet operations
+
+Flight Day 4 wastewater vent-line issue
+
+entry crew-environment context
+```
+
+Validation:
+
+```text
+EECOM role classification
+PASS
+
+EECOM prioritized view
+PASS
+```
+
+---
+
+# COMM Perspective
+
+Classification:
+
+```text
+MISSIONLAB_ANALYTICAL_LENS
+```
+
+MissionLab does not claim:
+
+```text
+COMM
+```
+
+as an exact Artemis II console call sign derived from private staffing records.
+
+Instead, the COMM lens groups public evidence concerning:
+
+```text
+DSN
+
+network transitions
+
+expected lunar occultation
+
+entry plasma blackout
+
+unexpected return-link loss
+
+reacquisition
+
+communications availability
+```
+
+Validation:
+
+```text
+COMM analytical-lens boundary
+PASS
+
+COMM prioritized view
+PASS
+
+COMM call-sign non-claim
+PASS
+```
+
+---
+
+# SCIENCE Perspective
+
+Classification:
+
+```text
+OFFICIAL_ARTEMIS_II_CONSOLE_ROLE_USED_AS_MISSIONLAB_LENS
+```
+
+MissionLab focus:
+
+```text
+lunar targeting
+
+crew observations
+
+science imagery
+
+impact flashes
+
+terminator terrain
+
+eclipse observations
+
+LRO context
+```
+
+Validation:
+
+```text
+SCIENCE Artemis II console classification
+PASS
+
+SCIENCE prioritized view
+PASS
+```
+
+---
+
+# ENGINEERING_SUPPORT Perspective
+
+Classification:
+
+```text
+MISSIONLAB_ANALYTICAL_LENS
+```
+
+This lens represents cross-system technical support rather than an asserted single front-room console call sign.
+
+MissionLab focus:
+
+```text
+system troubleshooting
+
+root-cause evidence
+
+model limitations
+
+thermal protection
+
+hardware behavior
+
+postflight investigation
+
+engineering closure
+```
+
+Validation:
+
+```text
+ENGINEERING_SUPPORT analytical-lens boundary
+PASS
+
+ENGINEERING_SUPPORT prioritized view
+PASS
+
+ENGINEERING_SUPPORT call-sign non-claim
+PASS
+```
+
+---
+
+# Shared Mission Timeline
+
+Phase 7A created one shared timeline containing:
+
+```text
+24 mission events
+```
+
+Each event carries priority values for all seven analytical lenses.
+
+Priority scale:
+
+```text
+0
+CONTEXT
+
+1
+AWARENESS
+
+2
+HIGH
+
+3
+PRIMARY
+```
+
+Validation:
+
+```text
+24 shared-timeline events
+PASS
+
+Contiguous event ordering
+PASS
+
+Timeline event-ID uniqueness
+PASS
+
+Complete 7-discipline priority registry
+PASS
+
+4-level priority scale
+PASS
+```
+
+---
+
+# Timing Policy
+
+Phase 7A preserves original evidence precision.
+
+Events without defensible exact UTC remain untimed.
+
+Therefore:
+
+```text
+DATE-ONLY OR RELATIVE EVENT
+!=
+EXACT UTC EVENT
+```
+
+No fabricated UTC or MET is assigned.
+
+Validation:
+
+```text
+No fabricated UTC for untimed events
+PASS
+
+No fabricated MET for untimed events
+PASS
+```
+
+---
+
+# Selected Cross-Discipline Anchors
+
+## Flight Day 4 Waste-System Issue
+
+Primary lenses:
+
+```text
+FLIGHT
+
+FAO
+
+EECOM
+
+ENGINEERING_SUPPORT
+```
+
+Interpretation:
+
+```text
+crew-system condition
++
+timeline implications
++
+environment / habitability responsibility
++
+technical troubleshooting
+```
+
+Validation:
+
+```text
+Waste-system cross-discipline anchor
+PASS
+```
+
+---
+
+## OTC3
+
+Primary lenses:
+
+```text
+FLIGHT
+
+FDO
+
+FAO
+```
+
+Interpretation:
+
+```text
+mission trajectory decision
+
+flight-dynamics relevance
+
+mission timeline execution
+```
+
+Validation:
+
+```text
+OTC3 cross-discipline anchor
+PASS
+```
+
+---
+
+## Pericynthion
+
+Primary lenses:
+
+```text
+FLIGHT
+
+FDO
+
+COMM
+
+SCIENCE
+```
+
+Interpretation:
+
+```text
+major mission geometry milestone
+
+flight-dynamics anchor
+
+lunar communications geometry
+
+science-observation context
+```
+
+Validation:
+
+```text
+Pericynthion cross-discipline anchor
+PASS
+```
+
+---
+
+## Total Solar Eclipse
+
+Primary lenses:
+
+```text
+FDO
+
+FAO
+
+SCIENCE
+```
+
+Interpretation:
+
+```text
+derived geometry window
+
+planned / scheduled science opportunity
+
+confirmed science-observation context
+```
+
+Validation:
+
+```text
+Solar-eclipse cross-discipline anchor
+PASS
+```
+
+---
+
+## Unexpected Return-Link Loss
+
+Primary lenses:
+
+```text
+FLIGHT
+
+FAO
+
+COMM
+
+ENGINEERING_SUPPORT
+```
+
+Interpretation:
+
+```text
+mission-status awareness
+
+timeline consequences
+
+communications recovery
+
+technical investigation
+```
+
+Validation:
+
+```text
+Return-link anomaly cross-discipline anchor
+PASS
+```
+
+---
+
+## RTC2
+
+Primary lenses:
+
+```text
+FLIGHT
+
+FDO
+
+FAO
+
+COMM
+
+ENGINEERING_SUPPORT
+```
+
+The public sequence establishes:
+
+```text
+unexpected return-link loss
+
+communications recovery
+
+burn preparation resumed
+
+RTC2 executed successfully
+```
+
+It does not establish:
+
+```text
+communications event caused a maneuver problem
+```
+
+Validation:
+
+```text
+RTC2 cross-discipline anchor
+PASS
+```
+
+---
+
+## Entry Interface
+
+Primary lenses:
+
+```text
+FLIGHT
+
+FDO
+
+FAO
+
+EECOM
+
+COMM
+
+ENGINEERING_SUPPORT
+```
+
+Entry Interface is one of the strongest integrated mission-control anchors because it simultaneously affects:
+
+```text
+flight-phase transition
+
+trajectory
+
+timeline
+
+crew environment
+
+communications
+
+thermal / entry engineering
+```
+
+Validation:
+
+```text
+Entry Interface cross-discipline anchor
+PASS
+```
+
+---
+
+## Splashdown
+
+Primary lenses:
+
+```text
+FLIGHT
+
+FAO
+
+EECOM
+
+ENGINEERING_SUPPORT
+```
+
+Splashdown marks the transition from:
+
+```text
+flight operations
+```
+
+to:
+
+```text
+crew recovery
+
+spacecraft recovery
+
+postflight engineering
+```
+
+Validation:
+
+```text
+Splashdown cross-discipline anchor
+PASS
+```
+
+---
+
+# Mission-Clock Preservation
+
+Validated anchors retain their established public or derived timing.
+
+Examples:
+
+```text
+Launch
+2026-04-01T22:35:12Z
+
+OTC3
+2026-04-06T03:03:00Z
+
+Pericynthion
+2026-04-06T23:00:46.177998Z
+
+Derived eclipse start
+2026-04-07T00:34:27.220Z
+
+RTC2
+2026-04-10T02:53:00Z
+
+Entry Interface
+2026-04-10T23:53:00Z
+
+Splashdown
+2026-04-11T00:07:00Z
+```
+
+Validation:
+
+```text
+Mission-clock anchor preservation
+PASS
+
+Derived lunar geometry preservation
+PASS
+```
+
+---
+
+# Communications Timing Boundaries
+
+Unexpected return-link loss:
+
+```text
+2026-04-10T00:53:00Z
+```
+
+remains:
+
+```text
+APPROXIMATE_PUBLIC_ANCHOR
+```
+
+It is not silently promoted to exact telemetry.
+
+Validation:
+
+```text
+Approximate return-link timing boundary
+PASS
+```
+
+Entry plasma blackout retains:
+
+```text
+relative timing
+
+approximate duration
+
+no invented exact start
+
+no invented exact end
+```
+
+Validation:
+
+```text
+Entry-blackout exact-time non-inference
+PASS
+```
+
+---
+
+# Priority Interpretation Boundary
+
+MissionLab discipline priorities are analytical synthesis.
+
+They are not NASA console logs.
+
+Therefore:
+
+```text
+MISSIONLAB DISCIPLINE PRIORITY
+!=
+NASA PRIVATE CONSOLE ACTION
+```
+
+A discipline marked PRIMARY means:
+
+```text
+the event is highly relevant to that analytical perspective
+```
+
+It does not mean:
+
+```text
+a specific controller issued a command
+
+a specific console owned the decision
+
+a private flight-loop exchange occurred
+```
+
+Validation:
+
+```text
+MissionLab-priority / console-action boundary
+PASS
+```
+
+---
+
+# Role / Staffing Boundary
+
+A public NASA role description defines a discipline's general function.
+
+It does not establish:
+
+```text
+exact Artemis II shift staffing
+
+specific controller identity
+
+specific real-time action
+
+private console responsibility at a specific second
+```
+
+Therefore:
+
+```text
+MISSIONLAB DISCIPLINE LENS
+!=
+EXACT ARTEMIS II CONSOLE STAFFING
+```
+
+Validation:
+
+```text
+Analytical-lens / staffing-record boundary
+PASS
+```
+
+---
+
+# Relevance / Authority Boundary
+
+An event may be important to several disciplines.
+
+That does not mean every discipline had decision authority.
+
+Therefore:
+
+```text
+CROSS-DISCIPLINE RELEVANCE
+!=
+DECISION AUTHORITY
+```
+
+Validation:
+
+```text
+Cross-discipline relevance / authority boundary
+PASS
+```
+
+---
+
+# Public Sequence / Flight Loop Boundary
+
+Public event reporting can reconstruct:
+
+```text
+event sequence
+
+mission state changes
+
+reported responses
+
+reported outcomes
+```
+
+It cannot reconstruct the entire private Mission Control loop.
+
+Therefore:
+
+```text
+PUBLIC EVENT SEQUENCE
+!=
+COMPLETE FLIGHT LOOP HISTORY
+```
+
+Validation:
+
+```text
+Public-sequence / full-loop-history boundary
+PASS
+```
+
+---
+
+# Expected Constraint / Anomaly Boundary
+
+Phase 7A continues the established communications distinction:
+
+```text
+expected lunar occultation
+!=
+communications anomaly
+```
+
+and:
+
+```text
+planned entry plasma blackout
+!=
+communications anomaly
+```
+
+while:
+
+```text
+unexpected return-link loss
+=
+communications anomaly
+```
+
+Validation:
+
+```text
+Expected-constraint / anomaly boundary
+PASS
+```
+
+---
+
+# Troubleshooting / Root-Cause Boundary
+
+Public engineering actions such as:
+
+```text
+vent heaters
+
+Sun-pointing
+
+crew troubleshooting
+
+communications recovery actions
+```
+
+do not themselves establish a final physical root cause.
+
+Therefore:
+
+```text
+PUBLIC TROUBLESHOOTING ACTION
+!=
+CONFIRMED ROOT CAUSE
+```
+
+Validation:
+
+```text
+Troubleshooting-action / root-cause boundary
+PASS
+```
+
+---
+
+# Geometry / Telemetry Boundary
+
+MissionLab-derived geometry includes:
+
+```text
+lunar SOI transitions
+
+pericynthion
+
+Earth occultation
+
+solar eclipse geometry
+```
+
+These are not onboard Orion telemetry.
+
+Therefore:
+
+```text
+MISSIONLAB DERIVED GEOMETRY
+!=
+ONBOARD TELEMETRY
+```
+
+Validation:
+
+```text
+Derived-geometry / telemetry boundary
+PASS
+```
+
+---
+
+# Critical Non-Equivalences
+
+Phase 7A validates:
+
+```text
+MISSIONLAB_DISCIPLINE_PRIORITY
+!=
+NASA_PRIVATE_CONSOLE_ACTION
+```
+
+```text
+MISSIONLAB_DISCIPLINE_LENS
+!=
+EXACT_ARTEMIS_II_CONSOLE_STAFFING
+```
+
+```text
+PUBLIC_EVENT_SEQUENCE
+!=
+COMPLETE_FLIGHT_LOOP_HISTORY
+```
+
+```text
+CROSS_DISCIPLINE_RELEVANCE
+!=
+DECISION_AUTHORITY
+```
+
+```text
+EXPECTED_COMMUNICATIONS_CONSTRAINT
+!=
+COMMUNICATIONS_ANOMALY
+```
+
+```text
+PUBLIC_TROUBLESHOOTING_ACTION
+!=
+CONFIRMED_ROOT_CAUSE
+```
+
+```text
+MISSIONLAB_DERIVED_GEOMETRY
+!=
+ONBOARD_TELEMETRY
+```
+
+Validation:
+
+```text
+7 critical non-equivalences
+PASS
+```
+
+---
+
+# Discipline-Prioritized Timeline Product
+
+Generated:
+
+```text
+data/processed/mission_control/artemis_ii_discipline_prioritized_timeline.csv
+```
+
+Rows:
+
+```text
+24
+```
+
+Each row includes:
+
+```text
+event identity
+
+UTC or preserved untimed state
+
+date
+
+MET where defensible
+
+evidence class
+
+event classification
+
+source dependency
+
+primary analytical lenses
+
+seven discipline priority scores
+
+event summary
+```
+
+Validation:
+
+```text
+Discipline-prioritized timeline CSV
+PASS
+
+Timeline CSV schema
+PASS
+
+Timeline CSV priority values
+PASS
+```
+
+---
+
+# Documentation Figure
+
+Created:
+
+```text
+docs/assets/mission_control/phase7a_discipline_priority_matrix.svg
+```
+
+The matrix compares:
+
+```text
+24 mission events
+x
+7 discipline lenses
+```
+
+using:
+
+```text
+CONTEXT
+
+AWARENESS
+
+HIGH
+
+PRIMARY
+```
+
+The figure explicitly states that priorities are MissionLab analytical synthesis rather than private NASA console activity.
+
+Validation:
+
+```text
+Documentation figure
+PASS
+```
+
+---
+
+# Independent Validation
+
+Created:
+
+```text
+scripts/validation/validate_mission_control_perspectives.py
+```
+
+Validation result:
+
+```text
+Analysis identity
+PASS
+
+Reference / processed manifest consistency
+PASS
+
+4 public role sources
+PASS
+
+NASA mission-control role grounding
+PASS
+
+7 discipline lenses
+PASS
+
+FLIGHT role classification
+PASS
+
+FDO role classification
+PASS
+
+FAO role classification
+PASS
+
+EECOM role classification
+PASS
+
+COMM analytical-lens boundary
+PASS
+
+SCIENCE Artemis II console classification
+PASS
+
+ENGINEERING_SUPPORT analytical-lens boundary
+PASS
+
+4-level priority scale
+PASS
+
+6 cross-phase dependencies
+PASS
+
+24 shared-timeline events
+PASS
+
+Contiguous event ordering
+PASS
+
+Timeline event-ID uniqueness
+PASS
+
+Complete 7-discipline priority registry
+PASS
+
+No fabricated UTC for untimed events
+PASS
+
+No fabricated MET for untimed events
+PASS
+
+Selected cross-discipline anchors
+PASS
+
+Mission-clock anchor preservation
+PASS
+
+Derived lunar geometry preservation
+PASS
+
+Approximate return-link timing boundary
+PASS
+
+Entry-blackout exact-time non-inference
+PASS
+
+All seven prioritized discipline views
+PASS
+
+MissionLab-priority / console-action boundary
+PASS
+
+Analytical-lens / staffing-record boundary
+PASS
+
+COMM call-sign non-claim
+PASS
+
+ENGINEERING_SUPPORT call-sign non-claim
+PASS
+
+Derived-geometry / reported-event separation
+PASS
+
+7 critical non-equivalences
+PASS
+
+All seven roadmap lenses
+PASS
+
+Shared discipline-prioritized timeline
+PASS
+
+Decision threads correctly left to 7B
+PASS
+
+Postflight engineering timeline correctly left to 7B
+PASS
+
+Timeline CSV
+PASS
+
+Documentation figure
+PASS
+```
+
+Final result:
+
+```text
+PHASE 7A VALIDATION PASSED
+```
+
+---
+
+# Phase 7A Final Status
+
+```text
+FLIGHT LENS
+COMPLETE
+
+FDO LENS
+COMPLETE
+
+FAO LENS
+COMPLETE
+
+EECOM LENS
+COMPLETE
+
+COMM LENS
+COMPLETE
+
+SCIENCE LENS
+COMPLETE
+
+ENGINEERING_SUPPORT LENS
+COMPLETE
+
+SHARED MISSION TIMELINE
+COMPLETE
+
+DISCIPLINE PRIORITIZATION
+COMPLETE
+
+ROLE / STAFFING EVIDENCE BOUNDARIES
+PRESERVED
+
+PRIVATE CONSOLE-ACTION BOUNDARY
+PRESERVED
+
+EXPECTED-CONSTRAINT / ANOMALY BOUNDARY
+PRESERVED
+
+DERIVED-GEOMETRY / TELEMETRY BOUNDARY
+PRESERVED
+
+DECISION-THREAD SYNTHESIS
+PENDING 7B
+
+POSTFLIGHT ENGINEERING TIMELINE
+PENDING 7B
+
+PHASE 7A
+COMPLETE
+```
+
+---
+
+# Phase 7B Handoff
+
+Next:
+
+```text
+PHASE 7B — DECISION THREADS, POSTFLIGHT ENGINEERING TIMELINE, AND PHASE 7 CLOSURE
+```
+
+Phase 7B will convert validated mission evidence into the roadmap decision structure:
+
+```text
+detection
+↓
+evidence
+↓
+constraint
+↓
+options
+↓
+decision
+↓
+action
+↓
+outcome
+```
+
+Priority threads will include:
+
+```text
+outbound correction cancellation / OTC3 execution
+
+Flight Day 1 UWMS troubleshooting
+
+Flight Day 4 wastewater vent-line response
+
+lunar communications constraint
+
+lunar science execution
+
+unexpected return-link anomaly and RTC2 continuation
+
+Artemis I TPS evidence → Artemis II mitigation → postflight result
+
+final correction → entry handoff
+
+entry blackout → reacquisition
+
+descent → splashdown → recovery
+```
+
+Phase 7B will also create:
+
+```text
+postflight engineering timeline
+
+open-vs-closed investigation registry
+
+decision-evidence maturity states
+
+Phase 7 roadmap validation
+```
+
+---
