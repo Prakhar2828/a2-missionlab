@@ -34269,3 +34269,3443 @@ ground navigation support
 propulsion context
 trajectory corrections
 entry handoff
+
+```
+---
+
+# Documentation Repair Note — Phase 2J.3 / 2J.4 Tail
+
+The previous append operation left the Engineering Log in a malformed Markdown state immediately after the Phase 2J.2 closure.
+
+The malformed tail contained:
+
+- an unclosed `text` code fence inside the beginning of Phase 2J.3;
+- a literal PowerShell here-string marker;
+- a partial Phase 2J.4 section;
+- no complete Phase 2J.3 record;
+- no complete Phase 2J.4 record;
+- no Phase 2K integration record.
+
+The malformed material above is retained as part of the historical file rather than deleted.
+
+For documentation purposes, the malformed Phase 2J.3 / 2J.4 tail above is superseded by the corrected sections below.
+
+The technical implementation itself was not invalidated by this Markdown formatting problem. Phase 2J.3 and Phase 2J.4 both passed their dedicated analyzers and independent validators before this documentation repair.
+
+---
+
+# Phase 2J.3 — Navigation & State-Estimation Reconstruction
+
+## Goal
+
+Phase 2J.3 reconstructs the publicly supportable Artemis II / Orion navigation architecture and establishes strict evidence boundaries between:
+
+```text
+ONBOARD NAVIGATION
+GROUND NAVIGATION SUPPORT
+PUBLIC MISSION TRAJECTORY PRODUCTS
+```
+
+The central objective is not to manufacture an Orion navigation-filter solution.
+
+Instead, the phase establishes what can actually be demonstrated from public NASA, PDS, and AROW evidence and what remains unavailable.
+
+The permanent state-product distinction is:
+
+```text
+ONBOARD_NAVIGATION_STATE
+!=
+GROUND_ORBIT_DETERMINATION
+!=
+AROW_PUBLIC_STATE_VECTOR
+```
+
+---
+
+## Dependencies
+
+Phase 2J.3 depends on three completed products:
+
+```text
+Phase 2J.1 — GNC Architecture & Evidence Model
+Phase 2J.2 — Manual Piloting & Control-Mode Reconstruction
+Phase 2I.3 — Maneuver / Public OEM Trajectory Correlation
+```
+
+Observed dependency checks:
+
+```text
+Phase 2J.1 GNC architecture: PASS
+Phase 2J.2 manual-control reconstruction: PASS
+Phase 2I.3 OEM trajectory correlation: PASS
+```
+
+---
+
+## Reference Dataset
+
+Created:
+
+```text
+data/reference/artemis_ii_navigation_state_estimation.json
+```
+
+Dataset identifier:
+
+```text
+phase2j3_artemis_ii_navigation_state_estimation
+```
+
+The reference dataset records:
+
+- onboard navigation sensor architecture;
+- external ground-navigation support;
+- navigation-state product taxonomy;
+- Artemis II as-flown optical-navigation evidence;
+- proximity-operations navigation evidence;
+- selected trajectory-correction navigation-monitoring evidence;
+- AROW / OEM product interpretation boundaries;
+- reconstructable and non-reconstructable state-estimation evidence;
+- permanent anti-overclaim guardrails.
+
+---
+
+## Navigation Architecture
+
+Six onboard navigation sensor classes are preserved from the Orion avionics architecture:
+
+```text
+star_tracker
+imu
+gps_receiver
+barometric_altimeter
+optical_navigation_camera
+sun_sensor
+```
+
+Count:
+
+```text
+6
+```
+
+These are architecture-level sensor classes.
+
+Their public existence and documented functions do not imply that complete raw Artemis II sensor histories are publicly available.
+
+---
+
+## Sensor Roles
+
+### Star Tracker
+
+Role:
+
+```text
+ATTITUDE KNOWLEDGE
+```
+
+The star tracker provides inertial attitude-reference information.
+
+Public architecture documentation does not expose the complete Artemis II star-tracker measurement history.
+
+---
+
+### Inertial Measurement Unit
+
+Role:
+
+```text
+ROTATION / ACCELERATION INPUTS
+POSITION-VELOCITY-ATTITUDE PROPAGATION SUPPORT
+```
+
+The IMU supplies inertial measurements used by onboard navigation.
+
+Not public:
+
+```text
+complete raw IMU history
+bias-state history
+filter innovation history
+measurement accept/reject history
+```
+
+---
+
+### GPS Receiver
+
+Role:
+
+```text
+EARTH-PROXIMATE POSITION / VELOCITY INFORMATION
+```
+
+GPS is an onboard navigation capability.
+
+It is not treated as the primary navigation source throughout deep-space flight.
+
+---
+
+### Barometric Altimeter
+
+Role:
+
+```text
+PRESSURE-ALTITUDE INFORMATION
+ENTRY / DEPLOYMENT BACKUP CONTEXT
+```
+
+Its inclusion in the architecture does not establish a complete as-flown barometric-altimeter time history.
+
+---
+
+### Optical Navigation Camera
+
+Role:
+
+```text
+EARTH / MOON IMAGING
+RANGE / BEARING NAVIGATION SUPPORT
+EMERGENCY RETURN NAVIGATION CAPABILITY
+```
+
+The camera is identified publicly as:
+
+```text
+Pixelink Prometheus PL-D725
+```
+
+Installation context:
+
+```text
+starboard lower Crew Module Adapter
+```
+
+Artemis II public reporting confirms optical-navigation imagery of:
+
+```text
+Earth
+Moon
+```
+
+A Flight Day 1 Earth image was publicly identified as optical-navigation imagery.
+
+Permanent interpretation rule:
+
+```text
+IMAGE CAPTURE
+!=
+PROOF OF A SPECIFIC FILTER UPDATE
+```
+
+and:
+
+```text
+IMAGE
+!=
+ESTIMATOR RESIDUAL
+!=
+FILTER INNOVATION
+```
+
+---
+
+### Sun Sensor
+
+Role:
+
+```text
+SAFE-MODE SUN-DIRECTION KNOWLEDGE
+```
+
+The public architecture establishes capability.
+
+It does not provide the complete Artemis II sun-sensor measurement history.
+
+---
+
+# Deep Space Network Boundary
+
+External navigation support:
+
+```text
+DEEP_SPACE_NETWORK_TRACKING
+```
+
+Onboard sensor:
+
+```text
+FALSE
+```
+
+The Deep Space Network supports ground-based determination of spacecraft location using communication-signal measurements.
+
+Permanent boundary:
+
+```text
+DSN GROUND TRACKING
+!=
+ONBOARD NAVIGATION SENSOR
+```
+
+and:
+
+```text
+GROUND NAVIGATION SUPPORT
+!=
+ORION ONBOARD NAVIGATION FILTER
+```
+
+---
+
+# Navigation-State Product Taxonomy
+
+Phase 2J.3 defines three separate evidence categories.
+
+## 1. ONBOARD_NAVIGATION_STATE
+
+Producer context:
+
+```text
+ORION_VEHICLE_MANAGEMENT_COMPUTERS
+```
+
+Role:
+
+```text
+Onboard spacecraft position, velocity, and attitude knowledge
+computed from navigation inputs.
+```
+
+The complete Artemis II onboard navigation-state history is not publicly reconstructed.
+
+---
+
+## 2. GROUND_ORBIT_DETERMINATION
+
+Producer context:
+
+```text
+GROUND_NAVIGATION_SUPPORT
+```
+
+Role:
+
+```text
+Ground-based determination of spacecraft location or trajectory
+using measurements such as Deep Space Network observations.
+```
+
+Important terminology rule:
+
+```text
+GROUND_ORBIT_DETERMINATION
+```
+
+is a MissionLab normalized taxonomy category.
+
+It is not claimed to be the exact official name of a released Artemis II NASA data product.
+
+---
+
+## 3. AROW_PUBLIC_STATE_VECTOR
+
+Producer context:
+
+```text
+NASA_PUBLIC_MISSION_DATA_PRODUCT
+```
+
+Role:
+
+```text
+Public downloadable trajectory and state-vector information
+describing Orion's location and motion.
+```
+
+AROW provides valuable public trajectory information.
+
+However:
+
+```text
+AROW_PUBLIC_STATE_VECTOR
+!=
+PROVEN_ORION_ONBOARD_FILTER_STATE
+```
+
+and:
+
+```text
+AROW_PUBLIC_STATE_VECTOR
+!=
+PROVEN_COMPLETE_GROUND_NAVIGATION_SOLUTION
+```
+
+---
+
+# Optical Navigation As-Flown Evidence
+
+Artemis II public evidence supports:
+
+```text
+Earth optical-navigation imagery captured: TRUE
+Moon optical-navigation imagery captured: TRUE
+```
+
+Not established:
+
+```text
+image capture proves estimator update: FALSE
+```
+
+Unavailable publicly:
+
+```text
+complete raw optical-navigation measurement history
+measurement residual history
+innovation history
+filter update sequence
+measurement weighting
+measurement accept/reject history
+```
+
+---
+
+# Proximity-Operations Navigation Evidence
+
+The Artemis II proximity-operations demonstration provides an important as-flown navigation anchor.
+
+Public reporting confirms:
+
+```text
+onboard navigation sensors used: TRUE
+```
+
+Public reporting does not establish:
+
+```text
+specific sensor set used at every instant
+complete relative-position history
+complete relative-velocity history
+complete relative-state estimator history
+```
+
+Therefore:
+
+```text
+ARCHITECTURE + AS-FLOWN SENSOR USE
+```
+
+is supported.
+
+A complete proximity-navigation solution is not.
+
+---
+
+# Trajectory-Correction Navigation Monitoring
+
+Phase 2J.3 distinguishes confirmed as-flown monitoring from pre-burn planning/context.
+
+## Confirmed As-Flown Examples
+
+```text
+RTC1
+RTC3
+```
+
+Public reporting supports crew monitoring of spacecraft configuration and navigation information in connection with these correction operations.
+
+---
+
+## Pre-Burn / Planned Monitoring Context
+
+```text
+OTC3
+RTC2
+```
+
+The public evidence for these cases is planning or pre-burn operational context.
+
+This evidence is not silently promoted into a complete as-flown crew-display history.
+
+---
+
+## Display Boundary
+
+Public evidence does not establish:
+
+```text
+exact displayed navigation variables
+complete navigation-display time history
+display values == complete onboard filter state
+```
+
+Permanent rule:
+
+```text
+CREW MONITORING NAVIGATION DATA
+!=
+COMPLETE ONBOARD NAVIGATION STATE
+```
+
+---
+
+# AROW / OEM Solution-Evolution Boundary
+
+Phase 2J.3 reuses the Phase 2I.3 public OEM maneuver audit.
+
+Audited maneuver brackets:
+
+```text
+4
+```
+
+Maneuvers:
+
+```text
+OTC3
+RTC1
+RTC2
+RTC3
+```
+
+Same-epoch public solution comparisons available:
+
+```text
+3
+```
+
+Each available comparison remains explicitly classified as:
+
+```text
+SOLUTION-TO-SOLUTION DIFFERENCE
+```
+
+and not:
+
+```text
+navigation error
+measured burn delta-v
+```
+
+---
+
+## OTC3 Creation-Time Guardrail
+
+A particularly important evidence boundary comes from the public product:
+
+```text
+Artemis_II_OEM_2026_04_06_Pre-OTC3_to_EI.csv
+```
+
+Its creation timing relative to the maneuver does not prove that OTC3 was assimilated into that public solution.
+
+Permanent rule:
+
+```text
+OEM CREATION TIME
+!=
+PROOF OF MANEUVER ASSIMILATION
+```
+
+Maneuver assimilation status from public evidence:
+
+```text
+NOT ESTABLISHED
+```
+
+---
+
+# State-Estimation Evidence Boundary
+
+## Publicly Supported
+
+Phase 2J.3 records eight supported evidence categories:
+
+```text
+onboard navigation architecture
+onboard sensor roles
+DSN ground-tracking role
+AROW public state vectors
+AROW public ephemeris
+as-flown Artemis II optical-navigation imagery
+as-flown proximity-operations onboard navigation-sensor use
+selected as-flown trajectory-correction navigation monitoring
+```
+
+Count:
+
+```text
+8
+```
+
+---
+
+## Not Publicly Available / Not Established
+
+Phase 2J.3 records twenty-one unavailable or unestablished categories:
+
+```text
+complete onboard navigation-state history
+complete ground orbit-determination solution history
+raw IMU history
+raw star-tracker history
+raw GPS history
+raw barometric-altimeter history
+raw sun-sensor history
+complete raw optical-navigation measurement history
+optical-navigation residual history
+navigation-filter innovation history
+navigation covariance history
+filter-gain history
+filter-bias-state history
+sensor-selection history
+measurement accept/reject history
+complete crew navigation-display history
+AROW == onboard filter state
+AROW == complete ground navigation solution
+OEM difference == navigation error
+OEM difference == measured burn delta-v
+OEM creation time == measurement or burn assimilation proof
+```
+
+Count:
+
+```text
+21
+```
+
+---
+
+# What Phase 2J.3 Can Reconstruct
+
+```text
+NAVIGATION_ARCHITECTURE
+SENSOR_MEASUREMENT_ROLES
+MISSION_PHASE_CAPABILITY_CONTEXT
+ONBOARD_VS_GROUND_NAVIGATION_BOUNDARY
+PUBLIC_AROW_PRODUCT_BOUNDARY
+AS_FLOWN_OPNAV_IMAGERY_EXISTENCE
+AS_FLOWN_PROXIMITY_NAV_SENSOR_USE
+SELECTED_AS_FLOWN_CREW_NAVIGATION_DATA_MONITORING_CONTEXT
+OEM_SOLUTION_EVOLUTION_WITH_NON_INFERENCE_GUARDRAILS
+```
+
+---
+
+# What Phase 2J.3 Cannot Reconstruct
+
+```text
+COMPLETE_ONBOARD_FILTER_STATE_HISTORY
+COMPLETE_GROUND_ORBIT_DETERMINATION_SOLUTION_HISTORY
+FILTER_COVARIANCE_HISTORY
+FILTER_GAIN_HISTORY
+MEASUREMENT_INNOVATION_HISTORY
+SENSOR_BIAS_STATE_HISTORY
+MEASUREMENT_ACCEPT_REJECT_HISTORY
+EXACT_SENSOR_SELECTION_HISTORY
+EXACT_OPNAV_ESTIMATOR_UPDATES
+EXACT_DSN_NAVIGATION_SOLUTION_HISTORY
+COMPLETE_CREW_NAVIGATION_DISPLAY_HISTORY
+```
+
+---
+
+# Generated Products
+
+Analyzer:
+
+```text
+scripts/analysis/analyze_navigation_state_estimation.py
+```
+
+Validator:
+
+```text
+scripts/validation/validate_navigation_state_estimation.py
+```
+
+Processed products:
+
+```text
+data/processed/gnc/navigation_state_product_taxonomy.csv
+data/processed/gnc/navigation_evidence_boundaries.csv
+data/processed/gnc/navigation_state_estimation_summary.json
+```
+
+Documentation figures:
+
+```text
+docs/assets/gnc/phase2j3_navigation_architecture.svg
+docs/assets/gnc/phase2j3_state_product_boundaries.svg
+```
+
+Processed products remain ignored by Git.
+
+---
+
+# Validation
+
+Observed analyzer completion:
+
+```text
+PHASE 2J.3 ANALYSIS COMPLETE
+```
+
+Independent validator result:
+
+```text
+Reference dataset: PASS
+Phase 2J.1 dependency: PASS
+Phase 2J.2 dependency: PASS
+Phase 2I.3 dependency: PASS
+Navigation sensor architecture: PASS
+Deep Space Network boundary: PASS
+Navigation-state product taxonomy: PASS
+ONBOARD != GROUND != AROW boundary: PASS
+AROW evidence boundary: PASS
+Optical-navigation evidence: PASS
+Proximity navigation evidence: PASS
+Trajectory-correction monitoring boundary: PASS
+OEM solution-evolution boundary: PASS
+Generated taxonomy CSV: PASS
+Generated evidence-boundary CSV: PASS
+Generated summary JSON: PASS
+Navigation architecture SVG: PASS
+State-product boundary SVG: PASS
+```
+
+Final validator output:
+
+```text
+PHASE 2J.3 VALIDATION PASSED
+```
+
+A copy-artifact audit also explicitly checked for known fused-word corruption patterns in the permanent reference dataset and returned no matches.
+
+`git diff --check` subsequently returned no errors.
+
+A clean working tree was observed after Phase 2J.3 closure.
+
+---
+
+# Permanent Phase 2J.3 Guardrails
+
+1. Navigation architecture is not navigation time history.
+2. Sensor capability is not raw sensor telemetry.
+3. DSN tracking is not an onboard sensor.
+4. Ground navigation support is not Orion's onboard navigation filter.
+5. AROW public state vectors are not proven onboard filter states.
+6. AROW public state vectors are not proven complete ground-navigation solutions.
+7. An optical-navigation image is not a filter innovation.
+8. Image capture does not prove a specific estimator update.
+9. Crew navigation monitoring does not expose the complete onboard state.
+10. Public OEM products are not raw spacecraft telemetry.
+11. OEM solution differences are not navigation error.
+12. OEM solution differences are not measured burn delta-v.
+13. OEM creation time does not prove maneuver assimilation.
+14. Public product naming does not expose internal filter architecture.
+15. Missing public residuals are not reconstructed synthetically.
+16. Missing covariance histories are not inferred.
+17. Missing bias states are not inferred.
+18. Missing sensor-selection histories are not inferred.
+19. Missing measurement accept/reject histories are not inferred.
+20. Absence from the curated public evidence set is not proof that an operational record never existed.
+
+---
+
+# Engineering Significance
+
+Phase 2J.3 establishes one of the most important scientific boundaries in MissionLab:
+
+```text
+PUBLIC TRAJECTORY PRODUCT
+!=
+ONBOARD NAVIGATION SOLUTION
+```
+
+This prevents later analyses from treating a convenient public trajectory file as hidden spacecraft telemetry.
+
+The result is less sensational but substantially more defensible.
+
+---
+
+# Phase 2J.3 Status
+
+```text
+COMPLETE
+```
+
+---
+
+# Phase 2J.4 — GNC Operational Threads & Closure
+
+## Goal
+
+Phase 2J.4 integrates the completed GNC architecture, manual-control reconstruction, navigation reconstruction, and maneuver context into mission-facing operational threads.
+
+The purpose is to answer:
+
+```text
+How did navigation, guidance, control,
+crew actions, ground support, and propulsion
+interact during publicly reconstructable
+Artemis II operations?
+```
+
+without manufacturing:
+
+```text
+filter histories
+guidance algorithms
+control laws
+controller deflection histories
+individual thruster histories
+complete targeting logic
+console decision histories
+Flight Director rationale
+```
+
+---
+
+# Dependencies
+
+Integrated products:
+
+```text
+Phase 2J.1 — GNC Architecture & Evidence Model
+Phase 2J.2 — Manual Piloting & Control-Mode Reconstruction
+Phase 2J.3 — Navigation & State-Estimation Reconstruction
+Phase 2I.4 — Maneuver Operational Threads
+```
+
+Observed:
+
+```text
+Dependencies: PASS
+```
+
+---
+
+# Reference Dataset
+
+Created:
+
+```text
+data/reference/artemis_ii_gnc_operational_threads.json
+```
+
+Dataset identifier:
+
+```text
+phase2j4_artemis_ii_gnc_operational_threads
+```
+
+---
+
+# GNC Domain Model
+
+Phase 2J preserves the fundamental decomposition:
+
+## Navigation
+
+Question:
+
+```text
+WHERE AM I?
+HOW AM I MOVING?
+HOW AM I POINTED?
+```
+
+Status:
+
+```text
+RECONSTRUCTED TO PUBLIC-EVIDENCE LIMIT
+```
+
+---
+
+## Guidance
+
+Question:
+
+```text
+WHERE SHOULD I GO OR POINT NEXT?
+```
+
+Status:
+
+```text
+ARCHITECTURE AND OPERATIONAL CONTEXT ONLY
+```
+
+Complete as-flown algorithm publicly available:
+
+```text
+FALSE
+```
+
+---
+
+## Control
+
+Question:
+
+```text
+HOW DO I COMMAND THE REQUIRED MOTION?
+```
+
+Status:
+
+```text
+ARCHITECTURE AND SELECTED AS-FLOWN CONTEXT ONLY
+```
+
+Complete as-flown control law publicly available:
+
+```text
+FALSE
+```
+
+---
+
+# Core Architecture Preserved
+
+Onboard navigation sensor classes:
+
+```text
+star_tracker
+imu
+gps_receiver
+barometric_altimeter
+optical_navigation_camera
+sun_sensor
+```
+
+Count:
+
+```text
+6
+```
+
+External support:
+
+```text
+DEEP_SPACE_NETWORK_TRACKING
+```
+
+Onboard sensor:
+
+```text
+FALSE
+```
+
+Manual control path:
+
+```text
+CREW_CONTROLLER_INPUT
+→
+GNC_FLIGHT_SOFTWARE
+→
+EFFECTOR_SELECTION
+→
+RCS_THRUSTER_COMMAND
+```
+
+Hand controllers are not modeled as direct individual-thruster switches.
+
+---
+
+# Control Effectors
+
+European Service Module / Orion control-effectors represented in the integrated GNC architecture:
+
+```text
+OMS-E main engine:             1
+R-4D-11 auxiliary engines:    8
+reaction-control engines:    24
+```
+
+Correction-burn engine assignments resolved:
+
+```text
+0
+```
+
+Unresolved:
+
+```text
+OTC3
+RTC1
+RTC2
+RTC3
+```
+
+---
+
+# Operational Thread 1 — Proximity Operations GNC
+
+Classification:
+
+```text
+CREW_MANUAL_FLIGHT_TEST_WITH_AUTOMATED_DEPARTURE
+```
+
+Execution:
+
+```text
+COMPLETED
+```
+
+Approximate duration:
+
+```text
+70 min
+```
+
+Reference target:
+
+```text
+DETACHED ICPS
+```
+
+Publicly supportable operational progression:
+
+```text
+automated pre-manual context
+→
+onboard navigation-sensor use
+→
+crew-controlled approach
+→
+crew-controlled retreat
+→
+crew input through GNC flight software
+→
+RCS control
+→
+automated departure
+```
+
+Supported as flown:
+
+```text
+onboard navigation sensors used: TRUE
+controlled approach: TRUE
+controlled retreat: TRUE
+reaction-control thrusters used: TRUE
+automated departure: TRUE
+```
+
+Not publicly reconstructable:
+
+```text
+exact relative range history
+exact relative velocity history
+exact attitude history
+exact RHC history
+exact THC history
+individual thruster-firing history
+exact manual-to-automatic transition time
+```
+
+The 17-step premission proximity sequence remains planning/reference evidence and is not promoted into an as-flown event log.
+
+---
+
+# Operational Thread 2 — Flight Day 4 Manual Piloting
+
+Execution:
+
+```text
+COMPLETED
+```
+
+Crew:
+
+```text
+Christina Koch
+Jeremy Hansen
+```
+
+Reported local start:
+
+```text
+2026-04-04 21:09 EDT
+```
+
+Derived UTC:
+
+```text
+2026-04-05T01:09:00Z
+```
+
+Derived MET:
+
+```text
+03:02:33:48
+```
+
+Duration:
+
+```text
+41 min
+```
+
+Derived end:
+
+```text
+2026-04-05T01:50:00Z
+```
+
+Public mode labels:
+
+```text
+SIX_DEGREES_OF_FREEDOM
+THREE_DEGREES_OF_FREEDOM
+```
+
+These mode names do not expose:
+
+```text
+controller gains
+axis-coupling logic
+command shaping
+thruster-allocation logic
+controller-deflection history
+individual thruster history
+```
+
+---
+
+# Operational Thread 3 — Deep-Space Navigation
+
+This thread integrates:
+
+```text
+onboard inertial / attitude navigation
+optical navigation
+Deep Space Network support
+public AROW trajectory products
+```
+
+Public evidence confirms:
+
+```text
+Earth optical-navigation imagery: TRUE
+Moon optical-navigation imagery: TRUE
+```
+
+Deep Space Network:
+
+```text
+GROUND NAVIGATION SUPPORT
+```
+
+Onboard sensor:
+
+```text
+FALSE
+```
+
+Permanent boundary:
+
+```text
+ONBOARD_NAVIGATION_STATE
+!=
+GROUND_ORBIT_DETERMINATION
+!=
+AROW_PUBLIC_STATE_VECTOR
+```
+
+Unavailable:
+
+```text
+complete onboard filter-state history
+complete ground OD solution history
+navigation covariance history
+filter gain history
+measurement innovation history
+sensor bias-state history
+measurement accept/reject history
+exact sensor-selection history
+exact optical-navigation update history
+```
+
+---
+
+# Operational Thread 4 — Trajectory-Correction GNC
+
+Executed corrections integrated:
+
+```text
+OTC3
+RTC1
+RTC2
+RTC3
+```
+
+## OTC3
+
+Public time:
+
+```text
+2026-04-06T03:03:00Z
+```
+
+Duration:
+
+```text
+17.5 s
+```
+
+Public delta-v:
+
+```text
+UNAVAILABLE
+```
+
+Engine assignment:
+
+```text
+UNRESOLVED_AS_FLOWN
+```
+
+Monitoring evidence:
+
+```text
+PRE-BURN OPERATIONAL CONTEXT
+```
+
+---
+
+## RTC1
+
+Public time:
+
+```text
+2026-04-08T00:03:00Z
+```
+
+Duration:
+
+```text
+15 s
+```
+
+Reported delta-v:
+
+```text
+1.6 ft/s
+```
+
+Navigation monitoring:
+
+```text
+AS_FLOWN CONFIRMED
+```
+
+Engine assignment:
+
+```text
+UNRESOLVED_AS_FLOWN
+```
+
+---
+
+## RTC2
+
+Public time:
+
+```text
+2026-04-10T02:53:00Z
+```
+
+Duration:
+
+```text
+9 s
+```
+
+Reported delta-v:
+
+```text
+5.3 ft/s
+```
+
+Monitoring evidence:
+
+```text
+PRE-BURN GNC / PROPULSION CONTEXT
+```
+
+Communications were recovered before execution.
+
+Engine assignment:
+
+```text
+UNRESOLVED_AS_FLOWN
+```
+
+---
+
+## RTC3
+
+Public time:
+
+```text
+2026-04-10T18:53:00Z
+```
+
+Duration:
+
+```text
+8 s
+```
+
+Reported delta-v:
+
+```text
+4.2 ft/s
+```
+
+Navigation monitoring:
+
+```text
+AS_FLOWN CONFIRMED
+```
+
+Engine assignment:
+
+```text
+UNRESOLVED_AS_FLOWN
+```
+
+---
+
+# Public OEM Context
+
+Maneuver brackets audited:
+
+```text
+4
+```
+
+Same-epoch solution comparisons available:
+
+```text
+3
+```
+
+Permanent interpretation:
+
+```text
+OEM DIFFERENCE
+!=
+NAVIGATION ERROR
+```
+
+```text
+OEM DIFFERENCE
+!=
+MEASURED BURN DELTA-V
+```
+
+```text
+OEM CREATION TIME
+!=
+PROOF OF MANEUVER ASSIMILATION
+```
+
+Assimilation status:
+
+```text
+NOT ESTABLISHED
+```
+
+---
+
+# Operational Thread 5 — Final Correction to Entry Handoff
+
+RTC3:
+
+```text
+2026-04-10T18:53:00Z
+```
+
+Entry Interface public anchor:
+
+```text
+2026-04-10T23:53:00Z
+```
+
+Derived public-clock interval:
+
+```text
+18,000 s
+5 h 00 min
+```
+
+This establishes a mission-clock relationship.
+
+It does not establish:
+
+```text
+final onboard navigation state
+entry-targeting covariance
+entry-targeting algorithm
+entry guidance-command history
+bank-command history
+entry control-command history
+```
+
+Detailed entry reconstruction remains downstream scope.
+
+---
+
+# Phase 2J.4 Reconstructable Scope
+
+Count:
+
+```text
+17
+```
+
+Includes:
+
+```text
+GNC domain decomposition
+onboard navigation-sensor architecture
+DSN external-support role
+onboard-vs-ground-vs-public-state boundary
+manual controller command domains
+crew-controller-to-GNC-to-RCS command path
+control-effector architecture
+proximity control-authority sequence
+as-flown proximity navigation-sensor use
+as-flown RCS use
+Flight Day 4 manual-piloting context
+6-DOF and 3-DOF public mode labels
+as-flown optical-navigation imagery
+selected correction navigation monitoring
+trajectory-correction operational sequence
+public OEM solution-evolution boundary
+final correction-to-entry public-clock handoff
+```
+
+---
+
+# Phase 2J.4 Non-Reconstructable Scope
+
+Count:
+
+```text
+24
+```
+
+Includes:
+
+```text
+complete onboard filter history
+complete ground OD history
+raw navigation-sensor histories
+filter covariance / gain / innovation / bias histories
+measurement accept/reject history
+exact sensor-selection history
+complete guidance algorithm
+complete guidance-command history
+complete manual control law
+complete automatic control law
+controller-gain history
+controller-deflection history
+thruster-allocation logic
+individual thruster-firing history
+correction-burn engine assignments
+complete maneuver-targeting logic
+burn-vector directions
+complete crew navigation-display history
+flight-control console decision history
+Flight Director rationale tree
+detailed as-flown entry guidance
+```
+
+---
+
+# Generated Products
+
+Analyzer:
+
+```text
+scripts/analysis/analyze_gnc_operational_threads.py
+```
+
+Validator:
+
+```text
+scripts/validation/validate_gnc_operational_threads.py
+```
+
+Processed products:
+
+```text
+data/processed/gnc/gnc_operational_threads.csv
+data/processed/gnc/phase2j_closure_matrix.csv
+data/processed/gnc/gnc_operational_threads_summary.json
+```
+
+Figures:
+
+```text
+docs/assets/gnc/phase2j4_gnc_operational_threads.svg
+docs/assets/gnc/phase2j4_phase2j_closure.svg
+```
+
+---
+
+# Validation
+
+Observed analyzer result:
+
+```text
+Dependencies: PASS
+GNC domains: PASS
+Six-sensor navigation architecture: PASS
+DSN ground-support boundary: PASS
+ONBOARD != GROUND != AROW boundary: PASS
+Manual-control architecture: PASS
+Proximity-operations GNC thread: PASS
+Flight Day 4 manual-piloting thread: PASS
+Deep-space navigation thread: PASS
+Trajectory-correction GNC thread: PASS
+Final correction-to-entry handoff: PASS
+Correction-engine assignment uncertainty: PASS
+OEM non-inference boundary: PASS
+Phase 4 entry-guidance deferral: PASS
+Phase 7 mission-control deferral: PASS
+```
+
+Observed counts:
+
+```text
+Operational threads: 5
+Reconstructable items: 17
+Not reconstructable items: 24
+```
+
+Analyzer completion:
+
+```text
+PHASE 2J.4 ANALYSIS COMPLETE
+```
+
+Independent validator:
+
+```text
+Reference dataset: PASS
+2J.1 architecture integration: PASS
+2J.2 manual/proximity integration: PASS
+2J.3 navigation integration: PASS
+2I.4 maneuver integration: PASS
+Five GNC operational threads: PASS
+State-product boundary: PASS
+Correction-engine uncertainty: PASS
+OEM non-inference boundary: PASS
+Final correction-to-entry boundary: PASS
+Phase 4 / Phase 7 deferred scope: PASS
+Processed products: PASS
+Documentation figures: PASS
+```
+
+Final result:
+
+```text
+PHASE 2J.4 VALIDATION PASSED
+```
+
+Observed commit:
+
+```text
+190d7e9 Complete Artemis II GNC operational reconstruction
+```
+
+The first push attempt reported that the local branch did not yet have an upstream tracking branch.
+
+No claim about the subsequent remote-push result is made here until that output is explicitly observed.
+
+---
+
+# Phase 2J Closure
+
+Subphases:
+
+```text
+2J.1 — GNC Architecture & Evidence Model
+COMPLETE
+
+2J.2 — Manual Piloting & Control-Mode Reconstruction
+COMPLETE
+
+2J.3 — Navigation & State-Estimation Reconstruction
+COMPLETE
+
+2J.4 — GNC Operational Threads & Closure
+COMPLETE
+```
+
+Overall Phase 2J status:
+
+```text
+COMPLETE
+```
+
+Phase 2J establishes an evidence-backed bridge between:
+
+```text
+spacecraft GNC architecture
+→
+navigation capability
+→
+crew manual authority
+→
+ground navigation support
+→
+maneuver operations
+→
+entry handoff
+```
+
+without pretending that public mission reporting exposes Orion's complete onboard navigation or control implementation.
+
+---
+
+# Phase 2K — Phase 2 Integration & Closure
+
+## Goal
+
+Phase 2K integrates the completed Phase 2 mission-operations work across:
+
+```text
+FLIGHT DYNAMICS
+COMMUNICATIONS
+PROPULSION
+MANEUVERS
+GUIDANCE / NAVIGATION / CONTROL
+```
+
+The purpose is to verify that these domains form one internally consistent Artemis II mission-operations reconstruction on a common mission clock.
+
+Phase 2K does not create hidden flight data.
+
+It connects already validated products and checks that the evidence boundaries established in earlier work remain intact when those products are combined.
+
+---
+
+# Reference Dataset
+
+Created:
+
+```text
+data/reference/artemis_ii_phase2_integrated_operations.json
+```
+
+Dataset identifier:
+
+```text
+phase2k_artemis_ii_phase2_integrated_operations
+```
+
+Phase:
+
+```text
+2K
+```
+
+Phase name:
+
+```text
+Phase 2 Integration & Closure
+```
+
+---
+
+# Integrated Dependencies
+
+Phase 2K integrates:
+
+```text
+data/reference/artemis_ii_maneuver_trajectory_correlation.json
+
+data/reference/artemis_ii_communications_operational_threads.json
+
+data/reference/artemis_ii_esm_propulsion_architecture.json
+
+data/reference/artemis_ii_maneuver_operational_threads.json
+
+data/reference/artemis_ii_gnc_operational_threads.json
+```
+
+These represent the completed Phase 2 domains:
+
+```text
+flight dynamics
+communications
+propulsion
+maneuvers
+GNC
+```
+
+---
+
+# Phase 2 Domain Status
+
+Each integrated domain reached:
+
+```text
+COMPLETE_TO_PHASE2_SCOPE
+```
+
+## Flight Dynamics
+
+Integrated capabilities include:
+
+```text
+shared mission clock
+Earth-Moon-Orion trajectory context
+lunar sphere-of-influence context
+pericynthion geometry
+public OEM solution evolution
+trajectory-correction event correlation
+entry-handoff clock context
+```
+
+---
+
+## Communications
+
+Integrated capabilities include:
+
+```text
+communications event catalog
+mission-clock correlation
+lunar-occultation context
+DSN geometric context
+optical-communications context
+expected blackout thread
+unexpected return-link anomaly thread
+communications recovery / mission-continuation thread
+```
+
+---
+
+## Propulsion
+
+Integrated capabilities include:
+
+```text
+ESM propulsion architecture
+OMS-E architecture
+auxiliary-engine architecture
+RCS architecture
+confirmed major-maneuver assignments
+correction-burn assignment boundary
+```
+
+---
+
+## Maneuvers
+
+Integrated capabilities include:
+
+```text
+planned-vs-executed corrections
+cancellation decisions
+executed-correction timeline
+return delta-v magnitude context
+public OEM correlation
+operational maneuver threads
+```
+
+---
+
+## GNC
+
+Integrated capabilities include:
+
+```text
+GNC domain model
+onboard navigation architecture
+ground-navigation support boundary
+manual-control architecture
+proximity-operations GNC
+manual-piloting context
+optical-navigation context
+trajectory-correction navigation monitoring
+final correction-to-entry handoff
+```
+
+---
+
+# Shared Mission Clock
+
+Phase 2K integrates eleven mission-clock anchors:
+
+```text
+1. Launch
+2. OTC3
+3. Lunar SOI entry
+4. Pericynthion
+5. Reported Earthrise
+6. Lunar SOI exit
+7. RTC1
+8. RTC2
+9. RTC3
+10. Entry Interface
+11. Splashdown
+```
+
+---
+
+## Launch
+
+```text
+2026-04-01T22:35:12Z
+```
+
+Provenance:
+
+```text
+NASA REPORTED / configured public mission epoch
+```
+
+---
+
+## OTC3
+
+```text
+2026-04-06T03:03:00Z
+```
+
+Precision:
+
+```text
+MINUTE LEVEL
+```
+
+---
+
+## Lunar SOI Entry
+
+```text
+2026-04-06T04:38:07.532302Z
+```
+
+Provenance:
+
+```text
+MISSIONLAB DERIVED GEOMETRY
+```
+
+---
+
+## Pericynthion
+
+```text
+2026-04-06T23:00:46.177998Z
+```
+
+Provenance:
+
+```text
+MISSIONLAB DERIVED GEOMETRY
+```
+
+---
+
+## Reported Earthrise
+
+```text
+2026-04-06T23:24:00Z
+```
+
+Provenance:
+
+```text
+NASA REPORTED
+```
+
+---
+
+## Lunar SOI Exit
+
+```text
+2026-04-07T17:23:41.922211Z
+```
+
+Provenance:
+
+```text
+MISSIONLAB DERIVED GEOMETRY
+```
+
+---
+
+## RTC1
+
+```text
+2026-04-08T00:03:00Z
+```
+
+---
+
+## RTC2
+
+```text
+2026-04-10T02:53:00Z
+```
+
+---
+
+## RTC3
+
+```text
+2026-04-10T18:53:00Z
+```
+
+---
+
+## Entry Interface
+
+```text
+2026-04-10T23:53:00Z
+```
+
+---
+
+## Splashdown
+
+```text
+2026-04-11T00:07:00Z
+```
+
+---
+
+# Phase 2 Integrated Operational Threads
+
+Six mission-level cross-domain threads were constructed.
+
+---
+
+## Thread 1 — Earth Departure and Adaptive Outbound Trajectory Management
+
+Domains:
+
+```text
+FLIGHT DYNAMICS
+MANEUVERS
+PROPULSION
+GNC
+```
+
+Sequence:
+
+```text
+launch
+→
+proximity operations
+→
+perigee-raise context
+→
+translunar-injection context
+→
+OTC1 cancelled
+→
+OTC2 cancelled
+→
+OTC3 executed
+→
+lunar SOI entry
+```
+
+Interpretation:
+
+The outbound trajectory demonstrates adaptive trajectory management.
+
+Three correction opportunities existed.
+
+Two were cancelled.
+
+One was executed.
+
+Permanent boundaries:
+
+```text
+CANCELLED CORRECTION
+!=
+FAILED BURN
+```
+
+and:
+
+```text
+CANCELLED CORRECTION
+!=
+PROPULSION ANOMALY
+```
+
+OTC3 engine assignment remains unresolved from current public evidence.
+
+---
+
+## Thread 2 — Proximity Operations Manual Control and Navigation
+
+Domains:
+
+```text
+GNC
+PROPULSION
+FLIGHT DYNAMICS
+```
+
+Approximate duration:
+
+```text
+70 min
+```
+
+Sequence:
+
+```text
+automated pre-manual context
+→
+onboard navigation-sensor use
+→
+crew-controlled approach
+→
+crew-controlled retreat
+→
+RCS control
+→
+automated departure
+```
+
+Permanent boundaries:
+
+```text
+premission reference sequence
+!=
+as-flown event log
+```
+
+```text
+planned range
+!=
+measured as-flown range
+```
+
+```text
+crew controller input
+!=
+direct individual-thruster switching
+```
+
+---
+
+## Thread 3 — Deep-Space Navigation and Lunar Communications Constraint
+
+Domains:
+
+```text
+FLIGHT DYNAMICS
+COMMUNICATIONS
+GNC
+```
+
+Sequence:
+
+```text
+lunar SOI entry
+→
+onboard deep-space navigation context
+→
+optical-navigation imagery
+→
+DSN ground-navigation support
+→
+lunar flyby
+→
+expected lunar communications blackout
+→
+reported Earthrise
+→
+DSN reacquisition sequence
+→
+lunar SOI exit
+```
+
+The lunar communications blackout remains classified as:
+
+```text
+EXPECTED_OPERATIONAL_CONSTRAINT
+```
+
+Anomaly:
+
+```text
+FALSE
+```
+
+Permanent navigation-state boundary:
+
+```text
+ONBOARD_NAVIGATION_STATE
+!=
+GROUND_ORBIT_DETERMINATION
+!=
+AROW_PUBLIC_STATE_VECTOR
+```
+
+---
+
+## Thread 4 — Return Trajectory Refinement
+
+Domains:
+
+```text
+FLIGHT DYNAMICS
+MANEUVERS
+PROPULSION
+GNC
+```
+
+Sequence:
+
+```text
+lunar SOI exit
+→
+RTC1 navigation monitoring
+→
+RTC1
+→
+RTC2 pre-burn GNC context
+→
+RTC2
+→
+RTC3 navigation monitoring
+→
+RTC3
+→
+Entry Interface
+```
+
+The public evidence establishes maneuver timing, duration, selected scalar delta-v magnitudes, and selected crew navigation-monitoring context.
+
+It does not establish:
+
+```text
+complete maneuver-targeting logic
+burn-vector directions
+complete guidance commands
+correction-burn engine assignments
+```
+
+---
+
+## Thread 5 — RTC2 Communications Anomaly, Recovery, and Mission Continuation
+
+Classification:
+
+```text
+UNEXPECTED_COMMUNICATIONS_ANOMALY_WITH_MISSION_CONTINUATION
+```
+
+This is the only Phase 2 integrated thread classified as an anomaly.
+
+Domains:
+
+```text
+COMMUNICATIONS
+MANEUVERS
+GNC
+PROPULSION
+```
+
+Public sequence:
+
+```text
+unexpected return-link loss
+→
+communications recovery
+→
+burn preparation resumed
+→
+RTC2 executed
+```
+
+Approximate computational loss anchor:
+
+```text
+2026-04-10T00:53:00Z
+```
+
+This anchor is explicitly:
+
+```text
+NOT EXACT
+```
+
+RTC2:
+
+```text
+2026-04-10T02:53:00Z
+```
+
+Supported:
+
+```text
+unexpected return-link anomaly occurred
+communications were restored
+burn preparation resumed
+RTC2 executed after recovery
+```
+
+Not established:
+
+```text
+exact loss time
+exact recovery time
+complete two-way outage
+root cause
+failed subsystem
+communications-caused maneuver problem
+communications-caused propulsion problem
+```
+
+Causal relationship:
+
+```text
+NOT ESTABLISHED
+```
+
+Permanent rule:
+
+```text
+SEQUENCE
+!=
+CAUSATION
+```
+
+---
+
+## Thread 6 — Final Correction to Entry Handoff
+
+Domains:
+
+```text
+FLIGHT DYNAMICS
+MANEUVERS
+GNC
+```
+
+RTC3:
+
+```text
+2026-04-10T18:53:00Z
+```
+
+Entry Interface:
+
+```text
+2026-04-10T23:53:00Z
+```
+
+Interval:
+
+```text
+18,000 s
+5 h
+```
+
+Splashdown public anchor:
+
+```text
+2026-04-11T00:07:00Z
+```
+
+This closes the Phase 2 mission-operations chain at the entry boundary.
+
+It does not reconstruct the detailed entry guidance law.
+
+---
+
+# Quantitative Phase 2 Summary
+
+Planned trajectory-correction opportunities:
+
+```text
+6
+```
+
+Executed trajectory corrections:
+
+```text
+4
+```
+
+Cancelled trajectory corrections:
+
+```text
+2
+```
+
+Outbound:
+
+```text
+3 planned
+2 cancelled
+1 executed
+```
+
+Return:
+
+```text
+3 planned
+3 executed
+```
+
+Known executed correction firing-time sum:
+
+```text
+49.5 s
+```
+
+Reported return scalar delta-v magnitude sum:
+
+```text
+11.1 ft/s
+3.38328 m/s
+```
+
+Important:
+
+```text
+11.1 ft/s
+!=
+net vector delta-v
+```
+
+because the public vector directions required for vector summation are unavailable.
+
+OTC3 public delta-v remains unavailable.
+
+Therefore a complete scalar sum for all four corrections is also not computed.
+
+---
+
+# Propulsion Integration Boundary
+
+European Service Module propulsion architecture:
+
+```text
+1 OMS-E main engine
+8 R-4D-11 auxiliary engines
+24 reaction-control engines
+33 engines total
+```
+
+Confirmed major OMS-E maneuver assignments:
+
+```text
+perigee raise
+translunar injection
+```
+
+Correction-burn engine assignments publicly resolved:
+
+```text
+0
+```
+
+Unresolved:
+
+```text
+OTC3
+RTC1
+RTC2
+RTC3
+```
+
+Permanent rule:
+
+```text
+CONFIRMED MAJOR-MANEUVER ENGINE ASSIGNMENT
+!=
+CORRECTION-BURN ENGINE ASSIGNMENT
+```
+
+---
+
+# OEM Integration Boundary
+
+Maneuver creation-time brackets audited:
+
+```text
+4
+```
+
+Same-epoch public solution comparisons available:
+
+```text
+3
+```
+
+Permanent rules:
+
+```text
+OEM SOLUTION DIFFERENCE
+!=
+NAVIGATION ERROR
+```
+
+```text
+OEM SOLUTION DIFFERENCE
+!=
+MEASURED BURN DELTA-V
+```
+
+```text
+OEM CREATION TIME
+!=
+PROOF OF MANEUVER ASSIMILATION
+```
+
+Assimilation status:
+
+```text
+NOT ESTABLISHED
+```
+
+---
+
+# Navigation Integration Boundary
+
+Onboard navigation sensor classes:
+
+```text
+6
+```
+
+```text
+star tracker
+IMU
+GPS receiver
+barometric altimeter
+optical navigation camera
+sun sensor
+```
+
+DSN onboard sensor:
+
+```text
+FALSE
+```
+
+Permanent state-product boundary:
+
+```text
+ONBOARD_NAVIGATION_STATE
+!=
+GROUND_ORBIT_DETERMINATION
+!=
+AROW_PUBLIC_STATE_VECTOR
+```
+
+Unavailable:
+
+```text
+complete onboard navigation-filter history
+complete ground OD solution history
+raw sensor histories
+```
+
+---
+
+# Phase 2 Reconstructable Scope
+
+Count:
+
+```text
+22
+```
+
+The integrated Phase 2 evidence supports reconstruction of:
+
+```text
+shared mission clock
+Earth-Moon-Orion trajectory context
+lunar SOI transitions
+pericynthion geometry
+public OEM solution evolution
+trajectory-correction plan versus execution
+trajectory-correction operational threads
+propulsion architecture
+confirmed major-maneuver propulsion assignments
+communications event sequence
+expected lunar communications constraint
+unexpected return-link anomaly sequence
+optical-communications context
+GNC domain architecture
+onboard navigation-sensor architecture
+ground-navigation support boundary
+manual-control architecture
+proximity-operations GNC context
+Flight Day 4 manual-piloting context
+optical-navigation imagery existence
+selected trajectory-correction navigation monitoring
+final correction-to-entry public-clock handoff
+```
+
+---
+
+# Phase 2 Non-Reconstructable Scope
+
+Count:
+
+```text
+25
+```
+
+Not reconstructable from the current curated public evidence:
+
+```text
+complete flight-control console log
+complete Flight Director decision tree
+complete onboard navigation-filter history
+complete ground orbit-determination history
+raw navigation-sensor histories
+filter covariance history
+filter gain history
+filter innovation history
+filter bias history
+measurement accept/reject history
+complete guidance algorithm
+complete guidance-command history
+complete manual-control law
+complete automatic-control law
+controller-deflection history
+individual thruster-firing history
+complete thruster-allocation logic
+correction-burn engine assignments
+complete maneuver-targeting logic
+trajectory-correction burn vectors
+OTC3 public delta-v
+complete crew navigation-display history
+Flight Day 9 communications root cause
+Flight Day 9 failed subsystem
+detailed as-flown entry guidance
+```
+
+---
+
+# Downstream Phase Handoffs
+
+Phase 2K establishes that the following downstream domains are ready for dedicated work.
+
+## Vehicle Systems / ECLSS / Thermal / Materials
+
+Ready scope:
+
+```text
+cabin and environmental trends
+ECLSS
+toilet and wastewater events
+thermal / materials
+heat-shield risk-mitigation chain
+```
+
+---
+
+## Entry / Descent / Splashdown / Recovery
+
+Entry anchor:
+
+```text
+2026-04-10T23:53:00Z
+```
+
+Ready scope:
+
+```text
+detailed entry timeline
+entry guidance where public evidence supports it
+atmospheric-entry modeling
+communications blackout
+parachute sequence
+splashdown accuracy
+recovery timeline
+```
+
+---
+
+## Space Weather / Radiation
+
+Ready scope:
+
+```text
+space-weather context
+OMNI / CDAWeb correlation
+NAIRAS trajectory input
+radiation environment
+external environment versus crew-dose boundary
+```
+
+---
+
+## Lunar Science / Crew Observations
+
+Ready scope:
+
+```text
+crew imagery
+Orion imagery
+mission audio / transcripts
+lunar-target correlation
+crew-observation threads
+```
+
+---
+
+## Mission Control / Engineering Perspectives
+
+Ready scope:
+
+```text
+flight-control discipline lenses
+FDO / FAO perspectives
+EECOM / COMM perspectives
+decision threads
+postflight engineering timeline
+```
+
+---
+
+# Generated Phase 2K Products
+
+Analyzer:
+
+```text
+scripts/analysis/analyze_phase2_integrated_operations.py
+```
+
+Validator:
+
+```text
+scripts/validation/validate_phase2_integrated_operations.py
+```
+
+Processed products:
+
+```text
+data/processed/phase2/phase2_integrated_operational_threads.csv
+data/processed/phase2/phase2_domain_closure.csv
+data/processed/phase2/phase2_integrated_operations_summary.json
+```
+
+Documentation figures:
+
+```text
+docs/assets/phase2/phase2k_integrated_operational_threads.svg
+docs/assets/phase2/phase2k_domain_closure.svg
+```
+
+Processed products remain ignored by Git.
+
+---
+
+# Phase 2K Validation
+
+Observed analyzer checks:
+
+```text
+Flight dynamics integration: PASS
+Communications integration: PASS
+Propulsion integration: PASS
+Maneuver integration: PASS
+GNC integration: PASS
+Shared mission clock: PASS
+Expected constraint vs anomaly boundary: PASS
+Propulsion assignment boundary: PASS
+ONBOARD != GROUND != AROW boundary: PASS
+OEM non-inference boundary: PASS
+RTC2 communications non-causation boundary: PASS
+Final correction-to-entry handoff: PASS
+Downstream phase handoffs: PASS
+```
+
+Observed integrated counts:
+
+```text
+Integrated mission-clock anchors: 11
+Integrated operational threads: 6
+Reconstructable Phase 2 items: 22
+Not reconstructable Phase 2 items: 25
+```
+
+Analyzer result:
+
+```text
+PHASE 2K ANALYSIS COMPLETE
+```
+
+Independent validation:
+
+```text
+Reference dataset: PASS
+Flight dynamics integration: PASS
+Communications integration: PASS
+Propulsion integration: PASS
+Maneuver integration: PASS
+GNC integration: PASS
+Shared mission clock: PASS
+Mission-clock anchors: PASS
+Expected blackout classification: PASS
+RTC2 anomaly/recovery boundary: PASS
+Correction-engine assignment boundary: PASS
+OEM solution-evolution boundary: PASS
+Navigation state-product boundary: PASS
+Six integrated operational threads: PASS
+Final correction-to-entry handoff: PASS
+Downstream phase handoffs: PASS
+Processed products: PASS
+Documentation figures: PASS
+```
+
+Final validator output:
+
+```text
+PHASE 2K VALIDATION PASSED
+```
+
+---
+
+# Phase 2K Current Closure State
+
+The Phase 2K implementation and independent validation have passed.
+
+At the time of this documentation repair, the observed validation run was performed while the Phase 2 integration reference still carried:
+
+```text
+IMPLEMENTATION_IN_PROGRESS
+```
+
+as its explicit closure-status field.
+
+Therefore this log does not retroactively claim that the final Phase 2 status update, final validation rerun, commit, push, or clean-tree verification has already occurred.
+
+Those final repository-closure steps must be observed before recording:
+
+```text
+PHASE 2 COMPLETE
+```
+
+as a committed repository state.
+
+Current evidence-supported status:
+
+```text
+Phase 2K implementation: COMPLETE
+Phase 2K validation: PASS
+Final Phase 2 repository closure: PENDING
+```
+
+---
+
+# Phase 2 Permanent Integration Guardrails
+
+1. A public mission timeline is not a complete flight-control console log.
+2. A public operational sequence is not a complete Flight Director rationale tree.
+3. A planned maneuver is not an executed maneuver.
+4. A cancelled correction is not a failed burn.
+5. A cancelled correction is not a propulsion anomaly.
+6. Propulsion capability does not establish burn-specific engine assignment.
+7. Confirmed OMS-E use for major maneuvers does not establish correction-burn OMS-E use.
+8. Correction-burn engine assignments remain unresolved for OTC3, RTC1, RTC2, and RTC3.
+9. A public OEM trajectory is not raw spacecraft telemetry.
+10. An OEM solution difference is not navigation error.
+11. An OEM solution difference is not measured maneuver delta-v.
+12. OEM creation time does not prove maneuver assimilation.
+13. Navigation architecture is not raw navigation-sensor history.
+14. DSN is ground support and not an onboard navigation sensor.
+15. Ground navigation is not the Orion onboard navigation filter.
+16. AROW state vectors are not proven Orion onboard filter states.
+17. Optical-navigation imagery is not filter residual or innovation data.
+18. Crew navigation monitoring is not a complete onboard navigation-state history.
+19. A manual-control mode label does not disclose a complete control law.
+20. Reported RCS use does not disclose individual thruster-firing history.
+21. Expected lunar occultation communications loss is not an anomaly.
+22. Return-link loss does not by itself prove a complete two-way outage.
+23. Temporal sequence between a communications anomaly and RTC2 does not establish causation.
+24. The RTC3-to-Entry-Interface clock relationship does not reconstruct entry guidance.
+25. Absence from the current curated public evidence set is not proof that an operational record never existed.
+
+---
+
+# Phase 2 — Full Reproducibility and Final Closure
+
+## Goal
+
+Close the complete implemented Artemis II Phase 2 technical stack only after proving that every Phase 2 analysis and validator from Phase 2A through Phase 2K can be executed successfully from the repository in dependency order.
+
+Phase 2 closure therefore requires more than the Phase 2K mission-operations integration.
+
+The complete closure scope includes:
+
+```text
+entry trajectory
+reference-frame reconstruction
+Earth-fixed and geodetic geometry
+entry dynamics
+entry and recovery events
+atmospheric environment
+dynamic pressure
+Mach reconstruction
+rarefaction / continuum analysis
+convective heating
+thermal-protection-system evidence
+entry-profile heritage
+loft / rebound heating
+lunar occultation geometry
+Deep Space Network geometry
+communications
+optical communications
+maneuvers
+propulsion
+flight dynamics
+guidance
+navigation
+control
+cross-domain mission operations
+```
+
+---
+
+## Full Phase 2 Reproducibility Runner
+
+Created:
+
+```text
+scripts/run_phase2.py
+```
+
+The runner executes the complete Phase 2 dependency chain using the active project Python environment.
+
+Successful execution used:
+
+```text
+.venv\Scripts\python.exe
+```
+
+Pipeline size:
+
+```text
+58 steps
+```
+
+Observed execution time:
+
+```text
+33.56 s
+```
+
+Final runner result:
+
+```text
+PHASE 2 PIPELINE COMPLETE
+```
+
+Final coverage statement:
+
+```text
+Phase 2A through Phase 2K regenerated and validated successfully.
+```
+
+---
+
+## Phase 2 Reproducibility Coverage
+
+```text
+Phase 2A
+High-rate entry trajectory
+
+Phase 2B
+Frame transformation and Earth-fixed geometry
+
+Phase 2C
+Entry dynamics
+
+Phase 2D
+Entry / recovery events
+
+Phase 2E
+Atmosphere, Mach, rarefaction, and heating
+
+Phase 2F
+TPS evidence, heritage, and heating-history analysis
+
+Phase 2G
+Lunar occultation and DSN geometry
+
+Phase 2H
+Communications
+
+Phase 2I
+Maneuvers and propulsion
+
+Phase 2J
+Guidance, navigation, and control
+
+Phase 2K
+Cross-domain integration
+```
+
+Every stage in the complete run executed successfully.
+
+No Phase 2 stage was skipped after the successful full-run start.
+
+---
+
+## Phase 2K Final Integration Validation
+
+Phase 2K analyzer result:
+
+```text
+Flight dynamics integration: PASS
+Communications integration: PASS
+Propulsion integration: PASS
+Maneuver integration: PASS
+GNC integration: PASS
+Shared mission clock: PASS
+Expected constraint vs anomaly boundary: PASS
+Propulsion assignment boundary: PASS
+ONBOARD != GROUND != AROW boundary: PASS
+OEM non-inference boundary: PASS
+RTC2 communications non-causation boundary: PASS
+Final correction-to-entry handoff: PASS
+Downstream phase handoffs: PASS
+```
+
+Integrated mission-clock anchors:
+
+```text
+11
+```
+
+Integrated operational threads:
+
+```text
+6
+```
+
+Reconstructable Phase 2 mission-operations items:
+
+```text
+22
+```
+
+Not reconstructable from the current curated public evidence:
+
+```text
+25
+```
+
+Analyzer result:
+
+```text
+PHASE 2K ANALYSIS COMPLETE
+```
+
+Independent validator result:
+
+```text
+Reference dataset: PASS
+Flight dynamics integration: PASS
+Communications integration: PASS
+Propulsion integration: PASS
+Maneuver integration: PASS
+GNC integration: PASS
+Shared mission clock: PASS
+Mission-clock anchors: PASS
+Expected blackout classification: PASS
+RTC2 anomaly/recovery boundary: PASS
+Correction-engine assignment boundary: PASS
+OEM solution-evolution boundary: PASS
+Navigation state-product boundary: PASS
+Six integrated operational threads: PASS
+Final correction-to-entry handoff: PASS
+Downstream phase handoffs: PASS
+Processed products: PASS
+Documentation figures: PASS
+```
+
+Final result:
+
+```text
+PHASE 2K VALIDATION PASSED
+```
+
+Phase 2K integration status:
+
+```text
+COMPLETE
+```
+
+---
+
+## Full Phase 2 Closure Manifest
+
+Created:
+
+```text
+data/reference/artemis_ii_phase2_closure_manifest.json
+```
+
+Dataset identifier:
+
+```text
+phase2_artemis_ii_full_closure_manifest
+```
+
+The closure manifest records the complete implemented Phase 2 hierarchy:
+
+```text
+2A
+
+2B.1
+2B.2
+
+2C
+
+2D
+
+2E.1
+2E.2
+2E.3
+2E.4
+
+2F.1
+2F.2
+2F.3
+2F.4
+
+2G.1
+2G.2
+
+2H.1
+2H.2
+2H.3
+2H.4
+
+2I.1
+2I.2
+2I.3
+2I.4
+
+2J.1
+2J.2
+2J.3
+2J.4
+
+2K
+```
+
+Total closure entries:
+
+```text
+28
+```
+
+All 28 entries are recorded as:
+
+```text
+COMPLETE
+```
+
+The manifest intentionally separates:
+
+```text
+Phase 2K
+=
+cross-domain mission-operations integration
+```
+
+from:
+
+```text
+Phase 2 closure
+=
+complete technical closure of every implemented
+Phase 2 subphase from 2A through 2K
+```
+
+---
+
+## Independent Full Phase 2 Closure Validator
+
+Created:
+
+```text
+scripts/validation/validate_phase2_closure.py
+```
+
+The validator independently verifies:
+
+```text
+closure manifest identity
+Phase 2 COMPLETE status
+Phase 2A through 2K coverage
+28 subphase closure entries
+all declared validators exist
+all declared validators are represented in the Phase 2 runner
+all key tracked reference products exist
+all required local reproducibility inputs exist
+Phase 2K integration closure
+Phase 2J closure
+Phase 2I closure readiness
+permanent evidence-boundary policy
+full reproducibility-run requirement
+58-step successful-run record
+Phase 3 handoff
+```
+
+Observed result:
+
+```text
+Closure manifest identity: PASS
+Phase 2 status COMPLETE: PASS
+Phase 2A through 2K coverage: PASS
+28 subphase closure entries: PASS
+All declared validators exist: PASS
+All declared validators in runner: PASS
+All key tracked reference products exist: PASS
+All local reproducibility inputs exist: PASS
+Phase 2K integration COMPLETE: PASS
+Phase 2J closure COMPLETE: PASS
+Phase 2I closure readiness: PASS
+Evidence-boundary policy: PASS
+Full reproducibility-run requirement: PASS
+58-step successful-run record: PASS
+Phase 3 handoff: PASS
+```
+
+Final result:
+
+```text
+PHASE 2 FULL CLOSURE VALIDATION PASSED
+```
+
+---
+
+## Reproducibility Inputs
+
+The successful Phase 2 preflight verified the required local mission-data and SPICE inputs, including:
+
+```text
+NASA AROW OEM archive
+
+de440s.bsp
+
+naif0012.tls
+
+pck00011.tpc
+
+earth_1962_260806_2126_combined.bpc
+```
+
+The runner also verified the tracked MissionLab reference products required by the Phase 2 analyses.
+
+---
+
+## Permanent Evidence Boundaries
+
+The Phase 2 closure preserves all major evidence-discipline rules established throughout the phase.
+
+### Entry Frames
+
+```text
+NASA M50 source label
+!=
+automatic proof of exact SPICE B1950 file-level equivalence
+```
+
+The B1950 representation remains an analysis mapping validated against the public trajectory handoff.
+
+### Atmosphere
+
+```text
+MODELED ATMOSPHERIC QUANTITIES
+!=
+RAW ORION FLIGHT TELEMETRY
+```
+
+### Dynamic Pressure
+
+```text
+MODELED DYNAMIC PRESSURE
+!=
+RECORDED ORION SENSOR CHANNEL
+```
+
+### Mach
+
+```text
+MODELED MACH
+!=
+RECORDED ORION SENSOR CHANNEL
+```
+
+### Rarefaction
+
+```text
+MODELED RAREFACTION / KNUDSEN REGIME
+!=
+RECORDED ORION SENSOR CHANNEL
+```
+
+### Convective Heating
+
+```text
+MODELED CONVECTIVE HEATING
+!=
+MEASURED ORION SURFACE HEAT FLUX
+```
+
+### Thermal Protection System
+
+```text
+PUBLIC TPS EVIDENCE
+!=
+INTERNAL THERMAL TELEMETRY
+```
+
+### Expected Lunar Communications Constraint
+
+```text
+EXPECTED LUNAR OCCULTATION BLACKOUT
+!=
+ANOMALY
+```
+
+### Communications Causation
+
+```text
+OPERATIONAL SEQUENCE
+!=
+CAUSATION
+```
+
+The Flight Day 9 communications anomaly does not establish a causal relationship to RTC2.
+
+### Maneuver Cancellation
+
+```text
+CANCELLED TRAJECTORY CORRECTION
+!=
+FAILED BURN
+```
+
+and:
+
+```text
+CANCELLED TRAJECTORY CORRECTION
+!=
+PROPULSION ANOMALY
+```
+
+### Propulsion Assignment
+
+```text
+PROPULSION ARCHITECTURE
+!=
+BURN-SPECIFIC ENGINE ASSIGNMENT
+```
+
+Correction-burn engine assignments remain unresolved for:
+
+```text
+OTC3
+RTC1
+RTC2
+RTC3
+```
+
+### Public OEM Products
+
+```text
+PUBLIC OEM
+!=
+RAW SPACECRAFT TELEMETRY
+```
+
+```text
+OEM SOLUTION DIFFERENCE
+!=
+NAVIGATION ERROR
+```
+
+```text
+OEM SOLUTION DIFFERENCE
+!=
+MEASURED BURN DELTA-V
+```
+
+```text
+OEM CREATION TIME
+!=
+PROOF OF MANEUVER ASSIMILATION
+```
+
+### Navigation State Products
+
+```text
+ONBOARD_NAVIGATION_STATE
+!=
+GROUND_ORBIT_DETERMINATION
+!=
+AROW_PUBLIC_STATE_VECTOR
+```
+
+### Deep Space Network
+
+```text
+DSN GROUND TRACKING
+!=
+ONBOARD NAVIGATION SENSOR
+```
+
+### Manual Control
+
+```text
+PUBLIC MANUAL-MODE LABEL
+!=
+COMPLETE CONTROL-LAW DISCLOSURE
+```
+
+and:
+
+```text
+REPORTED RCS USE
+!=
+INDIVIDUAL THRUSTER-FIRING HISTORY
+```
+
+### Entry Handoff
+
+```text
+RTC3 TO ENTRY-INTERFACE CLOCK CORRELATION
+!=
+DETAILED ENTRY-GUIDANCE RECONSTRUCTION
+```
+
+### Missing Public Evidence
+
+```text
+ABSENCE FROM THE CURRENT CURATED PUBLIC SOURCE SET
+!=
+PROOF THAT AN OPERATIONAL RECORD NEVER EXISTED
+```
+
+---
+
+## Phase 2 Closure Artifacts
+
+The final Phase 2 closure adds:
+
+```text
+data/reference/artemis_ii_phase2_integrated_operations.json
+
+data/reference/artemis_ii_phase2_closure_manifest.json
+
+scripts/analysis/analyze_phase2_integrated_operations.py
+
+scripts/validation/validate_phase2_integrated_operations.py
+
+scripts/validation/validate_phase2_closure.py
+
+scripts/run_phase2.py
+
+docs/assets/phase2/phase2k_integrated_operational_threads.svg
+
+docs/assets/phase2/phase2k_domain_closure.svg
+```
+
+The complete reproducibility run also regenerated existing Phase 2J documentation figures from their validated source products.
+
+---
+
+## Repository Quality Check
+
+Observed:
+
+```text
+git diff --check
+```
+
+No whitespace errors were reported.
+
+---
+
+# Final Phase 2 Status
+
+```text
+Phase 2A: COMPLETE
+Phase 2B: COMPLETE
+Phase 2C: COMPLETE
+Phase 2D: COMPLETE
+Phase 2E: COMPLETE
+Phase 2F: COMPLETE
+Phase 2G: COMPLETE
+Phase 2H: COMPLETE
+Phase 2I: COMPLETE
+Phase 2J: COMPLETE
+Phase 2K: COMPLETE
+```
+
+Overall:
+
+```text
+PHASE 2 COMPLETE
+```
+
+Closure basis:
+
+```text
+58 / 58 reproducibility steps passed
+
+28 / 28 implemented subphase closure entries complete
+
+Phase 2K analysis complete
+
+Phase 2K validation passed
+
+Full Phase 2 closure validation passed
+
+Evidence-boundary policy passed
+
+Phase 3 handoff passed
+```
+
+---
+
+# Phase 3 Handoff
+
+Next major phase:
+
+```text
+Phase 3 — ECLSS, Vehicle Systems, Thermal, and Materials
+```
+
+Phase 2 now provides the mission-clock, trajectory, entry, communications, maneuver, propulsion, and GNC backbone required to correlate Phase 3 spacecraft-system evidence against one defensible Artemis II operational timeline.
+
+Phase 3 will begin with inspection of the existing repository and current public evidence before creating any new permanent datasets or analyses.
+
+---
