@@ -161,8 +161,10 @@ def main() -> None:
     )
 
     require(
-        "Phases 0 through 8 are complete"
-        in readme,
+        (
+            "Phases 0 through 8 are complete" in readme
+            or "Phases 0 through 9 are complete" in readme
+        ),
         "README missing current project status",
     )
 
