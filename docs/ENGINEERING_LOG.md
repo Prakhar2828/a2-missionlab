@@ -46188,3 +46188,1147 @@ second-level telemetry
 and avoiding reconstruction of unavailable parachute or recovery telemetry.
 
 ---
+
+---
+
+# Phase 4A.2 — Artemis II Entry-to-Recovery Operational Timeline Reconstruction
+
+## Goal
+
+Transform the validated Phase 4A.1 public evidence set into one operational timeline spanning:
+
+```text
+final return preparation
+↓
+crew-module entry configuration
+↓
+atmospheric entry
+↓
+planned plasma blackout
+↓
+communications reacquisition
+↓
+parachute descent
+↓
+splashdown
+↓
+crew recovery
+↓
+spacecraft recovery
+```
+
+Phase 4A.2 integrates:
+
+```text
+NASA-reported public event minutes
+
+relative-order-only public events
+
+Phase 2 derived entry states
+
+MissionLab-derived operational states
+```
+
+without converting public mission updates into second-level telemetry.
+
+---
+
+# Analysis
+
+Created:
+
+```text
+scripts/analysis/analyze_entry_to_recovery_timeline.py
+```
+
+Generated:
+
+```text
+data/processed/recovery/entry_to_recovery_operational_timeline.json
+
+data/processed/recovery/entry_to_recovery_operational_timeline.csv
+```
+
+Documentation figure:
+
+```text
+docs/assets/recovery/phase4a2_entry_to_recovery_timeline.svg
+```
+
+Dataset:
+
+```text
+phase4a2_artemis_ii_entry_to_recovery_operational_timeline
+```
+
+Status:
+
+```text
+ENTRY_TO_RECOVERY_TIMELINE_COMPLETE
+```
+
+---
+
+# Dependencies
+
+Phase 4A.2 depends on:
+
+```text
+Phase 4A.1
+public entry / descent / splashdown / recovery evidence
+
+Phase 2
+entry event trajectory correlations
+```
+
+Validated:
+
+```text
+Phase 4A.1 public evidence
+PASS
+
+Phase 2 entry correlations
+PASS
+```
+
+---
+
+# Operational Timeline
+
+Total operational events:
+
+```text
+15
+```
+
+Public-minute anchored events:
+
+```text
+13
+```
+
+Relative-order-only events:
+
+```text
+2
+```
+
+Public-minute intervals:
+
+```text
+12
+```
+
+Operational state transitions:
+
+```text
+36
+```
+
+Phase 2 trajectory-state crosslinks:
+
+```text
+4
+```
+
+---
+
+# Unified Event Sequence
+
+The reconstructed operational timeline is:
+
+```text
+1.
+DSN → NSN handover
+
+2.
+crew module / service module separation
+
+3.
+crew module raise burn
+
+4.
+Entry Interface
+
+5.
+planned plasma communications blackout
+
+6.
+communications reacquisition
+
+7.
+drogue parachute deployment
+
+8.
+three main parachutes deployed
+
+9.
+splashdown
+
+10.
+post-splashdown spacecraft powerdown
+
+11.
+recovery-team approach
+
+12.
+crew extracted
+
+13.
+helicopter transfer
+
+14.
+crew aboard USS John P. Murtha
+
+15.
+Orion secured in well deck
+```
+
+---
+
+# Time Basis
+
+Thirteen events contain:
+
+```text
+NASA_REPORTED_PUBLIC_MINUTE
+```
+
+Two events deliberately remain without fabricated exact timestamps:
+
+```text
+A2_ENTRY_PLASMA_BLACKOUT
+
+A2_POST_SPLASHDOWN_POWERDOWN
+```
+
+Their time bases are:
+
+```text
+NASA_REPORTED_RELATIVE_ORDER_APPROXIMATE_DURATION
+
+NASA_REPORTED_RELATIVE_ORDER
+```
+
+respectively.
+
+Therefore:
+
+```text
+RELATIVE-ORDER EVENT
+!=
+FABRICATED TIMESTAMP
+```
+
+---
+
+# Public-Minute Relationship Policy
+
+Phase 4A.2 calculates differences between NASA public-update minute anchors.
+
+These are:
+
+```text
+MISSIONLAB_DERIVED_PUBLIC_MINUTE_DIFFERENCE
+```
+
+They are not:
+
+```text
+exact operational durations
+```
+
+Every interval enforces:
+
+```text
+exact_operational_duration = FALSE
+```
+
+Therefore:
+
+```text
+PUBLIC-MINUTE DIFFERENCE
+!=
+EXACT TELEMETRY DURATION
+```
+
+---
+
+# Entry Preparation Timing Relationships
+
+Validated public-minute differences:
+
+```text
+DSN → NSN handover
+to
+CM / SM separation
+
+18 minutes
+```
+
+```text
+CM / SM separation
+to
+crew module raise burn
+
+4 minutes
+```
+
+```text
+crew module raise burn
+to
+Entry Interface
+
+16 minutes
+```
+
+These values describe the spacing between public mission-update minute anchors.
+
+They are not promoted to exact maneuver timing.
+
+---
+
+# Entry Communications Relationship
+
+Validated public-minute difference:
+
+```text
+Entry Interface
+to
+communications reacquisition
+
+7 minutes
+```
+
+NASA separately described the planned blackout as:
+
+```text
+about 6 minutes
+```
+
+These are not inconsistent measurements of one exact quantity because:
+
+```text
+Entry Interface public minute
+!=
+exact blackout-start second
+```
+
+and:
+
+```text
+reacquisition public minute
+!=
+exact blackout-end second
+```
+
+Therefore:
+
+```text
+7-MINUTE PUBLIC UPDATE DIFFERENCE
+!=
+EXACT BLACKOUT DURATION
+```
+
+---
+
+# Post-Reacquisition Descent Relationships
+
+Validated public-minute relationships:
+
+```text
+communications reacquisition
+to
+drogue deployment
+
+3 minutes
+```
+
+```text
+drogue deployment
+to
+main parachute deployment
+
+1 minute
+```
+
+```text
+main parachute deployment
+to
+splashdown
+
+3 minutes
+```
+
+Again, these are public-minute relationships rather than exact telemetry durations.
+
+---
+
+# Recovery Relationships
+
+Validated public-minute relationships:
+
+```text
+splashdown
+to
+recovery-team approach
+
+5 minutes
+```
+
+```text
+splashdown
+to
+crew extraction
+
+87 minutes
+```
+
+```text
+splashdown
+to
+crew aboard recovery ship
+
+111 minutes
+```
+
+```text
+splashdown
+to
+Orion secured in well deck
+
+500 minutes
+```
+
+Additional recovery relationships:
+
+```text
+crew extraction
+to
+helicopter transfer
+
+22 minutes
+```
+
+```text
+helicopter transfer
+to
+crew aboard recovery ship
+
+2 minutes
+```
+
+```text
+crew aboard recovery ship
+to
+Orion secured in well deck
+
+389 minutes
+```
+
+These provide a public operational-scale view of recovery without inventing unavailable second-level recovery logs.
+
+---
+
+# Operational State Model
+
+Phase 4A.2 tracks six state dimensions:
+
+```text
+mission_phase
+
+communications_state
+
+vehicle_configuration
+
+parachute_state
+
+crew_state
+
+recovery_state
+```
+
+Total derived state transitions:
+
+```text
+36
+```
+
+Provenance:
+
+```text
+MISSIONLAB_DERIVED_OPERATIONAL_STATE_TRANSITION
+```
+
+---
+
+# Mission-Phase Progression
+
+Mission phase progresses through:
+
+```text
+ENTRY_PREPARATION
+↓
+ATMOSPHERIC_ENTRY
+↓
+PARACHUTE_DESCENT
+↓
+SPLASHDOWN
+↓
+POST_SPLASHDOWN_RECOVERY
+↓
+CREW_RECOVERY
+↓
+SPACECRAFT_RECOVERY
+```
+
+---
+
+# Communications-State Progression
+
+Operational communications state progresses through:
+
+```text
+NSN_HANDOVER_COMPLETE
+↓
+ENTRY_COMMUNICATIONS_AVAILABLE
+↓
+CONTACT_BEFORE_PLASMA_BLACKOUT
+↓
+PLANNED_PLASMA_BLACKOUT
+↓
+CONTACT_REACQUIRED
+↓
+CONTACT_AVAILABLE
+↓
+POST_ENTRY_CONTACT_AVAILABLE
+↓
+POST_SPLASHDOWN_CONTACT
+↓
+RECOVERY_OPERATIONS
+```
+
+The blackout remains classified as:
+
+```text
+PLANNED
+```
+
+rather than:
+
+```text
+ANOMALY
+```
+
+---
+
+# Vehicle-Configuration Progression
+
+Vehicle configuration progresses through:
+
+```text
+CREW_MODULE_SERVICE_MODULE_INTEGRATED
+↓
+CREW_MODULE_ONLY
+↓
+ENTRY_ATTITUDE_CONFIGURED
+↓
+CREW_MODULE_ATMOSPHERIC_ENTRY
+↓
+CREW_MODULE_DESCENT
+↓
+CREW_MODULE_AFLOAT
+↓
+RECOVERY_CONFIGURATION_TRANSITION
+↓
+SECURED_IN_WELL_DECK
+```
+
+---
+
+# Parachute-State Progression
+
+Parachute state progresses through:
+
+```text
+STOWED
+↓
+DROGUES_DEPLOYED
+↓
+THREE_MAIN_PARACHUTES_DEPLOYED
+↓
+PARACHUTE_DESCENT_COMPLETE
+↓
+DESCENT_SYSTEM_COMPLETE
+```
+
+No individual canopy telemetry is inferred.
+
+---
+
+# Crew-State Progression
+
+Crew state progresses through:
+
+```text
+ABOARD_ORION
+↓
+EXTRACTED_TO_FRONT_PORCH_RAFT
+↓
+HELICOPTER_TRANSFER
+↓
+ABOARD_RECOVERY_SHIP
+```
+
+This preserves the operational distinction between:
+
+```text
+spacecraft splashdown
+```
+
+and:
+
+```text
+crew recovery completion
+```
+
+---
+
+# Recovery-State Progression
+
+Recovery state progresses through:
+
+```text
+NOT_STARTED
+↓
+SPLASHDOWN_COMPLETE
+↓
+SPACECRAFT_SAFING
+↓
+RECOVERY_TEAM_APPROACH
+↓
+CREW_EXTRACTED
+↓
+CREW_TRANSFER_TO_SHIP
+↓
+CREW_RECOVERY_AT_SHIP_COMPLETE
+↓
+SPACECRAFT_RECOVERY_AT_SHIP_COMPLETE
+```
+
+This provides a clear distinction between:
+
+```text
+crew recovery
+```
+
+and:
+
+```text
+spacecraft recovery
+```
+
+---
+
+# Phase 2 Trajectory-State Integration
+
+Phase 4A.2 preserves four existing Phase 2 derived trajectory states.
+
+Crosslinked events:
+
+```text
+Entry Interface
+
+drogue deployment
+
+main parachute deployment
+
+splashdown
+```
+
+Crosslink count:
+
+```text
+4
+```
+
+---
+
+# Entry Interface Phase 2 Crosslink
+
+Phase 2 section:
+
+```text
+entry_interface
+```
+
+Phase 2 state:
+
+```text
+derived
+```
+
+Provenance:
+
+```text
+PHASE2_DERIVED_FROM_NASA_FLIGHT_DERIVED_EPHEMERIS
+```
+
+This preserves the reconstructed trajectory state at Entry Interface without reclassifying it as direct telemetry.
+
+---
+
+# Drogue Phase 2 Crosslink
+
+Phase 2 section:
+
+```text
+drogue_deploy
+```
+
+Phase 2 state:
+
+```text
+altitude_anchor
+```
+
+This preserves the Phase 2 trajectory-derived state associated with NASA's reported drogue deployment altitude.
+
+---
+
+# Main Parachute Phase 2 Crosslink
+
+Phase 2 section:
+
+```text
+main_deploy
+```
+
+Phase 2 state:
+
+```text
+altitude_anchor
+```
+
+This preserves the Phase 2 derived state associated with the reported 5,400-ft main-parachute event.
+
+---
+
+# Splashdown Phase 2 Crosslink
+
+Phase 2 section:
+
+```text
+splashdown
+```
+
+Phase 2 state:
+
+```text
+derived_surface_crossing
+```
+
+This is preserved as:
+
+```text
+DERIVED_SPLASHDOWN_CORRELATED_SURFACE_CROSSING
+```
+
+rather than:
+
+```text
+official NASA exact splashdown telemetry epoch
+```
+
+---
+
+# Derived-State Boundary
+
+The operational timeline explicitly preserves:
+
+```text
+PHASE 2 DERIVED STATE
+!=
+NASA-REPORTED TELEMETRY
+```
+
+The trajectory states originate from:
+
+```text
+NASA flight-derived ephemeris
++
+MissionLab reconstruction
+```
+
+They remain:
+
+```text
+DERIVED
+```
+
+---
+
+# Phase 2 Reuse Boundary
+
+Phase 4A.2 does not recompute:
+
+```text
+entry geometry
+
+Earth-relative speed
+
+atmospheric model
+
+Mach
+
+rarefaction
+
+convective heating
+
+entry trajectory
+
+surface crossing
+```
+
+Instead:
+
+```text
+Phase 2 results
+→
+Phase 4 operational crosslinks
+```
+
+Therefore:
+
+```text
+PHASE 4 REUSE
+!=
+PHASE 2 PHYSICS RECOMPUTATION
+```
+
+---
+
+# Operational Timeline Figure
+
+Created:
+
+```text
+docs/assets/recovery/phase4a2_entry_to_recovery_timeline.svg
+```
+
+The figure displays the public-minute timeline relative to Entry Interface.
+
+It includes:
+
+```text
+DSN → NSN
+
+CM / SM separation
+
+raise burn
+
+Entry Interface
+
+communications reacquisition
+
+drogues
+
+mains
+
+splashdown
+
+recovery approach
+
+crew extraction
+
+helicopter transfer
+
+crew aboard ship
+
+Orion secured
+```
+
+The figure explicitly notes that:
+
+```text
+public-minute differences
+are not exact telemetry durations
+```
+
+---
+
+# Timeline Evidence Boundaries
+
+Phase 4A.2 enforces:
+
+```text
+PUBLIC UPDATE MINUTE
+!=
+EXACT EVENT EPOCH
+```
+
+```text
+PUBLIC-MINUTE DIFFERENCE
+!=
+EXACT OPERATIONAL DURATION
+```
+
+```text
+ENTRY INTERFACE → REACQUISITION PUBLIC DIFFERENCE
+!=
+EXACT BLACKOUT DURATION
+```
+
+```text
+PHASE 2 DERIVED STATE
+!=
+NASA-REPORTED TELEMETRY
+```
+
+```text
+PARACHUTE ARCHITECTURE
+!=
+INDIVIDUAL DEPLOYMENT TELEMETRY
+```
+
+```text
+POST-SPLASHDOWN POWERDOWN
+!=
+KNOWN EXACT PUBLIC TIMESTAMP
+```
+
+```text
+RECOVERY PROCEDURE DESCRIPTION
+!=
+UNREPORTED EXACT EVENT TIMES
+```
+
+```text
+PHASE 4 OPERATIONAL INTEGRATION
+!=
+PHASE 2 ENTRY-PHYSICS RECOMPUTATION
+```
+
+---
+
+# Independent Validation
+
+Created:
+
+```text
+scripts/validation/validate_entry_to_recovery_timeline.py
+```
+
+Validation results:
+
+```text
+Analysis identity: PASS
+
+Dependency registry: PASS
+```
+
+Timeline structure:
+
+```text
+15-event operational timeline: PASS
+
+Timeline ordering: PASS
+
+Timeline provenance: PASS
+```
+
+Time basis:
+
+```text
+13 public-minute anchors: PASS
+
+2 relative-order-only events: PASS
+
+Blackout timing boundary: PASS
+
+Powerdown timing boundary: PASS
+```
+
+Public-minute relationships:
+
+```text
+12 public-minute intervals: PASS
+
+Exact-duration prohibition: PASS
+
+Public-minute relationship summary: PASS
+```
+
+Phase 2 integration:
+
+```text
+Phase 2 trajectory-state crosslinks: PASS
+
+Entry Interface state crosslink: PASS
+
+Drogue state crosslink: PASS
+
+Main-parachute state crosslink: PASS
+
+Splashdown-correlated state crosslink: PASS
+
+Derived-state / telemetry boundary: PASS
+```
+
+Operational state reconstruction:
+
+```text
+Mission-phase progression: PASS
+
+Communications-state progression: PASS
+
+Vehicle-configuration progression: PASS
+
+Parachute-state progression: PASS
+
+Crew-state progression: PASS
+
+Recovery-state progression: PASS
+```
+
+Transition validation:
+
+```text
+36 operational state transitions: PASS
+
+State-transition topology: PASS
+```
+
+Evidence integrity:
+
+```text
+Timeline evidence-boundary policy: PASS
+
+No Phase 2 physics recomputation: PASS
+
+No fabricated event epochs: PASS
+```
+
+Artifacts:
+
+```text
+Timeline CSV / JSON consistency: PASS
+
+Documentation figure: PASS
+```
+
+Final result:
+
+```text
+PHASE 4A.2 VALIDATION PASSED
+```
+
+---
+
+# Validated Phase 4A.2 Totals
+
+```text
+operational events
+15
+
+public-minute anchors
+13
+
+relative-order-only events
+2
+
+public-minute intervals
+12
+
+operational state transitions
+36
+
+Phase 2 trajectory-state crosslinks
+4
+```
+
+---
+
+# Phase 4A Status
+
+```text
+Phase 4A.1
+PUBLIC EVIDENCE RECONSTRUCTION
+COMPLETE
+
+Phase 4A.2
+ENTRY-TO-RECOVERY OPERATIONAL TIMELINE
+COMPLETE
+```
+
+Current reconstructed chain:
+
+```text
+RETURN COMMUNICATIONS HANDOVER
+↓
+CM / SM SEPARATION
+↓
+ENTRY CONFIGURATION
+↓
+ENTRY INTERFACE
+↓
+PLANNED PLASMA BLACKOUT
+↓
+COMMUNICATIONS REACQUISITION
+↓
+DROGUE DESCENT
+↓
+MAIN PARACHUTE DESCENT
+↓
+SPLASHDOWN
+↓
+SPACECRAFT SAFING
+↓
+RECOVERY APPROACH
+↓
+CREW EXTRACTION
+↓
+HELICOPTER TRANSFER
+↓
+CREW ABOARD RECOVERY SHIP
+↓
+ORION SECURED IN WELL DECK
+```
+
+---
+
+# Phase 4A.2 Status
+
+```text
+ENTRY-TO-RECOVERY EVENT INTEGRATION
+COMPLETE
+
+PUBLIC-MINUTE TIMELINE
+COMPLETE
+
+OPERATIONAL STATE MODEL
+COMPLETE
+
+PHASE 2 ENTRY CROSS-LINKING
+COMPLETE
+
+COMMUNICATIONS TRANSITIONS
+COMPLETE
+
+PARACHUTE TRANSITIONS
+COMPLETE
+
+CREW-RECOVERY TRANSITIONS
+COMPLETE
+
+SPACECRAFT-RECOVERY TRANSITIONS
+COMPLETE
+
+SECOND-LEVEL TELEMETRY CLAIMS
+NOT MADE
+
+PHASE 4A.2
+COMPLETE
+```
+
+---
