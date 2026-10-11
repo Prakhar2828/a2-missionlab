@@ -47332,3 +47332,889 @@ COMPLETE
 ```
 
 ---
+
+---
+
+# Phase 4B — Splashdown Accuracy and Recovery Closure
+
+## Goal
+
+Close the remaining Phase 4 roadmap requirement:
+
+```text
+splashdown accuracy
+```
+
+without inventing unavailable targeting data.
+
+Phase 4B integrates:
+
+```text
+Phase 4A.1
+public entry / descent / recovery evidence
+
+Phase 4A.2
+entry-to-recovery operational timeline
+
+Phase 2
+flight-derived terminal trajectory reconstruction
+```
+
+to determine exactly what can and cannot be said about Artemis II splashdown accuracy from public evidence.
+
+---
+
+# Analysis
+
+Created:
+
+```text
+scripts/analysis/analyze_splashdown_accuracy_recovery_closure.py
+```
+
+Generated:
+
+```text
+data/processed/recovery/splashdown_accuracy_recovery_closure.json
+
+data/processed/recovery/splashdown_accuracy_metrics.csv
+```
+
+Documentation figure:
+
+```text
+docs/assets/recovery/phase4b_splashdown_accuracy_boundary.svg
+```
+
+Dataset:
+
+```text
+phase4b_artemis_ii_splashdown_accuracy_recovery_closure
+```
+
+Status:
+
+```text
+PHASE4_PUBLIC_EVIDENCE_CLOSURE_COMPLETE
+```
+
+---
+
+# Dependencies
+
+Validated:
+
+```text
+Phase 4A.1 public evidence
+PASS
+
+Phase 4A.2 operational timeline
+PASS
+
+Phase 2 entry correlations
+PASS
+```
+
+---
+
+# Splashdown Public-Time Consistency
+
+NASA public splashdown minute:
+
+```text
+2026-04-11T00:07:00Z
+```
+
+Phase 2 derived WGS84 surface crossing:
+
+```text
+2026-04-11T00:07:08.823676Z
+```
+
+Derived offset from the start of NASA's reported public minute:
+
+```text
+8.824 seconds
+```
+
+The derived crossing lies within the publicly reported splashdown minute.
+
+Classification:
+
+```text
+PUBLIC_MINUTE_CONSISTENT
+```
+
+Validation:
+
+```text
+Splashdown public-minute consistency
+PASS
+
+Derived surface crossing within reported minute
+PASS
+```
+
+---
+
+# Timing Accuracy Boundary
+
+The 8.824-second value is:
+
+```text
+a consistency diagnostic
+```
+
+It is not:
+
+```text
+an exact splashdown timing error
+```
+
+because the NASA event report is only minute-resolution.
+
+Therefore:
+
+```text
+PUBLIC-MINUTE OFFSET
+!=
+EXACT EVENT TIMING ERROR
+```
+
+Validation:
+
+```text
+Exact timing-error prohibition
+PASS
+```
+
+---
+
+# Derived Terminal State
+
+Phase 2 derived terminal surface state:
+
+```text
+UTC
+2026-04-11T00:07:08.823676Z
+
+latitude
+32.340599 deg
+
+longitude
+-117.763095 deg
+```
+
+Classification:
+
+```text
+DERIVED_SPLASHDOWN_CORRELATED_SURFACE_CROSSING
+```
+
+Provenance:
+
+```text
+PHASE2_DERIVED_FROM_NASA_FLIGHT_DERIVED_EPHEMERIS
+```
+
+Validation:
+
+```text
+Derived terminal state
+PASS
+
+Terminal-state provenance
+PASS
+```
+
+---
+
+# Terminal Coordinate Boundary
+
+The derived coordinate is a MissionLab reconstruction from the flight-derived trajectory.
+
+It is not claimed as:
+
+```text
+official NASA actual splashdown coordinate
+```
+
+and it is not:
+
+```text
+official NASA target coordinate
+```
+
+Therefore:
+
+```text
+DERIVED TERMINAL COORDINATE
+!=
+OFFICIAL ACTUAL SPLASHDOWN COORDINATE
+```
+
+and:
+
+```text
+DERIVED TERMINAL COORDINATE
+!=
+OFFICIAL TARGET COORDINATE
+```
+
+---
+
+# Public Splashdown Location
+
+NASA public location description:
+
+```text
+Pacific Ocean off the coast of San Diego
+```
+
+This establishes regional location.
+
+It does not provide:
+
+```text
+numerical target latitude / longitude
+
+numerical official actual splashdown latitude / longitude
+```
+
+---
+
+# Spatial Targeting Accuracy
+
+Publicly available official numerical target coordinate:
+
+```text
+NO
+```
+
+Publicly available official numerical actual splashdown coordinate:
+
+```text
+NO
+```
+
+Therefore:
+
+```text
+official target-to-actual miss distance
+NOT PUBLICLY QUANTIFIABLE
+```
+
+Classification:
+
+```text
+TARGETING_MISS_DISTANCE_NOT_PUBLICLY_QUANTIFIABLE
+```
+
+No target miss distance is invented.
+
+Validation:
+
+```text
+Official target-coordinate boundary
+PASS
+
+Official actual-coordinate boundary
+PASS
+
+Target-to-actual miss-distance boundary
+PASS
+
+No fabricated landing-accuracy metric
+PASS
+```
+
+---
+
+# Splashdown Accuracy Closure
+
+The roadmap requirement:
+
+```text
+splashdown accuracy
+```
+
+is therefore closed as:
+
+```text
+COMPLETE_WITH_PUBLIC_EVIDENCE_BOUNDARY
+```
+
+MissionLab can defensibly quantify:
+
+```text
+derived terminal state
+
+consistency with the NASA splashdown minute
+```
+
+MissionLab cannot defensibly quantify:
+
+```text
+official target-to-actual landing miss distance
+```
+
+because the required public target and official actual coordinate pair is unavailable.
+
+---
+
+# Drogue Distance Diagnostic
+
+NASA-reported approximate distance to splashdown:
+
+```text
+0.800 statute miles
+```
+
+MissionLab-derived surface distance to the reconstructed terminal point at the drogue altitude anchor:
+
+```text
+1.159 statute miles
+```
+
+This difference is preserved as a diagnostic.
+
+It is not interpreted as:
+
+```text
+targeting error
+```
+
+because the NASA value is approximate and the values do not represent a proven common exact telemetry epoch.
+
+Therefore:
+
+```text
+DROGUE DISTANCE DIFFERENCE
+!=
+LANDING TARGETING MISS
+```
+
+Validation:
+
+```text
+Drogue distance diagnostic
+PASS
+
+Drogue diagnostic / targeting-error boundary
+PASS
+```
+
+---
+
+# Recovery Closure
+
+Crew recovery completion state:
+
+```text
+CREW_RECOVERY_AT_SHIP_COMPLETE
+```
+
+Completion event:
+
+```text
+A2_CREW_ABOARD_RECOVERY_SHIP
+```
+
+Splashdown-to-crew-aboard-ship public-minute relationship:
+
+```text
+111 minutes
+```
+
+This remains:
+
+```text
+PUBLIC-MINUTE DIFFERENCE
+```
+
+not an exact operational duration.
+
+---
+
+# Spacecraft Recovery Closure
+
+Spacecraft recovery completion state:
+
+```text
+SPACECRAFT_RECOVERY_AT_SHIP_COMPLETE
+```
+
+Completion event:
+
+```text
+A2_ORION_SECURED_IN_WELL_DECK
+```
+
+Splashdown-to-Orion-secured public-minute relationship:
+
+```text
+500 minutes
+```
+
+Again:
+
+```text
+PUBLIC-MINUTE DIFFERENCE
+!=
+EXACT OPERATIONAL DURATION
+```
+
+---
+
+# Crew Recovery / Spacecraft Recovery Boundary
+
+MissionLab explicitly preserves:
+
+```text
+CREW RECOVERY COMPLETE
+!=
+SPACECRAFT RECOVERY COMPLETE
+```
+
+Crew recovery closes when:
+
+```text
+crew aboard recovery ship
+```
+
+Spacecraft recovery closes when:
+
+```text
+Orion secured in well deck
+```
+
+Validation:
+
+```text
+Crew recovery closure
+PASS
+
+Spacecraft recovery closure
+PASS
+
+Crew / spacecraft recovery separation
+PASS
+```
+
+---
+
+# Recovery / Postflight Analysis Boundary
+
+Securing Orion aboard the recovery ship does not establish:
+
+```text
+postflight spacecraft analysis complete
+```
+
+Therefore:
+
+```text
+SPACECRAFT RECOVERY COMPLETE
+!=
+POSTFLIGHT ENGINEERING ANALYSIS COMPLETE
+```
+
+Validation:
+
+```text
+Recovery / postflight-analysis separation
+PASS
+```
+
+---
+
+# Phase 4 Roadmap Closure
+
+Original Phase 4 roadmap requirements:
+
+```text
+return geometry and entry timeline
+
+public entry events
+
+communications blackout
+
+modeled atmospheric quantities where raw telemetry unavailable
+
+parachute sequence
+
+splashdown accuracy and recovery timeline
+
+explicit separation of public data and model outputs
+```
+
+Validated closure:
+
+```text
+return geometry / entry timeline
+COMPLETE
+
+public entry events
+COMPLETE
+
+communications blackout
+COMPLETE
+
+modeled atmospheric quantities
+COMPLETE
+
+parachute sequence
+COMPLETE
+
+splashdown accuracy
+COMPLETE WITH PUBLIC EVIDENCE BOUNDARY
+
+recovery timeline
+COMPLETE
+
+public / model separation
+COMPLETE
+```
+
+Validation:
+
+```text
+Phase 4 roadmap coverage
+PASS
+```
+
+---
+
+# Phase 4 Evidence Boundaries
+
+Validated:
+
+```text
+derived surface crossing
+!=
+official actual splashdown coordinate
+```
+
+```text
+derived surface crossing
+!=
+official target coordinate
+```
+
+```text
+public-minute offset
+!=
+exact timing error
+```
+
+```text
+drogue distance difference
+!=
+targeting error
+```
+
+```text
+regional splashdown description
+!=
+precise miss distance
+```
+
+```text
+absence of public coordinates
+!=
+evidence that landing was inaccurate
+```
+
+```text
+crew recovery complete
+!=
+spacecraft recovery complete
+```
+
+```text
+spacecraft recovery complete
+!=
+postflight analysis complete
+```
+
+Validation:
+
+```text
+Phase 4 evidence-boundary policy
+PASS
+```
+
+---
+
+# Independent Validation
+
+Created:
+
+```text
+scripts/validation/validate_splashdown_accuracy_recovery_closure.py
+```
+
+Validation results:
+
+```text
+Analysis identity
+PASS
+
+Dependency registry
+PASS
+```
+
+Splashdown timing:
+
+```text
+Splashdown public-minute consistency
+PASS
+
+Derived surface crossing within reported minute
+PASS
+
+Exact timing-error prohibition
+PASS
+```
+
+Terminal state:
+
+```text
+Derived terminal state
+PASS
+
+Terminal-state provenance
+PASS
+```
+
+Spatial accuracy:
+
+```text
+Official target-coordinate boundary
+PASS
+
+Official actual-coordinate boundary
+PASS
+
+Target-to-actual miss-distance boundary
+PASS
+
+No fabricated landing-accuracy metric
+PASS
+```
+
+Drogue diagnostic:
+
+```text
+Drogue distance diagnostic
+PASS
+
+Drogue diagnostic / targeting-error boundary
+PASS
+```
+
+Recovery:
+
+```text
+Crew recovery closure
+PASS
+
+Spacecraft recovery closure
+PASS
+
+Crew / spacecraft recovery separation
+PASS
+
+Recovery / postflight-analysis separation
+PASS
+```
+
+Roadmap:
+
+```text
+Return geometry / entry timeline
+PASS
+
+Public entry events
+PASS
+
+Communications blackout
+PASS
+
+Modeled atmospheric quantities
+PASS
+
+Parachute sequence
+PASS
+
+Splashdown accuracy boundary closure
+PASS
+
+Recovery timeline
+PASS
+
+Public / model separation
+PASS
+
+Phase 4 roadmap coverage
+PASS
+```
+
+Artifacts:
+
+```text
+Metrics CSV consistency
+PASS
+
+Documentation figure
+PASS
+```
+
+Final validator result:
+
+```text
+PHASE 4B VALIDATION PASSED
+
+PHASE 4 ROADMAP COVERAGE PASSED
+```
+
+---
+
+# Phase 4 Final Status
+
+```text
+PHASE 4 — ENTRY, DESCENT, SPLASHDOWN, RECOVERY
+```
+
+Return geometry:
+
+```text
+COMPLETE
+```
+
+Entry timeline:
+
+```text
+COMPLETE
+```
+
+Public entry evidence:
+
+```text
+COMPLETE
+```
+
+Entry communications blackout:
+
+```text
+COMPLETE
+```
+
+Atmospheric reconstruction:
+
+```text
+COMPLETE
+```
+
+Entry heating / rarefaction / Mach context:
+
+```text
+COMPLETE
+```
+
+Parachute architecture:
+
+```text
+COMPLETE
+```
+
+As-flown drogue / main sequence:
+
+```text
+COMPLETE
+```
+
+Splashdown reconstruction:
+
+```text
+COMPLETE
+```
+
+Splashdown public-time consistency:
+
+```text
+COMPLETE
+```
+
+Official target-to-actual miss distance:
+
+```text
+NOT PUBLICLY QUANTIFIABLE
+```
+
+Splashdown-accuracy roadmap requirement:
+
+```text
+COMPLETE WITH PUBLIC EVIDENCE BOUNDARY
+```
+
+Crew recovery:
+
+```text
+COMPLETE
+```
+
+Spacecraft recovery:
+
+```text
+COMPLETE
+```
+
+Public-data / derived-model separation:
+
+```text
+PRESERVED
+```
+
+Independent Phase 4 validation:
+
+```text
+PASS
+```
+
+Overall:
+
+```text
+PHASE 4
+COMPLETE RELATIVE TO DEFENSIBLE PUBLIC EVIDENCE
+```
+
+---
+
+# Phase 5 Handoff
+
+Next roadmap phase:
+
+```text
+PHASE 5 — SPACE WEATHER AND RADIATION
+```
+
+Required work:
+
+```text
+OMNI / CDAWeb-compatible heliophysics quantities
+
+mission-clock space-weather correlation
+
+Artemis II trajectory preparation for NAIRAS 3.0
+
+NAIRAS run ingestion / export where permitted
+
+explicit shielding assumptions
+
+external radiation environment
+!=
+astronaut absorbed / effective dose
+```
+
+---
