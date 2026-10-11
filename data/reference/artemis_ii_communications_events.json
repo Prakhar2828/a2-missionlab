@@ -1,0 +1,116 @@
+{
+  "dataset_id": "phase2g1_artemis_ii_communications_reference",
+  "mission": "Artemis II",
+  "scope": "NASA-reported Artemis II communications architecture and public lunar-flyby loss-of-signal and acquisition-of-signal timing used as an external validation target for MissionLab geocentric occultation geometry.",
+  "provenance": "NASA_REPORTED",
+  "communications_architecture": {
+    "near_earth_network": {
+      "name": "Near Space Network",
+      "role": "NASA reports that the Near Space Network supported Artemis II during multiple stages of near-Earth mission operations."
+    },
+    "deep_space_network": {
+      "name": "Deep Space Network",
+      "role": "NASA reports that primary communications support transitioned to the Deep Space Network after translunar injection for deep-space operations."
+    },
+    "optical_demonstration": {
+      "name": "Orion Artemis II Optical Communications System",
+      "short_name": "O2O",
+      "role": "Separate optical communications demonstration flown concurrently with the mission's primary radio-frequency communications architecture.",
+      "phase2g1_use": "CONTEXT_ONLY_NOT_MODELED"
+    }
+  },
+  "public_lunar_occultation_window": {
+    "date_utc": "2026-04-06",
+    "loss_of_signal_utc": "2026-04-06T22:44:00Z",
+    "acquisition_of_signal_utc": "2026-04-06T23:25:00Z",
+    "duration_seconds_from_public_times": 2460.0,
+    "loss_of_signal_semantics": "MISSION_CONTROL_EXPECTED_TEMPORARY_LOSS_OF_COMMUNICATION",
+    "acquisition_of_signal_semantics": "MISSION_CONTROL_EXPECTED_REACQUISITION",
+    "reported_cause": "Orion passes behind the Moon and the lunar body blocks the Earth-based Deep Space Network radio path.",
+    "time_precision": "PUBLIC_TIMELINE_MINUTE_LEVEL",
+    "exact_signal_threshold_measurement": false,
+    "interpretation": "The public NASA window is an operational communications reference and validation target. It is not treated as an exact Earth-center geometric lunar-limb crossing."
+  },
+  "sources": [
+    {
+      "source_id": "nasa_artemis_ii_flyby_ready",
+      "source_organization": "NASA",
+      "source_title": "Artemis II Flight Day 6: Crew Ready for Lunar Flyby",
+      "source_date": "2026-04-06",
+      "source_page_slug": "artemis-ii-flight-day-6-crew-ready-for-lunar-flyby",
+      "claims_used": [
+        "Mission control expected temporary loss of communication at 6:44 p.m. EDT.",
+        "Mission control expected communication reacquisition at 7:25 p.m. EDT.",
+        "Earthset and Earthrise occurred around the same lunar-flyby interval."
+      ]
+    },
+    {
+      "source_id": "nasa_artemis_ii_flyby_updates",
+      "source_organization": "NASA",
+      "source_title": "Artemis II Flight Day 6: Lunar Flyby Updates",
+      "source_date": "2026-04-06",
+      "source_page_slug": "artemis-ii-flight-day-6-lunar-flyby-updates",
+      "claims_used": [
+        "Orion entered a planned communications blackout while passing behind the Moon.",
+        "NASA described the blackout as lasting about 40 minutes.",
+        "The lunar surface blocked radio signals from the Deep Space Network."
+      ]
+    },
+    {
+      "source_id": "nasa_artemis_ii_networks",
+      "source_organization": "NASA",
+      "source_title": "Networks Keeping NASA's Artemis II Mission Connected",
+      "source_date": "2026-01-28",
+      "source_page_slug": "networks-keeping-nasas-artemis-ii-mission-connected",
+      "claims_used": [
+        "Artemis II relied on the Near Space Network and Deep Space Network.",
+        "Primary communications support transitioned to the Deep Space Network following translunar injection."
+      ]
+    },
+    {
+      "source_id": "nasa_o2o",
+      "source_organization": "NASA",
+      "source_title": "NASA's Orion Artemis II Optical Communications System",
+      "source_date": "2023-08-02",
+      "source_page_slug": "o2o",
+      "claims_used": [
+        "O2O was an optical communications demonstration flown in parallel with Artemis II's primary communications systems.",
+        "O2O availability is distinct from the radio-frequency occultation geometry modeled in Phase 2G.1."
+      ]
+    }
+  ],
+  "phase2g1_geometric_model": {
+    "observer": "EARTH_CENTER",
+    "target": "ORION",
+    "occulter": "MOON",
+    "coordinate_frame": "J2000",
+    "moon_shape": "SPHERE_USING_SPICE_MEAN_RADIUS",
+    "moon_ephemeris": "SPICE_DE440S",
+    "aberration_correction": "NONE",
+    "orion_interpolation": "PIECEWISE_CUBIC_HERMITE_POSITION_USING_PUBLIC_OEM_POSITION_AND_VELOCITY",
+    "contact_definition": "The Moon is between the Earth center and Orion and the perpendicular distance from the Moon center to the Earth-Orion line segment equals the adopted mean lunar radius.",
+    "limitations": [
+      "Earth-center occultation is not equivalent to visibility from an individual Deep Space Network ground antenna.",
+      "The spherical mean-radius Moon ignores lunar topography and local limb relief.",
+      "The calculation is geometric and does not model antenna patterns, link margin, received signal strength, network scheduling, atmospheric effects, or operational handovers.",
+      "No light-time or stellar-aberration correction is applied to the geometric occultation test.",
+      "Radio-frequency lunar occultation is not equivalent to O2O optical-link availability."
+    ]
+  },
+  "validation_thresholds": {
+    "maximum_absolute_contact_offset_from_public_nasa_time_seconds": 300.0,
+    "maximum_absolute_duration_difference_seconds": 180.0,
+    "minimum_window_overlap_fraction": 0.8,
+    "minimum_expected_duration_minutes": 35.0,
+    "maximum_expected_duration_minutes": 45.0,
+    "require_refined_pericynthion_inside_occultation": true,
+    "interpretation": "These are validation thresholds for consistency with a minute-level NASA operational timeline, not claims that Earth-center geometry should reproduce DSN station contact times exactly."
+  },
+  "guardrails": [
+    "Geometric lunar occultation does not by itself establish actual Deep Space Network link availability.",
+    "Earth-center line-of-sight geometry does not represent the topocentric geometry of an individual Deep Space Network antenna.",
+    "The NASA public loss-of-signal and acquisition-of-signal times are minute-level operational references, not exact geometric limb-contact measurements.",
+    "Radio-frequency occultation geometry is not used as a prediction of O2O optical-link availability.",
+    "No received signal strength, antenna gain, link margin, network scheduling, or communications performance is inferred from geometric occultation alone."
+  ]
+}

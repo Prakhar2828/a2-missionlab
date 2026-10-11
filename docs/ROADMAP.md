@@ -116,3 +116,21 @@ Work:
 - performance optimization
 - public deployment
 - polished GitHub README and demo media
+
+## Release Status
+
+**Phases 0 through 9 complete relative to defensible public evidence and the validated MissionLab publication scope.**
+
+Phase 9 closure includes:
+
+- accessibility
+- mobile and desktop behavior
+- automated tests and CI
+- methodology and validation reports
+- static zero-framework performance hardening
+- GitHub Pages deployment workflow
+- polished GitHub README
+- release demo media
+- final cross-phase release validation
+
+Public deployment is configured through `.github/workflows/pages.yml` and activates from the `main` branch.

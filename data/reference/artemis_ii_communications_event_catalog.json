@@ -1,0 +1,359 @@
+{
+  "dataset_id": "phase2h1_artemis_ii_communications_event_catalog",
+  "mission": "Artemis II",
+  "scope": "Source-backed operational communications event catalog preserving NASA-reported timing precision, planned-versus-reported distinctions, RF-versus-optical distinctions, and sequence-only evidence without inventing timestamps.",
+  "provenance": "NASA_AND_NASA_JPL_REPORTED_WITH_MISSIONLAB_APPROXIMATE_ANCHORS",
+  "precision_policy": {
+    "EXACT": "Source provides sufficient explicit precision to treat the timestamp as an exact event value.",
+    "MINUTE_LEVEL": "Source identifies a specific minute. Seconds are represented as zero only as a storage convention and do not imply second-level precision.",
+    "APPROXIMATE": "Source provides approximate timing such as just after noon or about two hours before another event. Any stored anchor is explicitly non-exact.",
+    "DATE_LEVEL": "Source establishes the calendar date but does not support a useful time of day.",
+    "SEQUENCE_ONLY": "Source establishes ordering relative to another event or phase but does not support a timestamp."
+  },
+  "event_state_policy": {
+    "PLANNED": "NASA-published expected or scheduled event.",
+    "OBSERVED_REPORTED": "NASA or NASA/JPL reporting states that the event occurred.",
+    "REPORTED": "NASA reports an event or anomaly but without enough evidence to classify it as a precise observed timestamp.",
+    "SEQUENCE_REPORTED": "NASA establishes sequence or relative ordering without a defensible event timestamp."
+  },
+  "sources": [
+    {
+      "source_id": "nasa_networks_artemis_ii",
+      "organization": "NASA",
+      "title": "Networks Keeping NASA's Artemis II Mission Connected",
+      "date": "2026-01-28",
+      "url": "https://www.nasa.gov/missions/artemis/networks-keeping-nasas-artemis-ii-mission-connected/",
+      "claims_used": [
+        "Artemis II used the Near Space Network and Deep Space Network as its primary communications networks.",
+        "Primary support transitioned to the Deep Space Network after translunar injection.",
+        "O2O was a separate optical communications demonstration."
+      ]
+    },
+    {
+      "source_id": "nasa_jpl_dsn_acquires_artemis_ii_signal",
+      "organization": "NASA/JPL-Caltech",
+      "title": "The Deep Space Network Acquires Artemis II Signal",
+      "date": "2026-04-08",
+      "url": "https://www.jpl.nasa.gov/images/pia26745-the-deep-space-network-acquires-artemis-ii-signal/",
+      "claims_used": [
+        "Soon after launch, the Near Space Network led communications with Orion before handoff to the Deep Space Network."
+      ]
+    },
+    {
+      "source_id": "nasa_jpl_dsn_madrid_artemis_ii",
+      "organization": "NASA/JPL-Caltech",
+      "title": "The Deep Space Network Acquires Artemis II Signal",
+      "date": "2026-04-08",
+      "url": "https://www.jpl.nasa.gov/images/pia26746-the-deep-space-network-acquires-artemis-ii-signal/",
+      "claims_used": [
+        "A DSN visualization shows DSS-54 and DSS-56 at Madrid communicating with Artemis II on April 1, 2026."
+      ]
+    },
+    {
+      "source_id": "nasa_flight_day_3_comms_preview",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 3: Crew Prepares for First Correction Burn, Readies to Receive Lunar Observation Assignment",
+      "date": "2026-04-03",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/03/artemis-ii-flight-day-3-crew-prepares-for-first-correction-burn-readies-to-receive-lunar-observation-assignment/",
+      "claims_used": [
+        "NASA planned an Orion emergency communications system test on the Deep Space Network in the second half of the day.",
+        "O2O connected with two U.S.-based ground stations and transmitted high-definition video and other mission data."
+      ]
+    },
+    {
+      "source_id": "nasa_flight_day_3_comms_followup",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 3: Crew Prepares Cabin for Lunar Flyby",
+      "date": "2026-04-04",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/04/artemis-ii-flight-day-3-crew-prepares-cabin-for-lunar-flyby/",
+      "claims_used": [
+        "NASA later reported the crew had been testing Orion's emergency communications system in deep space."
+      ]
+    },
+    {
+      "source_id": "nasa_flight_day_4_o2o_100gb",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 4: Deep-Space Flying, Lunar Flyby Prep",
+      "date": "2026-04-04",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/04/artemis-ii-flight-day-4-deep-space-flying-lunar-flyby-prep/",
+      "claims_used": [
+        "Just after 12 p.m. EDT, O2O surpassed 100 gigabytes of data downlinked during the mission."
+      ]
+    },
+    {
+      "source_id": "nasa_flight_day_6_flyby_plan",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 6: Crew Ready for Lunar Flyby",
+      "date": "2026-04-06",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/06/artemis-ii-flight-day-6-crew-ready-for-lunar-flyby/",
+      "claims_used": [
+        "Mission control expected communications loss at 6:44 p.m. EDT.",
+        "Planned Earthset was 6:45 p.m. EDT.",
+        "Planned Earthrise was 7:25 p.m. EDT.",
+        "Mission control expected communications reacquisition at 7:25 p.m. EDT."
+      ]
+    },
+    {
+      "source_id": "nasa_flight_day_6_live",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 6: Lunar Flyby Updates",
+      "date": "2026-04-06",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/06/artemis-ii-flight-day-6-lunar-flyby-updates/",
+      "claims_used": [
+        "NASA reported Earthset at 6:41 p.m. EDT.",
+        "NASA reported Orion entered the planned communications blackout at 6:44 p.m. EDT.",
+        "NASA reported Earthrise at 7:24 p.m. EDT.",
+        "NASA reported DSN reacquisition occurred moments after Earthrise."
+      ]
+    },
+    {
+      "source_id": "nasa_flight_day_9_rtc2",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 9: Second Return Correction Burn Complete",
+      "date": "2026-04-10",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/10/artemis-ii-flight-day-9-second-return-correction-burn-complete/",
+      "claims_used": [
+        "RTC2 occurred at 10:53 p.m. EDT and lasted nine seconds.",
+        "About two hours before the burn, an unexpected return-link loss of signal occurred during a data-rate change.",
+        "Two-way communications were reestablished shortly afterward."
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": "nsn_leads_initial_orion_communications",
+      "name": "Near Space Network leads initial Orion communications",
+      "domain": "RF",
+      "network": "NSN",
+      "event_state": "SEQUENCE_REPORTED",
+      "precision": "SEQUENCE_ONLY",
+      "timestamp_utc": null,
+      "approximate_anchor_utc": null,
+      "date_utc": "2026-04-01",
+      "ordering": "SOON_AFTER_LAUNCH_BEFORE_DSN_HANDOFF",
+      "source_id": "nasa_jpl_dsn_acquires_artemis_ii_signal",
+      "provenance": "NASA_JPL_REPORTED"
+    },
+    {
+      "id": "dsn_madrid_early_mission_signal_acquisition",
+      "name": "Early mission DSN signal acquisition shown from Madrid",
+      "domain": "RF",
+      "network": "DSN",
+      "event_state": "OBSERVED_REPORTED",
+      "precision": "DATE_LEVEL",
+      "timestamp_utc": null,
+      "approximate_anchor_utc": null,
+      "date_utc": "2026-04-01",
+      "assets": [
+        "DSS-54",
+        "DSS-56"
+      ],
+      "source_id": "nasa_jpl_dsn_madrid_artemis_ii",
+      "provenance": "NASA_JPL_REPORTED"
+    },
+    {
+      "id": "primary_support_transition_nsn_to_dsn",
+      "name": "Primary communications support transitions from NSN to DSN",
+      "domain": "RF",
+      "network": "NSN_TO_DSN",
+      "event_state": "SEQUENCE_REPORTED",
+      "precision": "SEQUENCE_ONLY",
+      "timestamp_utc": null,
+      "approximate_anchor_utc": null,
+      "date_utc": null,
+      "ordering": "AFTER_TRANSLUNAR_INJECTION",
+      "source_id": "nasa_networks_artemis_ii",
+      "provenance": "NASA_REPORTED"
+    },
+    {
+      "id": "dsn_emergency_communications_test",
+      "name": "Orion emergency communications system tested in deep space",
+      "domain": "RF",
+      "network": "DSN",
+      "event_state": "OBSERVED_REPORTED",
+      "precision": "DATE_LEVEL",
+      "timestamp_utc": null,
+      "approximate_anchor_utc": null,
+      "date_utc": "2026-04-03",
+      "source_id": "nasa_flight_day_3_comms_followup",
+      "supporting_source_ids": [
+        "nasa_flight_day_3_comms_preview"
+      ],
+      "provenance": "NASA_REPORTED"
+    },
+    {
+      "id": "o2o_two_us_ground_station_links",
+      "name": "O2O connects with two U.S. ground stations",
+      "domain": "OPTICAL",
+      "network": "O2O",
+      "event_state": "OBSERVED_REPORTED",
+      "precision": "DATE_LEVEL",
+      "timestamp_utc": null,
+      "approximate_anchor_utc": null,
+      "date_utc": "2026-04-03",
+      "source_id": "nasa_flight_day_3_comms_preview",
+      "provenance": "NASA_REPORTED"
+    },
+    {
+      "id": "o2o_100_gb_downlink_milestone",
+      "name": "O2O surpasses 100 GB downlinked",
+      "domain": "OPTICAL",
+      "network": "O2O",
+      "event_state": "OBSERVED_REPORTED",
+      "precision": "APPROXIMATE",
+      "timestamp_utc": null,
+      "approximate_anchor_utc": "2026-04-04T16:00:00Z",
+      "anchor_semantics": "REFERENCE_CLOCK_ANCHOR_FOR_JUST_AFTER_12_PM_EDT",
+      "anchor_is_not_exact": true,
+      "date_utc": "2026-04-04",
+      "source_id": "nasa_flight_day_4_o2o_100gb",
+      "provenance": "NASA_REPORTED"
+    },
+    {
+      "id": "lunar_earthset_planned",
+      "name": "Planned lunar-flyby Earthset",
+      "domain": "GEOMETRIC_CONTEXT",
+      "network": null,
+      "event_state": "PLANNED",
+      "precision": "MINUTE_LEVEL",
+      "timestamp_utc": "2026-04-06T22:45:00Z",
+      "approximate_anchor_utc": null,
+      "date_utc": "2026-04-06",
+      "source_id": "nasa_flight_day_6_flyby_plan",
+      "provenance": "NASA_REPORTED"
+    },
+    {
+      "id": "lunar_earthset_reported",
+      "name": "Reported lunar-flyby Earthset",
+      "domain": "GEOMETRIC_CONTEXT",
+      "network": null,
+      "event_state": "OBSERVED_REPORTED",
+      "precision": "MINUTE_LEVEL",
+      "timestamp_utc": "2026-04-06T22:41:00Z",
+      "approximate_anchor_utc": null,
+      "date_utc": "2026-04-06",
+      "source_id": "nasa_flight_day_6_live",
+      "provenance": "NASA_REPORTED"
+    },
+    {
+      "id": "lunar_blackout_start_planned",
+      "name": "Planned lunar communications blackout start",
+      "domain": "RF",
+      "network": "DSN",
+      "event_state": "PLANNED",
+      "precision": "MINUTE_LEVEL",
+      "timestamp_utc": "2026-04-06T22:44:00Z",
+      "approximate_anchor_utc": null,
+      "date_utc": "2026-04-06",
+      "source_id": "nasa_flight_day_6_flyby_plan",
+      "provenance": "NASA_REPORTED"
+    },
+    {
+      "id": "lunar_blackout_start_reported",
+      "name": "Reported lunar communications blackout start",
+      "domain": "RF",
+      "network": "DSN",
+      "event_state": "OBSERVED_REPORTED",
+      "precision": "MINUTE_LEVEL",
+      "timestamp_utc": "2026-04-06T22:44:00Z",
+      "approximate_anchor_utc": null,
+      "date_utc": "2026-04-06",
+      "source_id": "nasa_flight_day_6_live",
+      "provenance": "NASA_REPORTED"
+    },
+    {
+      "id": "lunar_earthrise_planned",
+      "name": "Planned lunar-flyby Earthrise",
+      "domain": "GEOMETRIC_CONTEXT",
+      "network": null,
+      "event_state": "PLANNED",
+      "precision": "MINUTE_LEVEL",
+      "timestamp_utc": "2026-04-06T23:25:00Z",
+      "approximate_anchor_utc": null,
+      "date_utc": "2026-04-06",
+      "source_id": "nasa_flight_day_6_flyby_plan",
+      "provenance": "NASA_REPORTED"
+    },
+    {
+      "id": "lunar_earthrise_reported",
+      "name": "Reported lunar-flyby Earthrise",
+      "domain": "GEOMETRIC_CONTEXT",
+      "network": null,
+      "event_state": "OBSERVED_REPORTED",
+      "precision": "MINUTE_LEVEL",
+      "timestamp_utc": "2026-04-06T23:24:00Z",
+      "approximate_anchor_utc": null,
+      "date_utc": "2026-04-06",
+      "source_id": "nasa_flight_day_6_live",
+      "provenance": "NASA_REPORTED"
+    },
+    {
+      "id": "dsn_reacquisition_planned",
+      "name": "Planned DSN communications reacquisition",
+      "domain": "RF",
+      "network": "DSN",
+      "event_state": "PLANNED",
+      "precision": "MINUTE_LEVEL",
+      "timestamp_utc": "2026-04-06T23:25:00Z",
+      "approximate_anchor_utc": null,
+      "date_utc": "2026-04-06",
+      "source_id": "nasa_flight_day_6_flyby_plan",
+      "provenance": "NASA_REPORTED"
+    },
+    {
+      "id": "dsn_reacquisition_live_report",
+      "name": "DSN signal reacquired after Earthrise",
+      "domain": "RF",
+      "network": "DSN",
+      "event_state": "SEQUENCE_REPORTED",
+      "precision": "SEQUENCE_ONLY",
+      "timestamp_utc": null,
+      "approximate_anchor_utc": null,
+      "date_utc": "2026-04-06",
+      "ordering": "MOMENTS_AFTER_REPORTED_EARTHRISE",
+      "source_id": "nasa_flight_day_6_live",
+      "provenance": "NASA_REPORTED"
+    },
+    {
+      "id": "unexpected_return_link_loss",
+      "name": "Unexpected return-link loss during data-rate change",
+      "domain": "RF",
+      "network": "MISSION_RF_PATH_UNSPECIFIED",
+      "event_state": "REPORTED",
+      "precision": "APPROXIMATE",
+      "timestamp_utc": null,
+      "approximate_anchor_utc": "2026-04-10T00:53:00Z",
+      "anchor_semantics": "RTC2_MINUS_APPROXIMATELY_TWO_HOURS",
+      "anchor_is_not_exact": true,
+      "date_utc": "2026-04-10",
+      "source_id": "nasa_flight_day_9_rtc2",
+      "provenance": "NASA_REPORTED"
+    },
+    {
+      "id": "two_way_communications_reestablished",
+      "name": "Two-way communications reestablished after return-link loss",
+      "domain": "RF",
+      "network": "MISSION_RF_PATH_UNSPECIFIED",
+      "event_state": "SEQUENCE_REPORTED",
+      "precision": "SEQUENCE_ONLY",
+      "timestamp_utc": null,
+      "approximate_anchor_utc": null,
+      "date_utc": "2026-04-10",
+      "ordering": "SHORTLY_AFTER_UNEXPECTED_RETURN_LINK_LOSS_BEFORE_RTC2",
+      "source_id": "nasa_flight_day_9_rtc2",
+      "provenance": "NASA_REPORTED"
+    }
+  ],
+  "guardrails": [
+    "Minute-level timestamps do not imply second-level measurement precision.",
+    "Approximate anchors are computational reference points and must never be presented as exact event times.",
+    "Date-level evidence must not be assigned an invented time of day.",
+    "Sequence-only evidence must not be assigned an invented timestamp.",
+    "Planned events must remain distinguishable from events reported during or after execution.",
+    "Reported Earthset and Earthrise are geometric mission context and are not identical to operational RF LOS or AOS.",
+    "The NSN-to-DSN support transition is not assigned an exact handoff time because the public source establishes sequence but not a defensible timestamp.",
+    "The Flight Day 9 return-link loss is not assigned an exact 00:53 UTC event time; 00:53 UTC is only the approximate anchor produced by subtracting two hours from RTC2.",
+    "O2O optical communications activity must remain distinct from the mission's primary RF communications availability.",
+    "The catalog does not infer antenna assignment, link margin, signal strength, network scheduling, or communications performance beyond NASA's public reporting."
+  ]
+}

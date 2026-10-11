@@ -1,0 +1,303 @@
+{
+  "dataset_id": "phase2i1_artemis_ii_maneuver_plan_execution",
+  "mission": "Artemis II",
+  "scope": "Source-backed reconstruction of planned, cancelled, and executed Artemis II outbound and return trajectory correction maneuvers while preserving source precision, distinguishing planned values from executed values, and preventing unsupported propulsion or vector-delta-v inference.",
+  "provenance": "NASA_AND_ESA_REPORTED_WITH_MISSIONLAB_DERIVED_AGGREGATES",
+  "status_policy": {
+    "PLANNED": "Maneuver appeared in a public NASA mission plan or live schedule.",
+    "CANCELLED": "NASA reported that flight controllers elected not to execute the planned maneuver.",
+    "EXECUTED": "NASA reported completion of the maneuver.",
+    "cancelled_is_not_failed": true,
+    "cancelled_is_not_propulsion_anomaly": true
+  },
+  "quantity_policy": {
+    "planned_quantity_is_not_executed_quantity": true,
+    "missing_reported_delta_v_is_not_zero": true,
+    "scalar_delta_v_sum_is_not_vector_delta_v": true,
+    "minute_level_timestamp_seconds_are_storage_convention": true
+  },
+  "sources": [
+    {
+      "source_id": "nasa_artemis_ii_daily_agenda",
+      "organization": "NASA",
+      "title": "NASA's Artemis II Moon Mission Daily Agenda",
+      "url": "https://www.nasa.gov/missions/artemis/nasas-artemis-ii-moon-mission-daily-agenda/",
+      "claims_used": [
+        "Three outbound trajectory correction burns were part of the mission plan.",
+        "The first outbound correction was planned for Flight Day 3.",
+        "The second outbound correction was planned for Flight Day 4.",
+        "The final outbound correction was planned for Flight Day 5.",
+        "Return trajectory correction burns were part of the return-to-Earth mission plan."
+      ]
+    },
+    {
+      "source_id": "nasa_flight_day_3_otc1_plan",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 3: Crew Prepares for First Correction Burn, Readies to Receive Lunar Observation Assignment",
+      "date": "2026-04-03",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/03/artemis-ii-flight-day-3-crew-prepares-for-first-correction-burn-readies-to-receive-lunar-observation-assignment/",
+      "claims_used": [
+        "OTC1 was scheduled for 6:49 p.m. EDT.",
+        "The planned burn duration was approximately eight seconds.",
+        "The planned velocity change was 0.7 feet per second.",
+        "Trajectory correction burns fine-tune Orion's path after major maneuvers."
+      ]
+    },
+    {
+      "source_id": "nasa_flight_day_3_otc1_cancel",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 3: Outbound Trajectory Correction Burn Update",
+      "date": "2026-04-03",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/03/artemis-ii-flight-day-3-outbound-trajectory-correction-burn-update/",
+      "claims_used": [
+        "Flight controllers cancelled the first outbound trajectory correction burn.",
+        "Orion was already on the correct flight path.",
+        "OTC1 was the first of three planned outbound trajectory adjustments.",
+        "Any needed adjustment could be incorporated into a subsequent correction burn."
+      ]
+    },
+    {
+      "source_id": "nasa_flight_day_4_otc2_cancel",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 4: Deep-Space Flying, Lunar Flyby Prep",
+      "date": "2026-04-04",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/04/artemis-ii-flight-day-4-deep-space-flying-lunar-flyby-prep/",
+      "claims_used": [
+        "Flight controllers cancelled another planned outbound trajectory correction because Orion's trajectory remained on track.",
+        "The team instead adjusted spacecraft attitude to point the wastewater vent toward the Sun.",
+        "The schedule change did not affect Orion's current trajectory."
+      ]
+    },
+    {
+      "source_id": "nasa_flight_day_5_otc3_complete",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 5: Correction Burn Complete",
+      "date": "2026-04-05",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/05/artemis-ii-flight-day-5-correction-burn-complete/",
+      "claims_used": [
+        "The final outbound correction burn began at 11:03 p.m. EDT.",
+        "The burn lasted 17.5 seconds.",
+        "The burn refined Orion's trajectory toward the Moon."
+      ]
+    },
+    {
+      "source_id": "nasa_flight_day_7_rtc1",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 7: First Return Correction Burn Complete",
+      "date": "2026-04-07",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/07/artemis-ii-flight-day-7-first-return-correction-burn-complete/",
+      "claims_used": [
+        "RTC1 began at 8:03 p.m. EDT.",
+        "RTC1 lasted 15 seconds.",
+        "RTC1 produced a reported velocity change of 1.6 feet per second."
+      ]
+    },
+    {
+      "source_id": "nasa_flight_day_9_rtc2",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 9: Second Return Correction Burn Complete",
+      "date": "2026-04-10",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/10/artemis-ii-flight-day-9-second-return-correction-burn-complete/",
+      "claims_used": [
+        "RTC2 began at 10:53 p.m. EDT.",
+        "RTC2 lasted nine seconds.",
+        "RTC2 produced a reported velocity change of 5.3 feet per second.",
+        "An unexpected return-link loss occurred approximately two hours before the burn.",
+        "Two-way communications were restored and flight controllers resumed burn preparation."
+      ]
+    },
+    {
+      "source_id": "nasa_flight_day_10_rtc3",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 10: Crew Completes Final Burn Before Splashdown",
+      "date": "2026-04-10",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/10/artemis-ii-flight-day-10-crew-completes-final-burn-before-splashdown/",
+      "claims_used": [
+        "RTC3 began at 2:53 p.m. EDT.",
+        "RTC3 lasted eight seconds.",
+        "RTC3 produced a reported velocity change of 4.2 feet per second."
+      ]
+    },
+    {
+      "source_id": "esa_artemis_ii_splashdown",
+      "organization": "European Space Agency",
+      "title": "Artemis II: splashdown",
+      "url": "https://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/Artemis_II_splashdown",
+      "claims_used": [
+        "The translunar injection used the European Service Module main engine for 350 seconds.",
+        "The translunar injection was sufficiently precise that two of the three planned outbound trajectory corrections were unnecessary.",
+        "Three return trajectory correction burns occurred on the journey back to Earth."
+      ]
+    }
+  ],
+  "maneuvers": [
+    {
+      "maneuver_id": "otc1",
+      "name": "Outbound Trajectory Correction 1",
+      "leg": "OUTBOUND",
+      "sequence_index": 1,
+      "planned": true,
+      "executed": false,
+      "status": "CANCELLED",
+      "trajectory_event_id": null,
+      "plan": {
+        "planned_timestamp_utc": "2026-04-03T22:49:00Z",
+        "timestamp_precision": "MINUTE_LEVEL",
+        "planned_duration_seconds": 8.0,
+        "duration_relation": "APPROXIMATELY",
+        "planned_delta_v_ft_s": 0.7,
+        "delta_v_semantics": "PLANNED_VELOCITY_CHANGE",
+        "source_id": "nasa_flight_day_3_otc1_plan"
+      },
+      "decision": {
+        "decision_date_utc": "2026-04-03",
+        "precision": "DATE_LEVEL",
+        "exact_decision_timestamp_known": false,
+        "reason_classification": "TRAJECTORY_ALREADY_ON_CORRECT_FLIGHT_PATH",
+        "source_id": "nasa_flight_day_3_otc1_cancel"
+      },
+      "executed_duration_seconds": null,
+      "executed_delta_v_ft_s": null
+    },
+    {
+      "maneuver_id": "otc2",
+      "name": "Outbound Trajectory Correction 2",
+      "leg": "OUTBOUND",
+      "sequence_index": 2,
+      "planned": true,
+      "executed": false,
+      "status": "CANCELLED",
+      "trajectory_event_id": null,
+      "plan": {
+        "planned_date_utc": "2026-04-04",
+        "timestamp_precision": "DATE_LEVEL",
+        "planned_duration_seconds": null,
+        "planned_delta_v_ft_s": null,
+        "source_id": "nasa_artemis_ii_daily_agenda"
+      },
+      "decision": {
+        "decision_date_utc": "2026-04-04",
+        "precision": "DATE_LEVEL",
+        "exact_decision_timestamp_known": false,
+        "reason_classification": "TRAJECTORY_REMAINED_ON_TRACK",
+        "source_id": "nasa_flight_day_4_otc2_cancel",
+        "parallel_operational_activity": "ATTITUDE_ADJUSTMENT_FOR_WASTEWATER_VENT_CLEARING"
+      },
+      "executed_duration_seconds": null,
+      "executed_delta_v_ft_s": null
+    },
+    {
+      "maneuver_id": "otc3",
+      "name": "Outbound Trajectory Correction 3",
+      "alternate_name": "Final Outbound Trajectory Correction",
+      "leg": "OUTBOUND",
+      "sequence_index": 3,
+      "planned": true,
+      "executed": true,
+      "status": "EXECUTED",
+      "trajectory_event_id": "otc3",
+      "execution": {
+        "timestamp_utc": "2026-04-06T03:03:00Z",
+        "timestamp_precision": "MINUTE_LEVEL",
+        "duration_seconds": 17.5,
+        "reported_delta_v_ft_s": null,
+        "missing_delta_v_semantics": "NOT_PUBLICLY_REPORTED_IN_PHASE2I1_SOURCE",
+        "purpose": "REFINE_TRAJECTORY_TOWARD_MOON",
+        "source_id": "nasa_flight_day_5_otc3_complete"
+      }
+    },
+    {
+      "maneuver_id": "rtc1",
+      "name": "Return Trajectory Correction 1",
+      "leg": "RETURN",
+      "sequence_index": 1,
+      "planned": true,
+      "executed": true,
+      "status": "EXECUTED",
+      "trajectory_event_id": "rtc1",
+      "execution": {
+        "timestamp_utc": "2026-04-08T00:03:00Z",
+        "timestamp_precision": "MINUTE_LEVEL",
+        "duration_seconds": 15.0,
+        "reported_delta_v_ft_s": 1.6,
+        "delta_v_semantics": "REPORTED_MAGNITUDE",
+        "purpose": "REFINE_TRAJECTORY_TOWARD_EARTH",
+        "source_id": "nasa_flight_day_7_rtc1"
+      }
+    },
+    {
+      "maneuver_id": "rtc2",
+      "name": "Return Trajectory Correction 2",
+      "leg": "RETURN",
+      "sequence_index": 2,
+      "planned": true,
+      "executed": true,
+      "status": "EXECUTED",
+      "trajectory_event_id": "rtc2",
+      "execution": {
+        "timestamp_utc": "2026-04-10T02:53:00Z",
+        "timestamp_precision": "MINUTE_LEVEL",
+        "duration_seconds": 9.0,
+        "reported_delta_v_ft_s": 5.3,
+        "delta_v_semantics": "REPORTED_MAGNITUDE",
+        "purpose": "REFINE_TRAJECTORY_FOR_EARTH_RETURN",
+        "source_id": "nasa_flight_day_9_rtc2"
+      },
+      "communications_context": {
+        "preburn_anomaly_event_id": "unexpected_return_link_loss",
+        "recovery_event_id": "two_way_communications_reestablished",
+        "burn_executed_after_recovery": true,
+        "anomaly_caused_burn_failure": false
+      }
+    },
+    {
+      "maneuver_id": "rtc3",
+      "name": "Return Trajectory Correction 3",
+      "alternate_name": "Final Return Trajectory Correction",
+      "leg": "RETURN",
+      "sequence_index": 3,
+      "planned": true,
+      "executed": true,
+      "status": "EXECUTED",
+      "trajectory_event_id": "rtc3",
+      "execution": {
+        "timestamp_utc": "2026-04-10T18:53:00Z",
+        "timestamp_precision": "MINUTE_LEVEL",
+        "duration_seconds": 8.0,
+        "reported_delta_v_ft_s": 4.2,
+        "delta_v_semantics": "REPORTED_MAGNITUDE",
+        "purpose": "FINAL_TRAJECTORY_REFINEMENT_BEFORE_ENTRY",
+        "source_id": "nasa_flight_day_10_rtc3"
+      }
+    }
+  ],
+  "postflight_context": {
+    "tli_duration_seconds": 350.0,
+    "tli_engine_classification": "EUROPEAN_SERVICE_MODULE_MAIN_ENGINE",
+    "outbound_corrections_planned": 3,
+    "outbound_corrections_cancelled": 2,
+    "source_attribution": "ESA_REPORTED",
+    "interpretation": "ESA postflight reporting attributed the cancellation of two of the three planned outbound trajectory correction burns to the precision of the translunar injection."
+  },
+  "propulsion_assignment_boundary": {
+    "otc3_exact_engine_assignment": null,
+    "rtc1_exact_engine_assignment": null,
+    "rtc2_exact_engine_assignment": null,
+    "rtc3_exact_engine_assignment": null,
+    "phase2i1_rule": "Do not infer burn-specific engine selection from generic Orion propulsion architecture or from the phrase 'ignited its thrusters'."
+  },
+  "guardrails": [
+    "A cancelled correction burn is not a failed burn.",
+    "A cancelled correction burn is not by itself a propulsion anomaly.",
+    "The planned OTC1 value of 0.7 ft/s must not be represented as an executed delta-v.",
+    "The approximately eight-second planned OTC1 duration must not be represented as an executed firing duration.",
+    "OTC3 having no public delta-v value in the Phase 2I.1 execution source does not imply zero delta-v.",
+    "The return-burn delta-v total is a scalar sum of reported magnitudes and is not a net vector delta-v.",
+    "The return-burn delta-v scalar sum must not be combined with OTC3 as though OTC3 had a known zero delta-v.",
+    "Minute-level UTC values ending in :00 seconds do not imply second-level event-time precision.",
+    "The exact cancellation time for OTC1 and OTC2 is not established by the current public evidence.",
+    "Generic propulsion architecture does not establish the exact engine or thruster set used for an individual correction maneuver.",
+    "The Flight Day 9 communications anomaly does not imply that RTC2 failed, was cancelled, or was degraded.",
+    "ESA postflight attribution of two outbound cancellations to TLI precision is preserved as postflight context and does not replace NASA's live cancellation reasons."
+  ]
+}

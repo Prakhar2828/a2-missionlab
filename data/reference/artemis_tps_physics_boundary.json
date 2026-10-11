@@ -1,0 +1,289 @@
+{
+  "dataset_id": "phase2f4_artemis_tps_physics_boundary",
+  "mission": "Artemis II",
+  "heritage_mission": "Artemis I",
+  "scope": "Explicit causal and quantitative-model boundary between MissionLab external entry reconstruction and the internal Orion Avcoat material-response physics described by NASA's Artemis I investigation",
+  "provenance": "PROJECT_SCOPE_GUARDRAIL_WITH_NASA_REPORTED_MECHANISM",
+  "source_evidence_dataset_id": "phase2f1_orion_tps_heritage_evidence",
+  "source_evidence_ids": [
+    "avcoat_function",
+    "artemis_i_root_cause_low_permeability",
+    "artemis_i_skip_entry_role",
+    "permeable_regions_did_not_show_same_behavior",
+    "artemis_i_instrumentation",
+    "artemis_i_sample_campaign",
+    "artemis_i_thermal_test_campaign",
+    "artemis_i_ground_replication",
+    "artemis_ii_trajectory_mitigation",
+    "artemis_ii_no_skip_entry",
+    "artemis_ii_postflight_tps_expected",
+    "artemis_ii_char_loss_reduced",
+    "artemis_ii_arcjet_consistency",
+    "artemis_iii_permeability_manufacturing_change"
+  ],
+  "nasa_reported_mechanism": {
+    "source_evidence_id": "artemis_i_root_cause_low_permeability",
+    "sequence": [
+      "Avcoat heats during atmospheric entry",
+      "pyrolysis and ablation generate gases inside the material",
+      "low-permeability Avcoat restricts gas escape",
+      "internal gas pressure increases",
+      "cracks form",
+      "charred material is liberated"
+    ],
+    "interpretation": "This sequence is preserved as NASA-reported causal evidence. MissionLab does not numerically simulate the internal material-response stages."
+  },
+  "physics_boundary": {
+    "missionlab_quantitative_frontier_stage_id": "external_convective_heating",
+    "boundary_begins_at_stage_id": "surface_internal_thermal_response",
+    "stages": [
+      {
+        "order": 1,
+        "stage_id": "trajectory_external_flow",
+        "label": "TRAJECTORY / EXTERNAL FLOW",
+        "status": "MISSIONLAB_RECONSTRUCTS",
+        "inside_current_missionlab_quantitative_model": true,
+        "description": "Flight-derived trajectory state is transformed into Earth-fixed and atmospheric-entry quantities including altitude, Earth-relative speed, atmosphere-model density, Mach, and body-scale Knudsen number."
+      },
+      {
+        "order": 2,
+        "stage_id": "external_convective_heating",
+        "label": "EXTERNAL CONVECTIVE HEATING",
+        "status": "MISSIONLAB_MODELS",
+        "inside_current_missionlab_quantitative_model": true,
+        "description": "MissionLab applies the Phase 2E.4 Sutton-Graves engineering correlation and integrates modeled external stagnation-point convective heat flux over time."
+      },
+      {
+        "order": 3,
+        "stage_id": "surface_internal_thermal_response",
+        "label": "SURFACE / INTERNAL THERMAL RESPONSE",
+        "status": "BOUNDARY_NOT_MODELED",
+        "inside_current_missionlab_quantitative_model": false,
+        "description": "A material-response solution would be required to convert the external aerothermal boundary condition into surface temperature, through-thickness temperature, thermal gradients, and stored thermal energy."
+      },
+      {
+        "order": 4,
+        "stage_id": "pyrolysis_gas_generation",
+        "label": "PYROLYSIS / GAS GENERATION",
+        "status": "NASA_MECHANISM_KNOWN_NOT_MODELED",
+        "inside_current_missionlab_quantitative_model": false,
+        "description": "NASA reports that heating and Avcoat material response generate gases. MissionLab does not calculate pyrolysis rate or gas-generation rate."
+      },
+      {
+        "order": 5,
+        "stage_id": "gas_transport_permeability",
+        "label": "GAS TRANSPORT / PERMEABILITY",
+        "status": "NASA_MECHANISM_KNOWN_NOT_MODELED",
+        "inside_current_missionlab_quantitative_model": false,
+        "description": "NASA identified low permeability and restricted gas escape as central to the Artemis I mechanism. MissionLab does not possess or solve an Avcoat permeability field."
+      },
+      {
+        "order": 6,
+        "stage_id": "internal_pressure",
+        "label": "INTERNAL GAS PRESSURE",
+        "status": "NASA_MECHANISM_KNOWN_NOT_MODELED",
+        "inside_current_missionlab_quantitative_model": false,
+        "description": "NASA reports internal gas-pressure buildup in low-permeability Avcoat. MissionLab does not calculate internal pore pressure or gas pressure."
+      },
+      {
+        "order": 7,
+        "stage_id": "cracking_fracture",
+        "label": "CRACKING / FRACTURE",
+        "status": "NASA_MECHANISM_KNOWN_NOT_MODELED",
+        "inside_current_missionlab_quantitative_model": false,
+        "description": "NASA reports cracking associated with the pressure mechanism. MissionLab does not solve stress, strain, crack initiation, or crack propagation."
+      },
+      {
+        "order": 8,
+        "stage_id": "char_liberation_damage",
+        "label": "CHAR LIBERATION / DAMAGE",
+        "status": "NASA_OBSERVED_OUTCOME_NOT_PREDICTED",
+        "inside_current_missionlab_quantitative_model": false,
+        "description": "NASA observed unexpected Artemis I char liberation and reported significantly reduced Artemis I-type char loss on Artemis II. MissionLab does not predict char-loss mass, area, probability, or damage extent."
+      }
+    ]
+  },
+  "missionlab_quantitative_products": [
+    {
+      "quantity": "trajectory time history",
+      "provenance": "NASA_FLIGHT_DERIVED_AND_MISSIONLAB_DERIVED"
+    },
+    {
+      "quantity": "WGS84 altitude and Earth-relative speed",
+      "provenance": "MISSIONLAB_DERIVED"
+    },
+    {
+      "quantity": "atmospheric density",
+      "provenance": "MODEL"
+    },
+    {
+      "quantity": "free-stream Mach",
+      "provenance": "MODEL_DERIVED"
+    },
+    {
+      "quantity": "body-scale Knudsen number",
+      "provenance": "MODEL_DERIVED"
+    },
+    {
+      "quantity": "external Sutton-Graves convective heat flux",
+      "provenance": "MODEL_DERIVED"
+    },
+    {
+      "quantity": "integrated external Sutton-Graves heat load",
+      "provenance": "MODEL_DERIVED"
+    },
+    {
+      "quantity": "loft / rebound trajectory boundaries",
+      "provenance": "MISSIONLAB_DERIVED"
+    },
+    {
+      "quantity": "loft / rebound heating-history segmentation",
+      "provenance": "MISSIONLAB_DERIVED"
+    }
+  ],
+  "material_response_quantities_not_reconstructed": [
+    {
+      "quantity": "surface temperature",
+      "status": "NO_QUANTITATIVE_ARTEMIS_II_PRODUCT"
+    },
+    {
+      "quantity": "through-thickness Avcoat temperature",
+      "status": "NOT_AVAILABLE_TO_MISSIONLAB"
+    },
+    {
+      "quantity": "thermal conductivity field",
+      "status": "NOT_MODELED"
+    },
+    {
+      "quantity": "specific heat or enthalpy response",
+      "status": "NOT_MODELED"
+    },
+    {
+      "quantity": "Avcoat density evolution",
+      "status": "NOT_MODELED"
+    },
+    {
+      "quantity": "pyrolysis rate",
+      "status": "NOT_MODELED"
+    },
+    {
+      "quantity": "pyrolysis-gas mass generation",
+      "status": "NOT_MODELED"
+    },
+    {
+      "quantity": "gas transport through Avcoat",
+      "status": "NOT_MODELED"
+    },
+    {
+      "quantity": "local permeability field",
+      "status": "NO_PUBLIC_FLIGHT_FIELD_INGESTED"
+    },
+    {
+      "quantity": "internal pore or gas pressure",
+      "status": "NOT_MODELED"
+    },
+    {
+      "quantity": "thermal stress",
+      "status": "NOT_MODELED"
+    },
+    {
+      "quantity": "mechanical stress or strain",
+      "status": "NOT_MODELED"
+    },
+    {
+      "quantity": "crack initiation",
+      "status": "NOT_MODELED"
+    },
+    {
+      "quantity": "crack propagation",
+      "status": "NOT_MODELED"
+    },
+    {
+      "quantity": "char-layer structural response",
+      "status": "NOT_MODELED"
+    },
+    {
+      "quantity": "recession depth",
+      "status": "NOT_MODELED"
+    },
+    {
+      "quantity": "char-liberation mass or area",
+      "status": "NOT_PREDICTED"
+    }
+  ],
+  "nasa_investigation_data_not_present_as_quantitative_missionlab_inputs": [
+    "pressure-sensor time series",
+    "strain-gauge time series",
+    "thermocouple time series at multiple Avcoat depths",
+    "internal temperature profiles",
+    "sample-level Avcoat material measurements",
+    "detailed arc-jet facility response data",
+    "full coupled Orion material-response model"
+  ],
+  "prohibited_model_bridges": [
+    {
+      "from": "external Sutton-Graves heat flux",
+      "to": "Avcoat internal temperature",
+      "status": "PROHIBITED",
+      "reason": "MissionLab does not solve the material thermal-response problem."
+    },
+    {
+      "from": "external Sutton-Graves heat load",
+      "to": "pyrolysis rate",
+      "status": "PROHIBITED",
+      "reason": "No Avcoat pyrolysis kinetics or coupled thermal-response model is implemented."
+    },
+    {
+      "from": "external Sutton-Graves heat load",
+      "to": "internal gas pressure",
+      "status": "PROHIBITED",
+      "reason": "Gas generation, transport, permeability, and pressure evolution are not modeled."
+    },
+    {
+      "from": "loft / rebound geometry",
+      "to": "crack probability",
+      "status": "PROHIBITED",
+      "reason": "MissionLab does not solve mechanical stress, fracture, or crack initiation."
+    },
+    {
+      "from": "external heating history",
+      "to": "char-loss mass or area",
+      "status": "PROHIBITED",
+      "reason": "The public evidence does not provide a quantitative damage-transfer law suitable for MissionLab calibration."
+    },
+    {
+      "from": "external heat-flux decline",
+      "to": "TPS cooling",
+      "status": "PROHIBITED",
+      "reason": "Internal material temperature can lag the external heating boundary condition."
+    },
+    {
+      "from": "Artemis I / Artemis II entry-profile difference",
+      "to": "numerical char-loss reduction percentage",
+      "status": "PROHIBITED",
+      "reason": "NASA's public postflight statement characterizes Artemis II char loss qualitatively and MissionLab does not possess a quantitative flight damage map for calibration."
+    }
+  ],
+  "permitted_conclusions": [
+    "MissionLab may reconstruct the external entry environment and modeled external convective-heating time history.",
+    "MissionLab may place the Artemis II loft / rebound relative to the modeled external heating history.",
+    "MissionLab may preserve NASA's reported qualitative Artemis I permeability-pressure-cracking-char-liberation mechanism.",
+    "MissionLab may state that NASA changed the Artemis II entry profile as a mitigation for conditions associated with the Artemis I phenomenon.",
+    "MissionLab may report NASA's postflight statement that Artemis II thermal protection performed as expected and Artemis I-type char loss was significantly reduced.",
+    "MissionLab may not convert those qualitative causal and postflight statements into an unvalidated material-response or damage-prediction model."
+  ],
+  "model_assertions": {
+    "avcoat_damage_model_created": false,
+    "material_properties_invented": false,
+    "sutton_graves_calibrated_to_char_loss": false,
+    "internal_tps_temperature_inferred": false,
+    "pyrolysis_rate_inferred": false,
+    "internal_pressure_inferred": false,
+    "crack_probability_inferred": false,
+    "char_loss_quantity_inferred": false
+  },
+  "planned_outputs": {
+    "processed_summary": "data/processed/entry/tps_physics_boundary_summary.json",
+    "figure": "docs/assets/entry/phase2f_tps_physics_boundary.svg"
+  }
+}

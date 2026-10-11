@@ -1,0 +1,389 @@
+{
+  "dataset_id": "phase2j1_artemis_ii_gnc_architecture",
+  "mission": "Artemis II",
+  "scope": "Source-backed reconstruction of the public Orion guidance, navigation, and control architecture, navigation sensor roles, manual-control interfaces, propulsion effectors, and selected Artemis II as-flown control demonstrations while explicitly separating system capability from unavailable raw sensor, navigation-filter, guidance-command, controller-input, and thruster-firing histories.",
+  "provenance": "NASA_REPORTED_WITH_MISSIONLAB_CROSS_PHASE_ARCHITECTURE_CORRELATION",
+  "sources": [
+    {
+      "source_id": "nasa_artemis_ii_reference_guide",
+      "organization": "NASA",
+      "title": "Artemis II Reference Guide",
+      "url": "https://www.nasa.gov/wp-content/uploads/2026/01/a2-reference-guide-012825.pdf",
+      "evidence_stage": "MISSION_REFERENCE_ARCHITECTURE",
+      "claims_used": [
+        "Orion guidance, navigation, control, and propulsion software operates across multiple mission phases.",
+        "The software supports manual and automated modes.",
+        "The software can handle commands from the ground and crew.",
+        "Orion uses redundant navigation sensors appropriate to different mission phases.",
+        "Star trackers support attitude determination.",
+        "Inertial measurement units measure body rotation rates and accelerations.",
+        "GPS supplies position and velocity updates in Earth-proximate mission phases.",
+        "Deep Space Network measurements support deep-space spacecraft location determination.",
+        "The optical navigation camera uses Earth and Moon imagery for range and bearing information.",
+        "Sun sensors determine Sun direction during emergency safe mode."
+      ]
+    },
+    {
+      "source_id": "nasa_orion_avionics_software",
+      "organization": "NASA",
+      "title": "Avionics and Software",
+      "url": "https://www.nasa.gov/reference/avionics-and-software/",
+      "evidence_stage": "SYSTEM_ARCHITECTURE",
+      "claims_used": [
+        "The GNC&P system is responsible for knowledge of spacecraft state and trajectory and controls propulsion to maintain the required attitude and path.",
+        "GNC&P flight software runs on vehicle management computers.",
+        "The software receives navigation-sensor and pilot-control inputs.",
+        "The software commands appropriate spacecraft effectors.",
+        "The software operates in manual and automated modes and accepts ground and crew commands.",
+        "The onboard navigation architecture includes IMUs, GPS, star trackers, optical navigation, Sun sensors, and barometric altimeters.",
+        "Deep Space Network tracking supports location determination outside GPS range."
+      ]
+    },
+    {
+      "source_id": "nasa_how_to_fly_orion",
+      "organization": "NASA",
+      "title": "How to Fly NASA's Orion Spacecraft",
+      "url": "https://www.nasa.gov/missions/artemis/orion/how-to-fly-nasas-orion-spacecraft/",
+      "evidence_stage": "MANUAL_CONTROL_ARCHITECTURE",
+      "claims_used": [
+        "The rotational hand controller commands spacecraft attitude.",
+        "The translational hand controller commands translation.",
+        "Manual-controller commands are detected by Orion guidance, navigation, and control flight software.",
+        "The flight software determines which reaction-control-system thrusters to fire and when.",
+        "Orion has 24 reaction-control-system thrusters."
+      ]
+    },
+    {
+      "source_id": "nasa_proximity_operations_plan",
+      "organization": "NASA",
+      "title": "Artemis II Flight Update: Apogee Raise Burn Complete, Crew Looks Ahead to Proximity Operations",
+      "date": "2026-04-01",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/01/artemis-ii-flight-update-apogee-raise-burn-complete-crew-looks-ahead-to-proximity-operations/",
+      "evidence_stage": "MISSION_OPERATION_PLAN",
+      "claims_used": [
+        "The approximately 70-minute proximity-operations demonstration would test manual maneuvering relative to the detached ICPS.",
+        "The crew would use translational and rotational hand controllers.",
+        "Small close-range maneuvers would use European Service Module reaction-control-system thrusters.",
+        "An automated departure burn would conclude the demonstration.",
+        "Docking-camera measurements during departure would support engineering knowledge for future rendezvous navigation."
+      ]
+    },
+    {
+      "source_id": "nasa_proximity_operations_complete",
+      "organization": "NASA",
+      "title": "Artemis II Flight Update: Proximity Operations Complete, Perigee Raise Burn Up Next",
+      "date": "2026-04-01",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/01/artemis-ii-flight-update-proximity-operations-complete-perigee-raise-burn-up-next/",
+      "evidence_stage": "AS_FLOWN_REPORT",
+      "claims_used": [
+        "The proximity-operations demonstration was completed.",
+        "The activity lasted approximately 70 minutes.",
+        "The crew performed controlled approach and retreat maneuvers relative to the detached ICPS.",
+        "The demonstration used onboard navigation sensors and reaction-control thrusters.",
+        "Orion executed an automated departure burn after the manual demonstration."
+      ]
+    },
+    {
+      "source_id": "nasa_flight_day_4_manual_piloting",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 4: Crew Completes Manual Piloting Demonstration",
+      "date": "2026-04-04",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/04/artemis-ii-flight-day-4-crew-completes-manual-piloting-demonstration/",
+      "evidence_stage": "AS_FLOWN_REPORT",
+      "claims_used": [
+        "Christina Koch and Jeremy Hansen took turns controlling Orion.",
+        "The demonstration began at 9:09 p.m. EDT.",
+        "The crew manually piloted Orion for 41 minutes.",
+        "The demonstration tested six-degree-of-freedom and three-degree-of-freedom thruster modes."
+      ]
+    },
+    {
+      "source_id": "nasa_flight_day_8_manual_piloting",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 8: Crew Conducts Key Tests on Return to Earth",
+      "date": "2026-04-08",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/08/artemis-ii-flight-day-8-crew-conducts-key-tests-on-return-to-earth/",
+      "evidence_stage": "PLAN_AND_AS_FLOWN_UPDATE",
+      "claims_used": [
+        "A manual piloting demonstration was planned for approximately 10:55 p.m. EDT.",
+        "The planned activity included centering a designated target and guiding Orion to a tail-to-Sun attitude.",
+        "Flight controllers later elected to forgo the manual piloting demonstration."
+      ]
+    }
+  ],
+  "gnc_domain_model": {
+    "navigation": {
+      "question": "WHERE_AM_I_HOW_AM_I_MOVING_AND_WHICH_WAY_AM_I_POINTED",
+      "role": "ESTIMATE_SPACECRAFT_POSITION_VELOCITY_ATTITUDE_AND_RELEVANT_RELATIVE_GEOMETRY",
+      "does_not_equal_guidance": true,
+      "does_not_equal_control": true
+    },
+    "guidance": {
+      "question": "WHERE_SHOULD_THE_SPACECRAFT_GO_OR_POINT_NEXT",
+      "role": "DETERMINE_OR_RECEIVE_TRAJECTORY_ATTITUDE_AND_MISSION_OBJECTIVES",
+      "does_not_equal_navigation": true,
+      "does_not_equal_control": true
+    },
+    "control": {
+      "question": "HOW_DOES_THE_SPACECRAFT_FOLLOW_THE_COMMANDED_MOTION_OR_ATTITUDE",
+      "role": "CONVERT_COMMANDS_AND_ERRORS_INTO_EFFECTOR_ACTION",
+      "does_not_equal_navigation": true,
+      "does_not_equal_guidance": true
+    }
+  },
+  "gncp_flight_software": {
+    "runs_on": "VEHICLE_MANAGEMENT_COMPUTERS",
+    "receives_navigation_sensor_inputs": true,
+    "receives_pilot_control_inputs": true,
+    "accepts_ground_commands": true,
+    "accepts_crew_commands": true,
+    "manual_mode_supported": true,
+    "automated_mode_supported": true,
+    "commands_effectors": true,
+    "public_source_code_available_in_current_source_set": false,
+    "complete_control_law_available_in_current_source_set": false,
+    "complete_guidance_algorithm_available_in_current_source_set": false
+  },
+  "onboard_navigation_architecture": {
+    "redundant_sensor_architecture_reported": true,
+    "sensors": [
+      {
+        "sensor_id": "star_tracker",
+        "display_name": "Star Tracker",
+        "measurement_domain": "ATTITUDE",
+        "role": "COMPARE_STAR_FIELD_IMAGES_WITH_STAR_CATALOG_TO_ESTIMATE_SPACECRAFT_ORIENTATION",
+        "mission_phase_context": "ORBITAL_OPERATIONS",
+        "raw_artemis_ii_measurements_available_in_current_source_set": false
+      },
+      {
+        "sensor_id": "imu",
+        "display_name": "Orion Inertial Measurement Unit",
+        "measurement_domain": "ROTATION_RATE_AND_BODY_ACCELERATION",
+        "role": "GYROS_AND_ACCELEROMETERS_PROVIDE_INERTIAL_DATA_FOR_ONBOARD_NAVIGATION",
+        "gyro_axes_per_unit": 3,
+        "accelerometer_axes_per_unit": 3,
+        "derived_onboard_quantities_reported": [
+          "POSITION",
+          "VELOCITY",
+          "ATTITUDE"
+        ],
+        "raw_artemis_ii_measurements_available_in_current_source_set": false
+      },
+      {
+        "sensor_id": "gps_receiver",
+        "display_name": "GPS Receiver",
+        "measurement_domain": "POSITION_AND_VELOCITY",
+        "role": "EARTH_PROXIMATE_POSITION_AND_VELOCITY_UPDATES",
+        "mission_phase_context": [
+          "ASCENT",
+          "LOW_EARTH_ORBIT",
+          "REENTRY"
+        ],
+        "deep_space_primary_navigation": false,
+        "raw_artemis_ii_measurements_available_in_current_source_set": false
+      },
+      {
+        "sensor_id": "barometric_altimeter",
+        "display_name": "Barometric Altimeter Assembly",
+        "measurement_domain": "ALTITUDE_FROM_ATMOSPHERIC_PRESSURE",
+        "role": "BACKUP_ALTITUDE_VALUE_FOR_ENTRY_DEPLOYMENT_EVENTS",
+        "mission_phase_context": [
+          "ASCENT",
+          "REENTRY"
+        ],
+        "raw_artemis_ii_measurements_available_in_current_source_set": false
+      },
+      {
+        "sensor_id": "optical_navigation_camera",
+        "display_name": "Optical Navigation Camera",
+        "measurement_domain": "CELESTIAL_RANGE_AND_BEARING",
+        "role": "USE_EARTH_AND_MOON_IMAGE_SIZE_AND_POSITION_FOR_RANGE_AND_BEARING_INFORMATION",
+        "emergency_return_role": true,
+        "autonomous_lost_communications_role_reported": true,
+        "raw_artemis_ii_measurements_available_in_current_source_set": false
+      },
+      {
+        "sensor_id": "sun_sensor",
+        "display_name": "Sun Sensor",
+        "measurement_domain": "SUN_DIRECTION",
+        "role": "DETERMINE_SUN_DIRECTION_DURING_EMERGENCY_SAFE_MODE_FOR_POWER_POSITIVE_POINTING",
+        "primary_trajectory_navigation_sensor": false,
+        "raw_artemis_ii_measurements_available_in_current_source_set": false
+      }
+    ]
+  },
+  "external_navigation_support": [
+    {
+      "support_id": "deep_space_network_tracking",
+      "display_name": "Deep Space Network Tracking",
+      "measurement_domain": "GROUND_BASED_DEEP_SPACE_ORBIT_DETERMINATION",
+      "onboard_sensor": false,
+      "role": "SENSITIVE_COMMUNICATION_SIGNAL_MEASUREMENTS_SUPPORT_SPACECRAFT_LOCATION_DETERMINATION_OUTSIDE_GPS_RANGE",
+      "raw_artemis_ii_tracking_observables_available_in_current_source_set": false
+    }
+  ],
+  "manual_control_architecture": {
+    "rotational_hand_controller": {
+      "short_name": "RHC",
+      "command_domain": "ATTITUDE",
+      "commanded_axes": [
+        "ROLL",
+        "PITCH",
+        "YAW"
+      ],
+      "direct_thruster_command_device": false,
+      "command_processed_by_gnc_flight_software": true
+    },
+    "translational_hand_controller": {
+      "short_name": "THC",
+      "command_domain": "TRANSLATION",
+      "commanded_axes": [
+        "FORWARD_BACK",
+        "UP_DOWN",
+        "LEFT_RIGHT"
+      ],
+      "direct_thruster_command_device": false,
+      "command_processed_by_gnc_flight_software": true
+    },
+    "command_path": [
+      "CREW_CONTROLLER_INPUT",
+      "GNC_FLIGHT_SOFTWARE",
+      "EFFECTOR_SELECTION",
+      "RCS_THRUSTER_COMMAND"
+    ],
+    "exact_controller_input_time_history_available_in_current_source_set": false,
+    "exact_thruster_command_history_available_in_current_source_set": false
+  },
+  "control_effectors": [
+    {
+      "effector_id": "main_engine_oms_e",
+      "count": 1,
+      "control_role": "MAJOR_IN_SPACE_VELOCITY_CHANGE",
+      "source_relationship": "CROSS_PHASE_2I_PROPULSION_ARCHITECTURE",
+      "burn_specific_correction_assignment_implied": false
+    },
+    {
+      "effector_id": "auxiliary_r4d11",
+      "count": 8,
+      "control_role": "ORBITAL_AND_TRAJECTORY_CORRECTION_CAPABILITY",
+      "source_relationship": "CROSS_PHASE_2I_PROPULSION_ARCHITECTURE",
+      "burn_specific_correction_assignment_implied": false
+    },
+    {
+      "effector_id": "reaction_control_system",
+      "count": 24,
+      "control_role": "ATTITUDE_TRANSLATION_AND_FINE_CONTROL",
+      "source_relationship": "NASA_MANUAL_CONTROL_AND_CROSS_PHASE_2I_ARCHITECTURE",
+      "exact_as_flown_thruster_sequence_available": false
+    }
+  ],
+  "artemis_ii_operational_anchors": [
+    {
+      "event_id": "proximity_operations_demonstration",
+      "execution_status": "COMPLETED",
+      "date_utc": "2026-04-01",
+      "duration_semantics": "APPROXIMATELY",
+      "duration_minutes": 70,
+      "authority": "CREW_MANUAL_CONTROL",
+      "reference_target": "DETACHED_ICPS",
+      "activities": [
+        "CONTROLLED_APPROACH",
+        "CONTROLLED_RETREAT"
+      ],
+      "onboard_navigation_sensors_used": true,
+      "reaction_control_thrusters_used": true,
+      "automated_departure_burn_afterward": true,
+      "exact_sensor_measurement_history_available": false,
+      "exact_thruster_firing_history_available": false,
+      "source_id": "nasa_proximity_operations_complete"
+    },
+    {
+      "event_id": "flight_day_4_manual_piloting",
+      "execution_status": "COMPLETED",
+      "date_utc": "2026-04-04",
+      "reported_start_local": "9:09 p.m. EDT",
+      "duration_minutes": 41,
+      "participants": [
+        "Christina Koch",
+        "Jeremy Hansen"
+      ],
+      "tested_modes": [
+        "SIX_DEGREES_OF_FREEDOM",
+        "THREE_DEGREES_OF_FREEDOM"
+      ],
+      "mode_names_define_complete_control_algorithm": false,
+      "exact_controller_input_history_available": false,
+      "exact_thruster_firing_history_available": false,
+      "source_id": "nasa_flight_day_4_manual_piloting"
+    },
+    {
+      "event_id": "flight_day_8_manual_piloting",
+      "execution_status": "FOREGONE",
+      "date_utc": "2026-04-08",
+      "reported_planned_time_local": "10:55 p.m. EDT",
+      "planned_objectives": [
+        "CENTER_DESIGNATED_TARGET",
+        "GUIDE_TO_TAIL_TO_SUN_ATTITUDE"
+      ],
+      "performed": false,
+      "source_id": "nasa_flight_day_8_manual_piloting"
+    }
+  ],
+  "related_measurement_context": [
+    {
+      "context_id": "proximity_operations_docking_camera_departure_measurements",
+      "system": "DOCKING_CAMERA",
+      "phase": "PROXIMITY_OPERATIONS_DEPARTURE",
+      "public_role": "ENGINEERING_POSITIONING_MEASUREMENTS_FOR_FUTURE_RENDEZVOUS_NAVIGATION",
+      "classified_as_primary_artemis_ii_onboard_navigation_sensor_here": false,
+      "reason": "NASA reporting describes engineering measurements during the departure burn; Phase 2J.1 does not promote the docking camera to a closed-loop onboard navigation input without explicit evidence."
+    }
+  ],
+  "current_public_source_set_boundaries": {
+    "sensor_architecture_available": true,
+    "sensor_roles_available": true,
+    "gncp_flight_software_architecture_available": true,
+    "manual_control_architecture_available": true,
+    "as_flown_manual_control_event_sequence_available": true,
+    "six_dof_three_dof_execution_available": true,
+    "exact_thruster_command_history_available": false,
+    "attitude_time_series_available": false,
+    "raw_imu_measurement_history_available": false,
+    "raw_star_tracker_measurement_history_available": false,
+    "raw_gps_measurement_history_available": false,
+    "raw_barometric_altimeter_history_available": false,
+    "raw_opnav_measurement_history_available": false,
+    "raw_sun_sensor_measurement_history_available": false,
+    "raw_dsn_tracking_observable_history_available": false,
+    "full_navigation_filter_state_history_available": false,
+    "navigation_covariance_history_available": false,
+    "guidance_target_history_available": false,
+    "complete_flight_control_law_available": false,
+    "manual_controller_input_time_history_available": false,
+    "flight_director_gnc_rationale_tree_available": false
+  },
+  "cross_phase_boundaries": {
+    "arow_oem_state_vector_is_onboard_navigation_filter_state": false,
+    "dsn_orbit_determination_is_onboard_sensor_measurement": false,
+    "propulsion_architecture_is_exact_control_effector_history": false,
+    "trajectory_correction_outcome_is_guidance_command_history": false,
+    "correction_burn_engine_assignment_resolved_by_gnc_architecture": false,
+    "phase_2i_unresolved_correction_engine_assignments_preserved": true
+  },
+  "guardrails": [
+    "Navigation sensor capability does not establish an as-flown sensor measurement history.",
+    "AROW public OEM state vectors are flight-derived trajectory products and are not Orion's onboard navigation-filter state history.",
+    "Deep Space Network orbit determination is ground-based navigation support and is not an onboard sensor measurement.",
+    "A crew hand-controller command is processed by GNC flight software and is not itself a published thruster-firing history.",
+    "Installed RCS architecture does not establish the exact as-flown thruster sequence.",
+    "Manual piloting demonstration completion does not disclose the complete control law.",
+    "The names six degrees of freedom and three degrees of freedom do not reconstruct the underlying control algorithm.",
+    "The planned Flight Day 8 manual demonstration was foregone and must not be represented as executed.",
+    "Trajectory-correction outcomes do not expose the public guidance-command history.",
+    "Public GNC architecture does not expose Orion flight-software source code.",
+    "Public sensor descriptions do not expose navigation covariance history.",
+    "Public operational reports do not expose the complete Flight Director GNC rationale tree.",
+    "The docking-camera engineering measurement context is not promoted to a primary closed-loop Artemis II onboard navigation input without explicit source evidence.",
+    "Phase 2J.1 does not infer which propulsion engine class executed OTC3, RTC1, RTC2, or RTC3."
+  ]
+}

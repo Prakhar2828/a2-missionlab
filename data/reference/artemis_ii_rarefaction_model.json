@@ -1,0 +1,42 @@
+﻿{
+  "model_id": "phase2e3_body_scale_hard_sphere_knudsen",
+  "mission": "Artemis II",
+  "provenance": "MODEL",
+  "characteristic_length": {
+    "value_m": 5.0,
+    "interpretation": "Orion crew-module / heat-shield diameter",
+    "source": "NASA Orion By the Numbers 2026b and NASA Crew Module reference",
+    "source_url": "https://www.nasa.gov/wp-content/uploads/2026/01/orion-by-the-numbers-2026b.pdf",
+    "reported_value": "16.5 ft / 5 m"
+  },
+  "collision_model": {
+    "type": "reference effective hard-sphere air approximation",
+    "reference_collision_diameter_m": 3.7e-10,
+    "sensitivity_collision_diameters_m": [
+      3.5e-10,
+      4.0e-10
+    ],
+    "source": "LA-UR-15-22394 via OSTI, citing approximately 3.7e-10 m for air molecules",
+    "source_url": "https://www.osti.gov/servlets/purl/1177521"
+  },
+  "regime_thresholds": {
+    "continuum_upper_kn": 0.01,
+    "slip_upper_kn": 0.1,
+    "transition_upper_kn": 10.0,
+    "deep_continuum_reference_kn": 0.001
+  },
+  "classification": {
+    "CONTINUUM": "Kn < 0.01",
+    "SLIP": "0.01 <= Kn < 0.1",
+    "TRANSITION": "0.1 <= Kn < 10",
+    "FREE_MOLECULAR": "Kn >= 10"
+  },
+  "interpretation_limits": [
+    "Knudsen number is based on a 5 m whole-body characteristic length.",
+    "The hard-sphere collision diameter is a reference approximation rather than a multicomponent collision-integral model.",
+    "The classification is a body-scale rarefaction indicator rather than a complete Navier-Stokes breakdown criterion.",
+    "Local gradient-length Knudsen numbers are not calculated.",
+    "Shock-layer chemical nonequilibrium and DSMC flow solutions are not calculated.",
+    "The result does not by itself establish continuum validity for local stagnation-region heating."
+  ]
+}

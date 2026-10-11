@@ -1,0 +1,337 @@
+{
+  "dataset_id": "phase2_artemis_ii_full_closure_manifest",
+  "mission": "Artemis II",
+  "phase": "2",
+  "phase_name": "Entry, Flight Systems, Mission Operations, and Cross-Domain Reconstruction",
+  "status": "COMPLETE",
+  "closure_scope": "Machine-readable closure manifest covering every implemented Phase 2 subphase from 2A through 2K. Phase 2K remains the mission-operations integration product. This manifest proves that the complete Phase 2 technical stack also includes entry trajectory ingestion, frame reconstruction, Earth-fixed geometry, entry dynamics, entry and recovery events, atmospheric modeling, Mach and rarefaction analysis, convective heating, TPS evidence and physics boundaries, communications, maneuvers, propulsion, GNC, and cross-domain integration.",
+  "provenance": "MISSIONLAB_REPRODUCIBILITY_AND_VALIDATION_MANIFEST",
+
+  "closure_policy": {
+    "all_subphases_must_be_complete": true,
+    "all_declared_validation_scripts_must_exist": true,
+    "phase2k_must_be_complete": true,
+    "phase2j_must_be_complete": true,
+    "phase2i_must_be_ready_to_close": true,
+    "raw_and_processed_data_may_remain_gitignored": true,
+    "public_data_and_modeled_quantities_must_remain_distinguished": true,
+    "architecture_and_time_history_must_remain_distinguished": true,
+    "expected_constraints_and_anomalies_must_remain_distinguished": true,
+    "unsupported_telemetry_must_not_be_fabricated": true
+  },
+
+  "reproducibility_runner": {
+    "path": "scripts/run_phase2.py",
+    "purpose": "Execute the complete Phase 2 dependency chain in order using the active Python environment.",
+    "expected_success_marker": "PHASE 2 PIPELINE COMPLETE",
+    "expected_coverage_start": "2A",
+    "expected_coverage_end": "2K",
+    "observed_successful_step_count": 58,
+    "step_count_provenance": "LOCAL_CLOSURE_RUN",
+    "successful_run_required_for_closure": true
+  },
+
+  "subphases": [
+    {
+      "phase_id": "2A",
+      "name": "High-Rate Entry Trajectory Ingestion",
+      "status": "COMPLETE",
+      "domain": "ENTRY_TRAJECTORY",
+      "validation_script": "scripts/validation/validate_entry_trajectory.py"
+    },
+    {
+      "phase_id": "2B.1",
+      "name": "M50 to J2000 Frame Reconstruction",
+      "status": "COMPLETE",
+      "domain": "REFERENCE_FRAMES",
+      "validation_script": "scripts/validation/validate_entry_frame_transform.py"
+    },
+    {
+      "phase_id": "2B.2",
+      "name": "Earth-Fixed and Geodetic Entry Geometry",
+      "status": "COMPLETE",
+      "domain": "ENTRY_GEOMETRY",
+      "validation_script": "scripts/validation/validate_entry_geometry.py"
+    },
+    {
+      "phase_id": "2C",
+      "name": "Entry Dynamics Reconstruction",
+      "status": "COMPLETE",
+      "domain": "ENTRY_DYNAMICS",
+      "validation_script": "scripts/validation/validate_entry_dynamics.py"
+    },
+    {
+      "phase_id": "2D",
+      "name": "Entry and Recovery Event Correlation",
+      "status": "COMPLETE",
+      "domain": "ENTRY_RECOVERY_TIMELINE",
+      "validation_script": "scripts/validation/validate_entry_events.py"
+    },
+    {
+      "phase_id": "2E.1",
+      "name": "Entry Atmosphere and Dynamic Pressure",
+      "status": "COMPLETE",
+      "domain": "ATMOSPHERIC_ENVIRONMENT",
+      "validation_script": "scripts/validation/validate_entry_atmosphere.py"
+    },
+    {
+      "phase_id": "2E.2",
+      "name": "Mach and Flow-Regime Reconstruction",
+      "status": "COMPLETE",
+      "domain": "AEROTHERMODYNAMICS",
+      "validation_script": "scripts/validation/validate_entry_mach.py"
+    },
+    {
+      "phase_id": "2E.3",
+      "name": "Rarefaction and Continuum-Regime Reconstruction",
+      "status": "COMPLETE",
+      "domain": "AEROTHERMODYNAMICS",
+      "validation_script": "scripts/validation/validate_entry_rarefaction.py"
+    },
+    {
+      "phase_id": "2E.4",
+      "name": "Convective Heating Reconstruction",
+      "status": "COMPLETE",
+      "domain": "AEROTHERMODYNAMICS",
+      "validation_script": "scripts/validation/validate_entry_heating.py"
+    },
+    {
+      "phase_id": "2F.1",
+      "name": "TPS Evidence and Engineering Decision Thread",
+      "status": "COMPLETE",
+      "domain": "THERMAL_PROTECTION_SYSTEM",
+      "validation_script": "scripts/validation/validate_tps_decision_thread.py"
+    },
+    {
+      "phase_id": "2F.2",
+      "name": "Artemis Entry-Profile Heritage Comparison",
+      "status": "COMPLETE",
+      "domain": "ENTRY_HERITAGE",
+      "validation_script": "scripts/validation/validate_artemis_entry_profile_comparison.py"
+    },
+    {
+      "phase_id": "2F.3",
+      "name": "Loft and Rebound Heating-History Analysis",
+      "status": "COMPLETE",
+      "domain": "THERMAL_PROTECTION_SYSTEM",
+      "validation_script": "scripts/validation/validate_loft_heating_history.py"
+    },
+    {
+      "phase_id": "2F.4",
+      "name": "TPS Evidence-to-Physics Boundary",
+      "status": "COMPLETE",
+      "domain": "THERMAL_PROTECTION_SYSTEM",
+      "validation_script": "scripts/validation/validate_tps_physics_boundary.py"
+    },
+    {
+      "phase_id": "2G.1",
+      "name": "Geocentric Lunar Occultation Geometry",
+      "status": "COMPLETE",
+      "domain": "COMMUNICATIONS_GEOMETRY",
+      "validation_script": "scripts/validation/validate_lunar_occultation_geometry.py"
+    },
+    {
+      "phase_id": "2G.2",
+      "name": "Topocentric Deep Space Network Geometry",
+      "status": "COMPLETE",
+      "domain": "COMMUNICATIONS_GEOMETRY",
+      "validation_script": "scripts/validation/validate_dsn_topocentric_geometry.py"
+    },
+    {
+      "phase_id": "2H.1",
+      "name": "Communications Event Timeline",
+      "status": "COMPLETE",
+      "domain": "COMMUNICATIONS",
+      "validation_script": "scripts/validation/validate_communications_event_timeline.py"
+    },
+    {
+      "phase_id": "2H.2",
+      "name": "Mission-Clock Communications Correlation",
+      "status": "COMPLETE",
+      "domain": "COMMUNICATIONS",
+      "validation_script": "scripts/validation/validate_mission_clock_communications_correlation.py"
+    },
+    {
+      "phase_id": "2H.3",
+      "name": "Orion Optical Communications Reconstruction",
+      "status": "COMPLETE",
+      "domain": "OPTICAL_COMMUNICATIONS",
+      "validation_script": "scripts/validation/validate_o2o_optical_communications.py"
+    },
+    {
+      "phase_id": "2H.4",
+      "name": "Communications Operational Threads",
+      "status": "COMPLETE",
+      "domain": "COMMUNICATIONS",
+      "validation_script": "scripts/validation/validate_communications_operational_threads.py"
+    },
+    {
+      "phase_id": "2I.1",
+      "name": "Maneuver Plan Versus Execution",
+      "status": "COMPLETE",
+      "domain": "MANEUVERS",
+      "validation_script": "scripts/validation/validate_maneuver_plan_execution.py"
+    },
+    {
+      "phase_id": "2I.2",
+      "name": "European Service Module Propulsion Architecture",
+      "status": "COMPLETE",
+      "domain": "PROPULSION",
+      "validation_script": "scripts/validation/validate_esm_propulsion_architecture.py"
+    },
+    {
+      "phase_id": "2I.3",
+      "name": "Maneuver Mission-Clock and Trajectory Correlation",
+      "status": "COMPLETE",
+      "domain": "FLIGHT_DYNAMICS",
+      "validation_script": "scripts/validation/validate_maneuver_trajectory_correlation.py"
+    },
+    {
+      "phase_id": "2I.4",
+      "name": "Maneuver Operational Threads",
+      "status": "COMPLETE",
+      "domain": "MANEUVERS",
+      "validation_script": "scripts/validation/validate_maneuver_operational_threads.py"
+    },
+    {
+      "phase_id": "2J.1",
+      "name": "GNC Architecture and Evidence Model",
+      "status": "COMPLETE",
+      "domain": "GNC",
+      "validation_script": "scripts/validation/validate_gnc_architecture.py"
+    },
+    {
+      "phase_id": "2J.2",
+      "name": "Manual Piloting and Control Modes",
+      "status": "COMPLETE",
+      "domain": "GNC",
+      "validation_script": "scripts/validation/validate_manual_piloting_control_modes.py"
+    },
+    {
+      "phase_id": "2J.3",
+      "name": "Navigation and State-Estimation Evidence",
+      "status": "COMPLETE",
+      "domain": "NAVIGATION",
+      "validation_script": "scripts/validation/validate_navigation_state_estimation.py"
+    },
+    {
+      "phase_id": "2J.4",
+      "name": "GNC Operational Threads and Closure",
+      "status": "COMPLETE",
+      "domain": "GNC",
+      "validation_script": "scripts/validation/validate_gnc_operational_threads.py"
+    },
+    {
+      "phase_id": "2K",
+      "name": "Phase 2 Mission-Operations Integration",
+      "status": "COMPLETE",
+      "domain": "CROSS_DOMAIN_INTEGRATION",
+      "validation_script": "scripts/validation/validate_phase2_integrated_operations.py"
+    }
+  ],
+
+  "phase2_domain_coverage": [
+    "HIGH_RATE_ENTRY_TRAJECTORY",
+    "REFERENCE_FRAME_TRANSFORMATION",
+    "EARTH_FIXED_GEOMETRY",
+    "GEODETIC_ENTRY_GEOMETRY",
+    "ENTRY_DYNAMICS",
+    "ENTRY_AND_RECOVERY_EVENTS",
+    "ATMOSPHERIC_ENVIRONMENT",
+    "DYNAMIC_PRESSURE",
+    "MACH_RECONSTRUCTION",
+    "RAREFACTION_AND_CONTINUUM_ANALYSIS",
+    "CONVECTIVE_HEATING",
+    "THERMAL_PROTECTION_SYSTEM",
+    "ENTRY_PROFILE_HERITAGE",
+    "LOFT_AND_REBOUND_HEATING",
+    "LUNAR_OCCULTATION_GEOMETRY",
+    "DEEP_SPACE_NETWORK_GEOMETRY",
+    "COMMUNICATIONS",
+    "OPTICAL_COMMUNICATIONS",
+    "MANEUVERS",
+    "PROPULSION",
+    "FLIGHT_DYNAMICS",
+    "GUIDANCE",
+    "NAVIGATION",
+    "CONTROL",
+    "CROSS_DOMAIN_MISSION_OPERATIONS"
+  ],
+
+  "key_reference_products": [
+    "data/reference/artemis_ii_entry_events.json",
+    "data/reference/artemis_ii_msis_drivers.csv",
+    "data/reference/artemis_ii_msis_environment.json",
+    "data/reference/artemis_ii_rarefaction_model.json",
+    "data/reference/artemis_ii_convective_heating_model.json",
+    "data/reference/artemis_tps_evidence.json",
+    "data/reference/artemis_entry_profile_heritage.json",
+    "data/reference/artemis_tps_physics_boundary.json",
+    "data/reference/dsn_topocentric_geometry_reference.json",
+    "data/reference/artemis_ii_communications_event_catalog.json",
+    "data/reference/artemis_ii_communications_events.json",
+    "data/reference/artemis_ii_o2o_reference.json",
+    "data/reference/artemis_ii_communications_operational_threads.json",
+    "data/reference/artemis_ii_maneuver_plan_execution.json",
+    "data/reference/artemis_ii_esm_propulsion_architecture.json",
+    "data/reference/artemis_ii_maneuver_trajectory_correlation.json",
+    "data/reference/artemis_ii_maneuver_operational_threads.json",
+    "data/reference/artemis_ii_gnc_architecture.json",
+    "data/reference/artemis_ii_manual_piloting_control_modes.json",
+    "data/reference/artemis_ii_navigation_state_estimation.json",
+    "data/reference/artemis_ii_gnc_operational_threads.json",
+    "data/reference/artemis_ii_phase2_integrated_operations.json"
+  ],
+
+  "key_local_reproducibility_inputs": [
+    "data/raw/arow/all-artemis-ii-oem-files.zip",
+    "data/raw/spice/de440s.bsp",
+    "data/raw/spice/naif0012.tls",
+    "data/raw/spice/pck00011.tpc",
+    "data/raw/spice/earth_1962_260806_2126_combined.bpc"
+  ],
+
+  "permanent_evidence_boundaries": [
+    "M50_TO_B1950_TO_J2000_IS_AN_ANALYSIS_MAPPING_VALIDATED_AGAINST_THE_PUBLIC_HANDOFF_NOT_A_CLAIM_OF_FILE_LEVEL_FRAME_EQUIVALENCE",
+    "MODELED_ATMOSPHERIC_QUANTITIES_ARE_NOT_RAW_FLIGHT_TELEMETRY",
+    "MODELED_DYNAMIC_PRESSURE_IS_NOT_A_RECORDED_ORION_SENSOR_CHANNEL",
+    "MODELED_MACH_IS_NOT_A_RECORDED_ORION_SENSOR_CHANNEL",
+    "MODELED_RAREFACTION_IS_NOT_A_RECORDED_ORION_SENSOR_CHANNEL",
+    "MODELED_CONVECTIVE_HEATING_IS_NOT_MEASURED_SURFACE_HEAT_FLUX",
+    "TPS_PUBLIC_EVIDENCE_IS_NOT_INTERNAL_THERMAL_TELEMETRY",
+    "EXPECTED_LUNAR_COMMUNICATIONS_BLACKOUT_IS_NOT_AN_ANOMALY",
+    "COMMUNICATIONS_SEQUENCE_IS_NOT_CAUSATION",
+    "CANCELLED_CORRECTION_IS_NOT_FAILED_BURN",
+    "PROPULSION_ARCHITECTURE_IS_NOT_BURN_SPECIFIC_ENGINE_ASSIGNMENT",
+    "PUBLIC_OEM_IS_NOT_RAW_SPACECRAFT_TELEMETRY",
+    "OEM_SOLUTION_DIFFERENCE_IS_NOT_NAVIGATION_ERROR",
+    "OEM_SOLUTION_DIFFERENCE_IS_NOT_MEASURED_BURN_DELTA_V",
+    "OEM_CREATION_TIME_IS_NOT_PROOF_OF_MANEUVER_ASSIMILATION",
+    "AROW_PUBLIC_STATE_VECTOR_IS_NOT_PROVEN_ORION_ONBOARD_FILTER_STATE",
+    "DSN_GROUND_TRACKING_IS_NOT_AN_ONBOARD_NAVIGATION_SENSOR",
+    "MANUAL_MODE_LABEL_IS_NOT_CONTROL_LAW_DISCLOSURE",
+    "RCS_USE_IS_NOT_INDIVIDUAL_THRUSTER_HISTORY",
+    "RTC3_TO_ENTRY_CLOCK_HANDOFF_IS_NOT_DETAILED_ENTRY_GUIDANCE_RECONSTRUCTION",
+    "ABSENCE_FROM_THE_CURATED_PUBLIC_SOURCE_SET_IS_NOT_PROOF_A_RECORD_NEVER_EXISTED"
+  ],
+
+  "closure_criteria": {
+    "phase2a_entry_ingestion_complete": true,
+    "phase2b_frame_and_geometry_complete": true,
+    "phase2c_entry_dynamics_complete": true,
+    "phase2d_entry_recovery_events_complete": true,
+    "phase2e_atmosphere_and_aerothermal_complete": true,
+    "phase2f_tps_complete": true,
+    "phase2g_communications_geometry_complete": true,
+    "phase2h_communications_complete": true,
+    "phase2i_maneuvers_and_propulsion_complete": true,
+    "phase2j_gnc_complete": true,
+    "phase2k_mission_operations_integration_complete": true,
+    "full_phase2_reproducibility_run_passed": true,
+    "all_58_observed_pipeline_steps_passed": true,
+    "unsupported_telemetry_fabricated": false
+  },
+
+  "next_major_phase": "3",
+  "next_major_phase_name": "ECLSS, Vehicle Systems, Thermal, and Materials"
+}

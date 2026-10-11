@@ -1,0 +1,378 @@
+{
+  "dataset_id": "phase2j2_artemis_ii_manual_piloting_control_modes",
+  "mission": "Artemis II",
+  "scope": "Source-backed reconstruction of Artemis II manual piloting, proximity-operations planning, as-flown manual-control demonstrations, crew-versus-automated control authority, and public control-mode evidence while preserving strict separation between planned sequences and as-flown execution and without reconstructing unavailable controller histories, control laws, thruster-allocation logic, or individual thruster firings.",
+  "provenance": "NASA_REPORTED_WITH_MISSIONLAB_DERIVED_CLOCK_CORRELATION",
+  "input_dependencies": [
+    {
+      "path": "data/config/mission.json",
+      "role": "MISSION_CLOCK"
+    },
+    {
+      "path": "data/reference/artemis_ii_gnc_architecture.json",
+      "role": "PHASE_2J1_GNC_AND_MANUAL_CONTROL_ARCHITECTURE"
+    },
+    {
+      "path": "data/reference/artemis_ii_esm_propulsion_architecture.json",
+      "role": "REACTION_CONTROL_SYSTEM_CROSS_CHECK"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "nasa_sls_artemis_ii_reference_guide",
+      "organization": "NASA",
+      "title": "Artemis II SLS Reference Guide",
+      "url": "https://www.nasa.gov/wp-content/uploads/2026/01/sls-5558-artemis-ii-sls-reference-guide-final-review-508-012026.pdf",
+      "evidence_stage": "PREMISSION_REFERENCE_PLAN",
+      "claims_used": [
+        "The public reference guide provides a 17-step Artemis II proximity-operations demonstration sequence.",
+        "The sequence includes HQ 10 m evaluation number 1 and HQ 15 m evaluation number 2.",
+        "The sequence ends with auxiliary departure and a long-range flight test objective."
+      ]
+    },
+    {
+      "source_id": "nasa_proximity_operations_plan",
+      "organization": "NASA",
+      "title": "Artemis II Flight Update: Apogee Raise Burn Complete, Crew Looks Ahead to Proximity Operations",
+      "date": "2026-04-01",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/01/artemis-ii-flight-update-apogee-raise-burn-complete-crew-looks-ahead-to-proximity-operations/",
+      "evidence_stage": "PRE_EXECUTION_OPERATION_PLAN",
+      "claims_used": [
+        "The proximity-operations demonstration was planned for approximately 70 minutes.",
+        "Orion would automatically turn to face the ICPS before manual close-range operations.",
+        "At approximately 300 feet Orion would stop relative motion and the crew would take control.",
+        "The crew would use translational and rotational hand controllers and displays.",
+        "At about 30 feet Orion would stop for fine handling-quality evaluation.",
+        "Very close maneuvers would use European Service Module reaction-control-system thrusters.",
+        "An automated departure burn would conclude the demonstration.",
+        "The docking camera would gather positioning measurements during departure for future rendezvous-navigation knowledge."
+      ]
+    },
+    {
+      "source_id": "nasa_proximity_operations_complete",
+      "organization": "NASA",
+      "title": "Artemis II Flight Update: Proximity Operations Complete, Perigee Raise Burn Up Next",
+      "date": "2026-04-01",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/01/artemis-ii-flight-update-proximity-operations-complete-perigee-raise-burn-up-next/",
+      "evidence_stage": "AS_FLOWN_REPORT",
+      "claims_used": [
+        "The proximity-operations demonstration was successfully completed.",
+        "The activity lasted approximately 70 minutes.",
+        "The crew performed a series of controlled approach and retreat maneuvers relative to the detached ICPS.",
+        "The demonstration used onboard navigation sensors and reaction-control thrusters.",
+        "Orion executed an automated departure burn at the conclusion of the demonstration."
+      ]
+    },
+    {
+      "source_id": "nasa_flight_day_4_manual_piloting",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 4: Crew Completes Manual Piloting Demonstration",
+      "date": "2026-04-04",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/04/artemis-ii-flight-day-4-crew-completes-manual-piloting-demonstration/",
+      "evidence_stage": "AS_FLOWN_REPORT",
+      "claims_used": [
+        "Christina Koch and Jeremy Hansen took turns controlling Orion.",
+        "The manual piloting demonstration began at 9:09 p.m. EDT.",
+        "The demonstration lasted 41 minutes.",
+        "The crew tested six-degrees-of-freedom and three-degrees-of-freedom thruster modes."
+      ]
+    },
+    {
+      "source_id": "nasa_flight_day_8_manual_piloting",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 8: Crew Conducts Key Tests on Return to Earth",
+      "date": "2026-04-08",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/08/artemis-ii-flight-day-8-crew-conducts-key-tests-on-return-to-earth/",
+      "evidence_stage": "PLANNED_ACTIVITY_AND_AS_FLOWN_UPDATE",
+      "claims_used": [
+        "A manual piloting demonstration had been planned for approximately 10:55 p.m. EDT.",
+        "The planned activity included centering a designated target.",
+        "The planned activity included guiding Orion to a tail-to-Sun attitude.",
+        "Flight controllers elected to forgo the 10:55 p.m. EDT manual piloting demonstration."
+      ]
+    },
+    {
+      "source_id": "nasa_artemis_ii_daily_agenda",
+      "organization": "NASA",
+      "title": "NASA's Artemis II Moon Mission Daily Agenda",
+      "url": "https://www.nasa.gov/missions/artemis/nasas-artemis-ii-moon-mission-daily-agenda/",
+      "evidence_stage": "MISSION_PLAN",
+      "claims_used": [
+        "The Flight Day 8 manual-piloting plan included centering a target, moving Orion to a tail-to-Sun attitude, and comparing six-degree-of-freedom and three-degree-of-freedom attitude-control modes."
+      ]
+    }
+  ],
+  "time_policy": {
+    "launch_epoch_field": "launch_epoch_utc",
+    "reported_local_timezone_label": "EDT",
+    "reported_local_timezone_offset": "-04:00",
+    "iana_timezone_database_required": false,
+    "rule": "NASA explicitly reported the relevant Flight Day 4 and Flight Day 8 local times as EDT. MissionLab therefore converts those source timestamps using the fixed reported UTC-04:00 offset rather than adding an IANA tzdata dependency.",
+    "derived_met_rule": "Mission elapsed time is derived from the configured Artemis II launch epoch. Derived values inherit the public timestamp precision of their source anchors."
+  },
+  "manual_control_architecture": {
+    "rotational_hand_controller": {
+      "short_name": "RHC",
+      "command_domain": "ATTITUDE",
+      "axes": [
+        "ROLL",
+        "PITCH",
+        "YAW"
+      ]
+    },
+    "translational_hand_controller": {
+      "short_name": "THC",
+      "command_domain": "TRANSLATION",
+      "axes": [
+        "FORWARD_BACK",
+        "UP_DOWN",
+        "LEFT_RIGHT"
+      ]
+    },
+    "command_path": [
+      "CREW_CONTROLLER_INPUT",
+      "GNC_FLIGHT_SOFTWARE",
+      "EFFECTOR_SELECTION",
+      "RCS_THRUSTER_COMMAND"
+    ],
+    "hand_controller_is_direct_thruster_switch": false,
+    "exact_controller_input_history_available": false,
+    "exact_thruster_command_history_available": false
+  },
+  "proximity_operations": {
+    "planned_reference": {
+      "source_semantics": "PREMISSION_PLAN",
+      "step_count": 17,
+      "steps": [
+        {
+          "step": 1,
+          "source_label": "PRE-SEPARATION",
+          "normalized_id": "PRE_SEPARATION"
+        },
+        {
+          "step": 2,
+          "source_label": "SEPARATION / DRIFT",
+          "normalized_id": "SEPARATION_DRIFT"
+        },
+        {
+          "step": 3,
+          "source_label": "180° PITCH MANEUVER",
+          "normalized_id": "PITCH_MANEUVER_180_DEGREE"
+        },
+        {
+          "step": 4,
+          "source_label": "NULL SEPARATION ΔV",
+          "normalized_id": "NULL_SEPARATION_DELTA_V"
+        },
+        {
+          "step": 5,
+          "source_label": "COARSE HQ",
+          "normalized_id": "COARSE_HANDLING_QUALITIES"
+        },
+        {
+          "step": 6,
+          "source_label": "APPROACH",
+          "normalized_id": "APPROACH_1"
+        },
+        {
+          "step": 7,
+          "source_label": "HQ 10m EVAL #1",
+          "normalized_id": "HANDLING_QUALITIES_10_METER_EVALUATION_1"
+        },
+        {
+          "step": 8,
+          "source_label": "BACK AWAY",
+          "normalized_id": "BACK_AWAY"
+        },
+        {
+          "step": 9,
+          "source_label": "STATIONKEEP",
+          "normalized_id": "STATIONKEEP"
+        },
+        {
+          "step": 10,
+          "source_label": "ICPS MANEUVER",
+          "normalized_id": "ICPS_MANEUVER"
+        },
+        {
+          "step": 11,
+          "source_label": "APPROACH #2",
+          "normalized_id": "APPROACH_2"
+        },
+        {
+          "step": 12,
+          "source_label": "HQ 15m EVAL #2",
+          "normalized_id": "HANDLING_QUALITIES_15_METER_EVALUATION_2"
+        },
+        {
+          "step": 13,
+          "source_label": "MULTI-AXIS TEST",
+          "normalized_id": "MULTI_AXIS_TEST"
+        },
+        {
+          "step": 14,
+          "source_label": "MANUAL BACK-OUT",
+          "normalized_id": "MANUAL_BACK_OUT"
+        },
+        {
+          "step": 15,
+          "source_label": "TURN TO ATT BURN",
+          "normalized_id": "TURN_TO_ATTITUDE_BURN"
+        },
+        {
+          "step": 16,
+          "source_label": "AUX DEPARTURE",
+          "normalized_id": "AUXILIARY_DEPARTURE"
+        },
+        {
+          "step": 17,
+          "source_label": "LONG RANGE FTO",
+          "normalized_id": "LONG_RANGE_FLIGHT_TEST_OBJECTIVE"
+        }
+      ],
+      "geometry_context": {
+        "manual_takeover_range_approx_ft": 300.0,
+        "close_range_handling_stop_about_ft": 30.0,
+        "reference_guide_evaluation_1_range_m": 10.0,
+        "reference_guide_evaluation_2_range_m": 15.0,
+        "planned_values_are_as_flown_measurements": false,
+        "thirty_ft_forced_equal_to_ten_meter_reference_step": false,
+        "thirty_ft_forced_equal_to_fifteen_meter_reference_step": false,
+        "interpretation": "The mission update and SLS reference guide provide related but differently expressed planned geometry. MissionLab preserves each source statement and does not force exact equivalence between the approximately 30-foot narrative stop and either reference-guide evaluation step."
+      }
+    },
+    "as_flown": {
+      "execution_status": "COMPLETED",
+      "duration_minutes": 70.0,
+      "duration_semantics": "APPROXIMATELY",
+      "reference_target": "DETACHED_ICPS",
+      "controlled_approach_confirmed": true,
+      "controlled_retreat_confirmed": true,
+      "onboard_navigation_sensors_used": true,
+      "reaction_control_thrusters_used": true,
+      "automated_departure_confirmed": true,
+      "all_17_planned_steps_confirmed_individually": false,
+      "planned_300_ft_gate_confirmed_as_measured_as_flown_range": false,
+      "planned_30_ft_stop_confirmed_as_measured_as_flown_range": false,
+      "planned_10m_evaluation_confirmed_as_measured_as_flown_range": false,
+      "planned_15m_evaluation_confirmed_as_measured_as_flown_range": false,
+      "exact_relative_range_history_available": false,
+      "exact_relative_velocity_history_available": false,
+      "exact_attitude_history_available": false,
+      "exact_rhc_history_available": false,
+      "exact_thc_history_available": false,
+      "exact_individual_thruster_history_available": false
+    },
+    "control_authority_states": [
+      {
+        "order": 1,
+        "state": "AUTOMATED_PRE_MANUAL_PROXIMITY_OPERATIONS",
+        "evidence_scope": "PREMISSION_ARCHITECTURE_AND_PLAN",
+        "exact_transition_utc": null
+      },
+      {
+        "order": 2,
+        "state": "CREW_MANUAL_PROXIMITY_OPERATIONS",
+        "evidence_scope": "AS_FLOWN_CONFIRMED",
+        "exact_transition_utc": null
+      },
+      {
+        "order": 3,
+        "state": "AUTOMATED_DEPARTURE",
+        "evidence_scope": "AS_FLOWN_CONFIRMED",
+        "exact_transition_utc": null
+      }
+    ],
+    "docking_camera_context": {
+      "used_during_departure_for_positioning_measurements": true,
+      "purpose": "FUTURE_RENDEZVOUS_NAVIGATION_ENGINEERING_KNOWLEDGE",
+      "promoted_to_confirmed_closed_loop_navigation_input": false
+    }
+  },
+  "flight_day_4_manual_piloting": {
+    "execution_status": "COMPLETED",
+    "reported_start_local": "2026-04-04T21:09:00-04:00",
+    "reported_timezone_label": "EDT",
+    "timestamp_precision": "MINUTE_LEVEL",
+    "derived_start_utc": "2026-04-05T01:09:00Z",
+    "derived_start_met": "03:02:33:48",
+    "duration_minutes": 41.0,
+    "derived_end_utc": "2026-04-05T01:50:00Z",
+    "derived_end_met": "03:03:14:48",
+    "derived_end_precision": "INHERITS_MINUTE_LEVEL_START_AND_REPORTED_DURATION",
+    "participants": [
+      "Christina Koch",
+      "Jeremy Hansen"
+    ],
+    "reported_control_mode_labels": [
+      "SIX_DEGREES_OF_FREEDOM",
+      "THREE_DEGREES_OF_FREEDOM"
+    ],
+    "mode_labels_define_complete_control_algorithm": false,
+    "six_dof_control_algorithm_available": false,
+    "three_dof_control_algorithm_available": false,
+    "control_mode_gain_schedule_available": false,
+    "thruster_allocation_algorithm_available": false,
+    "controller_input_history_available": false,
+    "individual_thruster_history_available": false,
+    "attitude_time_series_available": false
+  },
+  "flight_day_8_manual_piloting": {
+    "execution_status": "FOREGONE",
+    "reported_planned_local": "2026-04-08T22:55:00-04:00",
+    "reported_timezone_label": "EDT",
+    "timestamp_precision": "MINUTE_LEVEL_PLANNED_ANCHOR",
+    "derived_planned_utc": "2026-04-09T02:55:00Z",
+    "derived_planned_met": "07:04:19:48",
+    "planned_objectives": [
+      "CENTER_DESIGNATED_TARGET",
+      "GUIDE_TO_TAIL_TO_SUN_ATTITUDE",
+      "COMPARE_SIX_DOF_AND_THREE_DOF_ATTITUDE_CONTROL_MODES"
+    ],
+    "performed": false,
+    "planned_timestamp_is_executed_event_timestamp": false,
+    "as_flown_manual_control_data_generated_by_this_foregone_activity": false
+  },
+  "evidence_boundaries": {
+    "planned_proximity_sequence_available": true,
+    "planned_proximity_geometry_available": true,
+    "as_flown_proximity_completion_available": true,
+    "as_flown_approach_retreat_sequence_available": true,
+    "as_flown_rcs_use_available": true,
+    "as_flown_onboard_navigation_sensor_use_available": true,
+    "as_flown_automated_departure_available": true,
+    "flight_day_4_execution_available": true,
+    "flight_day_4_control_mode_labels_available": true,
+    "all_17_planned_steps_confirmed_as_flown": false,
+    "as_flown_relative_range_time_history_available": false,
+    "as_flown_relative_velocity_time_history_available": false,
+    "as_flown_attitude_time_history_available": false,
+    "as_flown_rhc_input_history_available": false,
+    "as_flown_thc_input_history_available": false,
+    "as_flown_individual_thruster_history_available": false,
+    "six_dof_control_algorithm_available": false,
+    "three_dof_control_algorithm_available": false,
+    "control_mode_gain_schedule_available": false,
+    "thruster_allocation_algorithm_available": false,
+    "exact_manual_automatic_transition_times_available": false,
+    "flight_day_8_execution_available": false
+  },
+  "guardrails": [
+    "The 17-step proximity-operations sequence is a premission plan and is not an as-flown step-by-step event log.",
+    "Planned proximity range values are not measured as-flown Artemis II relative-range history.",
+    "The approximately 70-minute as-flown duration does not establish exact proximity-operations start or stop timestamps.",
+    "A manual-control mode does not mean that the hand controller directly switches individual thrusters.",
+    "A crew controller command is not an individual thruster-firing history.",
+    "Reported RCS use does not establish the exact thruster-allocation sequence.",
+    "The six-degrees-of-freedom mode label does not disclose the six-DOF control algorithm.",
+    "The three-degrees-of-freedom mode label does not disclose the three-DOF control algorithm.",
+    "Successful completion of proximity operations does not prove that every premission reference-guide step executed exactly as planned.",
+    "The approximately 300-foot and about 30-foot planning descriptions are not confirmed as-flown range measurements.",
+    "The reference-guide 10 m and 15 m handling-quality evaluation labels are planning geometry and are not promoted to as-flown range measurements.",
+    "The narrative approximately 30-foot stop is not silently forced to be identical to either the 10 m or 15 m reference-guide evaluation.",
+    "The confirmed automated departure does not establish the exact manual-to-automatic transition time.",
+    "The Flight Day 8 planned manual demonstration was foregone and must not be represented as executed.",
+    "The Flight Day 8 planned timestamp is not an executed GNC event timestamp.",
+    "The docking-camera measurement context is not promoted to a confirmed closed-loop navigation input without explicit evidence."
+  ]
+}

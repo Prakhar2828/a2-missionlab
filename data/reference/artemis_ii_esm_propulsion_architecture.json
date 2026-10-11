@@ -1,0 +1,319 @@
+{
+  "dataset_id": "phase2i2_artemis_ii_esm_propulsion_architecture",
+  "mission": "Artemis II",
+  "scope": "Source-backed reconstruction of Orion European Service Module propulsion architecture and the public evidence boundary for selecting propulsion hardware for Artemis II trajectory correction burns.",
+  "provenance": "NASA_AND_ESA_REPORTED_WITH_MISSIONLAB_DERIVED_ARCHITECTURE_METRICS",
+  "evidence_policy": {
+    "architecture_capability_is_not_burn_assignment": true,
+    "premission_plan_is_not_as_flown_assignment": true,
+    "operational_selection_rule_is_not_as_flown_assignment": true,
+    "generic_thruster_wording_is_not_engine_class_identification": true,
+    "burn_duration_is_not_engine_class_identification": true,
+    "delta_v_magnitude_is_not_engine_class_identification": true
+  },
+  "sources": [
+    {
+      "source_id": "esa_esm_propulsion_architecture",
+      "organization": "European Space Agency",
+      "title": "European Service Module: Propulsion",
+      "url": "https://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/Orion/European_Service_Module_Propulsion",
+      "evidence_stage": "SYSTEM_ARCHITECTURE",
+      "claims_used": [
+        "The European Service Module propulsion system contains 33 engines of three types.",
+        "The main engine provides 25.7 kN and is gimballed in pitch and yaw.",
+        "Eight fixed R-4D-11 auxiliary engines provide 490 N each.",
+        "The auxiliary engines provide orbit corrections and backup capability for the main engine.",
+        "Twenty-four 220 N reaction-control engines are arranged in six pods of four.",
+        "The reaction-control engines provide attitude control."
+      ]
+    },
+    {
+      "source_id": "esa_artemis_ii_engines",
+      "organization": "European Space Agency",
+      "title": "European Service Module engines powering Artemis II",
+      "date": "2026-03-30",
+      "url": "https://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/European_Service_Module_engines_powering_Artemis_II",
+      "evidence_stage": "ARTEMIS_II_ARCHITECTURE",
+      "claims_used": [
+        "Artemis II carries 33 European Service Module engines.",
+        "One main engine provides large velocity changes.",
+        "Eight auxiliary engines support orbital corrections and can back up the main engine.",
+        "Twenty-four reaction-control engines are arranged in six pods and provide precise rotational and orientation control.",
+        "The reaction-control system engines are used during the Artemis II proximity-operations demonstration.",
+        "The European Service Module main engine performs Artemis II translunar injection."
+      ]
+    },
+    {
+      "source_id": "esa_how_to_go_to_moon",
+      "organization": "European Space Agency",
+      "title": "How to go to the Moon",
+      "date": "2026-04-02",
+      "url": "https://blogs.esa.int/orion/2026/04/02/how-to-go-to-the-moon/",
+      "evidence_stage": "MISSION_OPERATIONAL_EXPLANATION",
+      "claims_used": [
+        "Artemis II translunar injection uses the European Service Module main engine.",
+        "Trajectory correction maneuvers use the European Service Module's smaller engines.",
+        "Flight rules determine which engine class is used for a trajectory correction.",
+        "Auxiliary engines are available for larger adjustments and as backup for the main engine.",
+        "Reaction-control thrusters are available for finer corrections.",
+        "A brief reaction-control firing of around ten seconds was given as an example of a slight correction."
+      ]
+    },
+    {
+      "source_id": "nasa_artemis_ii_press_kit",
+      "organization": "NASA",
+      "title": "Artemis II Press Kit",
+      "date": "2026-01",
+      "url": "https://www.nasa.gov/artemis-ii-press-kit/",
+      "evidence_stage": "PREMISSION_PLAN",
+      "claims_used": [
+        "NASA's premission plan described three smaller outbound trajectory correction burns as using Orion's orbital maneuvering system engine.",
+        "The translunar injection was planned for Orion's main engine.",
+        "Three return trajectory correction burns were planned on the trans-Earth leg."
+      ]
+    },
+    {
+      "source_id": "nasa_perigee_raise_complete",
+      "organization": "NASA",
+      "title": "Artemis II Flight Update: Perigee Raise Burn Complete",
+      "date": "2026-04-02",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/02/artemis-ii-flight-update-perigee-raise-burn-complete/",
+      "evidence_stage": "AS_FLOWN_REPORT",
+      "claims_used": [
+        "Orion ignited the service module main engine for 43 seconds for the perigee raise burn."
+      ]
+    },
+    {
+      "source_id": "esa_artemis_ii_splashdown",
+      "organization": "European Space Agency",
+      "title": "Artemis II: splashdown",
+      "date": "2026-04-11",
+      "url": "https://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/Artemis_II_splashdown",
+      "evidence_stage": "POSTFLIGHT_AS_FLOWN",
+      "claims_used": [
+        "The Artemis II translunar injection was a 350-second burn performed by the European Service Module main engine.",
+        "The translunar injection was sufficiently precise that two of the three planned outbound trajectory corrections were cancelled.",
+        "Three trajectory correction burns occurred during the return to Earth."
+      ]
+    },
+    {
+      "source_id": "nasa_otc3_complete",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 5: Correction Burn Complete",
+      "date": "2026-04-05",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/05/artemis-ii-flight-day-5-correction-burn-complete/",
+      "evidence_stage": "AS_FLOWN_REPORT",
+      "claims_used": [
+        "The executed outbound correction began at 11:03 p.m. EDT and lasted 17.5 seconds.",
+        "The report does not identify a specific propulsion engine class."
+      ]
+    },
+    {
+      "source_id": "nasa_rtc1_complete",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 7: First Return Correction Burn Complete",
+      "date": "2026-04-07",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/07/artemis-ii-flight-day-7-first-return-correction-burn-complete/",
+      "evidence_stage": "AS_FLOWN_REPORT",
+      "claims_used": [
+        "RTC1 ignited Orion's thrusters for 15 seconds.",
+        "RTC1 produced a reported velocity change of 1.6 feet per second.",
+        "The report does not identify the propulsion engine class."
+      ]
+    },
+    {
+      "source_id": "nasa_rtc2_complete",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 9: Second Return Correction Burn Complete",
+      "date": "2026-04-10",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/10/artemis-ii-flight-day-9-second-return-correction-burn-complete/",
+      "evidence_stage": "AS_FLOWN_REPORT",
+      "claims_used": [
+        "RTC2 ignited Orion's thrusters for nine seconds.",
+        "RTC2 produced a reported velocity change of 5.3 feet per second.",
+        "The report does not identify the propulsion engine class."
+      ]
+    },
+    {
+      "source_id": "nasa_rtc3_complete",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 10: Crew Completes Final Burn Before Splashdown",
+      "date": "2026-04-10",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/10/artemis-ii-flight-day-10-crew-completes-final-burn-before-splashdown/",
+      "evidence_stage": "AS_FLOWN_REPORT",
+      "claims_used": [
+        "RTC3 ignited Orion's thrusters for eight seconds.",
+        "RTC3 produced a reported velocity change of 4.2 feet per second.",
+        "The report does not identify the propulsion engine class."
+      ]
+    }
+  ],
+  "architecture": {
+    "system_id": "orion_european_service_module_propulsion",
+    "engine_class_count": 3,
+    "total_engine_count": 33,
+    "artemis_ii_count_role_source_id": "esa_artemis_ii_engines",
+    "detailed_hardware_source_id": "esa_esm_propulsion_architecture",
+    "engine_classes": [
+      {
+        "engine_class_id": "main_engine_oms_e",
+        "display_name": "Orbital Maneuvering System Engine",
+        "short_name": "OMS-E",
+        "count": 1,
+        "nominal_thrust_newtons_each": 25700.0,
+        "gimballed": true,
+        "fixed": false,
+        "primary_role": "MAJOR_IN_SPACE_MANEUVERS",
+        "artemis_ii_role": "LARGE_VELOCITY_CHANGE",
+        "hardware_detail_source_id": "esa_esm_propulsion_architecture",
+        "artemis_ii_role_source_id": "esa_artemis_ii_engines"
+      },
+      {
+        "engine_class_id": "auxiliary_r4d11",
+        "display_name": "R-4D-11 Auxiliary Engine",
+        "short_name": "AUXILIARY",
+        "count": 8,
+        "nominal_thrust_newtons_each": 490.0,
+        "gimballed": false,
+        "fixed": true,
+        "primary_role": "ORBITAL_AND_TRAJECTORY_CORRECTIONS",
+        "main_engine_backup": true,
+        "hardware_detail_source_id": "esa_esm_propulsion_architecture",
+        "artemis_ii_role_source_id": "esa_artemis_ii_engines"
+      },
+      {
+        "engine_class_id": "reaction_control_system",
+        "display_name": "Reaction Control System Engine",
+        "short_name": "RCS",
+        "count": 24,
+        "nominal_thrust_newtons_each": 220.0,
+        "gimballed": false,
+        "fixed": true,
+        "pod_count": 6,
+        "engines_per_pod": 4,
+        "primary_role": "ATTITUDE_AND_FINE_CONTROL",
+        "hardware_detail_source_id": "esa_esm_propulsion_architecture",
+        "artemis_ii_role_source_id": "esa_artemis_ii_engines"
+      }
+    ]
+  },
+  "confirmed_as_flown_major_maneuvers": [
+    {
+      "maneuver_id": "perigee_raise",
+      "engine_class_id": "main_engine_oms_e",
+      "assignment_status": "CONFIRMED_AS_FLOWN",
+      "duration_seconds": 43.0,
+      "source_id": "nasa_perigee_raise_complete"
+    },
+    {
+      "maneuver_id": "tli",
+      "engine_class_id": "main_engine_oms_e",
+      "assignment_status": "CONFIRMED_AS_FLOWN",
+      "duration_seconds": 350.0,
+      "source_id": "esa_artemis_ii_splashdown"
+    }
+  ],
+  "trajectory_correction_selection_evidence": [
+    {
+      "evidence_id": "nasa_premission_outbound_oms_plan",
+      "organization": "NASA",
+      "evidence_stage": "PREMISSION_PLAN",
+      "scope": "THREE_PLANNED_OUTBOUND_TRAJECTORY_CORRECTIONS",
+      "engine_selection_claim": "OMS_E",
+      "burn_specific_as_flown_assignment": false,
+      "source_id": "nasa_artemis_ii_press_kit"
+    },
+    {
+      "evidence_id": "esa_operational_correction_selection",
+      "organization": "ESA",
+      "evidence_stage": "MISSION_OPERATIONAL_EXPLANATION",
+      "scope": "TRAJECTORY_CORRECTION_MANEUVERS",
+      "engine_selection_claim": "AUXILIARY_OR_RCS_DEPENDING_ON_REQUIRED_CORRECTION_AND_FLIGHT_RULES",
+      "larger_correction_class": "AUXILIARY",
+      "finer_correction_class": "RCS",
+      "burn_specific_as_flown_assignment": false,
+      "source_id": "esa_how_to_go_to_moon"
+    }
+  ],
+  "source_relationship": {
+    "classification": "SOURCE_SCOPE_OR_PLAN_DIFFERENCE_PRESERVED",
+    "nasa_premission_claim": "THREE_PLANNED_OUTBOUND_CORRECTIONS_USE_OMS_E",
+    "esa_operational_claim": "CORRECTION_ENGINE_SELECTED_FROM_SMALLER_ENGINES_BY_FLIGHT_RULES_AND_REQUIRED_CORRECTION",
+    "treated_as_identical": false,
+    "forced_reconciliation": false,
+    "burn_specific_resolution_available": false,
+    "interpretation": "The NASA premission plan and ESA operational explanation are preserved as distinct evidence layers. They may reflect different planning assumptions, scope, or evolving operational practice. Without burn-specific as-flown identification, MissionLab does not select one claim as the executed engine assignment."
+  },
+  "correction_burn_assignments": [
+    {
+      "maneuver_id": "otc3",
+      "duration_seconds": 17.5,
+      "reported_delta_v_ft_s": null,
+      "as_flown_engine_class_id": null,
+      "assignment_status": "UNRESOLVED_AS_FLOWN",
+      "as_flown_wording": "OUTBOUND_CORRECTION_BURN",
+      "source_id": "nasa_otc3_complete"
+    },
+    {
+      "maneuver_id": "rtc1",
+      "duration_seconds": 15.0,
+      "reported_delta_v_ft_s": 1.6,
+      "as_flown_engine_class_id": null,
+      "assignment_status": "UNRESOLVED_AS_FLOWN",
+      "as_flown_wording": "IGNITED_ITS_THRUSTERS",
+      "source_id": "nasa_rtc1_complete"
+    },
+    {
+      "maneuver_id": "rtc2",
+      "duration_seconds": 9.0,
+      "reported_delta_v_ft_s": 5.3,
+      "as_flown_engine_class_id": null,
+      "assignment_status": "UNRESOLVED_AS_FLOWN",
+      "as_flown_wording": "IGNITED_ITS_THRUSTERS",
+      "source_id": "nasa_rtc2_complete"
+    },
+    {
+      "maneuver_id": "rtc3",
+      "duration_seconds": 8.0,
+      "reported_delta_v_ft_s": 4.2,
+      "as_flown_engine_class_id": null,
+      "assignment_status": "UNRESOLVED_AS_FLOWN",
+      "as_flown_wording": "IGNITED_ITS_THRUSTERS",
+      "source_id": "nasa_rtc3_complete"
+    }
+  ],
+  "selection_boundary": {
+    "flight_rules_influence_engine_selection": true,
+    "required_correction_influences_engine_selection": true,
+    "larger_corrections_may_use_auxiliary": true,
+    "finer_corrections_may_use_rcs": true,
+    "exact_public_selection_thresholds_available": false,
+    "exact_public_selection_algorithm_available": false,
+    "otc3_exact_engine_assignment_available": false,
+    "rtc1_exact_engine_assignment_available": false,
+    "rtc2_exact_engine_assignment_available": false,
+    "rtc3_exact_engine_assignment_available": false
+  },
+  "derived_metric_policy": {
+    "per_engine_nominal_thrust_ratios_allowed": true,
+    "ratios_are_architecture_context_only": true,
+    "ratios_are_not_spacecraft_acceleration_ratios": true,
+    "installed_engine_count_times_thrust_is_not_one_direction_available_thrust": true,
+    "thrust_times_duration_is_not_computed_as_maneuver_impulse_without_as_flown_engine_assignment": true
+  },
+  "guardrails": [
+    "European Service Module propulsion architecture describes capability and does not by itself establish burn-specific as-flown engine selection.",
+    "The NASA premission outbound-correction OMS-E plan is not treated as burn-specific as-flown evidence.",
+    "The ESA flight-rule explanation is not treated as a burn-specific assignment record.",
+    "The NASA and ESA correction-engine descriptions are preserved as separate evidence layers rather than silently reconciled.",
+    "The phrase 'ignited its thrusters' does not identify the auxiliary engine class.",
+    "The phrase 'ignited its thrusters' does not identify the reaction-control engine class.",
+    "OTC3 lacking explicit engine-class wording does not permit an inferred engine assignment.",
+    "Burn duration alone does not establish engine class.",
+    "Reported delta-v magnitude alone does not establish engine class.",
+    "Per-engine nominal thrust ratios are architecture comparisons only and are not spacecraft acceleration ratios.",
+    "Twenty-four RCS engines multiplied by 220 N must not be interpreted as simultaneously available one-direction thrust.",
+    "No burn-specific impulse is computed from nominal thrust and duration when the as-flown engine assignment is unresolved.",
+    "Perigee raise and translunar injection are retained as confirmed main-engine examples and must not be generalized automatically to the smaller trajectory corrections."
+  ]
+}

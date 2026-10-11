@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">A2 MissionLab Artemis II Release Overview</title>
+  <desc id="desc">Architecture overview showing public evidence, deterministic engineering analysis, mission-control perspectives, and the Mission Analyst.</desc>
+
+  <rect width="1600" height="900" fill="#05080e"/>
+  <circle cx="1380" cy="80" r="260" fill="#0d2034"/>
+  <circle cx="1380" cy="80" r="180" fill="#102b47"/>
+
+  <text x="90" y="105" fill="#8fbdec" font-family="Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="4">
+    ARTEMIS II · PUBLIC-EVIDENCE ENGINEERING RECONSTRUCTION
+  </text>
+
+  <text x="90" y="180" fill="#f1f6fb" font-family="Arial, sans-serif" font-size="72" font-weight="700">
+    A2 MissionLab
+  </text>
+
+  <text x="90" y="230" fill="#9fb1c5" font-family="Arial, sans-serif" font-size="30">
+    One mission clock. Multiple engineering disciplines. Explicit evidence boundaries.
+  </text>
+
+  <line x1="120" y1="450" x2="1480" y2="450" stroke="#35516f" stroke-width="4"/>
+
+  <g font-family="Arial, sans-serif">
+    <rect x="90" y="330" width="260" height="190" rx="16" fill="#0b1420" stroke="#2e4c6c" stroke-width="2"/>
+    <text x="120" y="375" fill="#8fbdec" font-size="19" font-weight="700">PUBLIC EVIDENCE</text>
+    <text x="120" y="415" fill="#edf4fb" font-size="22">NASA reporting</text>
+    <text x="120" y="450" fill="#edf4fb" font-size="22">AROW trajectory</text>
+    <text x="120" y="485" fill="#edf4fb" font-size="22">PDS · OMNI · LRO</text>
+
+    <rect x="420" y="330" width="310" height="190" rx="16" fill="#0b1420" stroke="#2e4c6c" stroke-width="2"/>
+    <text x="450" y="375" fill="#8fbdec" font-size="19" font-weight="700">ENGINEERING ANALYSIS</text>
+    <text x="450" y="415" fill="#edf4fb" font-size="22">Flight dynamics · GNC</text>
+    <text x="450" y="450" fill="#edf4fb" font-size="22">Systems · Entry · Science</text>
+    <text x="450" y="485" fill="#edf4fb" font-size="22">Derived ≠ reported</text>
+
+    <rect x="800" y="330" width="310" height="190" rx="16" fill="#0b1420" stroke="#2e4c6c" stroke-width="2"/>
+    <text x="830" y="375" fill="#8fbdec" font-size="19" font-weight="700">MISSION OPERATIONS</text>
+    <text x="830" y="415" fill="#edf4fb" font-size="22">24 shared mission events</text>
+    <text x="830" y="450" fill="#edf4fb" font-size="22">7 discipline lenses</text>
+    <text x="830" y="485" fill="#edf4fb" font-size="22">10 decision threads</text>
+
+    <rect x="1180" y="330" width="330" height="190" rx="16" fill="#0b1420" stroke="#5f8fc3" stroke-width="2"/>
+    <text x="1210" y="375" fill="#8fbdec" font-size="19" font-weight="700">MISSION ANALYST</text>
+    <text x="1210" y="415" fill="#edf4fb" font-size="22">146 searchable records</text>
+    <text x="1210" y="450" fill="#edf4fb" font-size="22">8 deterministic tools</text>
+    <text x="1210" y="485" fill="#edf4fb" font-size="22">Citation-first answers</text>
+  </g>
+
+  <g fill="#88bdf2">
+    <circle cx="385" cy="450" r="8"/>
+    <circle cx="765" cy="450" r="8"/>
+    <circle cx="1145" cy="450" r="8"/>
+  </g>
+
+  <g font-family="Arial, sans-serif">
+    <text x="90" y="625" fill="#9fb1c5" font-size="18" font-weight="700" letter-spacing="3">VALIDATED RELEASE SCALE</text>
+
+    <text x="90" y="690" fill="#f1f6fb" font-size="42" font-weight="700">25</text>
+    <text x="90" y="725" fill="#9fb1c5" font-size="18">reference datasets</text>
+
+    <text x="325" y="690" fill="#f1f6fb" font-size="42" font-weight="700">81</text>
+    <text x="325" y="725" fill="#9fb1c5" font-size="18">public sources</text>
+
+    <text x="540" y="690" fill="#f1f6fb" font-size="42" font-weight="700">24</text>
+    <text x="540" y="725" fill="#9fb1c5" font-size="18">mission events</text>
+
+    <text x="755" y="690" fill="#f1f6fb" font-size="42" font-weight="700">10</text>
+    <text x="755" y="725" fill="#9fb1c5" font-size="18">decision threads</text>
+
+    <text x="995" y="690" fill="#f1f6fb" font-size="42" font-weight="700">146</text>
+    <text x="995" y="725" fill="#9fb1c5" font-size="18">searchable records</text>
+
+    <text x="1265" y="690" fill="#f1f6fb" font-size="42" font-weight="700">8 + 8</text>
+    <text x="1265" y="725" fill="#9fb1c5" font-size="18">tools + answer routes</text>
+  </g>
+
+  <rect x="90" y="790" width="1420" height="1" fill="#25384e"/>
+
+  <text x="90" y="835" fill="#7ee2b8" font-family="Arial, sans-serif" font-size="20" font-weight="700">
+    PUBLIC EVIDENCE ONLY · UNKNOWN MEANS UNKNOWN · NO PAID MODEL DEPENDENCY
+  </text>
+</svg>

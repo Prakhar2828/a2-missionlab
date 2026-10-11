@@ -1,103 +1,175 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="A2 MissionLab — public-data Artemis II mission operations and engineering reconstruction." />
-  <title>A2 MissionLab</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta
+    name="description"
+    content="A2 MissionLab — evidence-grounded Artemis II mission operations and engineering reconstruction."
+  >
+  <meta name="theme-color" content="#05080e">
+  <title>A2 MissionLab — Artemis II Mission Reconstruction</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to mission content</a>
+
   <header class="topbar">
     <div>
-      <div class="eyebrow">ARTEMIS II · PUBLIC-DATA RECONSTRUCTION</div>
+      <div class="eyebrow">ARTEMIS II · PUBLIC-EVIDENCE RECONSTRUCTION</div>
       <h1>A2 MissionLab</h1>
       <p class="subtitle">Mission Operations & Engineering Reconstruction</p>
     </div>
-    <div class="status-card">
-      <span class="pulse"></span>
-      <div><strong>PHASE 0</strong><small>Foundation prototype</small></div>
+
+    <div class="status-card" aria-label="Project publication status">
+      <span class="status-dot" aria-hidden="true"></span>
+      <div>
+        <strong>PHASE 9</strong>
+        <small>Publication quality</small>
+      </div>
     </div>
   </header>
 
-  <main>
-    <section class="hero-grid">
-      <div class="mission-clock panel">
-        <div class="panel-label">MISSION CLOCK</div>
-        <div id="clock-time" class="clock-time">—</div>
-        <div id="clock-phase" class="clock-phase">Select an event</div>
+  <nav class="project-nav" aria-label="Project navigation">
+    <a href="#overview">Overview</a>
+    <a href="#timeline">Mission timeline</a>
+    <a href="#provenance">Provenance</a>
+    <a href="docs/METHODOLOGY.md">Methodology</a>
+    <a href="docs/VALIDATION_REPORT.md">Validation</a>
+    <a href="docs/ANALYST_GUIDE.md">Mission Analyst</a>
+  </nav>
+
+  <main id="main-content">
+    <section id="overview" class="hero-grid" aria-labelledby="overview-title">
+      <div class="panel hero-copy">
+        <div class="panel-label">EVIDENCE-GROUNDED MISSION RECONSTRUCTION</div>
+        <h2 id="overview-title">One mission clock. Multiple engineering disciplines. Explicit evidence boundaries.</h2>
+        <p>
+          MissionLab connects public Artemis II trajectory, spacecraft systems,
+          communications, lunar science, entry and recovery, mission-control
+          perspectives, and postflight engineering without inventing unavailable telemetry.
+        </p>
       </div>
-      <div class="panel mission-principle">
-        <div class="panel-label">OPERATIONS PRINCIPLE</div>
-        <blockquote>Observe → Understand → Integrate → Decide → Verify</blockquote>
-        <p>Every displayed item must expose what came from NASA, what was derived, and what was modeled.</p>
+
+      <div class="panel metrics-panel" aria-labelledby="metrics-title">
+        <div class="panel-label" id="metrics-title">VALIDATED ANALYST INVENTORY</div>
+        <div id="metric-grid" class="metric-grid" aria-live="polite">
+          <p class="loading-copy">Loading publication metrics…</p>
+        </div>
       </div>
     </section>
 
-    <section class="controls panel">
-      <label>
-        Domain
-        <select id="domain-filter"><option value="ALL">All domains</option></select>
-      </label>
-      <label>
-        Provenance
-        <select id="provenance-filter">
-          <option value="ALL">All provenance</option>
-          <option value="FLIGHT_DATA">FLIGHT DATA</option>
-          <option value="NASA_REPORTED">NASA REPORTED</option>
-          <option value="DERIVED">DERIVED</option>
-          <option value="MODEL">MODEL</option>
-          <option value="SYNTHETIC">SYNTHETIC</option>
-        </select>
-      </label>
-      <label>
-        Criticality
-        <select id="criticality-filter">
-          <option value="ALL">All criticalities</option>
-          <option value="CRITICAL">Critical</option>
-          <option value="HIGH">High</option>
-          <option value="MEDIUM">Medium</option>
-          <option value="LOW">Low</option>
-        </select>
-      </label>
-      <button id="reset-btn" type="button">Reset</button>
+    <section class="mission-clock panel" aria-labelledby="clock-label">
+      <div class="panel-label" id="clock-label">SELECTED MISSION EVENT</div>
+      <div id="clock-time" class="clock-time">—</div>
+      <div id="clock-phase" class="clock-phase">Select an event below</div>
     </section>
 
-    <section class="workspace">
+    <section class="controls panel" aria-labelledby="filter-title">
+      <div class="control-heading">
+        <div class="panel-label" id="filter-title">TIMELINE FILTERS</div>
+        <p>Filter the validated Phase 7 shared mission timeline.</p>
+      </div>
+
+      <label>
+        Primary discipline
+        <select id="discipline-filter">
+          <option value="ALL">All disciplines</option>
+        </select>
+      </label>
+
+      <label>
+        Evidence
+        <select id="evidence-filter">
+          <option value="ALL">All evidence classes</option>
+        </select>
+      </label>
+
+      <button id="reset-btn" type="button">Reset filters</button>
+    </section>
+
+    <section id="timeline" class="workspace" aria-labelledby="timeline-title">
       <aside class="timeline panel">
         <div class="panel-heading">
           <div>
-            <div class="panel-label">MISSION TIMELINE</div>
-            <h2>Public event backbone</h2>
+            <div class="panel-label">VALIDATED SHARED TIMELINE</div>
+            <h2 id="timeline-title">Mission events</h2>
           </div>
-          <span id="event-count" class="count">0</span>
+          <span id="event-count" class="count" aria-label="Visible event count">0</span>
         </div>
-        <div id="event-list" class="event-list" aria-live="polite"></div>
+
+        <div
+          id="event-list"
+          class="event-list"
+          aria-live="polite"
+          aria-label="Mission event list"
+        ></div>
       </aside>
 
-      <section class="detail panel" id="detail-panel">
+      <section
+        class="detail panel"
+        id="detail-panel"
+        aria-labelledby="detail-title"
+        tabindex="-1"
+      >
         <div class="empty-state">
-          <div class="orbital-icon">◌</div>
-          <h2>Select a mission event</h2>
-          <p>Inspect its disciplines, public evidence, limitations, and decision thread.</p>
+          <div class="orbital-icon" aria-hidden="true">◌</div>
+          <h2 id="detail-title">Select a mission event</h2>
+          <p>
+            Inspect validated timing, evidence class, Mission Elapsed Time,
+            classification, and discipline relevance.
+          </p>
         </div>
       </section>
     </section>
 
-    <section class="provenance-legend panel">
-      <div class="panel-label">PROVENANCE LEGEND</div>
-      <div class="legend-grid">
-        <span class="badge flight">FLIGHT DATA</span><p>Direct public flight-derived value.</p>
-        <span class="badge nasa">NASA REPORTED</span><p>Publicly reported event or fact without raw telemetry here.</p>
-        <span class="badge derived">DERIVED</span><p>Deterministically calculated from public data.</p>
-        <span class="badge model">MODEL</span><p>Physical/statistical estimate with explicit assumptions.</p>
-        <span class="badge synthetic">SYNTHETIC</span><p>Invented only for testing or training.</p>
+    <section id="provenance" class="provenance-legend panel" aria-labelledby="provenance-title">
+      <div class="panel-label" id="provenance-title">EVIDENCE BOUNDARIES</div>
+
+      <div class="boundary-grid">
+        <article>
+          <strong>NASA REPORTED</strong>
+          <p>Publicly reported mission fact or event.</p>
+        </article>
+
+        <article>
+          <strong>MISSIONLAB DERIVED</strong>
+          <p>Deterministic result calculated from public inputs, not onboard telemetry.</p>
+        </article>
+
+        <article>
+          <strong>KNOWN UNKNOWN</strong>
+          <p>Missing public evidence remains explicitly unresolved.</p>
+        </article>
+
+        <article>
+          <strong>CAUSATION</strong>
+          <p>Temporal sequence is never promoted to causation without evidence.</p>
+        </article>
       </div>
     </section>
+
+    <section class="boundary-callout panel" aria-label="MissionLab evidence rules">
+      <code>MISSIONLAB DERIVED != NASA REPORTED</code>
+      <code>TEMPORAL SEQUENCE != CAUSATION</code>
+      <code>UNKNOWN PUBLIC FACT != PERMISSION TO INVENT</code>
+    </section>
+
+    <p id="app-status" class="sr-only" aria-live="assertive"></p>
   </main>
 
   <footer>
-    Independent open-source project using publicly released NASA data. Not an official NASA application and not NASA-endorsed.
+    <p>
+      Independent open-source project using publicly released NASA data.
+      Not an official NASA application and not NASA-endorsed.
+    </p>
+    <p>
+      <a href="README.md">README</a>
+      ·
+      <a href="DISCLAIMER.md">Disclaimer</a>
+      ·
+      <a href="docs/ROADMAP.md">Roadmap</a>
+    </p>
   </footer>
 
   <script src="app.js" defer></script>

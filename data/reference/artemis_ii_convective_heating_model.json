@@ -1,0 +1,76 @@
+{
+  "model_id": "phase2e4_sutton_graves_convective_heating",
+  "mission": "Artemis II",
+  "provenance": "MODEL_DERIVED",
+  "correlation": {
+    "name": "Sutton-Graves stagnation-point convective heating correlation",
+    "equation": "q_dot = k * sqrt(rho / Rn) * V^3",
+    "earth_constant": 1.74153e-4,
+    "input_units": {
+      "density": "kg/m^3",
+      "nose_radius": "m",
+      "velocity": "m/s"
+    },
+    "output_units": "W/m^2",
+    "boundary_condition": "cold-wall engineering correlation",
+    "source": "NASA engineering implementation of the Sutton-Graves relation",
+    "source_url": "https://ntrs.nasa.gov/api/citations/20060004824/downloads/20060004824.pdf",
+    "original_reference": "Sutton and Graves, NASA TR R-376, 1971",
+    "original_reference_url": "https://ntrs.nasa.gov/citations/19720003329"
+  },
+  "geometry": {
+    "reference_nose_radius_m": 6.035,
+    "interpretation": "Orion EFT-1 heritage/reference nose radius",
+    "source": "NASA Planetary Mission Entry Vehicle Quick Reference Guide Version 4.1",
+    "source_url": "https://www.nasa.gov/wp-content/uploads/2023/08/final-planetary-mission-entry-vehicles-quick-reference-guide-v4.1-.pdf",
+    "provenance": "ORION_EFT1_HERITAGE_REFERENCE",
+    "artemis_ii_specific_geometry_claim": false
+  },
+  "domain_definition": {
+    "primary": {
+      "maximum_body_scale_knudsen": 0.01,
+      "minimum_mach": 5.0,
+      "interpretation": "nominal body-scale continuum and hypersonic domain"
+    },
+    "stronger_continuum_sensitivity": {
+      "maximum_body_scale_knudsen": 0.001,
+      "minimum_mach": 5.0,
+      "interpretation": "stronger whole-body continuum sensitivity domain"
+    },
+    "full_trajectory": {
+      "interpretation": "diagnostic mathematical integral only"
+    }
+  },
+  "nose_radius_sensitivity": {
+    "type": "numerical sensitivity only",
+    "fractional_variation": 0.1,
+    "low_radius_m": 5.4315,
+    "reference_radius_m": 6.035,
+    "high_radius_m": 6.6385,
+    "interpretation": "plus or minus 10 percent sensitivity is not an asserted Orion geometry uncertainty"
+  },
+  "velocity_assumption": {
+    "quantity": "Earth-relative trajectory speed",
+    "atmospheric_wind_model": "none",
+    "interpretation": "Earth-relative speed is used as the free-stream velocity approximation"
+  },
+  "density_assumption": {
+    "quantity": "NRLMSIS 2.0 modeled total mass density",
+    "provenance": "MODEL"
+  },
+  "interpretation_limits": [
+    "The result is a low-fidelity engineering stagnation-point convective-heating estimate.",
+    "The result is MODEL-DERIVED and is not measured Artemis II heat flux.",
+    "The correlation uses a cold-wall approximation.",
+    "Radiative heating is not included.",
+    "Finite wall temperature is not modeled.",
+    "Avcoat ablation and pyrolysis are not modeled.",
+    "Blowing and surface recession are not modeled.",
+    "Catalytic wall effects are not modeled.",
+    "Detailed shock-layer chemistry and chemical nonequilibrium are not modeled.",
+    "The 6.035 m nose radius is Orion EFT-1 heritage geometry and is not claimed as an Artemis II-specific as-flown effective stagnation radius.",
+    "Primary heat-load interpretation is restricted to Kn < 0.01 and Mach >= 5.",
+    "Kn < 0.001 and Mach >= 5 is retained as a stronger continuum sensitivity domain.",
+    "The full-trajectory Sutton-Graves integral is diagnostic only."
+  ]
+}

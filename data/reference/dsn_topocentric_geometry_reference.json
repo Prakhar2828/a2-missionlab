@@ -1,0 +1,122 @@
+{
+  "dataset_id": "phase2g2_dsn_topocentric_geometry_reference",
+  "mission": "Artemis II",
+  "scope": "Authoritative NAIF Deep Space Network station geometry and NASA-reported lunar-flyby timing used to reconstruct topocentric lunar occultation from representative 70-meter reference antennas at each DSN complex.",
+  "provenance": "MIXED_NAIF_REFERENCE_AND_NASA_REPORTED",
+  "parent_products": {
+    "communications_reference": "phase2g1_artemis_ii_communications_reference",
+    "geocentric_geometry_product": "phase2g1_geocentric_lunar_occultation"
+  },
+  "nasa_public_events": {
+    "communications_loss_utc": "2026-04-06T22:44:00Z",
+    "communications_acquisition_utc": "2026-04-06T23:25:00Z",
+    "live_reported_earthset_minute_utc": "2026-04-06T22:41:00Z",
+    "live_reported_earthrise_minute_utc": "2026-04-06T23:24:00Z",
+    "timing_precision": "PUBLIC_MINUTE_LEVEL",
+    "interpretation": "Earthset and Earthrise are geometric visual events reported from Orion. Communications LOS and AOS are operational network events. They are related but are not assumed to be identical."
+  },
+  "naif_station_reference": {
+    "source_product": "earthstns_itrf93_260814.bsp comment area",
+    "creation_date": "2026-08-14",
+    "reference_document": "DSN No. 810-005, 301, Rev. P",
+    "reference_document_issue_date": "2026-05-22",
+    "frame": "ITRF93",
+    "coordinate_epoch": "2003 JAN 01 00:00:00 TDB",
+    "velocity_model": "CONSTANT_CARTESIAN_PLATE_MOTION",
+    "station_position_units": "m",
+    "station_velocity_units": "m/year",
+    "station_location_uncertainty_note": "NAIF notes that accumulated station-location uncertainty can reach approximately 0.1 m at one sigma for some stations due to tectonic motion and events. This is negligible relative to the kilometer-scale geometry modeled here."
+  },
+  "earth_reference": {
+    "frame": "ITRF93",
+    "reference_spheroid_equatorial_radius_m": 6378137.0,
+    "inverse_flattening": 298.2572236,
+    "orientation_kernel": "earth_1962_260806_2126_combined.bpc",
+    "orientation_kernel_sha256": "CC87AD1A495CF598800BA403763D350F087AC0B97DA9FEC603278A3864C6A53E",
+    "use": "Transform propagated station positions from ITRF93 into J2000 and calculate local geodetic elevation."
+  },
+  "reference_stations": [
+    {
+      "station": "DSS-14",
+      "complex": "Goldstone",
+      "diameter_m": 70,
+      "position_itrf93_m_at_2003_epoch": [
+        -2353621.420,
+        -4641341.472,
+        3677052.318
+      ],
+      "velocity_itrf93_m_per_year": [
+        -0.0180,
+        0.0065,
+        -0.0038
+      ],
+      "role_in_phase2g2": "REPRESENTATIVE_COMPLEX_REFERENCE",
+      "operational_assignment_claimed": false
+    },
+    {
+      "station": "DSS-43",
+      "complex": "Canberra",
+      "diameter_m": 70,
+      "position_itrf93_m_at_2003_epoch": [
+        -4460894.917,
+        2682361.507,
+        -3674748.152
+      ],
+      "velocity_itrf93_m_per_year": [
+        -0.0335,
+        -0.0041,
+        0.0392
+      ],
+      "role_in_phase2g2": "REPRESENTATIVE_COMPLEX_REFERENCE",
+      "operational_assignment_claimed": false
+    },
+    {
+      "station": "DSS-63",
+      "complex": "Madrid",
+      "diameter_m": 70,
+      "position_itrf93_m_at_2003_epoch": [
+        4849092.518,
+        -360180.3480,
+        4115109.251
+      ],
+      "velocity_itrf93_m_per_year": [
+        -0.0100,
+        0.0242,
+        0.0156
+      ],
+      "role_in_phase2g2": "REPRESENTATIVE_COMPLEX_REFERENCE",
+      "operational_assignment_claimed": false
+    }
+  ],
+  "model": {
+    "orion_state_frame": "J2000",
+    "orion_interpolation": "PIECEWISE_CUBIC_HERMITE_USING_PUBLIC_OEM_POSITION_AND_VELOCITY",
+    "moon_ephemeris": "SPICE_DE440S",
+    "moon_shape": "SPHERE_USING_SPICE_MEAN_RADIUS",
+    "aberration_correction": "NONE",
+    "station_propagation": "NAIF_2003_ITRF93_POSITION_PLUS_CONSTANT_PLATE_VELOCITY",
+    "station_inertial_transform": "ITRF93_TO_J2000_USING_HIGH_PRECISION_EARTH_BINARY_PCK",
+    "elevation_definition": "GEODETIC_LOCAL_UP_USING_NAIF_REFERENCE_SPHEROID",
+    "horizon_threshold_deg": 0.0,
+    "sampling_interval_seconds": 30,
+    "analysis_window_start_utc": "2026-04-06T22:00:00Z",
+    "analysis_window_stop_utc": "2026-04-07T00:00:00Z"
+  },
+  "inspection_expectations": {
+    "reference_station_count": 3,
+    "expected_only_reference_station_above_horizon_at_both_nasa_contacts": "DSS-43",
+    "maximum_dss43_total_absolute_nasa_contact_offset_seconds": 240.0,
+    "minimum_dss43_timing_improvement_fraction_vs_geocentric": 0.35,
+    "require_dss43_occulted_at_nasa_los": true,
+    "require_dss43_unocculted_at_nasa_aos": true
+  },
+  "guardrails": [
+    "The representative 70-meter antenna at a DSN complex is used as a geometric reference point and is not asserted to be the antenna that operationally tracked Artemis II during the flyby.",
+    "Best agreement with NASA public LOS and AOS timing does not identify the actual operational DSN antenna.",
+    "Topocentric lunar occultation is necessary geometric context but does not by itself establish RF link availability.",
+    "A station below its local geometric horizon is not considered a plausible direct Earth-to-Orion observer at that instant.",
+    "NASA public LOS and AOS timestamps are minute-level operational references and are not exact geometric limb-contact measurements.",
+    "No antenna gain, link budget, modulation state, network scheduling, handover logic, received signal strength, or tracking assignment is inferred.",
+    "Radio-frequency DSN geometry is not used as a prediction of O2O optical communications availability."
+  ]
+}

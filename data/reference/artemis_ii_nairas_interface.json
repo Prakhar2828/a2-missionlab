@@ -1,0 +1,218 @@
+{
+  "dataset_id": "phase5b_artemis_ii_nairas_radiation_interface",
+  "mission": "Artemis II",
+  "phase": "5B",
+  "status": "NAIRAS_TRAJECTORY_INTERFACE_PREPARED",
+  "source_trajectory": {
+    "path": "data/processed/trajectory/trajectory_with_mission_phases.csv",
+    "provenance": "NASA_FLIGHT_DERIVED_OEM_WITH_MISSIONLAB_DERIVED_GEOMETRY",
+    "input_row_count": 3262,
+    "start_utc": "2026-04-02T01:57:37.084Z",
+    "stop_utc": "2026-04-10T23:53:16.723Z",
+    "mission_phases_present": [
+      "LUNAR_APPROACH",
+      "LUNAR_DEPARTURE",
+      "OUTBOUND_TRANSIT",
+      "TRANS_EARTH_RETURN"
+    ],
+    "complete_launch_to_splashdown_coverage": false,
+    "coverage_boundary": "The selected public primary OEM begins after launch and ends at Entry Interface. MissionLab does not invent trajectory states outside the flight-derived OEM coverage."
+  },
+  "nairas_model": {
+    "name": "NAIRAS",
+    "version_family": "3.0",
+    "model_page": "https://ccmc.gsfc.nasa.gov/models/NAIRAS~3.0/",
+    "runs_on_request_page": "https://ccmc.gsfc.nasa.gov/ror/requests/IT/NAIRAS3/nairas_user_registration.php",
+    "trajectory_run_supported": true,
+    "spacecraft_trajectory_supported": true,
+    "required_trajectory_fields": [
+      "date",
+      "time",
+      "geocentric_latitude_deg",
+      "geocentric_longitude_deg",
+      "altitude_km"
+    ],
+    "radiation_sources_described_by_model": [
+      "GCR",
+      "SEP",
+      "TRP_where_model_applicable"
+    ],
+    "available_dosimetric_quantities": [
+      "absorbed_dose_in_silicon",
+      "absorbed_dose_in_tissue",
+      "dose_equivalent",
+      "ambient_dose_equivalent",
+      "effective_dose"
+    ],
+    "user_selectable_aluminum_equivalent_shielding_depths": true
+  },
+  "trajectory_interface": {
+    "output_path": "data/processed/radiation/artemis_ii_nairas_trajectory_fields.csv",
+    "output_row_count": 3262,
+    "field_content_ready": true,
+    "portal_specific_file_syntax_confirmed": false,
+    "reason": "NASA publicly specifies the key trajectory fields. This product prepares those fields directly but does not claim an undocumented portal parser syntax.",
+    "coordinate_conversion": {
+      "earth_radii_km": [
+        6378.1366,
+        6378.1366,
+        6356.7519
+      ],
+      "earth_mean_radius_km": 6371.008366666666,
+      "input_frame": "J2000",
+      "output_frame": "IAU_EARTH",
+      "latitude_definition": "geocentric latitude from Earth-fixed Cartesian position",
+      "longitude_definition": "Earth-fixed geocentric longitude normalized to [-180, 180] degrees",
+      "altitude_definition": "Earth-center radius minus SPICE mean Earth radius",
+      "minimum_altitude_km": 143.950681,
+      "maximum_altitude_km": 406773.436342,
+      "minimum_latitude_deg": -38.10456842,
+      "maximum_latitude_deg": 28.27695484,
+      "minimum_longitude_deg": -179.91912595,
+      "maximum_longitude_deg": 179.96262852
+    }
+  },
+  "shielding": {
+    "orion_specific_effective_aluminum_equivalent_depth_publicly_established_here": false,
+    "shielding_depths_g_cm2_used_by_missionlab": [],
+    "dose_calculation_performed": false,
+    "reason": "NAIRAS shielding depth is a model input. MissionLab does not assign an Orion crew-location shielding depth without defensible source evidence."
+  },
+  "phase5a_relationship": {
+    "space_weather_dataset_id": "phase5a_artemis_ii_space_weather_context",
+    "omni_context_manually_used_as_nairas_driver": false,
+    "reason": "Phase 5A OMNI data provide an independent mission-clock-aligned near-Earth context product. MissionLab does not override or replace NAIRAS internal radiation environment drivers."
+  },
+  "radiation_response_chain": [
+    {
+      "stage": 1,
+      "name": "external_radiation_environment",
+      "examples": [
+        "GCR",
+        "SEP",
+        "TRP_where_applicable"
+      ]
+    },
+    {
+      "stage": 2,
+      "name": "transport_through_material",
+      "requires": [
+        "trajectory",
+        "material_or_aluminum_equivalent_shielding"
+      ]
+    },
+    {
+      "stage": 3,
+      "name": "absorbed_dose",
+      "examples": [
+        "absorbed_dose_in_silicon",
+        "absorbed_dose_in_tissue"
+      ]
+    },
+    {
+      "stage": 4,
+      "name": "radiation_protection_response_quantity",
+      "examples": [
+        "dose_equivalent",
+        "ambient_dose_equivalent",
+        "effective_dose"
+      ]
+    }
+  ],
+  "nairas_run_status": {
+    "run_submitted_by_missionlab": false,
+    "run_id": null,
+    "run_output_ingested": false,
+    "dose_values_reported": false,
+    "status": "TRAJECTORY_PREPARED_NO_RUN_CLAIMED",
+    "closure_rule": "A future authenticated CCMC Runs-on-Request submission can use this trajectory field product. Until an actual NAIRAS output is obtained, MissionLab reports no NAIRAS-derived radiation dose."
+  },
+  "critical_non_equivalences": [
+    {
+      "left": "PHASE5A_OMNI_CONTEXT",
+      "right": "ORION_LOCAL_RADIATION_FIELD",
+      "equivalent": false
+    },
+    {
+      "left": "EXTERNAL_RADIATION_ENVIRONMENT",
+      "right": "ABSORBED_DOSE",
+      "equivalent": false
+    },
+    {
+      "left": "ABSORBED_DOSE",
+      "right": "DOSE_EQUIVALENT",
+      "equivalent": false
+    },
+    {
+      "left": "DOSE_EQUIVALENT",
+      "right": "EFFECTIVE_DOSE",
+      "equivalent": false
+    },
+    {
+      "left": "TRAJECTORY_GEOMETRY",
+      "right": "RADIATION_DOSE",
+      "equivalent": false
+    },
+    {
+      "left": "ASSUMED_SHIELDING_DEPTH",
+      "right": "ORION_CREW_LOCATION_SHIELDING",
+      "equivalent": false
+    },
+    {
+      "left": "NAIRAS_INTERFACE_PREPARED",
+      "right": "NAIRAS_RUN_EXECUTED",
+      "equivalent": false
+    },
+    {
+      "left": "NAIRAS_MODEL_OUTPUT",
+      "right": "CREW_DOSIMETER_MEASUREMENT",
+      "equivalent": false
+    }
+  ],
+  "roadmap_assessment": {
+    "ingest_omni_cdaweb_quantities": {
+      "status": "COMPLETE",
+      "phase": "5A"
+    },
+    "correlate_space_weather_with_mission_clock": {
+      "status": "COMPLETE",
+      "phase": "5A"
+    },
+    "prepare_artemis_ii_trajectory_for_nairas": {
+      "status": "COMPLETE",
+      "phase": "5B"
+    },
+    "ingest_export_nairas_runs_where_permitted": {
+      "status": "INTERFACE_PREPARED_NO_RUN_OUTPUT_CLAIMED",
+      "phase": "5B"
+    },
+    "make_shielding_assumptions_explicit": {
+      "status": "COMPLETE",
+      "phase": "5B",
+      "assumption_used": "NONE"
+    },
+    "external_environment_vs_astronaut_dose": {
+      "status": "SEPARATED",
+      "phase": "5B"
+    },
+    "phase5_overall": {
+      "status": "COMPLETE_WITH_NAIRAS_EXECUTION_BOUNDARY"
+    }
+  },
+  "evidence_boundaries": {
+    "trajectory_fields_equal_radiation_dose": false,
+    "omni_context_equal_orion_local_radiation": false,
+    "shielding_depth_inferred_without_source": false,
+    "nairas_run_claimed_without_run_output": false,
+    "model_output_equal_dosimeter_measurement": false,
+    "external_environment_equal_absorbed_dose": false,
+    "absorbed_dose_equal_effective_dose": false,
+    "oem_coverage_extended_beyond_public_states": false
+  },
+  "outputs": {
+    "trajectory_fields_csv": "data/processed/radiation/artemis_ii_nairas_trajectory_fields.csv",
+    "processed_summary_json": "data/processed/radiation/artemis_ii_nairas_radiation_interface.json",
+    "reference_manifest_json": "data/reference/artemis_ii_nairas_interface.json",
+    "figure": "docs/assets/radiation/phase5b_nairas_radiation_interface.svg"
+  }
+}

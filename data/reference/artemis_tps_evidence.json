@@ -1,0 +1,392 @@
+{
+  "dataset_id": "phase2f1_orion_tps_heritage_evidence",
+  "mission": "Artemis II",
+  "scope": "Orion thermal protection system heritage, Artemis I heat-shield anomaly/root cause, Artemis II mitigation, and Artemis II postflight outcome",
+  "provenance": "NASA_REPORTED",
+  "evidence_items": [
+    {
+      "id": "orion_heat_shield_architecture",
+      "category": "TPS_ARCHITECTURE",
+      "mission_context": "Artemis II / Orion",
+      "claim": "The Orion crew module uses a 16.5-foot-diameter ablative heat shield whose outer surface is made from Avcoat bonded to a titanium skeleton and composite skin. NASA describes the Artemis II configuration as using 186 Avcoat blocks.",
+      "provenance": "NASA_REPORTED",
+      "source_title": "Crew Module",
+      "source_url": "https://www.nasa.gov/reference/crew-module/",
+      "source_organization": "NASA",
+      "source_date": null,
+      "key_values": {
+        "heat_shield_diameter_ft": 16.5,
+        "avcoat_blocks": 186
+      },
+      "interpretation": "Defines the physical TPS architecture relevant to Artemis II.",
+      "limitations": [
+        "This source describes spacecraft architecture and does not provide an Artemis II measured heat-flux history.",
+        "The number of Avcoat blocks is a manufacturing/architecture quantity, not an aerothermal model input by itself."
+      ]
+    },
+    {
+      "id": "avcoat_function",
+      "category": "TPS_FUNCTION",
+      "mission_context": "Orion",
+      "claim": "Avcoat is an ablative material designed to wear away in a controlled manner during entry, carrying heat away from the Orion crew module.",
+      "provenance": "NASA_REPORTED",
+      "source_title": "Crew Module",
+      "source_url": "https://www.nasa.gov/reference/crew-module/",
+      "source_organization": "NASA",
+      "source_date": null,
+      "interpretation": "Establishes that material loss is an expected part of normal Avcoat operation, while abnormal char liberation must be distinguished from controlled ablation.",
+      "limitations": [
+        "This is a qualitative functional description.",
+        "It does not provide a material-response law suitable for predicting Artemis II recession or internal temperature."
+      ]
+    },
+    {
+      "id": "artemis_i_unexpected_char_loss",
+      "category": "ARTEMIS_I_ANOMALY",
+      "mission_context": "Artemis I",
+      "claim": "Postflight inspection of the Artemis I Orion heat shield identified unexpected char loss across portions of the Avcoat heat shield.",
+      "provenance": "NASA_REPORTED",
+      "source_title": "NASA Identifies Cause of Artemis I Orion Heat Shield Char Loss",
+      "source_url": "https://www.nasa.gov/missions/artemis/nasa-identifies-cause-of-artemis-i-orion-heat-shield-char-loss/",
+      "source_organization": "NASA",
+      "source_date": "2024-12-05",
+      "interpretation": "This is the starting anomaly for the Artemis I to Artemis II TPS decision thread.",
+      "limitations": [
+        "The existence of char loss does not imply failure of the heat shield to protect the spacecraft.",
+        "This item alone does not identify the root cause."
+      ]
+    },
+    {
+      "id": "artemis_i_root_cause_low_permeability",
+      "category": "ROOT_CAUSE",
+      "mission_context": "Artemis I",
+      "claim": "NASA determined that gases generated inside the Avcoat during entry could not vent and dissipate adequately in low-permeability material. Internal gas pressure built up, leading to cracking and liberation of charred material.",
+      "provenance": "NASA_REPORTED",
+      "source_title": "NASA Identifies Cause of Artemis I Orion Heat Shield Char Loss",
+      "source_url": "https://www.nasa.gov/missions/artemis/nasa-identifies-cause-of-artemis-i-orion-heat-shield-char-loss/",
+      "source_organization": "NASA",
+      "source_date": "2024-12-05",
+      "mechanism": {
+        "sequence": [
+          "Avcoat heats during atmospheric entry",
+          "pyrolysis and ablation generate gases inside the material",
+          "low-permeability Avcoat restricts gas escape",
+          "internal gas pressure increases",
+          "cracks form",
+          "charred material is liberated"
+        ]
+      },
+      "interpretation": "The anomaly was a coupled material-response and trajectory-environment phenomenon, not simply a single peak-temperature or peak-heat-flux exceedance.",
+      "limitations": [
+        "This evidence does not provide a numerical permeability threshold for use in the MissionLab heating model.",
+        "The project must not infer local char loss directly from Sutton-Graves heat flux."
+      ]
+    },
+    {
+      "id": "artemis_i_skip_entry_role",
+      "category": "ENTRY_ENVIRONMENT",
+      "mission_context": "Artemis I",
+      "claim": "NASA found that during the Artemis I skip-entry profile, heating decreased between atmospheric dips while thermal energy remained within the Avcoat. This condition contributed to gas accumulation inside low-permeability material.",
+      "provenance": "NASA_REPORTED",
+      "source_title": "NASA Identifies Cause of Artemis I Orion Heat Shield Char Loss",
+      "source_url": "https://www.nasa.gov/missions/artemis/nasa-identifies-cause-of-artemis-i-orion-heat-shield-char-loss/",
+      "source_organization": "NASA",
+      "source_date": "2024-12-05",
+      "interpretation": "Time history and internal thermal response matter; the Artemis I phenomenon cannot be represented by peak external heating alone.",
+      "limitations": [
+        "The current MissionLab Sutton-Graves model does not calculate internal Avcoat thermal energy, permeability, pyrolysis-gas pressure, or cracking.",
+        "No direct damage model should be derived from this qualitative mechanism."
+      ]
+    },
+    {
+      "id": "permeable_regions_did_not_show_same_behavior",
+      "category": "ROOT_CAUSE_EVIDENCE",
+      "mission_context": "Artemis I",
+      "claim": "NASA reported that local areas of Artemis I Avcoat known to be permeable before flight did not exhibit the same cracking or char-loss behavior because gases could adequately vent.",
+      "provenance": "NASA_REPORTED",
+      "source_title": "NASA Identifies Cause of Artemis I Orion Heat Shield Char Loss",
+      "source_url": "https://www.nasa.gov/missions/artemis/nasa-identifies-cause-of-artemis-i-orion-heat-shield-char-loss/",
+      "source_organization": "NASA",
+      "source_date": "2024-12-05",
+      "interpretation": "This observation strongly supported permeability as a key material parameter in the root-cause determination.",
+      "limitations": [
+        "The source does not provide a complete spatial map of permeability versus char loss for public quantitative reconstruction."
+      ]
+    },
+    {
+      "id": "artemis_i_instrumentation",
+      "category": "INVESTIGATION_EVIDENCE",
+      "mission_context": "Artemis I",
+      "claim": "The Artemis I heat shield carried pressure sensors, strain gauges, and thermocouples at different depths in the ablative material, providing flight data used to support environmental reconstruction and material-response analysis.",
+      "provenance": "NASA_REPORTED",
+      "source_title": "Testing",
+      "source_url": "https://www.nasa.gov/reference/testing/",
+      "source_organization": "NASA",
+      "source_date": null,
+      "instrumentation": [
+        "pressure sensors",
+        "strain gauges",
+        "thermocouples"
+      ],
+      "interpretation": "NASA's root-cause work used direct heat-shield instrumentation unavailable in the public Artemis II trajectory reconstruction.",
+      "limitations": [
+        "MissionLab does not currently possess these raw Artemis I heat-shield sensor time series.",
+        "The existence of instrumentation does not make MissionLab's modeled Artemis II quantities equivalent to measured TPS data."
+      ]
+    },
+    {
+      "id": "artemis_i_sample_campaign",
+      "category": "INVESTIGATION_EVIDENCE",
+      "mission_context": "Artemis I",
+      "claim": "NASA removed approximately 200 Avcoat samples from the Artemis I heat shield for analysis and inspection.",
+      "provenance": "NASA_REPORTED",
+      "source_title": "Testing",
+      "source_url": "https://www.nasa.gov/reference/testing/",
+      "source_organization": "NASA",
+      "source_date": null,
+      "key_values": {
+        "approximate_avcoat_samples": 200
+      },
+      "interpretation": "The root-cause determination was supported by extensive postflight material inspection rather than trajectory analysis alone.",
+      "limitations": [
+        "The public source does not expose all sample-level measurements needed for independent material-response reconstruction."
+      ]
+    },
+    {
+      "id": "artemis_i_thermal_test_campaign",
+      "category": "INVESTIGATION_EVIDENCE",
+      "mission_context": "Artemis I",
+      "claim": "NASA conducted eight postflight thermal test campaigns totaling 121 individual tests while investigating Artemis I heat-shield char loss.",
+      "provenance": "NASA_REPORTED",
+      "source_title": "NASA Identifies Cause of Artemis I Orion Heat Shield Char Loss",
+      "source_url": "https://www.nasa.gov/missions/artemis/nasa-identifies-cause-of-artemis-i-orion-heat-shield-char-loss/",
+      "source_organization": "NASA",
+      "source_date": "2024-12-05",
+      "key_values": {
+        "thermal_test_campaigns": 8,
+        "individual_tests": 121
+      },
+      "interpretation": "NASA reproduced and investigated the phenomenon using multiple ground-test methods.",
+      "limitations": [
+        "MissionLab does not reproduce these material tests.",
+        "The test count should not be interpreted as a statistical sample for the MissionLab aerothermal model."
+      ]
+    },
+    {
+      "id": "artemis_i_ground_replication",
+      "category": "ROOT_CAUSE_EVIDENCE",
+      "mission_context": "Artemis I",
+      "claim": "NASA reproduced the Artemis I char-loss mechanism in ground testing using reconstructed entry conditions, strengthening confidence in the identified root cause.",
+      "provenance": "NASA_REPORTED",
+      "source_title": "NASA Identifies Cause of Artemis I Orion Heat Shield Char Loss",
+      "source_url": "https://www.nasa.gov/missions/artemis/nasa-identifies-cause-of-artemis-i-orion-heat-shield-char-loss/",
+      "source_organization": "NASA",
+      "source_date": "2024-12-05",
+      "interpretation": "The root cause was experimentally reproduced and was not based only on visual postflight inspection.",
+      "limitations": [
+        "MissionLab does not have the full test matrix or detailed facility boundary conditions."
+      ]
+    },
+    {
+      "id": "artemis_ii_trajectory_mitigation",
+      "category": "ARTEMIS_II_MITIGATION",
+      "mission_context": "Artemis II",
+      "claim": "NASA modified the Artemis II entry trajectory to reduce the duration of conditions associated with the Artemis I heat-shield phenomenon. NASA describes the change as shortening the distance Orion travels between atmospheric entry and splashdown.",
+      "provenance": "NASA_REPORTED",
+      "source_title": "Testing",
+      "source_url": "https://www.nasa.gov/reference/testing/",
+      "source_organization": "NASA",
+      "source_date": null,
+      "interpretation": "Artemis II mitigated the known TPS mechanism by changing the entry environment rather than replacing the already-integrated heat shield.",
+      "limitations": [
+        "This source does not provide the exact internal guidance design constraints used to select the final Artemis II trajectory.",
+        "MissionLab must not infer that every difference between Artemis I and Artemis II trajectories was driven solely by the heat-shield issue."
+      ]
+    },
+    {
+      "id": "artemis_ii_no_skip_entry",
+      "category": "ARTEMIS_II_MITIGATION",
+      "mission_context": "Artemis II",
+      "claim": "NASA technical reporting states that Artemis II flew a modified trajectory without the Artemis I-style skip entry in order to minimize conditions that promoted cracking and char liberation.",
+      "provenance": "NASA_REPORTED",
+      "source_title": "Under Pressure: The Artemis I Heatshield Char Loss Investigation and Artemis II's Successful Entry",
+      "source_url": "https://ntrs.nasa.gov/citations/20260006849",
+      "source_organization": "NASA Technical Reports Server",
+      "source_date": "2026",
+      "interpretation": "This provides the clearest public technical linkage between the Artemis I root cause and the Artemis II entry-profile mitigation.",
+      "limitations": [
+        "The abstract does not provide the complete guidance design or all trajectory optimization constraints."
+      ]
+    },
+    {
+      "id": "artemis_ii_postflight_tps_expected",
+      "category": "ARTEMIS_II_POSTFLIGHT",
+      "mission_context": "Artemis II",
+      "claim": "Initial Artemis II postflight inspections found the Orion thermal protection system performed as expected with no unusual conditions identified.",
+      "provenance": "NASA_REPORTED",
+      "source_title": "NASA on Track for Future Missions with Initial Artemis II Assessments",
+      "source_url": "https://www.nasa.gov/missions/nasa-on-track-for-future-missions-with-initial-artemis-ii-assessments/",
+      "source_organization": "NASA",
+      "source_date": "2026-04-20",
+      "interpretation": "This provides an initial postflight outcome for the Artemis II TPS mitigation strategy.",
+      "limitations": [
+        "NASA explicitly described these as initial assessments.",
+        "Detailed postflight heat-shield examination and sample analysis continued after this report."
+      ]
+    },
+    {
+      "id": "artemis_ii_char_loss_reduced",
+      "category": "ARTEMIS_II_POSTFLIGHT",
+      "mission_context": "Artemis II",
+      "claim": "NASA reported that the char-loss behavior observed on Artemis I was significantly reduced on Artemis II in both quantity and size.",
+      "provenance": "NASA_REPORTED",
+      "source_title": "NASA on Track for Future Missions with Initial Artemis II Assessments",
+      "source_url": "https://www.nasa.gov/missions/nasa-on-track-for-future-missions-with-initial-artemis-ii-assessments/",
+      "source_organization": "NASA",
+      "source_date": "2026-04-20",
+      "interpretation": "The Artemis II flight provides initial evidence that the mitigation approach reduced the Artemis I-type phenomenon.",
+      "limitations": [
+        "The source does not provide a public numerical char-loss mass or area comparison.",
+        "The word 'significantly' is NASA's qualitative characterization and should not be converted into an invented percentage."
+      ]
+    },
+    {
+      "id": "artemis_ii_arcjet_consistency",
+      "category": "ARTEMIS_II_POSTFLIGHT",
+      "mission_context": "Artemis II",
+      "claim": "NASA reported that Artemis II heat-shield performance was consistent with arc-jet ground testing performed after Artemis I.",
+      "provenance": "NASA_REPORTED",
+      "source_title": "NASA on Track for Future Missions with Initial Artemis II Assessments",
+      "source_url": "https://www.nasa.gov/missions/nasa-on-track-for-future-missions-with-initial-artemis-ii-assessments/",
+      "source_organization": "NASA",
+      "source_date": "2026-04-20",
+      "interpretation": "This connects the Artemis I root-cause ground-test program to the observed Artemis II postflight outcome.",
+      "limitations": [
+        "The public article does not provide the detailed quantitative comparison between flight and arc-jet test results."
+      ]
+    },
+    {
+      "id": "artemis_ii_entry_velocity_prediction",
+      "category": "ARTEMIS_II_POSTFLIGHT",
+      "mission_context": "Artemis II",
+      "claim": "NASA's initial assessment found Artemis II entry-interface velocity was within one mile per hour of prediction.",
+      "provenance": "NASA_REPORTED",
+      "source_title": "NASA on Track for Future Missions with Initial Artemis II Assessments",
+      "source_url": "https://www.nasa.gov/missions/nasa-on-track-for-future-missions-with-initial-artemis-ii-assessments/",
+      "source_organization": "NASA",
+      "source_date": "2026-04-20",
+      "key_values": {
+        "entry_interface_velocity_prediction_difference_mph": 1.0,
+        "comparison_semantics": "within"
+      },
+      "interpretation": "This is useful mission-level evidence that the flown entry state closely matched prediction, but it does not independently validate MissionLab's modeled heating.",
+      "limitations": [
+        "NASA did not state in this article that MissionLab's reconstructed velocity or heating model was the prediction being referenced.",
+        "This must not be used as direct validation of the Sutton-Graves model."
+      ]
+    },
+    {
+      "id": "artemis_iii_permeability_manufacturing_change",
+      "category": "FUTURE_CORRECTIVE_ACTION",
+      "mission_context": "Artemis III and later Orion heat shields",
+      "claim": "NASA applied lessons from Artemis I by improving heat-shield manufacturing to produce Avcoat with greater uniformity and consistent permeability for future Orion missions.",
+      "provenance": "NASA_REPORTED",
+      "source_title": "Testing",
+      "source_url": "https://www.nasa.gov/reference/testing/",
+      "source_organization": "NASA",
+      "source_date": null,
+      "interpretation": "The long-term corrective action addresses the identified material parameter directly rather than relying only on trajectory mitigation.",
+      "limitations": [
+        "This item describes manufacturing direction, not a public quantitative permeability specification."
+      ]
+    }
+  ],
+  "decision_thread": {
+    "thread_id": "artemis_i_to_ii_heat_shield_risk_mitigation",
+    "title": "Artemis I Heat-Shield Char Loss to Artemis II Entry Mitigation",
+    "stages": [
+      {
+        "stage": "DETECTION",
+        "evidence_ids": [
+          "artemis_i_unexpected_char_loss"
+        ],
+        "summary": "Unexpected char loss was observed on the Artemis I Orion heat shield after flight."
+      },
+      {
+        "stage": "EVIDENCE_COLLECTION",
+        "evidence_ids": [
+          "artemis_i_instrumentation",
+          "artemis_i_sample_campaign",
+          "artemis_i_thermal_test_campaign",
+          "artemis_i_ground_replication"
+        ],
+        "summary": "NASA combined flight instrumentation, postflight sampling, nondestructive evaluation, modeling, and extensive ground testing."
+      },
+      {
+        "stage": "ROOT_CAUSE",
+        "evidence_ids": [
+          "artemis_i_root_cause_low_permeability",
+          "artemis_i_skip_entry_role",
+          "permeable_regions_did_not_show_same_behavior"
+        ],
+        "summary": "Low-permeability Avcoat restricted pyrolysis-gas venting during the skip-entry thermal history, allowing internal pressure to build and produce cracking and char liberation."
+      },
+      {
+        "stage": "CONSTRAINT",
+        "evidence_ids": [
+          "artemis_i_root_cause_low_permeability"
+        ],
+        "summary": "The already-manufactured Artemis II heat shield had to be flown with a safe entry environment supported by the investigation and test evidence."
+      },
+      {
+        "stage": "DECISION_AND_ACTION",
+        "evidence_ids": [
+          "artemis_ii_trajectory_mitigation",
+          "artemis_ii_no_skip_entry"
+        ],
+        "summary": "NASA modified the Artemis II entry trajectory, reducing exposure to conditions associated with the Artemis I phenomenon and avoiding the Artemis I-style skip entry."
+      },
+      {
+        "stage": "FLIGHT_OUTCOME",
+        "evidence_ids": [
+          "artemis_ii_postflight_tps_expected",
+          "artemis_ii_char_loss_reduced",
+          "artemis_ii_arcjet_consistency",
+          "artemis_ii_entry_velocity_prediction"
+        ],
+        "summary": "Initial postflight inspections found Artemis II TPS performance as expected, with Artemis I-type char loss substantially reduced."
+      },
+      {
+        "stage": "LONG_TERM_CORRECTIVE_ACTION",
+        "evidence_ids": [
+          "artemis_iii_permeability_manufacturing_change"
+        ],
+        "summary": "Future Orion heat-shield manufacturing incorporates improvements intended to produce more uniform and consistently permeable Avcoat."
+      }
+    ]
+  },
+  "missionlab_interpretation": {
+    "relationship_to_phase2e4_heating_model": [
+      "Phase 2E.4 reconstructs a low-fidelity external stagnation-point convective-heating environment.",
+      "Phase 2F evidence describes Orion material behavior, investigation findings, operational mitigation, and postflight outcomes.",
+      "The Sutton-Graves heat-flux history must not be converted directly into Avcoat crack probability, char-loss amount, recession depth, bondline temperature, or crew risk.",
+      "The Artemis I root cause depended on material permeability, internal gas pressure, and thermal time history, quantities not modeled by Phase 2E.4.",
+      "Artemis II postflight TPS observations provide heritage and outcome context but are not a direct numerical validation of MissionLab's Sutton-Graves heat flux."
+    ],
+    "allowed_uses": [
+      "construct an evidence-grounded TPS decision thread",
+      "provide heritage context beside the modeled Artemis II entry environment",
+      "compare mission timeline and qualitative entry-profile structure",
+      "distinguish expected controlled ablation from anomalous char liberation",
+      "document how Artemis I findings affected Artemis II operations and future heat-shield manufacturing"
+    ],
+    "prohibited_inferences": [
+      "predict Artemis II char-loss quantity from Sutton-Graves heat flux alone",
+      "predict Avcoat recession depth without a material-response model",
+      "predict internal heat-shield temperature without TPS thermal-response data",
+      "treat Artemis II reduced char loss as numerical validation of the MissionLab heating model",
+      "invent quantitative permeability limits not published by NASA",
+      "calibrate the Sutton-Graves model to Artemis I or Artemis II char-loss observations"
+    ]
+  }
+}

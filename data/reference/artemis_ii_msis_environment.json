@@ -1,0 +1,62 @@
+{
+  "mission": "Artemis II",
+  "purpose": "Pinned historical space-weather drivers for Phase 2E atmospheric reconstruction.",
+  "provenance": "MODEL_INPUT",
+  "atmosphere_model": {
+    "name": "NRLMSIS",
+    "version": 2.0,
+    "implementation": "pymsis",
+    "pymsis_version": "0.12.0",
+    "geomagnetic_activity": -1,
+    "geomagnetic_interpretation": "Storm-time mode using the full seven-element Ap history vector."
+  },
+  "space_weather_source": {
+    "provider": "CelesTrak",
+    "url": "https://celestrak.org/SpaceData/SW-All.csv",
+    "filename": "SW-All.csv",
+    "local_source_size_bytes": 2890313,
+    "sha256": "50130BC78F48B02FEC4424DA59098A065D5DE06562DB73BBCC3631BCCBFFBAEE"
+  },
+  "driver_snapshot": {
+    "filename": "artemis_ii_msis_drivers.csv",
+    "sha256": "6A688BE48A211CD2426B81EE30148EDD04FDAA28C438DE04066121AC940D21DA",
+    "records": 819,
+    "start_utc": "2026-04-10T23:53:30.866000Z",
+    "stop_utc": "2026-04-11T00:07:08.841000Z",
+    "ap_vector_order": [
+      "daily_ap",
+      "current_3h_ap",
+      "3h_prior_ap",
+      "6h_prior_ap",
+      "9h_prior_ap",
+      "12_to_33h_average_ap",
+      "36_to_57h_average_ap"
+    ]
+  },
+  "observed_driver_range": {
+    "distinct_f107": [
+      93.7,
+      96.7
+    ],
+    "distinct_f107a": [
+      123.8,
+      124.1
+    ],
+    "distinct_current_3h_ap": [
+      5.0,
+      7.0
+    ]
+  },
+  "utc_boundary_control": {
+    "boundary": "2026-04-10T23:59:59.866000Z to 2026-04-11T00:00:00.866000Z",
+    "observed_altitude_change_m": -164.736,
+    "observed_density_change_percent": 2.142846275,
+    "driver_only_density_effect_percent": 0.0,
+    "fixed_driver_geometry_time_change_percent": 2.142846275,
+    "interpretation": "The modeled density change across midnight is attributable to trajectory descent through the atmospheric density gradient. The F10.7/F10.7a/Ap driver swap produced no measurable density effect at these approximately 47-km states."
+  },
+  "interpretation_limits": [
+    "These values are empirical-model forcing inputs, not spacecraft measurements.",
+    "The committed driver snapshot is used for reproducibility rather than silently consuming future updates to SW-All.csv."
+  ]
+}

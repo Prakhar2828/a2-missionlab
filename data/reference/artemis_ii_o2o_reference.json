@@ -1,0 +1,285 @@
+{
+  "dataset_id": "phase2h3_artemis_ii_o2o_reference",
+  "mission": "Artemis II",
+  "system_name": "Orion Artemis II Optical Communications System",
+  "short_name": "O2O",
+  "scope": "Source-backed reconstruction of the Artemis II O2O optical communications architecture, ground segment, mission operations context, live mission milestones, and postflight performance while preserving the distinction between optical demonstration activity and the mission's primary radio-frequency communications architecture.",
+  "provenance": "NASA_AND_NASA_NTRS_REPORTED_WITH_MISSIONLAB_DERIVED_METRICS",
+  "mission_role": {
+    "classification": "OPTICAL_COMMUNICATIONS_DEMONSTRATION",
+    "primary_mission_communications": [
+      "Near Space Network",
+      "Deep Space Network"
+    ],
+    "relationship": "O2O operated as a parallel optical communications demonstration while NASA's Near Space Network and Deep Space Network provided primary mission communications.",
+    "primary_rf_replacement": false
+  },
+  "optical_architecture": {
+    "optical_band": "OPTICAL_C_BAND",
+    "nominal_wavelength_nm": 1550,
+    "maximum_return_downlink_rate_mbps": 260,
+    "maximum_forward_uplink_rate_mbps": 20,
+    "line_of_sight_required": true,
+    "terminal_components": [
+      {
+        "id": "optical_module",
+        "name": "Optical Module",
+        "functions": [
+          "Optical transmission and reception",
+          "Pointing toward optical ground terminals"
+        ],
+        "telescope_aperture_inches": 4,
+        "gimbal_count": 2
+      },
+      {
+        "id": "modem",
+        "name": "Modem",
+        "functions": [
+          "Converts mission data and commands to and from optical communication signals"
+        ]
+      },
+      {
+        "id": "controller",
+        "name": "Controller",
+        "functions": [
+          "Interfaces with Orion flight avionics",
+          "Controls and points the optical module telescope"
+        ]
+      }
+    ],
+    "interpretation": "The 260 Mbps and 20 Mbps values are architecture maximum return and forward rates and are not mission-average throughput values."
+  },
+  "ground_segment": {
+    "main_ground_sites": [
+      {
+        "site_id": "white_sands_complex",
+        "name": "White Sands Complex",
+        "short_name": "WSC",
+        "location": "Las Cruces, New Mexico, USA",
+        "premission_role": "PRIMARY_OPTICAL_GROUND_STATION",
+        "postflight_status": "MISSION_USED",
+        "evidence_layer": "PREMISSION_ARCHITECTURE_AND_POSTFLIGHT_REPORTED"
+      },
+      {
+        "site_id": "table_mountain_facility",
+        "name": "Table Mountain Facility",
+        "short_name": "TMF",
+        "organization": "NASA Jet Propulsion Laboratory",
+        "location": "Southern California, USA",
+        "premission_role": "PRIMARY_OPTICAL_GROUND_STATION",
+        "postflight_status": "JPL_SOUTHERN_CALIFORNIA_GROUND_STATION_REPORTED",
+        "evidence_layer": "PREMISSION_ARCHITECTURE_AND_POSTFLIGHT_REPORTED",
+        "cross_source_mapping_note": "Premission NASA documentation names Table Mountain Facility as the JPL optical ground station. Postflight NASA reporting describes one of the two main optical ground stations as NASA JPL in Southern California without repeating the Table Mountain Facility name."
+      }
+    ],
+    "additional_demonstration_sites": [
+      {
+        "site_id": "mount_stromlo_qogs",
+        "name": "Australian National University Quantum Optical Ground Station",
+        "short_name": "QOGS",
+        "location": "Mount Stromlo, Canberra, Australia",
+        "role": "ADDITIONAL_OPTICAL_DEMONSTRATION_SITE",
+        "premission_status": "PLANNED_DEMONSTRATION",
+        "postflight_status": "MISSION_DEMONSTRATED",
+        "commercial_off_the_shelf_context": true
+      }
+    ],
+    "environmental_context": {
+      "clear_sky_dependency": true,
+      "site_selection_context": "NASA selected the primary optical sites for high, dry environments and favorable cloud conditions because atmospheric cloud cover can obstruct optical links.",
+      "phase2h3_weather_model": false
+    }
+  },
+  "operations_segment": {
+    "location": "Johnson Space Center, Houston, Texas, USA",
+    "elements": [
+      {
+        "id": "mcc",
+        "name": "Artemis II Mission Control Center",
+        "short_name": "MCC"
+      },
+      {
+        "id": "lstc",
+        "name": "Lasercomm Space Terminal Console",
+        "short_name": "LSTC"
+      },
+      {
+        "id": "lpac",
+        "name": "Lasercomm Link Planning and Analysis Center",
+        "short_name": "LPAC"
+      }
+    ],
+    "interpretation": "The operations segment connected optical-link planning and execution with Artemis II mission-control operations."
+  },
+  "live_mission_events": [
+    {
+      "catalog_event_id": "o2o_two_us_ground_station_links",
+      "name": "O2O connects with two U.S. ground stations",
+      "date_utc": "2026-04-03",
+      "precision": "DATE_LEVEL",
+      "event_state": "OBSERVED_REPORTED",
+      "evidence_layer": "LIVE_MISSION_REPORTED",
+      "reported_products": [
+        "High-definition video",
+        "Mission data"
+      ]
+    },
+    {
+      "catalog_event_id": "o2o_100_gb_downlink_milestone",
+      "name": "O2O surpasses 100 GB downlinked",
+      "date_utc": "2026-04-04",
+      "precision": "APPROXIMATE",
+      "approximate_anchor_utc": "2026-04-04T16:00:00Z",
+      "anchor_is_not_exact": true,
+      "threshold_gb": 100,
+      "threshold_relation": "GREATER_THAN",
+      "evidence_layer": "LIVE_MISSION_REPORTED",
+      "interpretation": "The 16:00 UTC value is a reference anchor for NASA's phrase 'just after 12 p.m. EDT' and is not an exact milestone timestamp."
+    }
+  ],
+  "postflight_results": {
+    "evidence_layer": "POSTFLIGHT_REPORTED",
+    "time_semantics": "MISSION_AGGREGATE_OR_UNTIMED_RESULT",
+    "mission_total_data_exchange": {
+      "value_gb": 484,
+      "semantics": "DATA_EXCHANGED_BETWEEN_ORION_AND_EARTH",
+      "downlink_only": false,
+      "single_session": false
+    },
+    "downlink_performance": {
+      "multiple_260_mbps_downlinks": true,
+      "maximum_demonstrated_downlink_rate_mbps": 260,
+      "mission_average_rate_mbps": null
+    },
+    "main_ground_station_transfer": {
+      "reported_data_volume_gb": 26,
+      "reported_duration_relation": "LESS_THAN",
+      "reported_duration_hours": 1,
+      "exact_duration_known": false,
+      "individual_site_assignment": null,
+      "interpretation": "NASA attributes the transfer record collectively to the two main U.S. optical ground stations rather than assigning this 26 GB record to one named station."
+    },
+    "mount_stromlo": {
+      "dual_stream_video_duration_relation": "GREATER_THAN",
+      "dual_stream_video_duration_hours": 15.5,
+      "continuous_single_pass_claimed": false,
+      "maximum_demonstrated_downlink_rate_mbps": 260
+    },
+    "content_and_direction": {
+      "earthset_images_downlinked": true,
+      "earthrise_images_downlinked": true,
+      "other_mission_images_downlinked": true,
+      "forward_data_to_orion_demonstrated": true
+    }
+  },
+  "sources": [
+    {
+      "source_id": "nasa_o2o_system",
+      "organization": "NASA",
+      "title": "NASA's Orion Artemis II Optical Communications System (O2O)",
+      "date": "2023-08-02",
+      "url": "https://www.nasa.gov/technology/space-comms/o2o/",
+      "evidence_layer": "PREMISSION_ARCHITECTURE",
+      "claims_used": [
+        "Near Space Network and Deep Space Network were the primary Artemis II communications systems while O2O operated simultaneously.",
+        "The O2O terminal contains an optical module, modem, and controller.",
+        "The optical module contains a 4-inch telescope and two gimbals.",
+        "White Sands Complex and Table Mountain Facility were identified as the optical ground stations.",
+        "Mount Stromlo was planned as an additional Australian demonstration."
+      ]
+    },
+    {
+      "source_id": "ntrs_o2o_architecture_20250010065",
+      "organization": "NASA Technical Reports Server",
+      "title": "Orion Artemis II Optical Communications Architecture, Implementation and Test Systems",
+      "document_id": "20250010065",
+      "url": "https://ntrs.nasa.gov/citations/20250010065",
+      "evidence_layer": "PREMISSION_ARCHITECTURE",
+      "claims_used": [
+        "O2O architecture is based on optical C-band near 1550 nm.",
+        "O2O supports data transfer up to 260 Mbps downlink.",
+        "O2O was integrated with Orion and Mission Control Center operations."
+      ]
+    },
+    {
+      "source_id": "ntrs_o2o_interface_20230007379",
+      "organization": "NASA Technical Reports Server",
+      "title": "Space-to-Ground Optical Interface Verification for the Orion Artemis II Optical Communications Demonstration",
+      "document_id": "20230007379",
+      "url": "https://ntrs.nasa.gov/citations/20230007379",
+      "evidence_layer": "PREMISSION_ARCHITECTURE",
+      "claims_used": [
+        "O2O supports return links up to 260 Mbps.",
+        "O2O supports forward links up to 20 Mbps.",
+        "White Sands Complex and Table Mountain Facility support the Earth end of the optical link."
+      ]
+    },
+    {
+      "source_id": "ntrs_o2o_ground_operations_20210012024",
+      "organization": "NASA Technical Reports Server",
+      "title": "Ground Segment Operations Concept for the Orion Artemis-2 Optical Communications System",
+      "document_id": "20210012024",
+      "url": "https://ntrs.nasa.gov/citations/20210012024",
+      "evidence_layer": "PREMISSION_ARCHITECTURE",
+      "claims_used": [
+        "The O2O operations segment includes the Artemis II Mission Control Center, Lasercomm Space Terminal Console, and Lasercomm Link Planning and Analysis Center at Johnson Space Center.",
+        "Ground operations included planning, event execution, and post-pass reporting."
+      ]
+    },
+    {
+      "source_id": "nasa_flight_day_3_o2o",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 3: Crew Prepares for First Correction Burn, Readies to Receive Lunar Observation Assignment",
+      "date": "2026-04-03",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/03/artemis-ii-flight-day-3-crew-prepares-for-first-correction-burn-readies-to-receive-lunar-observation-assignment/",
+      "evidence_layer": "LIVE_MISSION_REPORTED",
+      "claims_used": [
+        "O2O connected with two U.S.-based ground stations.",
+        "O2O transmitted high-definition video and mission data."
+      ]
+    },
+    {
+      "source_id": "nasa_flight_day_4_o2o",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 4: Deep-Space Flying, Lunar Flyby Prep",
+      "date": "2026-04-04",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/04/artemis-ii-flight-day-4-deep-space-flying-lunar-flyby-prep/",
+      "evidence_layer": "LIVE_MISSION_REPORTED",
+      "claims_used": [
+        "O2O surpassed 100 GB downlinked just after noon EDT."
+      ]
+    },
+    {
+      "source_id": "nasa_o2o_postflight",
+      "organization": "NASA",
+      "title": "NASA Laser Terminal Enhances Views During Artemis II Mission",
+      "date": "2026-04-28",
+      "url": "https://www.nasa.gov/missions/artemis/artemis-2/nasa-laser-terminal-enhances-views-during-artemis-ii-mission/",
+      "evidence_layer": "POSTFLIGHT_REPORTED",
+      "claims_used": [
+        "O2O exchanged 484 GB between Orion and Earth.",
+        "Earthset and Earthrise imagery was downlinked over O2O.",
+        "O2O transmitted data to Orion.",
+        "Near Space Network and Deep Space Network remained the primary Artemis II communications support.",
+        "O2O established multiple 260 Mbps downlinks.",
+        "The two main U.S. ground stations supported a 26 GB transfer in under one hour.",
+        "Mount Stromlo achieved more than 15.5 hours of dual-stream video.",
+        "Mount Stromlo successfully received at 260 Mbps."
+      ]
+    }
+  ],
+  "guardrails": [
+    "O2O was a parallel optical communications demonstration and must not be represented as replacing the Near Space Network or Deep Space Network primary RF architecture.",
+    "The 484 GB value is reported as total data exchanged between Orion and Earth and must not be relabeled as 484 GB of downlink-only data.",
+    "The 484 GB mission aggregate must not be represented as one continuous communications session.",
+    "A demonstrated 260 Mbps downlink rate is not a mission-average throughput rate.",
+    "The Flight Day 4 100 GB milestone is a threshold event and must not be represented as exactly 100 GB.",
+    "The Flight Day 4 16:00 UTC value is an approximate computational anchor and not an observed exact timestamp.",
+    "The reported 26 GB transfer occurred in under one hour; the public source does not provide its exact duration.",
+    "The 26 GB ground-station transfer record is not assigned to one individual U.S. ground station because the NASA source describes the two main stations collectively.",
+    "More than 15.5 hours of Mount Stromlo dual-stream video does not establish one continuous 15.5-hour optical pass.",
+    "Premission architecture capability is not automatically treated as demonstrated mission performance.",
+    "Optical ground-station activity does not establish Deep Space Network RF antenna assignments.",
+    "Phase 2H.3 does not model clouds, atmospheric attenuation, pointing loss, optical link margin, pass scheduling, or received optical power."
+  ]
+}

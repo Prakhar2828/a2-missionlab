@@ -1,0 +1,218 @@
+{
+  "dataset_id": "phase2f2_artemis_entry_profile_heritage",
+  "scope": "Authoritative NASA entry-profile reference quantities for bounded Artemis I versus Artemis II trajectory comparison",
+  "provenance": "NASA_REPORTED",
+  "evidence_items": [
+    {
+      "id": "artemis_i_entry_interface_state",
+      "mission": "Artemis I",
+      "category": "ENTRY_INTERFACE_STATE",
+      "claim": "NASA's Artemis I entry-performance reconstruction defines Entry Interface at 400,000 ft geodetic altitude and reports an actual inertial velocity magnitude of 36,062.65680 ft/s.",
+      "provenance": "NASA_REPORTED",
+      "source_title": "Orion Artemis I Entry Performance",
+      "source_url": "https://ntrs.nasa.gov/citations/20240000024",
+      "source_organization": "NASA Technical Reports Server",
+      "source_date": "2024",
+      "key_values": {
+        "geodetic_altitude_ft": 400000.0,
+        "geodetic_latitude_deg": -25.82847,
+        "longitude_deg": -120.08071,
+        "inertial_velocity_magnitude_ft_s": 36062.6568,
+        "inertial_topocentric_flight_path_angle_deg": -5.66367,
+        "inertial_topocentric_azimuth_deg": 4.65389,
+        "total_range_to_target_nmi": 3176.65
+      },
+      "interpretation": "Provides a technically matched Artemis I inertial Entry Interface speed for comparison with the Artemis II high-rate source-state inertial speed magnitude.",
+      "limitations": [
+        "The Artemis I state is reported by NASA from flight reconstruction.",
+        "Frame conventions must remain explicit when comparing individual vector components.",
+        "Only velocity magnitude is used for the cross-mission speed comparison because magnitude is invariant under pure frame rotation."
+      ]
+    },
+    {
+      "id": "artemis_i_skip_apogee",
+      "mission": "Artemis I",
+      "category": "SKIP_ENTRY_GEOMETRY",
+      "claim": "NASA reports that Artemis I successfully performed a skip entry and reached an actual skip-apogee geodetic altitude of 287.4 kft, compared with a predicted 293.5 kft.",
+      "provenance": "NASA_REPORTED",
+      "source_title": "Orion Artemis I Entry Performance",
+      "source_url": "https://ntrs.nasa.gov/citations/20240000024",
+      "source_organization": "NASA Technical Reports Server",
+      "source_date": "2024",
+      "key_values": {
+        "entry_classification": "SKIP_ENTRY",
+        "actual_skip_apogee_kft": 287.4,
+        "actual_skip_apogee_km": 87.59952,
+        "predicted_skip_apogee_kft": 293.5
+      },
+      "interpretation": "Defines the principal published Artemis I upper-trajectory skip landmark.",
+      "limitations": [
+        "Skip-apogee altitude is not the same quantity as rebound amplitude.",
+        "The Artemis I skip apogee must not be interpreted as an Artemis II design requirement.",
+        "MissionLab does not currently reconstruct the full Artemis I state history from raw flight data."
+      ]
+    },
+    {
+      "id": "artemis_i_sensed_acceleration_peaks",
+      "mission": "Artemis I",
+      "category": "SENSED_ACCELERATION",
+      "claim": "NASA's Artemis I entry-performance paper identifies first and second peak sensed-acceleration magnitudes of 4.05 g and 3.89 g.",
+      "provenance": "NASA_REPORTED",
+      "source_title": "Orion Artemis I Entry Performance",
+      "source_url": "https://ntrs.nasa.gov/citations/20240000024",
+      "source_organization": "NASA Technical Reports Server",
+      "source_date": "2024",
+      "key_values": {
+        "first_peak_sensed_acceleration_g": 4.05,
+        "second_peak_sensed_acceleration_g": 3.89
+      },
+      "interpretation": "Provides qualitative heritage context for the two-pass Artemis I skip-entry loading structure.",
+      "limitations": [
+        "These values are sensed acceleration magnitudes.",
+        "They are not directly comparable to Phase 2C MissionLab kinematic deceleration divided by g0.",
+        "MissionLab must not describe its Phase 2C g0-equivalent quantity as crew g-load."
+      ]
+    },
+    {
+      "id": "artemis_i_ei_to_splashdown_duration",
+      "mission": "Artemis I",
+      "category": "ENTRY_DURATION",
+      "claim": "NASA's Artemis I mission timeline reports crew-module Entry Interface at MET 025/11:15:52 and splashdown at MET 025/11:36:27, a difference of 1,235 seconds.",
+      "provenance": "NASA_REPORTED",
+      "source_title": "Artemis I Mission Timeline",
+      "source_url": "https://www.nasa.gov/reference/artemis-i-mission-timeline/",
+      "source_organization": "NASA",
+      "source_date": null,
+      "key_values": {
+        "entry_interface_met": "025/11:15:52",
+        "splashdown_met": "025/11:36:27",
+        "ei_to_splashdown_seconds": 1235.0
+      },
+      "interpretation": "Provides an authoritative Artemis I Entry Interface to splashdown duration.",
+      "limitations": [
+        "The Artemis II comparison endpoint is a MissionLab-derived WGS84 surface crossing correlated with NASA's splashdown minute.",
+        "The cross-mission duration comparison therefore mixes NASA-reported Artemis I event epochs with a derived Artemis II terminal epoch."
+      ]
+    },
+    {
+      "id": "artemis_ii_no_skip_entry",
+      "mission": "Artemis II",
+      "category": "ENTRY_PROFILE_CLASSIFICATION",
+      "claim": "NASA technical reporting states that Artemis II flew a modified trajectory without the Artemis I skip entry to minimize the crack-inducing conditions identified during the Artemis I heat-shield investigation.",
+      "provenance": "NASA_REPORTED",
+      "source_title": "Under Pressure: The Artemis I Heatshield Char Loss Investigation and Artemis II's Successful Entry",
+      "source_url": "https://ntrs.nasa.gov/citations/20260006849",
+      "source_organization": "NASA Technical Reports Server",
+      "source_date": "2026",
+      "key_values": {
+        "entry_classification": "MODIFIED_TRAJECTORY_WITHOUT_SKIP_ENTRY"
+      },
+      "interpretation": "Defines the authoritative terminology boundary for Artemis II.",
+      "limitations": [
+        "A geometric altitude rebound in the Artemis II trajectory must not be relabeled as a skip entry.",
+        "The source does not publish the full Artemis II guidance design or trajectory optimization constraint set."
+      ]
+    },
+    {
+      "id": "artemis_ii_lofted_entry_label",
+      "mission": "Artemis II",
+      "category": "ENTRY_PROFILE_CLASSIFICATION",
+      "claim": "NASA described the Artemis II Orion return sequence in public mission coverage as a lofted entry sequence.",
+      "provenance": "NASA_REPORTED",
+      "source_title": "Artemis II Flight Day 9: Crew Prepares to Come Home",
+      "source_url": "https://www.nasa.gov/blogs/missions/2026/04/09/artemis-ii-flight-day-9-crew-prepares-to-come-home/",
+      "source_organization": "NASA",
+      "source_date": "2026-04-09",
+      "key_values": {
+        "public_profile_label": "LOFTED_ENTRY_SEQUENCE"
+      },
+      "interpretation": "Supports describing MissionLab's derived Artemis II vertical rebound as a loft/rebound while preserving NASA's explicit no-skip classification.",
+      "limitations": [
+        "The phrase is a NASA public mission label rather than a complete mathematical guidance-mode definition."
+      ]
+    },
+    {
+      "id": "artemis_ii_public_pre_ei_velocity",
+      "mission": "Artemis II",
+      "category": "PUBLIC_SPEED_CONTEXT",
+      "claim": "NASA reported that Orion would reach approximately 23,864 mph maximum velocity just before Artemis II Entry Interface.",
+      "provenance": "NASA_REPORTED",
+      "source_title": "Artemis II Flight Day 9: Crew Prepares to Come Home",
+      "source_url": "https://www.nasa.gov/blogs/missions/2026/04/09/artemis-ii-flight-day-9-crew-prepares-to-come-home/",
+      "source_organization": "NASA",
+      "source_date": "2026-04-09",
+      "key_values": {
+        "maximum_velocity_before_ei_mph": 23864.0
+      },
+      "interpretation": "Retained as public mission context rather than the primary cross-mission speed comparison.",
+      "limitations": [
+        "This public velocity value is not used as the primary speed-comparison metric because its reporting semantics are not as precisely matched to the Artemis I technical EI inertial state.",
+        "MissionLab instead compares the technical Artemis I EI inertial velocity magnitude with the Artemis II high-rate source-state inertial speed magnitude."
+      ]
+    }
+  ],
+  "permanent_comparison_plan": {
+    "primary_metrics": [
+      {
+        "metric_id": "profile_classification",
+        "artemis_i": "SKIP_ENTRY",
+        "artemis_ii": "LOFTED_OR_REBOUND_STRUCTURE_WITHOUT_SKIP_ENTRY"
+      },
+      {
+        "metric_id": "ei_to_terminal_duration",
+        "artemis_i_source": "NASA_REPORTED",
+        "artemis_ii_source": "MISSIONLAB_DERIVED"
+      },
+      {
+        "metric_id": "upper_profile_altitude",
+        "artemis_i_quantity": "NASA-reported skip-apogee geodetic altitude",
+        "artemis_ii_quantity": "MissionLab-derived rebound-top WGS84 geodetic altitude"
+      },
+      {
+        "metric_id": "entry_interface_inertial_speed",
+        "artemis_i_quantity": "NASA-reported EI inertial velocity magnitude",
+        "artemis_ii_quantity": "NASA flight-derived high-rate M50 inertial speed magnitude"
+      },
+      {
+        "metric_id": "artemis_ii_rebound_structure",
+        "quantities": [
+          "descent-to-climb time",
+          "climb-to-descent time",
+          "rebound duration",
+          "altitude recovery",
+          "speed loss during rebound"
+        ]
+      }
+    ],
+    "context_only_metrics": [
+      "Artemis I first sensed-acceleration peak",
+      "Artemis I second sensed-acceleration peak",
+      "Artemis II public maximum velocity just before Entry Interface"
+    ]
+  },
+  "planned_figures": [
+    {
+      "filename": "phase2f_entry_duration_comparison.svg",
+      "purpose": "Compare Artemis I NASA-reported EI-to-splashdown duration with Artemis II MissionLab-derived EI-to-surface-crossing duration."
+    },
+    {
+      "filename": "phase2f_skip_loft_altitude_comparison.svg",
+      "purpose": "Compare Artemis I NASA-reported skip apogee with Artemis II MissionLab-derived rebound-top altitude while preserving different trajectory classifications."
+    },
+    {
+      "filename": "phase2f_artemis_ii_rebound_profile.svg",
+      "purpose": "Show the actual Artemis II derived altitude rebound versus Entry Interface elapsed time with descent-to-climb and climb-to-descent markers."
+    }
+  ],
+  "interpretation_guardrails": [
+    "Artemis II must not be labeled a skip entry.",
+    "The Artemis II derived vertical rebound may be described as a rebound or loft.",
+    "Artemis I skip-apogee altitude and Artemis II rebound-top altitude may be compared as upper-profile landmarks but not as identical guidance phases.",
+    "The Artemis I to Artemis II duration comparison must preserve mixed provenance between NASA-reported Artemis I epochs and the MissionLab-derived Artemis II surface crossing.",
+    "Public mission velocity figures are context only when epoch or frame semantics are not matched.",
+    "The primary speed comparison must use inertial velocity magnitudes with explicitly compatible semantics.",
+    "Artemis I sensed acceleration must not be directly compared with Phase 2C MissionLab g0-equivalent kinematic deceleration.",
+    "No trajectory comparison may be converted into a TPS char-loss or damage prediction.",
+    "No causal claim may be made that every Artemis I versus Artemis II entry-profile difference was driven exclusively by the heat-shield investigation."
+  ]
+}

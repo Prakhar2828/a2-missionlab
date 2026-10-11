@@ -1,0 +1,587 @@
+{
+  "dataset_id": "phase4a1_artemis_ii_entry_descent_recovery_evidence",
+  "mission": "Artemis II",
+  "phase": "4A.1",
+  "title": "Artemis II Entry, Descent, Splashdown, and Recovery Public Evidence Reconstruction",
+  "status": "REFERENCE_EVIDENCE_ASSEMBLED",
+  "purpose": "Assemble the public NASA evidence required to reconstruct Artemis II crew-module separation, entry preparation, atmospheric entry, communications blackout, parachute descent, splashdown, crew recovery, and spacecraft recovery without duplicating Phase 2 quantitative entry modeling or inventing unavailable telemetry.",
+  "scope": {
+    "starts_with": "Orion crew module and service module separation on Flight Day 10",
+    "ends_with": "Orion secured in the well deck of USS John P. Murtha",
+    "includes": [
+      "crew module and service module separation",
+      "crew module raise burn",
+      "Entry Interface",
+      "planned plasma communications blackout",
+      "communications reacquisition",
+      "drogue parachute deployment",
+      "main parachute deployment",
+      "splashdown",
+      "post-splashdown spacecraft power-down",
+      "recovery-team approach",
+      "crew extraction",
+      "helicopter transfer",
+      "crew aboard recovery ship",
+      "Orion spacecraft recovery into the well deck",
+      "Orion parachute-system architecture"
+    ],
+    "excludes": [
+      "recomputation of Phase 2 entry trajectory",
+      "recomputation of Phase 2 atmospheric density",
+      "recomputation of Phase 2 Mach number",
+      "recomputation of Phase 2 rarefaction",
+      "recomputation of Phase 2 convective heating",
+      "recomputation of Phase 2 TPS material physics",
+      "private Orion telemetry",
+      "private parachute sensor data",
+      "private Mission Control console logs",
+      "unreported sub-second parachute event times",
+      "unreported splashdown coordinates",
+      "unreported recovery-team decision logic"
+    ]
+  },
+  "time_interpretation": {
+    "nasa_live_update_timezone": "Eastern",
+    "eastern_timezone_on_2026_04_10": "EDT",
+    "utc_offset_hours_on_2026_04_10": -4,
+    "public_event_time_resolution": "minute",
+    "rule": "NASA Flight Day 10 live-update timestamps are preserved as minute-resolution public reports. They are not treated as exact second-level telemetry epochs.",
+    "overnight_rule": "Updates through 9:58 p.m. are interpreted as April 10, 2026 EDT. The later 4:27 a.m. spacecraft-secured update is interpreted as April 11, 2026 EDT.",
+    "blackout_rule": "NASA reported that the planned communications blackout began shortly after Entry Interface and was expected to last about six minutes. No exact public blackout-start second or exact blackout-end second is inferred."
+  },
+  "source_registry": [
+    {
+      "source_id": "NASA_A2_FLIGHT_DAY_10_LIVE_REENTRY_2026_04_10",
+      "publisher": "NASA",
+      "title": "Artemis II Flight Day 10: Live Re-Entry Updates",
+      "publication_date": "2026-04-10",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/10/artemis-ii-flight-day-10-re-entry-live-updates/",
+      "source_type": "NASA_MISSION_LIVE_UPDATE",
+      "role": "Primary as-flown public source for entry, blackout, parachute descent, splashdown, crew extraction, helicopter transfer, recovery-ship arrival, and spacecraft recovery."
+    },
+    {
+      "source_id": "NASA_A2_PRESS_KIT",
+      "publisher": "NASA",
+      "title": "Artemis II Press Kit",
+      "url": "https://www.nasa.gov/artemis-ii-press-kit/",
+      "source_type": "NASA_MISSION_REFERENCE",
+      "role": "Preflight mission architecture and nominal return-sequence reference. Planned values are not automatically treated as as-flown values."
+    },
+    {
+      "source_id": "NASA_ORION_FUN_FACTS",
+      "publisher": "NASA",
+      "title": "Orion Fun Facts",
+      "url": "https://www.nasa.gov/reference/orion-fun-facts/",
+      "source_type": "NASA_SPACECRAFT_REFERENCE",
+      "role": "Orion parachute-system architecture reference."
+    },
+    {
+      "source_id": "NASA_ARTEMIS_II_REFERENCE_GUIDE_2026",
+      "publisher": "NASA",
+      "title": "Artemis II Reference Guide",
+      "publication_year": 2026,
+      "url": "https://www.nasa.gov/wp-content/uploads/2026/01/a2-reference-guide-012825.pdf",
+      "source_type": "NASA_MISSION_REFERENCE_GUIDE",
+      "role": "Artemis II spacecraft and parachute-system reference."
+    },
+    {
+      "source_id": "NASA_ORION_CREW_MODULE_REFERENCE",
+      "publisher": "NASA",
+      "title": "Crew Module",
+      "url": "https://www.nasa.gov/reference/crew-module/",
+      "source_type": "NASA_SPACECRAFT_REFERENCE",
+      "role": "Orion crew-module and parachute architecture reference."
+    }
+  ],
+  "phase2_dependencies": {
+    "rule": "Phase 4A.1 treats validated Phase 2 entry products as dependencies rather than recreating them.",
+    "existing_public_event_reference": "data/reference/artemis_ii_entry_events.json",
+    "existing_entry_analysis_scripts": [
+      "scripts/analysis/analyze_entry_dynamics.py",
+      "scripts/analysis/build_entry_atmosphere.py",
+      "scripts/analysis/build_entry_mach.py",
+      "scripts/analysis/build_entry_rarefaction.py",
+      "scripts/analysis/build_entry_heating.py",
+      "scripts/analysis/correlate_entry_events.py"
+    ],
+    "already_reconstructed_in_phase2": [
+      "Entry Interface trajectory state",
+      "atmospheric density",
+      "Mach",
+      "rarefaction",
+      "external convective heating",
+      "drogue-altitude correlation",
+      "main-parachute-altitude correlation",
+      "derived zero-altitude surface crossing",
+      "splashdown public-minute correlation"
+    ]
+  },
+  "parachute_architecture": {
+    "evidence_class": "NASA_REPORTED_SYSTEM_ARCHITECTURE",
+    "architecture_not_as_flown_event_log": true,
+    "total_parachutes": 11,
+    "components": [
+      {
+        "component": "forward_bay_cover_parachutes",
+        "count": 3,
+        "nominal_diameter_ft_each": 7,
+        "function": "Remove the forward bay cover that protects the parachute compartment during entry."
+      },
+      {
+        "component": "drogue_parachutes",
+        "count": 2,
+        "nominal_diameter_ft_each": 23,
+        "function": "Slow and stabilize the crew module before main-parachute deployment."
+      },
+      {
+        "component": "pilot_parachutes",
+        "count": 3,
+        "nominal_diameter_ft_each": 11,
+        "function": "Deploy the three main parachutes."
+      },
+      {
+        "component": "main_parachutes",
+        "count": 3,
+        "nominal_diameter_ft_each": 116,
+        "function": "Provide final descent deceleration for ocean splashdown."
+      }
+    ],
+    "sources": [
+      "NASA_ORION_FUN_FACTS",
+      "NASA_ARTEMIS_II_REFERENCE_GUIDE_2026",
+      "NASA_ORION_CREW_MODULE_REFERENCE"
+    ],
+    "interpretation_boundary": "The 11-parachute architecture describes the Orion system design. It does not by itself prove the exact as-flown deployment time or performance of every individual parachute on Artemis II."
+  },
+  "events": [
+    {
+      "event_id": "A2_FD10_DSN_TO_NSN_HANDOVER",
+      "event_type": "COMMUNICATIONS_NETWORK_HANDOVER",
+      "mission_date": "2026-04-10",
+      "reported_local_minute": "2026-04-10T19:15:00-04:00",
+      "reported_utc_minute": "2026-04-10T23:15:00Z",
+      "time_precision": "PUBLIC_UPDATE_MINUTE",
+      "evidence_class": "NASA_REPORTED",
+      "observation": "NASA reported completion of Orion's handover from the Deep Space Network to the Near Space Network Tracking and Data Relay Satellite system as the crew prepared for the final return phase.",
+      "sources": [
+        "NASA_A2_FLIGHT_DAY_10_LIVE_REENTRY_2026_04_10"
+      ],
+      "exact_second_known": false
+    },
+    {
+      "event_id": "A2_FD10_CM_SM_SEPARATION",
+      "event_type": "SPACECRAFT_SEPARATION",
+      "mission_date": "2026-04-10",
+      "reported_local_minute": "2026-04-10T19:33:00-04:00",
+      "reported_utc_minute": "2026-04-10T23:33:00Z",
+      "time_precision": "PUBLIC_UPDATE_MINUTE",
+      "evidence_class": "NASA_REPORTED",
+      "observation": "NASA reported that Orion's crew module and service module separated. The crew module continued toward Earth while the service module was expected to burn up over the Pacific.",
+      "operational_role": "Expose the crew-module heat shield and transition Orion into the crew-module-only entry configuration.",
+      "sources": [
+        "NASA_A2_FLIGHT_DAY_10_LIVE_REENTRY_2026_04_10"
+      ],
+      "exact_second_known": false
+    },
+    {
+      "event_id": "A2_FD10_CREW_MODULE_RAISE_BURN",
+      "event_type": "ENTRY_PREPARATION_MANEUVER",
+      "mission_date": "2026-04-10",
+      "reported_local_minute": "2026-04-10T19:37:00-04:00",
+      "reported_utc_minute": "2026-04-10T23:37:00Z",
+      "time_precision": "PUBLIC_UPDATE_MINUTE",
+      "evidence_class": "NASA_REPORTED",
+      "observation": "NASA reported that Orion performed the crew module raise burn, adjusting spacecraft orientation to align the heat shield for re-entry.",
+      "sources": [
+        "NASA_A2_FLIGHT_DAY_10_LIVE_REENTRY_2026_04_10"
+      ],
+      "burn_duration_seconds": null,
+      "delta_v": null,
+      "exact_second_known": false,
+      "internal_guidance_logic_public": false
+    },
+    {
+      "event_id": "A2_ENTRY_INTERFACE",
+      "event_type": "ENTRY_INTERFACE",
+      "mission_date": "2026-04-10",
+      "reported_local_minute": "2026-04-10T19:53:00-04:00",
+      "reported_utc_minute": "2026-04-10T23:53:00Z",
+      "time_precision": "PUBLIC_UPDATE_MINUTE",
+      "evidence_class": "NASA_REPORTED",
+      "reported_altitude_ft": 400000,
+      "reported_speed_description": "35 times the speed of sound",
+      "reported_distance_to_splashdown_statute_miles": 1956,
+      "distance_qualifier": "about",
+      "observation": "NASA reported Orion reaching Earth's atmosphere at 400,000 feet, traveling approximately Mach 35 and about 1,956 statute miles from the splashdown site.",
+      "sources": [
+        "NASA_A2_FLIGHT_DAY_10_LIVE_REENTRY_2026_04_10"
+      ],
+      "phase2_existing_event_id": "entry_interface",
+      "exact_second_known_from_live_source": false
+    },
+    {
+      "event_id": "A2_ENTRY_PLASMA_BLACKOUT",
+      "event_type": "PLANNED_COMMUNICATIONS_BLACKOUT",
+      "mission_date": "2026-04-10",
+      "reported_start_relation": "SHORTLY_AFTER_ENTRY_INTERFACE",
+      "reported_expected_duration_minutes": 6,
+      "exact_start_utc": null,
+      "exact_end_utc": null,
+      "time_precision": "RELATIVE_EVENT_ORDER_AND_APPROXIMATE_DURATION",
+      "evidence_class": "NASA_REPORTED",
+      "observation": "NASA reported a planned communications blackout shortly after Entry Interface as superheated plasma built around the crew capsule during atmospheric heating. The blackout was expected to last about six minutes.",
+      "cause_classification": "PLASMA_COMMUNICATIONS_BLOCKAGE_DURING_ENTRY",
+      "planned": true,
+      "anomaly": false,
+      "sources": [
+        "NASA_A2_FLIGHT_DAY_10_LIVE_REENTRY_2026_04_10",
+        "NASA_A2_PRESS_KIT"
+      ],
+      "exact_second_known": false,
+      "missionlab_may_infer_exact_start": false,
+      "missionlab_may_infer_exact_end": false
+    },
+    {
+      "event_id": "A2_ENTRY_COMM_REACQUISITION",
+      "event_type": "COMMUNICATIONS_REACQUISITION",
+      "mission_date": "2026-04-10",
+      "reported_local_minute": "2026-04-10T20:00:00-04:00",
+      "reported_utc_minute": "2026-04-11T00:00:00Z",
+      "time_precision": "PUBLIC_UPDATE_MINUTE",
+      "evidence_class": "NASA_REPORTED",
+      "observation": "NASA reported that communications contact with the Artemis II crew aboard Orion had been reestablished.",
+      "sources": [
+        "NASA_A2_FLIGHT_DAY_10_LIVE_REENTRY_2026_04_10"
+      ],
+      "exact_second_known": false,
+      "blackout_exact_duration_derivable": false
+    },
+    {
+      "event_id": "A2_DROGUE_DEPLOYMENT",
+      "event_type": "PARACHUTE_DEPLOYMENT",
+      "mission_date": "2026-04-10",
+      "reported_local_minute": "2026-04-10T20:03:00-04:00",
+      "reported_utc_minute": "2026-04-11T00:03:00Z",
+      "time_precision": "PUBLIC_UPDATE_MINUTE",
+      "evidence_class": "NASA_REPORTED_AS_FLOWN_EVENT",
+      "parachute_type": "DROGUE",
+      "architecture_count": 2,
+      "reported_altitude_ft": 23400,
+      "reported_speed_ft_s": 479,
+      "reported_distance_to_splashdown_statute_miles": 0.8,
+      "observation": "NASA reported Orion's drogue parachutes deploying at 23,400 feet to slow and stabilize the spacecraft. The same update reported velocity dropping to 479 feet per second and the spacecraft being 0.8 miles from splashdown.",
+      "associated_values_same_exact_subsecond_state_assumed": false,
+      "sources": [
+        "NASA_A2_FLIGHT_DAY_10_LIVE_REENTRY_2026_04_10"
+      ],
+      "phase2_existing_event_id": "drogue_deploy",
+      "exact_second_known": false
+    },
+    {
+      "event_id": "A2_MAIN_PARACHUTE_DEPLOYMENT",
+      "event_type": "PARACHUTE_DEPLOYMENT",
+      "mission_date": "2026-04-10",
+      "reported_local_minute": "2026-04-10T20:04:00-04:00",
+      "reported_utc_minute": "2026-04-11T00:04:00Z",
+      "time_precision": "PUBLIC_UPDATE_MINUTE",
+      "evidence_class": "NASA_REPORTED_AS_FLOWN_EVENT",
+      "parachute_type": "MAIN",
+      "architecture_count": 3,
+      "reported_altitude_ft": 5400,
+      "reported_speed_upper_ft_s": 200,
+      "speed_relation": "less_than",
+      "observation": "NASA reported the drogue parachutes being cut at 5,400 feet and all three main parachutes deploying, reducing Orion's velocity to less than 200 feet per second.",
+      "sources": [
+        "NASA_A2_FLIGHT_DAY_10_LIVE_REENTRY_2026_04_10"
+      ],
+      "phase2_existing_event_id": "main_deploy",
+      "exact_second_known": false
+    },
+    {
+      "event_id": "A2_SPLASHDOWN",
+      "event_type": "SPLASHDOWN",
+      "mission_date": "2026-04-10",
+      "reported_local_minute": "2026-04-10T20:07:00-04:00",
+      "reported_utc_minute": "2026-04-11T00:07:00Z",
+      "time_precision": "PUBLIC_UPDATE_MINUTE",
+      "evidence_class": "NASA_REPORTED_AS_FLOWN_EVENT",
+      "reported_location": "Pacific Ocean off the coast of San Diego",
+      "observation": "NASA reported successful parachute-assisted splashdown of Orion with the Artemis II crew at 8:07 p.m. EDT.",
+      "sources": [
+        "NASA_A2_FLIGHT_DAY_10_LIVE_REENTRY_2026_04_10"
+      ],
+      "phase2_existing_event_id": "splashdown",
+      "exact_coordinates_public_in_curated_source": false,
+      "exact_second_known": false
+    },
+    {
+      "event_id": "A2_POST_SPLASHDOWN_POWERDOWN",
+      "event_type": "POST_SPLASHDOWN_SPACECRAFT_CONFIGURATION",
+      "mission_date": "2026-04-10",
+      "reported_time_relation": "AFTER_SPLASHDOWN",
+      "exact_utc": null,
+      "time_precision": "RELATIVE_EVENT_ORDER_ONLY",
+      "evidence_class": "NASA_REPORTED",
+      "observation": "NASA reported that Orion began crew module power-down after splashdown. Flight controllers shut down nonessential systems and transitioned the capsule into its recovery configuration.",
+      "operational_role": "Reduce power demand and prepare Orion for crew extraction and recovery-team operations.",
+      "sources": [
+        "NASA_A2_FLIGHT_DAY_10_LIVE_REENTRY_2026_04_10"
+      ],
+      "exact_second_known": false
+    },
+    {
+      "event_id": "A2_RECOVERY_TEAM_APPROACH",
+      "event_type": "RECOVERY_OPERATIONS",
+      "mission_date": "2026-04-10",
+      "reported_local_minute": "2026-04-10T20:12:00-04:00",
+      "reported_utc_minute": "2026-04-11T00:12:00Z",
+      "time_precision": "PUBLIC_UPDATE_MINUTE",
+      "evidence_class": "NASA_REPORTED",
+      "observation": "At the direction of the NASA recovery director, NASA and U.S. military recovery personnel began approaching Orion in inflatable boats.",
+      "sources": [
+        "NASA_A2_FLIGHT_DAY_10_LIVE_REENTRY_2026_04_10"
+      ],
+      "exact_second_known": false
+    },
+    {
+      "event_id": "A2_CREW_EXTRACTED",
+      "event_type": "CREW_RECOVERY",
+      "mission_date": "2026-04-10",
+      "reported_local_minute": "2026-04-10T21:34:00-04:00",
+      "reported_utc_minute": "2026-04-11T01:34:00Z",
+      "time_precision": "PUBLIC_UPDATE_MINUTE",
+      "evidence_class": "NASA_REPORTED",
+      "observation": "NASA reported that all four Artemis II crewmembers had been safely extracted from Orion and were on the inflatable recovery raft known as the front porch.",
+      "crew_status": "SAFELY_EXTRACTED",
+      "sources": [
+        "NASA_A2_FLIGHT_DAY_10_LIVE_REENTRY_2026_04_10"
+      ],
+      "exact_second_known": false
+    },
+    {
+      "event_id": "A2_CREW_HELICOPTER_TRANSFER",
+      "event_type": "CREW_RECOVERY_TRANSPORT",
+      "mission_date": "2026-04-10",
+      "reported_local_minute": "2026-04-10T21:56:00-04:00",
+      "reported_utc_minute": "2026-04-11T01:56:00Z",
+      "time_precision": "PUBLIC_UPDATE_MINUTE",
+      "evidence_class": "NASA_REPORTED",
+      "observation": "NASA reported that the Artemis II crew had been hoisted into U.S. military helicopters for transport to USS John P. Murtha.",
+      "sources": [
+        "NASA_A2_FLIGHT_DAY_10_LIVE_REENTRY_2026_04_10"
+      ],
+      "exact_second_known": false
+    },
+    {
+      "event_id": "A2_CREW_ABOARD_RECOVERY_SHIP",
+      "event_type": "CREW_RECOVERY_COMPLETE_AT_SHIP",
+      "mission_date": "2026-04-10",
+      "reported_local_minute": "2026-04-10T21:58:00-04:00",
+      "reported_utc_minute": "2026-04-11T01:58:00Z",
+      "time_precision": "PUBLIC_UPDATE_MINUTE",
+      "evidence_class": "NASA_REPORTED",
+      "observation": "NASA reported the Artemis II crew safely aboard USS John P. Murtha for post-mission medical evaluations.",
+      "crew_status": "ABOARD_RECOVERY_SHIP",
+      "sources": [
+        "NASA_A2_FLIGHT_DAY_10_LIVE_REENTRY_2026_04_10"
+      ],
+      "exact_second_known": false
+    },
+    {
+      "event_id": "A2_ORION_SECURED_IN_WELL_DECK",
+      "event_type": "SPACECRAFT_RECOVERY_COMPLETE_AT_SHIP",
+      "mission_date": "2026-04-11",
+      "reported_local_minute": "2026-04-11T04:27:00-04:00",
+      "reported_utc_minute": "2026-04-11T08:27:00Z",
+      "time_precision": "PUBLIC_UPDATE_MINUTE",
+      "evidence_class": "NASA_REPORTED",
+      "observation": "NASA reported Orion secured in the well deck of USS John P. Murtha. The ship was then expected to return to Naval Base San Diego before Orion transport to Kennedy Space Center for postflight analysis.",
+      "spacecraft_status": "SECURED_IN_RECOVERY_SHIP_WELL_DECK",
+      "sources": [
+        "NASA_A2_FLIGHT_DAY_10_LIVE_REENTRY_2026_04_10"
+      ],
+      "exact_second_known": false
+    }
+  ],
+  "actual_parachute_confirmation": {
+    "forward_bay_cover_parachutes": {
+      "system_architecture_known": true,
+      "explicit_as_flown_deployment_confirmed_in_primary_live_update": false,
+      "interpretation": "The primary NASA live update does not provide a separately timestamped explicit deployment report for the three forward bay cover parachutes."
+    },
+    "drogue_parachutes": {
+      "system_architecture_known": true,
+      "explicit_as_flown_deployment_confirmed_in_primary_live_update": true,
+      "reported_event_id": "A2_DROGUE_DEPLOYMENT"
+    },
+    "pilot_parachutes": {
+      "system_architecture_known": true,
+      "explicit_as_flown_deployment_confirmed_in_primary_live_update": false,
+      "interpretation": "The primary NASA live update reports deployment of the three main parachutes but does not provide a separately timestamped explicit pilot-parachute deployment event."
+    },
+    "main_parachutes": {
+      "system_architecture_known": true,
+      "explicit_as_flown_deployment_confirmed_in_primary_live_update": true,
+      "reported_event_id": "A2_MAIN_PARACHUTE_DEPLOYMENT",
+      "reported_count_deployed": 3
+    }
+  },
+  "recovery_procedure_context": {
+    "evidence_class": "NASA_REPORTED_OPERATIONAL_CONTEXT",
+    "reported_after_splashdown": [
+      "NASA and U.S. military personnel approach Orion in inflatable boats.",
+      "Crew is extracted from Orion.",
+      "Crew is transported by helicopter to USS John P. Murtha.",
+      "Crew undergoes post-mission medical evaluation aboard the ship.",
+      "Navy divers attach a winch line to Orion.",
+      "Additional tending lines are attached while Orion is under tow.",
+      "Orion is positioned over a specially designed cradle in the ship's well deck.",
+      "The well deck is drained and the capsule is secured."
+    ],
+    "boundary": "Procedure descriptions explain the recovery architecture. They are not interpreted as exact as-flown timestamps unless NASA separately reports completion of the associated event."
+  },
+  "operational_threads": [
+    {
+      "thread_id": "entry_preparation_and_configuration",
+      "event_ids": [
+        "A2_FD10_DSN_TO_NSN_HANDOVER",
+        "A2_FD10_CM_SM_SEPARATION",
+        "A2_FD10_CREW_MODULE_RAISE_BURN",
+        "A2_ENTRY_INTERFACE"
+      ],
+      "interpretation": "Orion transitioned from deep-space return configuration into crew-module atmospheric-entry configuration."
+    },
+    {
+      "thread_id": "entry_communications_blackout",
+      "event_ids": [
+        "A2_ENTRY_INTERFACE",
+        "A2_ENTRY_PLASMA_BLACKOUT",
+        "A2_ENTRY_COMM_REACQUISITION"
+      ],
+      "interpretation": "A planned plasma communications blackout occurred during atmospheric entry and communications were subsequently reestablished."
+    },
+    {
+      "thread_id": "parachute_descent_and_splashdown",
+      "event_ids": [
+        "A2_DROGUE_DEPLOYMENT",
+        "A2_MAIN_PARACHUTE_DEPLOYMENT",
+        "A2_SPLASHDOWN"
+      ],
+      "interpretation": "NASA publicly confirmed drogue deployment, all three main parachutes, and successful parachute-assisted splashdown."
+    },
+    {
+      "thread_id": "crew_recovery",
+      "event_ids": [
+        "A2_SPLASHDOWN",
+        "A2_POST_SPLASHDOWN_POWERDOWN",
+        "A2_RECOVERY_TEAM_APPROACH",
+        "A2_CREW_EXTRACTED",
+        "A2_CREW_HELICOPTER_TRANSFER",
+        "A2_CREW_ABOARD_RECOVERY_SHIP"
+      ],
+      "interpretation": "The recovery sequence transitioned from spacecraft safing and team approach through crew extraction and transfer aboard the recovery ship."
+    },
+    {
+      "thread_id": "spacecraft_recovery",
+      "event_ids": [
+        "A2_SPLASHDOWN",
+        "A2_RECOVERY_TEAM_APPROACH",
+        "A2_ORION_SECURED_IN_WELL_DECK"
+      ],
+      "interpretation": "Orion progressed from splashdown through recovery-team operations to being secured aboard USS John P. Murtha."
+    }
+  ],
+  "critical_non_equivalences": [
+    {
+      "left": "PLANNED_PARACHUTE_ARCHITECTURE",
+      "right": "AS_FLOWN_DEPLOYMENT_CONFIRMATION",
+      "equivalent": false
+    },
+    {
+      "left": "PUBLIC_UPDATE_MINUTE",
+      "right": "EXACT_TELEMETRY_EPOCH",
+      "equivalent": false
+    },
+    {
+      "left": "EXPECTED_SIX_MINUTE_BLACKOUT",
+      "right": "EXACT_SIX_MINUTE_MEASURED_BLACKOUT",
+      "equivalent": false
+    },
+    {
+      "left": "COMMUNICATIONS_BLACKOUT",
+      "right": "COMMUNICATIONS_ANOMALY",
+      "equivalent": false
+    },
+    {
+      "left": "DROGUE_DEPLOYMENT_REPORT",
+      "right": "INDIVIDUAL_DROGUE_PERFORMANCE_TELEMETRY",
+      "equivalent": false
+    },
+    {
+      "left": "THREE_MAIN_PARACHUTES_REPORTED_DEPLOYED",
+      "right": "COMPLETE_MAIN_PARACHUTE_LOAD_TELEMETRY",
+      "equivalent": false
+    },
+    {
+      "left": "PARACHUTE_ASSISTED_SPLASHDOWN",
+      "right": "EXACT_SPLASHDOWN_COORDINATES",
+      "equivalent": false
+    },
+    {
+      "left": "RECOVERY_PROCEDURE_DESCRIPTION",
+      "right": "EXACT_AS_FLOWN_RECOVERY_EVENT_TIME",
+      "equivalent": false
+    },
+    {
+      "left": "CREW_SAFELY_EXTRACTED",
+      "right": "COMPLETE_POSTFLIGHT_MEDICAL_RESULT",
+      "equivalent": false
+    },
+    {
+      "left": "ORION_SECURED_IN_WELL_DECK",
+      "right": "POSTFLIGHT_SPACECRAFT_ANALYSIS_COMPLETE",
+      "equivalent": false
+    }
+  ],
+  "public_evidence_limits": {
+    "not_publicly_reconstructable_from_curated_sources": [
+      "exact second-level crew-module/service-module separation time",
+      "raise-burn duration",
+      "raise-burn delta-v",
+      "complete raise-burn guidance law",
+      "exact plasma-blackout start second",
+      "exact plasma-blackout end second",
+      "exact measured blackout duration",
+      "complete entry communications signal-strength history",
+      "individual forward bay cover parachute deployment times",
+      "individual drogue deployment times",
+      "individual pilot parachute deployment times",
+      "individual main parachute deployment times",
+      "individual parachute canopy inflation histories",
+      "individual suspension-line loads",
+      "parachute reefing telemetry",
+      "exact splashdown coordinates from the curated live-update source",
+      "exact water-impact velocity",
+      "complete crew-module attitude history after splashdown",
+      "exact post-splashdown power-down start and completion seconds",
+      "complete recovery-team command timeline",
+      "complete crew medical data",
+      "exact Orion winch-line attachment time",
+      "exact Orion well-deck ingress start time"
+    ]
+  },
+  "evidence_boundary": {
+    "phase2_entry_quantitative_products_are_reused": true,
+    "phase4_recomputes_phase2_entry_physics": false,
+    "public_event_minutes_are_preserved": true,
+    "exact_unreported_seconds_are_invented": false,
+    "planned_blackout_is_treated_as_anomaly": false,
+    "parachute_architecture_is_treated_as_as_flown_event_log": false,
+    "forward_bay_cover_deployment_time_is_inferred": false,
+    "pilot_parachute_deployment_time_is_inferred": false,
+    "individual_parachute_loads_are_inferred": false,
+    "exact_splashdown_coordinates_are_inferred": false,
+    "recovery_procedure_is_converted_into_unreported_exact_timestamps": false,
+    "private_console_rationale_is_inferred": false
+  }
+}

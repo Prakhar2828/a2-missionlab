@@ -1,0 +1,263 @@
+{
+  "dataset_id": "phase2h4_artemis_ii_communications_operational_threads",
+  "mission": "Artemis II",
+  "scope": "Source-backed communications operational threads distinguishing contingency readiness, expected communications constraints, and unexpected communications anomalies without inventing console decisions, root causes, event times, or Flight Director rationale.",
+  "provenance": "NASA_REPORTED_WITH_MISSIONLAB_DERIVED_CORRELATIONS",
+  "thread_policy": {
+    "purpose": "Organize public communications evidence into mission-operations sequences while preserving the timing precision and event-state semantics established in Phase 2H.1.",
+    "operational_thread_is_not_console_log": true,
+    "sequence_does_not_imply_decision_rationale": true,
+    "approximate_anchor_is_not_observed_timestamp": true,
+    "sequence_only_event_is_not_timed_event": true
+  },
+  "sources": [
+    {
+      "source_id": "nasa_flight_day_3_comms_followup",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 3: Crew Prepares Cabin for Lunar Flyby",
+      "date": "2026-04-04",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/04/artemis-ii-flight-day-3-crew-prepares-cabin-for-lunar-flyby/",
+      "claims_used": [
+        "NASA reported that the crew tested Orion's emergency communications system in deep space."
+      ]
+    },
+    {
+      "source_id": "nasa_flight_day_6_flyby_plan",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 6: Crew Ready for Lunar Flyby",
+      "date": "2026-04-06",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/06/artemis-ii-flight-day-6-crew-ready-for-lunar-flyby/",
+      "claims_used": [
+        "Mission control expected temporary communications loss at 6:44 p.m. EDT.",
+        "Planned Earthrise was 7:25 p.m. EDT.",
+        "Mission control expected communications reacquisition at 7:25 p.m. EDT."
+      ]
+    },
+    {
+      "source_id": "nasa_flight_day_6_live",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 6: Lunar Flyby Updates",
+      "date": "2026-04-06",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/06/artemis-ii-flight-day-6-lunar-flyby-updates/",
+      "claims_used": [
+        "NASA reported Earthset at 6:41 p.m. EDT.",
+        "NASA reported that Orion entered a planned communications blackout at 6:44 p.m. EDT.",
+        "NASA reported Earthrise at 7:24 p.m. EDT.",
+        "NASA reported that the Deep Space Network reacquired Orion moments after Earthrise and restored communications."
+      ]
+    },
+    {
+      "source_id": "nasa_flight_day_9_rtc2",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 9: Second Return Correction Burn Complete",
+      "date": "2026-04-10",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/10/artemis-ii-flight-day-9-second-return-correction-burn-complete/",
+      "claims_used": [
+        "About two hours before RTC2, NASA reported an unexpected return-link loss of signal during a data-rate change.",
+        "The loss affected communications and telemetry transmission from Orion to the ground.",
+        "Two-way communications were reestablished.",
+        "Flight controllers resumed preparing for RTC2 with the crew shortly afterward.",
+        "RTC2 occurred at 10:53 p.m. EDT and lasted nine seconds."
+      ]
+    }
+  ],
+  "threads": [
+    {
+      "thread_id": "emergency_communications_readiness",
+      "name": "Emergency communications readiness",
+      "classification": "CONTINGENCY_READINESS",
+      "expectedness": "PLANNED_TEST_ACTIVITY",
+      "anomaly": false,
+      "primary_source_id": "nasa_flight_day_3_comms_followup",
+      "event_ids": [
+        "dsn_emergency_communications_test"
+      ],
+      "precision_pattern": "DATE_LEVEL",
+      "public_decision_rationale_available": false,
+      "public_console_log_available": false,
+      "root_cause_applicable": false,
+      "operational_sequence": [
+        {
+          "order": 1,
+          "step_id": "emergency_comms_test",
+          "event_id": "dsn_emergency_communications_test",
+          "step_type": "READINESS_TEST",
+          "precision": "DATE_LEVEL",
+          "timestamp_utc": null,
+          "date_utc": "2026-04-03",
+          "interpretation": "NASA reported that Orion's emergency communications system was tested in deep space. Public reporting does not provide a defensible exact test time."
+        }
+      ]
+    },
+    {
+      "thread_id": "lunar_occultation_blackout_and_reacquisition",
+      "name": "Lunar occultation blackout and reacquisition",
+      "classification": "EXPECTED_OPERATIONAL_CONSTRAINT",
+      "expectedness": "EXPECTED",
+      "anomaly": false,
+      "primary_source_id": "nasa_flight_day_6_live",
+      "supporting_source_ids": [
+        "nasa_flight_day_6_flyby_plan"
+      ],
+      "event_ids": [
+        "lunar_blackout_start_planned",
+        "lunar_blackout_start_reported",
+        "lunar_earthrise_planned",
+        "lunar_earthrise_reported",
+        "dsn_reacquisition_planned",
+        "dsn_reacquisition_live_report"
+      ],
+      "precision_pattern": "MIXED_MINUTE_LEVEL_AND_SEQUENCE_ONLY",
+      "public_decision_rationale_available": false,
+      "public_console_log_available": false,
+      "root_cause_applicable": false,
+      "operational_sequence": [
+        {
+          "order": 1,
+          "step_id": "planned_blackout",
+          "event_id": "lunar_blackout_start_planned",
+          "step_type": "PLANNED_LOSS_OF_COMMUNICATION",
+          "precision": "MINUTE_LEVEL",
+          "timestamp_utc": "2026-04-06T22:44:00Z"
+        },
+        {
+          "order": 2,
+          "step_id": "reported_blackout",
+          "event_id": "lunar_blackout_start_reported",
+          "step_type": "REPORTED_LOSS_OF_COMMUNICATION",
+          "precision": "MINUTE_LEVEL",
+          "timestamp_utc": "2026-04-06T22:44:00Z"
+        },
+        {
+          "order": 3,
+          "step_id": "planned_earthrise",
+          "event_id": "lunar_earthrise_planned",
+          "step_type": "PLANNED_GEOMETRIC_RECOVERY_CONTEXT",
+          "precision": "MINUTE_LEVEL",
+          "timestamp_utc": "2026-04-06T23:25:00Z"
+        },
+        {
+          "order": 4,
+          "step_id": "reported_earthrise",
+          "event_id": "lunar_earthrise_reported",
+          "step_type": "REPORTED_GEOMETRIC_RECOVERY_CONTEXT",
+          "precision": "MINUTE_LEVEL",
+          "timestamp_utc": "2026-04-06T23:24:00Z"
+        },
+        {
+          "order": 5,
+          "step_id": "planned_reacquisition",
+          "event_id": "dsn_reacquisition_planned",
+          "step_type": "PLANNED_REACQUISITION",
+          "precision": "MINUTE_LEVEL",
+          "timestamp_utc": "2026-04-06T23:25:00Z"
+        },
+        {
+          "order": 6,
+          "step_id": "live_reacquisition",
+          "event_id": "dsn_reacquisition_live_report",
+          "step_type": "REPORTED_REACQUISITION",
+          "precision": "SEQUENCE_ONLY",
+          "timestamp_utc": null,
+          "ordering": "MOMENTS_AFTER_REPORTED_EARTHRISE",
+          "interpretation": "NASA reported DSN reacquisition moments after Earthrise. No exact reacquisition UTC is assigned."
+        }
+      ]
+    },
+    {
+      "thread_id": "flight_day_9_return_link_loss_and_recovery",
+      "name": "Flight Day 9 return-link loss and recovery",
+      "classification": "UNEXPECTED_COMMUNICATIONS_ANOMALY",
+      "expectedness": "UNEXPECTED",
+      "anomaly": true,
+      "primary_source_id": "nasa_flight_day_9_rtc2",
+      "event_ids": [
+        "unexpected_return_link_loss",
+        "two_way_communications_reestablished",
+        "rtc2"
+      ],
+      "precision_pattern": "APPROXIMATE_AND_SEQUENCE_ONLY_WITH_EXACT_BURN_ANCHOR",
+      "public_decision_rationale_available": false,
+      "public_console_log_available": false,
+      "public_root_cause_available": false,
+      "affected_direction_supported": "RETURN_LINK",
+      "affected_content_supported": [
+        "COMMUNICATIONS_FROM_SPACECRAFT_TO_GROUND",
+        "TELEMETRY_FROM_SPACECRAFT_TO_GROUND"
+      ],
+      "complete_two_way_outage_established": false,
+      "context": "DURING_DATA_RATE_CHANGE",
+      "causal_relationship": "NOT_ESTABLISHED",
+      "failed_subsystem_identified": false,
+      "anomaly_duration_known": false,
+      "operational_sequence": [
+        {
+          "order": 1,
+          "step_id": "unexpected_return_link_loss",
+          "event_id": "unexpected_return_link_loss",
+          "step_type": "ANOMALY_DETECTED",
+          "precision": "APPROXIMATE",
+          "timestamp_utc": null,
+          "approximate_anchor_utc": "2026-04-10T00:53:00Z",
+          "anchor_is_not_exact": true,
+          "interpretation": "The computational anchor is RTC2 minus approximately two hours. It is not an observed exact loss-of-signal time."
+        },
+        {
+          "order": 2,
+          "step_id": "two_way_communications_reestablished",
+          "event_id": "two_way_communications_reestablished",
+          "step_type": "COMMUNICATIONS_RECOVERY",
+          "precision": "SEQUENCE_ONLY",
+          "timestamp_utc": null,
+          "ordering": "SHORTLY_AFTER_UNEXPECTED_RETURN_LINK_LOSS_BEFORE_RTC2",
+          "interpretation": "NASA reported that two-way communications were reestablished. Public reporting does not provide an exact recovery time."
+        },
+        {
+          "order": 3,
+          "step_id": "burn_preparation_resumed",
+          "event_id": null,
+          "step_type": "OPERATIONS_RESUMED",
+          "precision": "SEQUENCE_ONLY",
+          "timestamp_utc": null,
+          "ordering": "AFTER_COMMUNICATIONS_REESTABLISHED_BEFORE_RTC2",
+          "source_id": "nasa_flight_day_9_rtc2",
+          "interpretation": "NASA reported that flight controllers resumed preparing for the upcoming burn with the crew shortly after communications were reestablished."
+        },
+        {
+          "order": 4,
+          "step_id": "rtc2",
+          "event_id": "rtc2",
+          "step_type": "MISSION_OPERATION_CONTINUED",
+          "precision": "SOURCE_REPORTED",
+          "timestamp_utc": "2026-04-10T02:53:00Z",
+          "interpretation": "RTC2 occurred after communications had been reestablished and burn preparation resumed."
+        }
+      ]
+    }
+  ],
+  "decision_evidence_boundary": {
+    "public_event_sequence_available": true,
+    "public_planned_vs_reported_timing_available": true,
+    "public_full_console_transcript_available": false,
+    "public_flight_director_rationale_tree_available": false,
+    "public_fault_isolation_sequence_available": false,
+    "public_root_cause_analysis_available": false,
+    "public_failed_subsystem_identification_available": false
+  },
+  "guardrails": [
+    "The Flight Day 6 lunar blackout is an expected operational constraint and must not be labeled an anomaly.",
+    "The reported Flight Day 6 blackout minute matching the planned minute does not imply second-level timing precision.",
+    "Reported Earthrise occurring one minute earlier than planned does not establish the exact DSN reacquisition time.",
+    "The planned 23:25 UTC DSN reacquisition must not be relabeled as an observed 23:25 UTC reacquisition.",
+    "The live DSN reacquisition remains SEQUENCE_ONLY and receives no invented UTC or MET.",
+    "The Flight Day 9 return-link-loss anchor is approximate and must not be presented as an observed 00:53 UTC loss-of-signal timestamp.",
+    "NASA's phrase 'during a data rate change' establishes context but not causation.",
+    "The supported Flight Day 9 affected direction is the return link from spacecraft to ground.",
+    "A return-link loss does not by itself establish a complete simultaneous two-way RF outage.",
+    "The exact Flight Day 9 communications anomaly duration is unknown.",
+    "The exact communications recovery time is unknown.",
+    "Two-way communications being reestablished does not identify the failed subsystem.",
+    "The public event sequence does not expose the Flight Director's decision rationale, console call history, or fault-isolation tree.",
+    "MissionLab may reconstruct evidence-backed operational sequence but must not fabricate undocumented mission-control decisions."
+  ]
+}

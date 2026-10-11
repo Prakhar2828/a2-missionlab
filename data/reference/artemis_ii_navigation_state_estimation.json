@@ -1,0 +1,438 @@
+{
+  "dataset_id": "phase2j3_artemis_ii_navigation_state_estimation",
+  "mission": "Artemis II",
+  "scope": "Source-backed reconstruction of the public Orion navigation and state-estimation architecture, onboard sensor measurement roles, Deep Space Network ground-navigation context, Artemis Real-time Orbit Website public state-vector products, and selected Artemis II as-flown navigation evidence while explicitly separating public architecture and mission products from unavailable onboard navigation-filter states, raw sensor histories, ground orbit-determination solution histories, estimator residuals, innovations, covariance, gains, bias states, measurement-selection histories, and measurement accept-reject histories.",
+  "provenance": "NASA_REPORTED_WITH_MISSIONLAB_STATE_PRODUCT_TAXONOMY_AND_CROSS_PHASE_CORRELATION",
+  "input_dependencies": [
+    {
+      "path": "data/reference/artemis_ii_gnc_architecture.json",
+      "role": "PHASE_2J1_ONBOARD_NAVIGATION_ARCHITECTURE"
+    },
+    {
+      "path": "data/reference/artemis_ii_manual_piloting_control_modes.json",
+      "role": "PHASE_2J2_PROXIMITY_OPERATIONS_NAVIGATION_EVIDENCE"
+    },
+    {
+      "path": "data/reference/artemis_ii_maneuver_trajectory_correlation.json",
+      "role": "PHASE_2I3_PUBLIC_OEM_SOLUTION_EVOLUTION_BOUNDARY"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "nasa_orion_avionics_software",
+      "organization": "NASA",
+      "title": "Avionics and Software",
+      "url": "https://www.nasa.gov/reference/avionics-and-software/",
+      "evidence_stage": "SYSTEM_ARCHITECTURE",
+      "claims_used": [
+        "Orion GNC&P flight software runs on the vehicle management computers and receives inputs from navigation sensors.",
+        "Orion has an onboard navigation system composed of redundant sensors used for position and attitude knowledge.",
+        "Orion inertial measurement units supply inertial data used by the vehicle management computers to compute position, velocity, and attitude.",
+        "GPS receivers provide position and velocity updates during ascent, low-Earth orbit, and reentry.",
+        "Barometric altimeters provide atmospheric-pressure-derived altitude and backup entry deployment altitude information.",
+        "Star trackers determine spacecraft attitude during orbital operations.",
+        "The optical navigation camera uses Earth and Moon imagery to determine range and bearing and supports emergency-return capability.",
+        "Sun sensors determine Sun direction during emergency safe mode.",
+        "Outside GPS range in deep space, Deep Space Network measurements support determination of Orion's location."
+      ]
+    },
+    {
+      "source_id": "nasa_artemis_ii_arow_state_vectors",
+      "organization": "NASA",
+      "title": "Track NASA's Artemis II Mission in Real Time",
+      "date": "2026-03-06",
+      "url": "https://www.nasa.gov/missions/artemis/artemis-2/track-nasas-artemis-ii-mission-in-real-time/",
+      "evidence_stage": "PUBLIC_MISSION_DATA_PRODUCT",
+      "claims_used": [
+        "AROW provides public tracking information for Orion.",
+        "NASA describes state vectors as data describing where Orion is located and how it moves.",
+        "AROW provides state vectors to the public.",
+        "NASA provides downloadable Artemis II trajectory data described as an ephemeris.",
+        "AROW visualizes mission data associated with Orion and Mission Control."
+      ]
+    },
+    {
+      "source_id": "nasa_pds_artemis_ii_opnav_context",
+      "organization": "NASA",
+      "system": "Planetary Data System",
+      "title": "Artemis 2 Optical Navigation (OpNav) camera",
+      "url": "https://pds.nasa.gov/ds-view/pds/viewContext.jsp?identifier=urn:nasa:pds:context:instrument:artemis2_orion.opnav&version=1.0",
+      "evidence_stage": "INSTRUMENT_CONTEXT_AND_AS_FLOWN_IMAGERY",
+      "claims_used": [
+        "The Artemis II optical navigation camera is a Pixelink Prometheus PL-D725.",
+        "The camera is hard-mounted on the starboard lower side of the Crew Module Adapter.",
+        "Its primary use is spacecraft navigation during flight.",
+        "The camera captured images of Earth during Artemis II.",
+        "The camera captured images of the Moon during Artemis II."
+      ]
+    },
+    {
+      "source_id": "nasa_artemis_ii_mission_milestones",
+      "organization": "NASA",
+      "title": "Artemis II Mission Milestones: An Image and Video Recap",
+      "url": "https://www.nasa.gov/centers-and-facilities/johnson/artemis-ii-mission-milestones-an-image-and-video-recap/",
+      "evidence_stage": "AS_FLOWN_IMAGE_IDENTIFICATION",
+      "claims_used": [
+        "NASA publicly identifies a Flight Day 1 black-and-white Earth image as having been captured by the optical navigation sensor on Orion."
+      ]
+    },
+    {
+      "source_id": "nasa_proximity_operations_complete",
+      "organization": "NASA",
+      "title": "Artemis II Flight Update: Proximity Operations Complete, Perigee Raise Burn Up Next",
+      "date": "2026-04-01",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/01/artemis-ii-flight-update-proximity-operations-complete-perigee-raise-burn-up-next/",
+      "evidence_stage": "AS_FLOWN_REPORT",
+      "claims_used": [
+        "The Artemis II crew successfully completed the proximity-operations demonstration.",
+        "The demonstration used Orion's onboard navigation sensors.",
+        "The demonstration used reaction-control thrusters.",
+        "The public report does not identify a complete sensor-by-sensor measurement history or relative-state time history."
+      ]
+    },
+    {
+      "source_id": "nasa_otc3_preburn_navigation_monitoring",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 5: Crew Demos Suits, Readies for Lunar Flyby",
+      "date": "2026-04-05",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/05/artemis-ii-flight-day-5-crew-demos-suits-readies-for-lunar-flyby/",
+      "evidence_stage": "PRE_BURN_OPERATIONAL_CONTEXT",
+      "claims_used": [
+        "Ahead of the outbound correction burn, NASA reported that Jeremy Hansen would monitor spacecraft configuration and navigation data.",
+        "This pre-burn report is not promoted to a complete as-flown navigation-display history."
+      ]
+    },
+    {
+      "source_id": "nasa_rtc1_navigation_monitoring",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 7: First Return Correction Burn Complete",
+      "date": "2026-04-07",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/07/artemis-ii-flight-day-7-first-return-correction-burn-complete/",
+      "evidence_stage": "AS_FLOWN_REPORT",
+      "claims_used": [
+        "During the completed first return correction burn, Christina Koch and Jeremy Hansen reviewed procedures and monitored spacecraft configuration and navigation data.",
+        "The public report does not identify the exact displayed navigation variables.",
+        "The public report does not establish that the crew display values were identical to the complete onboard navigation-filter state."
+      ]
+    },
+    {
+      "source_id": "nasa_rtc2_navigation_monitoring_plan",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 9: Crew Prepares to Come Home",
+      "date": "2026-04-09",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/09/artemis-ii-flight-day-9-crew-prepares-to-come-home/",
+      "evidence_stage": "PRE_BURN_OPERATIONAL_CONTEXT",
+      "claims_used": [
+        "NASA reported that Jeremy Hansen would review procedure steps and monitor Orion's guidance, navigation, and propulsion systems during the planned second return correction burn.",
+        "This planning statement is not promoted to an as-flown navigation-display history."
+      ]
+    },
+    {
+      "source_id": "nasa_rtc3_navigation_monitoring",
+      "organization": "NASA",
+      "title": "Artemis II Flight Day 10: Crew Completes Final Burn Before Splashdown",
+      "date": "2026-04-10",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/10/artemis-ii-flight-day-10-crew-completes-final-burn-before-splashdown/",
+      "evidence_stage": "AS_FLOWN_REPORT",
+      "claims_used": [
+        "During the completed third return correction burn, the Artemis II crew reviewed procedures and monitored spacecraft configuration and navigation data.",
+        "The public report does not identify the exact displayed navigation variables.",
+        "The public report does not establish that the crew display values were identical to the complete onboard navigation-filter state."
+      ]
+    }
+  ],
+  "navigation_state_product_taxonomy": {
+    "taxonomy_is_missionlab_normalization": true,
+    "products": [
+      {
+        "product_id": "ONBOARD_NAVIGATION_STATE",
+        "producer_context": "ORION_VEHICLE_MANAGEMENT_COMPUTERS",
+        "product_class": "ONBOARD_COMPUTED_NAVIGATION_KNOWLEDGE",
+        "role": "Onboard spacecraft position, velocity, and attitude knowledge computed from navigation inputs.",
+        "source_relationship": "NASA_ONBOARD_NAVIGATION_ARCHITECTURE",
+        "complete_artemis_ii_history_public_in_current_source_set": false
+      },
+      {
+        "product_id": "GROUND_ORBIT_DETERMINATION",
+        "producer_context": "GROUND_NAVIGATION_SUPPORT",
+        "product_class": "MISSIONLAB_NORMALIZED_GROUND_NAVIGATION_CATEGORY",
+        "role": "Ground-based determination of spacecraft location or trajectory using measurements such as Deep Space Network communication-signal observations.",
+        "source_relationship": "NASA_DEEP_SPACE_NETWORK_LOCATION_DETERMINATION_ARCHITECTURE",
+        "exact_label_is_claimed_as_nasa_public_product_name": false,
+        "complete_artemis_ii_history_public_in_current_source_set": false
+      },
+      {
+        "product_id": "AROW_PUBLIC_STATE_VECTOR",
+        "producer_context": "NASA_PUBLIC_MISSION_DATA_PRODUCT",
+        "product_class": "PUBLIC_STATE_VECTOR_AND_EPHEMERIS_PRODUCT",
+        "role": "Public downloadable state-vector and trajectory information describing Orion's location and motion.",
+        "source_relationship": "NASA_AROW_PUBLIC_DATA_PRODUCT",
+        "complete_public_products_available": true,
+        "proven_equal_to_onboard_navigation_filter_state": false
+      }
+    ]
+  },
+  "critical_state_product_boundary": {
+    "onboard_navigation_state_equals_ground_orbit_determination": false,
+    "onboard_navigation_state_equals_arow_public_state_vector": false,
+    "ground_orbit_determination_equals_arow_public_state_vector": false,
+    "statement": "ONBOARD_NAVIGATION_STATE != GROUND_ORBIT_DETERMINATION != AROW_PUBLIC_STATE_VECTOR"
+  },
+  "onboard_navigation_sensor_capability_context": [
+    {
+      "sensor_id": "star_tracker",
+      "measurement_domain": "ATTITUDE",
+      "public_role": "ORBITAL_ATTITUDE_DETERMINATION",
+      "mission_phase_context": [
+        "ORBITAL_OPERATIONS"
+      ],
+      "raw_artemis_ii_time_history_public_in_current_source_set": false
+    },
+    {
+      "sensor_id": "imu",
+      "measurement_domain": "ROTATION_RATE_AND_BODY_ACCELERATION",
+      "public_role": "INERTIAL_DATA_FOR_ONBOARD_POSITION_VELOCITY_ATTITUDE_COMPUTATION",
+      "mission_phase_context": [
+        "ONBOARD_NAVIGATION"
+      ],
+      "raw_artemis_ii_time_history_public_in_current_source_set": false
+    },
+    {
+      "sensor_id": "gps_receiver",
+      "measurement_domain": "POSITION_AND_VELOCITY",
+      "public_role": "EARTH_PROXIMATE_POSITION_AND_VELOCITY_UPDATES",
+      "mission_phase_context": [
+        "ASCENT",
+        "LOW_EARTH_ORBIT",
+        "REENTRY"
+      ],
+      "deep_space_primary_navigation_sensor": false,
+      "raw_artemis_ii_time_history_public_in_current_source_set": false
+    },
+    {
+      "sensor_id": "barometric_altimeter",
+      "measurement_domain": "ALTITUDE_FROM_ATMOSPHERIC_PRESSURE",
+      "public_role": "BACKUP_ALTITUDE_FOR_ENTRY_DEPLOYMENT_EVENTS",
+      "mission_phase_context": [
+        "ASCENT",
+        "REENTRY"
+      ],
+      "raw_artemis_ii_time_history_public_in_current_source_set": false
+    },
+    {
+      "sensor_id": "optical_navigation_camera",
+      "measurement_domain": "EARTH_MOON_RANGE_AND_BEARING",
+      "public_role": "OPTICAL_NAVIGATION_AND_EMERGENCY_RETURN_SUPPORT",
+      "mission_phase_context": [
+        "EARTH_MOON_NAVIGATION",
+        "EMERGENCY_RETURN"
+      ],
+      "artemis_ii_image_capture_confirmed": true,
+      "raw_artemis_ii_estimator_measurement_history_public_in_current_source_set": false
+    },
+    {
+      "sensor_id": "sun_sensor",
+      "measurement_domain": "SUN_DIRECTION",
+      "public_role": "EMERGENCY_SAFE_MODE_SUN_DIRECTION",
+      "mission_phase_context": [
+        "EMERGENCY_SAFE_MODE"
+      ],
+      "primary_trajectory_navigation_sensor": false,
+      "raw_artemis_ii_time_history_public_in_current_source_set": false
+    }
+  ],
+  "external_navigation_support": {
+    "support_id": "deep_space_network_tracking",
+    "display_name": "Deep Space Network Tracking",
+    "onboard_sensor": false,
+    "public_role": "DEEP_SPACE_GROUND_LOCATION_DETERMINATION_OUTSIDE_GPS_RANGE",
+    "measurement_context": "SENSITIVE_MEASUREMENTS_OF_COMMUNICATION_SIGNALS_BETWEEN_ORION_AND_GROUND_DISHES",
+    "raw_artemis_ii_tracking_observable_history_public_in_current_source_set": false,
+    "complete_ground_navigation_solution_history_public_in_current_source_set": false,
+    "equivalent_to_onboard_navigation_filter": false
+  },
+  "arow_public_product_context": {
+    "state_vectors_publicly_provided": true,
+    "state_vector_public_description": "ORION_LOCATION_AND_MOTION",
+    "downloadable_ephemeris_publicly_provided": true,
+    "arow_visualizes_data_associated_with_orion_and_mission_control": true,
+    "public_state_vector_proven_to_be_raw_sensor_data": false,
+    "public_state_vector_proven_equal_to_onboard_navigation_filter_state": false,
+    "public_state_vector_proven_equal_to_complete_ground_orbit_determination_solution": false,
+    "public_state_vector_generation_algorithm_available_in_current_source_set": false,
+    "boundary": "PUBLIC_MISSION_DATA_PRODUCT_NOT_A_PUBLISHED_ONBOARD_FILTER_STATE_HISTORY"
+  },
+  "artemis_ii_as_flown_navigation_evidence": {
+    "optical_navigation_imagery": {
+      "system": "OPTICAL_NAVIGATION_CAMERA",
+      "execution_status": "AS_FLOWN_CONFIRMED",
+      "instrument_model": "PIXELINK_PROMETHEUS_PL_D725",
+      "mount": "STARBOARD_LOWER_SIDE_OF_CREW_MODULE_ADAPTER",
+      "primary_public_role": "SPACECRAFT_NAVIGATION_DURING_FLIGHT",
+      "earth_images_captured": true,
+      "moon_images_captured": true,
+      "flight_day_1_earth_image_publicly_identified_as_opnav": true,
+      "image_capture_proves_specific_navigation_filter_update": false,
+      "image_metadata_equals_navigation_state": false,
+      "opnav_measurement_residual_history_public": false,
+      "opnav_filter_innovation_history_public": false,
+      "source_ids": [
+        "nasa_pds_artemis_ii_opnav_context",
+        "nasa_artemis_ii_mission_milestones"
+      ]
+    },
+    "proximity_operations_navigation": {
+      "system": "ONBOARD_NAVIGATION_SENSORS",
+      "execution_status": "AS_FLOWN_CONFIRMED",
+      "onboard_navigation_sensors_used": true,
+      "specific_sensor_set_publicly_identified": false,
+      "individual_sensor_measurement_history_public": false,
+      "relative_state_history_public": false,
+      "navigation_filter_state_history_public": false,
+      "source_ids": [
+        "nasa_proximity_operations_complete"
+      ]
+    },
+    "trajectory_correction_navigation_monitoring": {
+      "system": "CREW_NAVIGATION_DATA_DISPLAY_CONTEXT",
+      "as_flown_monitoring_confirmed_for_at_least_two_executed_correction_burns": true,
+      "confirmed_as_flown_examples": [
+        {
+          "maneuver_id": "rtc1",
+          "timestamp_utc": "2026-04-08T00:03:00Z",
+          "timestamp_precision": "MINUTE_LEVEL",
+          "crew_members_explicitly_identified": [
+            "Christina Koch",
+            "Jeremy Hansen"
+          ],
+          "spacecraft_configuration_monitored": true,
+          "navigation_data_monitored": true,
+          "source_id": "nasa_rtc1_navigation_monitoring"
+        },
+        {
+          "maneuver_id": "rtc3",
+          "timestamp_utc": "2026-04-10T18:53:00Z",
+          "timestamp_precision": "MINUTE_LEVEL",
+          "crew_scope": "ARTEMIS_II_CREW",
+          "spacecraft_configuration_monitored": true,
+          "navigation_data_monitored": true,
+          "source_id": "nasa_rtc3_navigation_monitoring"
+        }
+      ],
+      "planned_or_preburn_monitoring_context": [
+        {
+          "maneuver_id": "otc3",
+          "evidence_semantics": "PRE_BURN_OPERATIONAL_CONTEXT",
+          "spacecraft_configuration_monitoring_reported": true,
+          "navigation_data_monitoring_reported": true,
+          "promoted_to_complete_as_flown_display_history": false,
+          "source_id": "nasa_otc3_preburn_navigation_monitoring"
+        },
+        {
+          "maneuver_id": "rtc2",
+          "evidence_semantics": "PRE_BURN_OPERATIONAL_CONTEXT",
+          "guidance_navigation_propulsion_system_monitoring_reported": true,
+          "promoted_to_complete_as_flown_display_history": false,
+          "source_id": "nasa_rtc2_navigation_monitoring_plan"
+        }
+      ],
+      "all_executed_correction_burns_have_identical_public_monitoring_evidence": false,
+      "exact_displayed_variables_public": false,
+      "display_values_proven_equal_to_onboard_filter_state": false,
+      "display_time_history_public": false
+    }
+  },
+  "public_oem_solution_evolution_boundary": {
+    "source_dependency": "data/reference/artemis_ii_maneuver_trajectory_correlation.json",
+    "oem_maneuver_brackets_expected": 4,
+    "same_epoch_solution_comparisons_expected": 3,
+    "same_epoch_comparisons_are_navigation_error": false,
+    "same_epoch_comparisons_are_measured_burn_delta_v": false,
+    "oem_creation_time_proves_maneuver_assimilation": false,
+    "arow_state_vector_equals_onboard_navigation_filter_state": false,
+    "maneuver_assimilation_status_from_creation_time": "NOT_ESTABLISHED",
+    "important_example": {
+      "maneuver_id": "otc3",
+      "earliest_post_maneuver_created_product": "Artemis_II_OEM_2026_04_06_Pre-OTC3_to_EI.csv",
+      "filename_semantics": "PRE_OTC3",
+      "creation_time_proves_otc3_assimilation": false
+    }
+  },
+  "state_estimation_evidence_boundaries": {
+    "onboard_navigation_architecture_public": true,
+    "onboard_sensor_roles_public": true,
+    "dsn_ground_tracking_role_public": true,
+    "arow_public_state_vectors_available": true,
+    "arow_public_ephemeris_available": true,
+    "artemis_ii_opnav_imagery_as_flown_confirmed": true,
+    "proximity_ops_onboard_navigation_sensor_use_confirmed": true,
+    "trajectory_correction_navigation_monitoring_as_flown_examples_confirmed": true,
+    "complete_onboard_navigation_state_history_public": false,
+    "complete_ground_orbit_determination_solution_history_public": false,
+    "raw_imu_time_history_public": false,
+    "raw_star_tracker_time_history_public": false,
+    "raw_gps_time_history_public": false,
+    "raw_barometric_altimeter_time_history_public": false,
+    "raw_sun_sensor_time_history_public": false,
+    "complete_raw_opnav_measurement_time_history_public": false,
+    "opnav_measurement_residual_history_public": false,
+    "navigation_filter_innovation_history_public": false,
+    "navigation_covariance_history_public": false,
+    "filter_gain_history_public": false,
+    "filter_bias_state_history_public": false,
+    "sensor_selection_mode_history_public": false,
+    "measurement_accept_reject_history_public": false,
+    "complete_crew_navigation_display_history_public": false,
+    "arow_equals_onboard_filter_state_proven": false,
+    "arow_equals_complete_ground_navigation_solution_proven": false,
+    "oem_difference_equals_navigation_error": false,
+    "oem_difference_equals_measured_burn_delta_v": false,
+    "oem_creation_time_proves_measurement_or_burn_assimilation": false
+  },
+  "phase2j3_reconstructable": [
+    "NAVIGATION_ARCHITECTURE",
+    "SENSOR_MEASUREMENT_ROLES",
+    "MISSION_PHASE_CAPABILITY_CONTEXT",
+    "ONBOARD_VS_GROUND_NAVIGATION_BOUNDARY",
+    "PUBLIC_AROW_PRODUCT_BOUNDARY",
+    "AS_FLOWN_OPNAV_IMAGERY_EXISTENCE",
+    "AS_FLOWN_PROXIMITY_NAV_SENSOR_USE",
+    "SELECTED_AS_FLOWN_CREW_NAVIGATION_DATA_MONITORING_CONTEXT",
+    "OEM_SOLUTION_EVOLUTION_WITH_NON_INFERENCE_GUARDRAILS"
+  ],
+  "phase2j3_not_reconstructable": [
+    "COMPLETE_ONBOARD_FILTER_STATE_HISTORY",
+    "COMPLETE_GROUND_ORBIT_DETERMINATION_SOLUTION_HISTORY",
+    "FILTER_COVARIANCE_HISTORY",
+    "FILTER_GAIN_HISTORY",
+    "MEASUREMENT_INNOVATION_HISTORY",
+    "SENSOR_BIAS_STATE_HISTORY",
+    "MEASUREMENT_ACCEPT_REJECT_HISTORY",
+    "EXACT_SENSOR_SELECTION_HISTORY",
+    "EXACT_OPNAV_ESTIMATOR_UPDATES",
+    "EXACT_DSN_NAVIGATION_SOLUTION_HISTORY",
+    "COMPLETE_CREW_NAVIGATION_DISPLAY_HISTORY"
+  ],
+  "guardrails": [
+    "Public navigation-sensor architecture is not an as-flown sensor time history.",
+    "IMU capability is not a raw Artemis II inertial-measurement history.",
+    "A star-tracker role is not a published Artemis II attitude-solution history.",
+    "GPS capability is not a complete as-flown Artemis II GPS solution history.",
+    "Deep Space Network tracking is external ground navigation support and is not an onboard navigation sensor.",
+    "Deep Space Network ground navigation is not the Orion onboard navigation filter.",
+    "GROUND_ORBIT_DETERMINATION is a MissionLab normalized taxonomy category and is not claimed to be the exact public name of a NASA Artemis II data product.",
+    "An Artemis II optical-navigation image is as-flown sensor evidence but is not an estimator residual or innovation history.",
+    "Optical-navigation image capture does not prove a specific estimator measurement update.",
+    "AROW public state vectors are not proven to be the Orion onboard navigation-filter state.",
+    "An AROW public state vector is not proven to be the complete ground orbit-determination solution.",
+    "A public OEM is a trajectory data product and is not raw spacecraft telemetry.",
+    "A public OEM solution-to-solution difference is not a navigation error.",
+    "A public OEM solution-to-solution difference is not measured maneuver delta-v.",
+    "An OEM product creation time does not by itself prove measurement assimilation or maneuver assimilation.",
+    "Crew monitoring of navigation data does not expose the complete onboard navigation-state history.",
+    "Crew monitoring of navigation data does not establish that displayed values are identical to the complete onboard filter state.",
+    "As-flown crew navigation-data monitoring is explicitly confirmed here for RTC1 and RTC3 and is not generalized to every trajectory-correction burn without equivalent public evidence.",
+    "Pre-burn or planned monitoring language is not silently promoted to an as-flown display history.",
+    "The absence of a navigation record from the current curated public source set is not proof that the record never existed."
+  ]
+}

@@ -1,0 +1,592 @@
+﻿{
+  "dataset_id": "phase2k_artemis_ii_phase2_integrated_operations",
+  "mission": "Artemis II",
+  "scope": "Cross-domain Phase 2 integration of Artemis II flight dynamics, communications, maneuver operations, propulsion architecture, and guidance-navigation-control reconstruction. The product links the shared mission clock, trajectory geometry, maneuver decisions, communications constraints and anomalies, propulsion boundaries, navigation evidence, crew-control evidence, and the final correction-to-entry handoff while preserving the distinction between public evidence, MissionLab-derived quantities, models, and unavailable internal flight data.",
+  "provenance": "NASA_AND_ESA_REPORTED_WITH_MISSIONLAB_DERIVED_CROSS_PHASE_OPERATIONAL_CORRELATION",
+  "phase": "2K",
+  "phase_name": "Phase 2 Integration & Closure",
+
+  "input_dependencies": [
+    {
+      "path": "data/reference/artemis_ii_maneuver_trajectory_correlation.json",
+      "role": "FLIGHT_DYNAMICS_MISSION_CLOCK_GEOMETRY_AND_PUBLIC_OEM_SOLUTION_EVOLUTION"
+    },
+    {
+      "path": "data/reference/artemis_ii_communications_operational_threads.json",
+      "role": "COMMUNICATIONS_CONSTRAINT_ANOMALY_AND_RECOVERY_CONTEXT"
+    },
+    {
+      "path": "data/reference/artemis_ii_esm_propulsion_architecture.json",
+      "role": "PROPULSION_ARCHITECTURE_AND_ENGINE_ASSIGNMENT_BOUNDARIES"
+    },
+    {
+      "path": "data/reference/artemis_ii_maneuver_operational_threads.json",
+      "role": "MANEUVER_PLAN_EXECUTION_AND_OPERATIONAL_THREADS"
+    },
+    {
+      "path": "data/reference/artemis_ii_gnc_operational_threads.json",
+      "role": "GNC_ARCHITECTURE_NAVIGATION_MANUAL_CONTROL_AND_OPERATIONAL_THREADS"
+    }
+  ],
+
+  "integration_policy": {
+    "shared_mission_clock_required": true,
+    "public_reported_and_missionlab_derived_values_separated": true,
+    "planned_and_as_flown_events_separated": true,
+    "expected_constraint_and_anomaly_separated": true,
+    "architecture_and_time_history_separated": true,
+    "public_state_product_and_onboard_filter_state_separated": true,
+    "trajectory_solution_difference_and_navigation_error_separated": true,
+    "trajectory_solution_difference_and_measured_burn_delta_v_separated": true,
+    "communications_sequence_and_causation_separated": true,
+    "propulsion_architecture_and_burn_specific_assignment_separated": true,
+    "entry_handoff_and_detailed_entry_guidance_separated": true,
+    "absence_from_public_source_set_is_not_proof_record_never_existed": true
+  },
+
+  "phase2_domain_status": {
+    "flight_dynamics": {
+      "status": "COMPLETE_TO_PHASE2_SCOPE",
+      "capabilities": [
+        "SHARED_MISSION_CLOCK",
+        "EARTH_MOON_ORION_TRAJECTORY_CONTEXT",
+        "LUNAR_SPHERE_OF_INFLUENCE_CONTEXT",
+        "PERICYNTHION_GEOMETRY",
+        "PUBLIC_OEM_SOLUTION_EVOLUTION",
+        "TRAJECTORY_CORRECTION_EVENT_CORRELATION",
+        "ENTRY_HANDOFF_CLOCK_CONTEXT"
+      ]
+    },
+    "communications": {
+      "status": "COMPLETE_TO_PHASE2_SCOPE",
+      "capabilities": [
+        "COMMUNICATIONS_EVENT_CATALOG",
+        "MISSION_CLOCK_CORRELATION",
+        "LUNAR_OCCULTATION_CONTEXT",
+        "DSN_GEOMETRIC_CONTEXT",
+        "OPTICAL_COMMUNICATIONS_CONTEXT",
+        "EXPECTED_BLACKOUT_THREAD",
+        "UNEXPECTED_RETURN_LINK_ANOMALY_THREAD",
+        "RECOVERY_AND_MISSION_CONTINUATION_THREAD"
+      ]
+    },
+    "propulsion": {
+      "status": "COMPLETE_TO_PHASE2_SCOPE",
+      "capabilities": [
+        "ESM_PROPULSION_ARCHITECTURE",
+        "OMS_E_ARCHITECTURE",
+        "AUXILIARY_ENGINE_ARCHITECTURE",
+        "RCS_ARCHITECTURE",
+        "CONFIRMED_MAJOR_MANEUVER_ASSIGNMENTS",
+        "CORRECTION_BURN_ASSIGNMENT_BOUNDARY"
+      ]
+    },
+    "maneuvers": {
+      "status": "COMPLETE_TO_PHASE2_SCOPE",
+      "capabilities": [
+        "PLANNED_VS_EXECUTED_CORRECTIONS",
+        "CANCELLATION_DECISIONS",
+        "EXECUTED_CORRECTION_TIMELINE",
+        "RETURN_DELTA_V_MAGNITUDE_CONTEXT",
+        "PUBLIC_OEM_CORRELATION",
+        "OPERATIONAL_MANEUVER_THREADS"
+      ]
+    },
+    "gnc": {
+      "status": "COMPLETE_TO_PHASE2_SCOPE",
+      "capabilities": [
+        "GNC_DOMAIN_MODEL",
+        "ONBOARD_NAVIGATION_ARCHITECTURE",
+        "GROUND_NAVIGATION_SUPPORT_BOUNDARY",
+        "MANUAL_CONTROL_ARCHITECTURE",
+        "PROXIMITY_OPERATIONS_GNC",
+        "MANUAL_PILOTING_CONTEXT",
+        "OPTICAL_NAVIGATION_CONTEXT",
+        "TRAJECTORY_CORRECTION_NAVIGATION_MONITORING",
+        "FINAL_CORRECTION_TO_ENTRY_HANDOFF"
+      ]
+    }
+  },
+
+  "mission_clock_anchors": [
+    {
+      "event_id": "launch",
+      "timestamp_utc": "2026-04-01T22:35:12Z",
+      "precision": "SECOND_LEVEL",
+      "provenance": "NASA_REPORTED"
+    },
+    {
+      "event_id": "otc3",
+      "timestamp_utc": "2026-04-06T03:03:00Z",
+      "precision": "MINUTE_LEVEL",
+      "provenance": "NASA_REPORTED"
+    },
+    {
+      "event_id": "lunar_soi_entry",
+      "timestamp_utc": "2026-04-06T04:38:07.532302Z",
+      "precision": "DERIVED",
+      "provenance": "MISSIONLAB_DERIVED_GEOMETRY"
+    },
+    {
+      "event_id": "pericynthion",
+      "timestamp_utc": "2026-04-06T23:00:46.177998Z",
+      "precision": "DERIVED",
+      "provenance": "MISSIONLAB_DERIVED_GEOMETRY"
+    },
+    {
+      "event_id": "reported_earthrise",
+      "timestamp_utc": "2026-04-06T23:24:00Z",
+      "precision": "MINUTE_LEVEL",
+      "provenance": "NASA_REPORTED"
+    },
+    {
+      "event_id": "lunar_soi_exit",
+      "timestamp_utc": "2026-04-07T17:23:41.922211Z",
+      "precision": "DERIVED",
+      "provenance": "MISSIONLAB_DERIVED_GEOMETRY"
+    },
+    {
+      "event_id": "rtc1",
+      "timestamp_utc": "2026-04-08T00:03:00Z",
+      "precision": "MINUTE_LEVEL",
+      "provenance": "NASA_REPORTED"
+    },
+    {
+      "event_id": "rtc2",
+      "timestamp_utc": "2026-04-10T02:53:00Z",
+      "precision": "MINUTE_LEVEL",
+      "provenance": "NASA_REPORTED"
+    },
+    {
+      "event_id": "rtc3",
+      "timestamp_utc": "2026-04-10T18:53:00Z",
+      "precision": "MINUTE_LEVEL",
+      "provenance": "NASA_REPORTED"
+    },
+    {
+      "event_id": "entry_interface",
+      "timestamp_utc": "2026-04-10T23:53:00Z",
+      "precision": "MINUTE_LEVEL",
+      "provenance": "NASA_REPORTED"
+    },
+    {
+      "event_id": "splashdown",
+      "timestamp_utc": "2026-04-11T00:07:00Z",
+      "precision": "MINUTE_LEVEL",
+      "provenance": "NASA_REPORTED"
+    }
+  ],
+
+  "phase2_integrated_operational_threads": [
+    {
+      "thread_id": "earth_departure_and_adaptive_outbound_trajectory_management",
+      "classification": "NOMINAL_MISSION_OPERATIONS",
+      "anomaly": false,
+      "domains": [
+        "FLIGHT_DYNAMICS",
+        "MANEUVERS",
+        "PROPULSION",
+        "GNC"
+      ],
+      "sequence": [
+        "LAUNCH",
+        "PROXIMITY_OPERATIONS",
+        "PERIGEE_RAISE_CONTEXT",
+        "TRANSLUNAR_INJECTION_CONTEXT",
+        "OTC1_CANCELLED",
+        "OTC2_CANCELLED",
+        "OTC3_EXECUTED",
+        "LUNAR_SOI_ENTRY"
+      ],
+      "interpretation": "The outbound mission demonstrates adaptive trajectory management. Two planned outbound corrections were cancelled because the trajectory remained sufficiently on track, while OTC3 was executed before lunar sphere-of-influence entry.",
+      "guardrails": [
+        "CANCELLED_CORRECTION_IS_NOT_FAILED_BURN",
+        "CANCELLED_CORRECTION_IS_NOT_PROPULSION_ANOMALY",
+        "OTC3_ENGINE_ASSIGNMENT_REMAINS_UNRESOLVED",
+        "PUBLIC_SEQUENCE_IS_NOT_COMPLETE_CONSOLE_DECISION_HISTORY"
+      ]
+    },
+
+    {
+      "thread_id": "proximity_operations_manual_control_and_navigation",
+      "classification": "CREW_MANUAL_FLIGHT_TEST_WITH_AUTOMATED_DEPARTURE",
+      "anomaly": false,
+      "domains": [
+        "GNC",
+        "PROPULSION",
+        "FLIGHT_DYNAMICS"
+      ],
+      "sequence": [
+        "AUTOMATED_PRE_MANUAL_CONTEXT",
+        "ONBOARD_NAVIGATION_SENSOR_USE",
+        "CREW_CONTROLLED_APPROACH",
+        "CREW_CONTROLLED_RETREAT",
+        "RCS_CONTROL",
+        "AUTOMATED_DEPARTURE"
+      ],
+      "duration_minutes": 70.0,
+      "duration_semantics": "APPROXIMATELY",
+      "interpretation": "Public evidence confirms the broad as-flown proximity demonstration and authority progression while not exposing second-by-second relative-state, controller-input, or individual-thruster histories.",
+      "guardrails": [
+        "PREMISSION_REFERENCE_SEQUENCE_IS_NOT_AS_FLOWN_STEP_LOG",
+        "PLANNED_RANGE_IS_NOT_MEASURED_AS_FLOWN_RANGE",
+        "CREW_CONTROLLER_INPUT_IS_NOT_DIRECT_THRUSTER_SWITCHING",
+        "RCS_USE_IS_NOT_INDIVIDUAL_THRUSTER_HISTORY"
+      ]
+    },
+
+    {
+      "thread_id": "deep_space_navigation_and_lunar_communications_constraint",
+      "classification": "EXPECTED_DEEP_SPACE_OPERATIONAL_CONSTRAINT",
+      "anomaly": false,
+      "domains": [
+        "FLIGHT_DYNAMICS",
+        "COMMUNICATIONS",
+        "GNC"
+      ],
+      "sequence": [
+        "LUNAR_SOI_ENTRY",
+        "ONBOARD_DEEP_SPACE_NAVIGATION_CONTEXT",
+        "OPTICAL_NAVIGATION_IMAGERY",
+        "DSN_GROUND_NAVIGATION_SUPPORT",
+        "LUNAR_FLYBY",
+        "EXPECTED_LUNAR_COMMUNICATIONS_BLACKOUT",
+        "REPORTED_EARTHRISE",
+        "DSN_REACQUISITION_SEQUENCE",
+        "LUNAR_SOI_EXIT"
+      ],
+      "interpretation": "The lunar flyby integrates trajectory geometry, onboard navigation capability, optical navigation, DSN ground support, and an expected communications loss caused by lunar geometry.",
+      "state_product_boundary": "ONBOARD_NAVIGATION_STATE != GROUND_ORBIT_DETERMINATION != AROW_PUBLIC_STATE_VECTOR",
+      "guardrails": [
+        "EXPECTED_BLACKOUT_IS_NOT_ANOMALY",
+        "DSN_IS_NOT_ONBOARD_SENSOR",
+        "AROW_STATE_VECTOR_IS_NOT_PROVEN_ONBOARD_FILTER_STATE",
+        "OPNAV_IMAGE_IS_NOT_FILTER_INNOVATION",
+        "REPORTED_EARTHRISE_IS_NOT_EXACT_LIVE_REACQUISITION_TIME"
+      ]
+    },
+
+    {
+      "thread_id": "return_trajectory_refinement",
+      "classification": "NOMINAL_RETURN_TRAJECTORY_MANAGEMENT",
+      "anomaly": false,
+      "domains": [
+        "FLIGHT_DYNAMICS",
+        "MANEUVERS",
+        "PROPULSION",
+        "GNC"
+      ],
+      "sequence": [
+        "LUNAR_SOI_EXIT",
+        "RTC1_NAVIGATION_MONITORING",
+        "RTC1_EXECUTED",
+        "RTC2_PREBURN_GNC_CONTEXT",
+        "RTC2_EXECUTED",
+        "RTC3_NAVIGATION_MONITORING",
+        "RTC3_EXECUTED",
+        "ENTRY_INTERFACE"
+      ],
+      "interpretation": "Three return corrections refined the trajectory between lunar departure and Earth entry. Public reporting supplies maneuver timing, durations, selected delta-v magnitudes, and selected navigation-monitoring context, but not complete burn vectors, targeting algorithms, or correction-engine assignments.",
+      "guardrails": [
+        "CORRECTION_ENGINE_ASSIGNMENTS_REMAIN_UNRESOLVED",
+        "REPORTED_SCALAR_DELTA_V_IS_NOT_NET_VECTOR_DELTA_V",
+        "MANEUVER_EXECUTION_IS_NOT_TARGETING_ALGORITHM_DISCLOSURE",
+        "NAVIGATION_MONITORING_IS_NOT_COMPLETE_FILTER_HISTORY"
+      ]
+    },
+
+    {
+      "thread_id": "rtc2_communications_anomaly_recovery_and_mission_continuation",
+      "classification": "UNEXPECTED_COMMUNICATIONS_ANOMALY_WITH_MISSION_CONTINUATION",
+      "anomaly": true,
+      "domains": [
+        "COMMUNICATIONS",
+        "MANEUVERS",
+        "GNC",
+        "PROPULSION"
+      ],
+      "sequence": [
+        "UNEXPECTED_RETURN_LINK_LOSS",
+        "COMMUNICATIONS_RECOVERY",
+        "BURN_PREPARATION_RESUMED",
+        "RTC2_EXECUTED"
+      ],
+      "approximate_loss_anchor_utc": "2026-04-10T00:53:00Z",
+      "approximate_anchor_is_exact": false,
+      "rtc2_timestamp_utc": "2026-04-10T02:53:00Z",
+      "causal_relationship": "NOT_ESTABLISHED",
+      "complete_two_way_outage_established": false,
+      "root_cause_public": false,
+      "failed_subsystem_public": false,
+      "burn_executed_after_recovery": true,
+      "burn_failure": false,
+      "propulsion_anomaly_inferred": false,
+      "interpretation": "The public sequence establishes an unexpected return-link communications interruption, recovery, resumption of burn preparation, and successful RTC2 execution. It does not establish that the communications event caused a maneuver or propulsion problem.",
+      "guardrails": [
+        "DURING_DATA_RATE_CHANGE_IS_NOT_CAUSED_BY_DATA_RATE_CHANGE",
+        "RETURN_LINK_LOSS_IS_NOT_PROVEN_COMPLETE_TWO_WAY_OUTAGE",
+        "COMMUNICATIONS_ANOMALY_IS_NOT_PROPULSION_ANOMALY",
+        "SEQUENCE_RELATIONSHIP_IS_NOT_CAUSATION"
+      ]
+    },
+
+    {
+      "thread_id": "final_correction_to_entry_handoff",
+      "classification": "NOMINAL_PHASE2_TO_PHASE4_HANDOFF",
+      "anomaly": false,
+      "domains": [
+        "FLIGHT_DYNAMICS",
+        "MANEUVERS",
+        "GNC"
+      ],
+      "sequence": [
+        "RTC3",
+        "FIVE_HOUR_PUBLIC_CLOCK_INTERVAL",
+        "ENTRY_INTERFACE",
+        "SPLASHDOWN_CONTEXT"
+      ],
+      "rtc3_timestamp_utc": "2026-04-10T18:53:00Z",
+      "entry_interface_timestamp_utc": "2026-04-10T23:53:00Z",
+      "rtc3_to_entry_interval_seconds": 18000.0,
+      "splashdown_timestamp_utc": "2026-04-11T00:07:00Z",
+      "interpretation": "Phase 2 closes at the public final-correction-to-entry handoff. Detailed as-flown entry guidance, atmospheric entry reconstruction, parachute deployment, splashdown, and recovery remain downstream scope.",
+      "guardrails": [
+        "FINAL_PUBLIC_CLOCK_HANDOFF_IS_NOT_FINAL_ONBOARD_NAVIGATION_STATE",
+        "FINAL_PUBLIC_CLOCK_HANDOFF_IS_NOT_ENTRY_TARGETING_COVARIANCE",
+        "FINAL_PUBLIC_CLOCK_HANDOFF_IS_NOT_ENTRY_GUIDANCE_LAW",
+        "DETAILED_ENTRY_RECONSTRUCTION_REMAINS_PHASE4_SCOPE"
+      ]
+    }
+  ],
+
+  "phase2_quantitative_summary": {
+    "planned_trajectory_correction_opportunities": 6,
+    "executed_trajectory_corrections": 4,
+    "cancelled_trajectory_corrections": 2,
+    "outbound_planned": 3,
+    "outbound_cancelled": 2,
+    "outbound_executed": 1,
+    "return_planned": 3,
+    "return_executed": 3,
+    "known_executed_correction_firing_time_seconds": 49.5,
+    "return_scalar_delta_v_magnitude_sum_ft_s": 11.1,
+    "return_scalar_delta_v_magnitude_sum_m_s": 3.38328,
+    "net_vector_delta_v_computed": false,
+    "all_correction_scalar_delta_v_computed": false,
+    "correction_burn_engine_assignments_resolved": 0,
+    "correction_burn_engine_assignments_unresolved": 4,
+    "onboard_navigation_sensor_classes": 6,
+    "oem_maneuver_creation_brackets_audited": 4,
+    "oem_same_epoch_solution_comparisons_available": 3,
+    "gnc_operational_threads": 5,
+    "phase2_integrated_operational_threads": 6
+  },
+
+  "propulsion_boundary": {
+    "confirmed_major_oms_e_maneuvers": [
+      "perigee_raise",
+      "tli"
+    ],
+    "resolved_correction_burn_engine_assignments": 0,
+    "unresolved_correction_burn_engine_assignments": [
+      "otc3",
+      "rtc1",
+      "rtc2",
+      "rtc3"
+    ],
+    "confirmed_major_burn_engine_assignment_generalized_to_corrections": false
+  },
+
+  "navigation_boundary": {
+    "onboard_navigation_sensor_classes": [
+      "star_tracker",
+      "imu",
+      "gps_receiver",
+      "barometric_altimeter",
+      "optical_navigation_camera",
+      "sun_sensor"
+    ],
+    "dsn_onboard_sensor": false,
+    "state_product_boundary": "ONBOARD_NAVIGATION_STATE != GROUND_ORBIT_DETERMINATION != AROW_PUBLIC_STATE_VECTOR",
+    "complete_onboard_filter_state_history_public": false,
+    "complete_ground_orbit_determination_solution_history_public": false,
+    "raw_navigation_sensor_histories_public": false
+  },
+
+  "oem_boundary": {
+    "maneuver_brackets_audited": 4,
+    "same_epoch_solution_comparisons_available": 3,
+    "solution_difference_is_navigation_error": false,
+    "solution_difference_is_measured_burn_delta_v": false,
+    "creation_time_proves_maneuver_assimilation": false,
+    "maneuver_assimilation_status": "NOT_ESTABLISHED"
+  },
+
+  "communications_boundary": {
+    "expected_lunar_blackout_classified_as_anomaly": false,
+    "flight_day_9_return_link_loss_classified_as_anomaly": true,
+    "flight_day_9_complete_two_way_outage_established": false,
+    "flight_day_9_root_cause_public": false,
+    "flight_day_9_failed_subsystem_public": false,
+    "flight_day_9_recovery_before_rtc2": true,
+    "communications_anomaly_caused_rtc2_issue": false
+  },
+
+  "phase2_reconstructable": [
+    "SHARED_MISSION_CLOCK",
+    "EARTH_MOON_ORION_TRAJECTORY_CONTEXT",
+    "LUNAR_SPHERE_OF_INFLUENCE_TRANSITIONS",
+    "PERICYNTHION_GEOMETRY",
+    "PUBLIC_OEM_SOLUTION_EVOLUTION",
+    "TRAJECTORY_CORRECTION_PLAN_VS_EXECUTION",
+    "TRAJECTORY_CORRECTION_OPERATIONAL_THREADS",
+    "PROPULSION_ARCHITECTURE",
+    "CONFIRMED_MAJOR_MANEUVER_PROPULSION_ASSIGNMENTS",
+    "COMMUNICATIONS_EVENT_SEQUENCE",
+    "EXPECTED_LUNAR_COMMUNICATIONS_CONSTRAINT",
+    "UNEXPECTED_RETURN_LINK_ANOMALY_SEQUENCE",
+    "OPTICAL_COMMUNICATIONS_CONTEXT",
+    "GNC_DOMAIN_ARCHITECTURE",
+    "ONBOARD_NAVIGATION_SENSOR_ARCHITECTURE",
+    "GROUND_NAVIGATION_SUPPORT_BOUNDARY",
+    "MANUAL_CONTROL_ARCHITECTURE",
+    "PROXIMITY_OPERATIONS_GNC_CONTEXT",
+    "FLIGHT_DAY_4_MANUAL_PILOTING_CONTEXT",
+    "OPTICAL_NAVIGATION_IMAGERY_EXISTENCE",
+    "SELECTED_TRAJECTORY_CORRECTION_NAVIGATION_MONITORING",
+    "FINAL_CORRECTION_TO_ENTRY_PUBLIC_CLOCK_HANDOFF"
+  ],
+
+  "phase2_not_reconstructable": [
+    "COMPLETE_FLIGHT_CONTROL_CONSOLE_LOG",
+    "COMPLETE_FLIGHT_DIRECTOR_DECISION_TREE",
+    "COMPLETE_ONBOARD_NAVIGATION_FILTER_STATE_HISTORY",
+    "COMPLETE_GROUND_ORBIT_DETERMINATION_HISTORY",
+    "RAW_NAVIGATION_SENSOR_TIME_HISTORIES",
+    "FILTER_COVARIANCE_HISTORY",
+    "FILTER_GAIN_HISTORY",
+    "FILTER_INNOVATION_HISTORY",
+    "FILTER_BIAS_HISTORY",
+    "MEASUREMENT_ACCEPT_REJECT_HISTORY",
+    "COMPLETE_GUIDANCE_ALGORITHM",
+    "COMPLETE_GUIDANCE_COMMAND_HISTORY",
+    "COMPLETE_MANUAL_CONTROL_LAW",
+    "COMPLETE_AUTOMATIC_CONTROL_LAW",
+    "CONTROLLER_DEFLECTION_HISTORY",
+    "INDIVIDUAL_THRUSTER_FIRING_HISTORY",
+    "COMPLETE_THRUSTER_ALLOCATION_LOGIC",
+    "CORRECTION_BURN_ENGINE_ASSIGNMENTS",
+    "COMPLETE_MANEUVER_TARGETING_LOGIC",
+    "TRAJECTORY_CORRECTION_BURN_VECTORS",
+    "OTC3_PUBLIC_DELTA_V",
+    "COMPLETE_CREW_NAVIGATION_DISPLAY_HISTORY",
+    "FLIGHT_DAY_9_COMMUNICATIONS_ROOT_CAUSE",
+    "FLIGHT_DAY_9_FAILED_SUBSYSTEM",
+    "DETAILED_AS_FLOWN_ENTRY_GUIDANCE"
+  ],
+
+  "next_phase_handoffs": {
+    "phase3_vehicle_systems": {
+      "status": "READY",
+      "scope": [
+        "CABIN_AND_ENVIRONMENTAL_TRENDS",
+        "ECLSS",
+        "TOILET_AND_WASTEWATER_EVENTS",
+        "THERMAL_AND_MATERIALS",
+        "HEAT_SHIELD_RISK_MITIGATION_CHAIN"
+      ]
+    },
+    "phase4_entry_descent_splashdown_recovery": {
+      "status": "READY",
+      "entry_anchor_utc": "2026-04-10T23:53:00Z",
+      "scope": [
+        "DETAILED_ENTRY_TIMELINE",
+        "ENTRY_GUIDANCE_WHERE_PUBLIC_EVIDENCE_SUPPORTS_IT",
+        "ATMOSPHERIC_ENTRY_MODELING",
+        "COMMUNICATIONS_BLACKOUT",
+        "PARACHUTE_SEQUENCE",
+        "SPLASHDOWN_ACCURACY",
+        "RECOVERY_TIMELINE"
+      ]
+    },
+    "phase5_space_weather_and_radiation": {
+      "status": "READY",
+      "scope": [
+        "SPACE_WEATHER_CONTEXT",
+        "OMNI_OR_CDAWEB_CORRELATION",
+        "NAIRAS_TRAJECTORY_INPUT",
+        "RADIATION_ENVIRONMENT",
+        "ENVIRONMENT_VS_CREW_DOSE_BOUNDARY"
+      ]
+    },
+    "phase6_lunar_science_and_observations": {
+      "status": "READY",
+      "scope": [
+        "CREW_IMAGERY",
+        "ORION_IMAGERY",
+        "MISSION_AUDIO_AND_TRANSCRIPTS",
+        "LUNAR_TARGET_CORRELATION",
+        "CREW_OBSERVATION_THREADS"
+      ]
+    },
+    "phase7_mission_control_engineering_perspectives": {
+      "status": "READY",
+      "scope": [
+        "FLIGHT_CONTROL_DISCIPLINE_LENSES",
+        "FDO_AND_FAO_PERSPECTIVES",
+        "EECOM_AND_COMM_PERSPECTIVES",
+        "DECISION_THREADS",
+        "POSTFLIGHT_ENGINEERING_TIMELINE"
+      ]
+    }
+  },
+
+  "phase2_closure_criteria": {
+    "flight_dynamics_integrated": true,
+    "communications_integrated": true,
+    "propulsion_integrated": true,
+    "maneuvers_integrated": true,
+    "gnc_integrated": true,
+    "shared_mission_clock_preserved": true,
+    "expected_constraint_vs_anomaly_boundary_preserved": true,
+    "planned_vs_as_flown_boundary_preserved": true,
+    "architecture_vs_time_history_boundary_preserved": true,
+    "state_product_boundary_preserved": true,
+    "correction_engine_assignment_uncertainty_preserved": true,
+    "oem_non_inference_boundary_preserved": true,
+    "communications_non_causation_boundary_preserved": true,
+    "phase4_entry_scope_preserved": true,
+    "phase7_console_decision_scope_preserved": true,
+    "unsupported_telemetry_fabricated": false
+  },
+
+  "guardrails": [
+    "A public mission timeline is not a complete flight-control console log.",
+    "A public operational sequence is not a complete Flight Director rationale tree.",
+    "A planned maneuver is not an executed maneuver.",
+    "A cancelled correction is not a failed burn.",
+    "A cancelled correction is not a propulsion anomaly.",
+    "A propulsion architecture capability does not establish burn-specific engine assignment.",
+    "Confirmed OMS-E use for major maneuvers does not establish OMS-E use for correction burns.",
+    "Correction-burn engine assignments remain unresolved for OTC3, RTC1, RTC2, and RTC3.",
+    "A public OEM trajectory product is not raw spacecraft telemetry.",
+    "An OEM solution difference is not navigation error.",
+    "An OEM solution difference is not measured maneuver delta-v.",
+    "OEM creation time does not prove maneuver assimilation.",
+    "An onboard navigation architecture is not a raw sensor time history.",
+    "Deep Space Network tracking is ground support and not an onboard navigation sensor.",
+    "Ground navigation support is not the Orion onboard navigation filter.",
+    "An AROW public state vector is not proven to be Orion's onboard navigation-filter state.",
+    "An optical-navigation image is not a filter residual or innovation.",
+    "Crew monitoring of navigation data does not expose the complete onboard navigation state.",
+    "A manual-control mode label does not disclose the complete control law.",
+    "Reported RCS use does not disclose the individual thruster-firing history.",
+    "An expected lunar communications blackout is not an anomaly.",
+    "A return-link loss does not by itself establish a complete two-way outage.",
+    "A communications anomaly followed by RTC2 does not establish that the communications anomaly caused a maneuver or propulsion problem.",
+    "The final RTC3-to-Entry-Interface clock relationship does not reconstruct the detailed entry-guidance law.",
+    "Absence from the current curated public source set is not proof that a record never existed."
+  ],
+
+  "phase2_status": "COMPLETE"
+}

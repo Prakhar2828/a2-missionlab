@@ -1,0 +1,387 @@
+{
+  "dataset_id": "phase6a_artemis_ii_lunar_science_archive_index",
+  "mission": "Artemis II",
+  "phase": "6A",
+  "status": "PUBLIC_LUNAR_SCIENCE_ARCHIVE_INDEXED",
+  "release_summary": {
+    "release_date": "2026-10-07",
+    "reported_total_data_volume_gb": {
+      "operator": ">",
+      "value": 800,
+      "exact": false
+    },
+    "reported_full_resolution_image_video_count": {
+      "operator": ">",
+      "value": 11000,
+      "exact": false
+    },
+    "reported_science_audio_hours": {
+      "value": 8.5,
+      "exact": false
+    },
+    "includes": [
+      "crew_handheld_imagery",
+      "orion_spacecraft_imagery",
+      "video",
+      "crew_science_audio",
+      "transcripts",
+      "crew_annotations"
+    ],
+    "boundary": "NASA release totals are public summary figures and are not treated as exact PDS product counts."
+  },
+  "source_registry": [
+    {
+      "source_id": "NASA_ARTEMIS_II_LUNAR_SCIENCE_DATA_RELEASE_2026_10_07",
+      "publisher": "NASA",
+      "source_type": "NASA_RELEASE",
+      "url": "https://www.nasa.gov/blogs/missions/2026/10/07/nasa-releases-artemis-ii-lunar-science-data-images/",
+      "role": "Postflight release announcing the full public Artemis II lunar-science dataset and high-level archive totals."
+    },
+    {
+      "source_id": "NASA_ARTEMIS_II_CREW_MOON_PHOTO_ANNOTATIONS_2026_10_07",
+      "publisher": "NASA",
+      "source_type": "NASA_IMAGE_ARTICLE",
+      "url": "https://www.nasa.gov/image-article/artemis-ii-crew-moon-photo-annotations/",
+      "role": "Postflight public evidence for crew annotations and impact-flash observations."
+    },
+    {
+      "source_id": "NASA_ARTEMIS_II_OFFICIAL_MOON_FLYBY_PHOTOS_2026_04_07",
+      "publisher": "NASA",
+      "source_type": "NASA_RELEASE",
+      "url": "https://www.nasa.gov/news-release/nasas-artemis-ii-crew-beams-official-moon-flyby-photos-to-earth/",
+      "role": "Early public release of lunar-flyby imagery, Earthset/Earthrise, eclipse, terminator, and impact-flash reporting."
+    },
+    {
+      "source_id": "NASA_ARTEMIS_II_LUNAR_TARGETING_PLAN",
+      "publisher": "NASA Science",
+      "source_type": "NASA_SCIENCE_RESOURCE",
+      "url": "https://science.nasa.gov/resource/artemis-ii-lunar-targeting-plan/",
+      "role": "Public description of the crew lunar observation targeting plan and night-side science opportunities."
+    },
+    {
+      "source_id": "PDS_ARTEMIS2_CREW_CAMERA_BUNDLE",
+      "publisher": "NASA Planetary Data System",
+      "source_type": "PDS_BUNDLE",
+      "url": "https://pds.nasa.gov/ds-view/pds/viewBundle.jsp?identifier=urn:nasa:pds:artemis2_crew_camera&version=1.0",
+      "role": "Authoritative crew-camera bundle metadata and collection registry."
+    },
+    {
+      "source_id": "PDS_ARTEMIS2_ORION_CAMERA_BUNDLE",
+      "publisher": "NASA Planetary Data System",
+      "source_type": "PDS_BUNDLE",
+      "url": "https://pds.nasa.gov/ds-view/pds/viewBundle.jsp?identifier=urn:nasa:pds:artemis2_orion_camera&version=1.0",
+      "role": "Authoritative Orion-camera bundle metadata and collection registry."
+    },
+    {
+      "source_id": "PDS_ARTEMIS2_MISSION_AUDIO_BUNDLE",
+      "publisher": "NASA Planetary Data System",
+      "source_type": "PDS_BUNDLE",
+      "url": "https://pds.nasa.gov/ds-view/pds/viewBundle.jsp?identifier=urn:nasa:pds:artemis2_mission_audio&version=1.0",
+      "role": "Authoritative mission audio, transcript, voice-loop, and crew-annotation registry."
+    },
+    {
+      "source_id": "NASA_ARTEMIS_II_PRELIMINARY_LUNAR_SCIENCE_REPORT_PAGE",
+      "publisher": "NASA Science",
+      "source_type": "NASA_SCIENCE_REPORT_INDEX",
+      "url": "https://science.nasa.gov/feature/artemis-ii-preliminary-lunar-science-report/",
+      "role": "Public landing page for the preliminary science report, science operations report, data user guide, audio, and imagery."
+    }
+  ],
+  "pds_bundles": [
+    {
+      "bundle_id": "crew_camera",
+      "pds_identifier": "urn:nasa:pds:artemis2_crew_camera::1.0",
+      "name": "Artemis 2 Crew Camera Product Bundle",
+      "doi": "10.17189/x52v-tb80",
+      "start_utc": "2026-04-02T11:35:16.960Z",
+      "stop_utc": "2026-04-09T04:28:31.990Z",
+      "targets": [
+        "Earth",
+        "Moon"
+      ],
+      "instruments": [
+        "Nikon D5 camera",
+        "Nikon Z9 camera"
+      ],
+      "collections": [
+        {
+          "collection_id": "crew_camera_native_source",
+          "pds_identifier": "urn:nasa:pds:artemis2_crew_camera:data_source::1.0",
+          "collection_type": "DATA",
+          "name": "Artemis 2 Crew Camera Native Source Product Collection",
+          "content_class": "native_source_imagery"
+        },
+        {
+          "collection_id": "crew_camera_raw",
+          "pds_identifier": "urn:nasa:pds:artemis2_crew_camera:data_raw::1.0",
+          "collection_type": "DATA",
+          "name": "Artemis 2 Crew Camera Raw Product Collection",
+          "content_class": "raw_imagery"
+        },
+        {
+          "collection_id": "crew_camera_processed",
+          "pds_identifier": "urn:nasa:pds:artemis2_crew_camera:data_processed::1.0",
+          "collection_type": "DATA",
+          "name": "Artemis 2 Crew Camera Nikon Processed Product Collection",
+          "content_class": "processed_imagery"
+        },
+        {
+          "collection_id": "crew_camera_browse",
+          "pds_identifier": "urn:nasa:pds:artemis2_crew_camera:browse::1.0",
+          "collection_type": "BROWSE",
+          "name": "Artemis 2 Crew Camera Browse Product Collection",
+          "content_class": "browse_imagery"
+        }
+      ]
+    },
+    {
+      "bundle_id": "orion_camera",
+      "pds_identifier": "urn:nasa:pds:artemis2_orion_camera::1.0",
+      "name": "Artemis 2 Orion Camera Product Bundle",
+      "doi": "10.17189/hzev-nq50",
+      "start_utc": "2026-04-02T12:49:07.000Z",
+      "stop_utc": "2026-04-10T08:13:18.000Z",
+      "targets": [
+        "Earth",
+        "Moon"
+      ],
+      "instruments": [
+        "Orion Solar Array Wing (SAW) cameras",
+        "Orion Optical Navigation (OpNav) camera",
+        "Orion Cabin cameras",
+        "Orion Docking Camera"
+      ],
+      "collections": [
+        {
+          "collection_id": "orion_camera_raw_image",
+          "pds_identifier": "urn:nasa:pds:artemis2_orion_camera:data_raw_image::1.0",
+          "collection_type": "DATA",
+          "name": "Artemis 2 Orion Cameras Data Raw Image Product Collection",
+          "content_class": "raw_imagery"
+        },
+        {
+          "collection_id": "orion_camera_video",
+          "pds_identifier": "urn:nasa:pds:artemis2_orion_camera:data_video::1.0",
+          "collection_type": "DATA",
+          "name": "Artemis 2 Orion Cameras Data Raw Product Collection",
+          "content_class": "video"
+        },
+        {
+          "collection_id": "orion_camera_browse",
+          "pds_identifier": "urn:nasa:pds:artemis2_orion_camera:browse_source::1.0",
+          "collection_type": "BROWSE",
+          "name": "Artemis 2 Orion Cameras Browse Source Product Collection",
+          "content_class": "browse_imagery"
+        }
+      ]
+    },
+    {
+      "bundle_id": "mission_audio",
+      "pds_identifier": "urn:nasa:pds:artemis2_mission_audio::1.0",
+      "name": "Artemis 2 Mission Audio Product Bundle",
+      "doi": "10.17189/4a29-dz64",
+      "start_utc": "2026-04-05T05:36:35.000Z",
+      "stop_utc": "2026-04-07T11:59:59.000Z",
+      "targets": [
+        "Earth",
+        "Moon"
+      ],
+      "instruments": [
+        "Microsoft Surface Pro 5",
+        "Artemis Voice Loop"
+      ],
+      "collections": [
+        {
+          "collection_id": "mission_audio_pcd",
+          "pds_identifier": "urn:nasa:pds:artemis2_mission_audio:data_audio_pcd::1.0",
+          "collection_type": "DATA",
+          "name": "Artemis 2 Mission PCD Audio Product Collection",
+          "content_class": "crew_audio"
+        },
+        {
+          "collection_id": "mission_transcripts_pcd",
+          "pds_identifier": "urn:nasa:pds:artemis2_mission_audio:data_transcripts_pcd::1.0",
+          "collection_type": "DATA",
+          "name": "Artemis 2 Mission Audio Portable Computing Device Transcript Product Collection",
+          "content_class": "crew_audio_transcripts"
+        },
+        {
+          "collection_id": "mission_voice_loop_audio",
+          "pds_identifier": "urn:nasa:pds:artemis2_mission_audio:data_audio_loops::1.0",
+          "collection_type": "DATA",
+          "name": "Artemis 2 Mission Voice Loop Audio Product Collection",
+          "content_class": "voice_loop_audio"
+        },
+        {
+          "collection_id": "mission_voice_loop_transcripts",
+          "pds_identifier": "urn:nasa:pds:artemis2_mission_audio:data_transcripts_loops::1.0",
+          "collection_type": "DATA",
+          "name": "Artemis 2 Mission Voice Loop Transcript Product Collection",
+          "content_class": "voice_loop_transcripts"
+        },
+        {
+          "collection_id": "mission_annotations",
+          "pds_identifier": "urn:nasa:pds:artemis2_mission_audio:annotations::1.0",
+          "collection_type": "DOCUMENT",
+          "name": "Artemis 2 Mission Crew Annotation Files Product Collection",
+          "content_class": "crew_annotations"
+        }
+      ]
+    }
+  ],
+  "collection_index_summary": {
+    "bundle_count": 3,
+    "collection_count": 12,
+    "bundle_ids": [
+      "crew_camera",
+      "orion_camera",
+      "mission_audio"
+    ],
+    "content_classes": [
+      "browse_imagery",
+      "crew_annotations",
+      "crew_audio",
+      "crew_audio_transcripts",
+      "native_source_imagery",
+      "processed_imagery",
+      "raw_imagery",
+      "video",
+      "voice_loop_audio",
+      "voice_loop_transcripts"
+    ],
+    "individual_media_downloaded": false,
+    "reason": "Phase 6A indexes authoritative PDS archive structure and metadata without downloading the 800+ GB science archive."
+  },
+  "observation_evidence": [
+    {
+      "observation_id": "A2_LUNAR_EARTHSET",
+      "observation_class": "EARTH_IMAGERY",
+      "target": "Earth",
+      "reported_utc": "2026-04-06T22:41:00Z",
+      "time_precision": "MINUTE",
+      "reported_image_id": "art002e009288",
+      "evidence_state": "NASA_REPORTED",
+      "description": "Earthset behind the lunar limb during the far-side flyby.",
+      "source_ids": [
+        "NASA_ARTEMIS_II_OFFICIAL_MOON_FLYBY_PHOTOS_2026_04_07"
+      ]
+    },
+    {
+      "observation_id": "A2_LUNAR_EARTHRISE",
+      "observation_class": "EARTH_IMAGERY",
+      "target": "Earth",
+      "reported_utc": "2026-04-06T23:22:00Z",
+      "time_precision": "MINUTE",
+      "reported_image_id": "art002e021278",
+      "evidence_state": "NASA_REPORTED",
+      "description": "Earthrise photographed through an Orion spacecraft window.",
+      "source_ids": [
+        "NASA_ARTEMIS_II_OFFICIAL_MOON_FLYBY_PHOTOS_2026_04_07"
+      ]
+    },
+    {
+      "observation_id": "A2_LUNAR_TERMINATOR_VAVILOV",
+      "observation_class": "TERMINATOR_OBSERVATION",
+      "target": "Vavilov Crater / Hertzsprung basin region",
+      "reported_utc": null,
+      "reported_date": "2026-04-06",
+      "time_precision": "DATE_ONLY_IN_CURATED_SOURCE",
+      "reported_image_id": "art002e009282",
+      "evidence_state": "NASA_REPORTED",
+      "description": "Long shadows near the lunar terminator accentuated Vavilov Crater and surrounding terrain.",
+      "source_ids": [
+        "NASA_ARTEMIS_II_OFFICIAL_MOON_FLYBY_PHOTOS_2026_04_07"
+      ]
+    },
+    {
+      "observation_id": "A2_LUNAR_SOLAR_ECLIPSE",
+      "observation_class": "ECLIPSE_CORONA_OBSERVATION",
+      "target": "Sun / lunar limb",
+      "reported_utc": null,
+      "reported_date": "2026-04-06",
+      "time_precision": "NO_EXACT_START_STOP_IN_CURATED_SOURCE",
+      "reported_image_id": "art002e009301",
+      "reported_totality_duration_minutes": 54,
+      "duration_qualifier": "NEARLY",
+      "evidence_state": "NASA_REPORTED",
+      "description": "The Moon fully eclipsed the Sun from Orion's viewpoint for nearly 54 minutes.",
+      "interpretation_boundary": "NASA stated the visible halo was under investigation as corona, zodiacal light, or a combination.",
+      "source_ids": [
+        "NASA_ARTEMIS_II_OFFICIAL_MOON_FLYBY_PHOTOS_2026_04_07"
+      ]
+    },
+    {
+      "observation_id": "A2_LUNAR_IMPACT_FLASH_REPORT",
+      "observation_class": "IMPACT_FLASH_OBSERVATION",
+      "target": "lunar night side",
+      "reported_utc": null,
+      "time_precision": "NO_INDIVIDUAL_FLASH_TIMES_IN_CURATED_SOURCE",
+      "evidence_state": "SOURCE_EVOLUTION_REQUIRES_RECONCILIATION",
+      "count_evidence": [
+        {
+          "reported_count": 6,
+          "source_id": "NASA_ARTEMIS_II_OFFICIAL_MOON_FLYBY_PHOTOS_2026_04_07",
+          "publication_date": "2026-04-07",
+          "status": "EARLY_PUBLIC_REPORT"
+        },
+        {
+          "reported_count": 5,
+          "source_id": "NASA_ARTEMIS_II_CREW_MOON_PHOTO_ANNOTATIONS_2026_10_07",
+          "publication_date": "2026-10-07",
+          "status": "POSTFLIGHT_DATA_RELEASE_REPORT"
+        }
+      ],
+      "missionlab_selected_count": null,
+      "reason": "MissionLab preserves the public source evolution rather than silently forcing the early six-flash report and later five-flash annotation report into a single unsupported value."
+    }
+  ],
+  "roadmap_mapping": {
+    "index_pds_crew_imagery_metadata": "COLLECTION_LEVEL_COMPLETE_PRODUCT_LEVEL_PENDING",
+    "index_pds_orion_imagery_metadata": "COLLECTION_LEVEL_COMPLETE_PRODUCT_LEVEL_PENDING",
+    "index_audio_transcripts_annotations": "COLLECTION_LEVEL_COMPLETE_PRODUCT_LEVEL_PENDING",
+    "connect_observation_time_view_image_remark_target": "PARTIAL_OBSERVATION_EVIDENCE_SEE_PHASE6B",
+    "integrate_lro_context": "PENDING_PHASE6B",
+    "reconstruct_impact_flash": "PENDING_PHASE6B",
+    "reconstruct_terminator": "PENDING_PHASE6B",
+    "reconstruct_eclipse_corona": "PENDING_PHASE6B",
+    "reconstruct_earth_imagery": "PENDING_PHASE6B"
+  },
+  "critical_non_equivalences": [
+    {
+      "left": "NASA_RELEASE_SUMMARY_COUNT",
+      "right": "EXACT_PDS_PRODUCT_COUNT",
+      "equivalent": false
+    },
+    {
+      "left": "PDS_COLLECTION_INDEX",
+      "right": "FULL_MEDIA_DOWNLOAD",
+      "equivalent": false
+    },
+    {
+      "left": "IMAGE_CAPTURE_TIME",
+      "right": "CREW_REMARK_TIME",
+      "equivalent": false
+    },
+    {
+      "left": "OBSERVATION_OPPORTUNITY",
+      "right": "CONFIRMED_OBSERVATION",
+      "equivalent": false
+    },
+    {
+      "left": "EARLY_PUBLIC_FLASH_COUNT",
+      "right": "FINAL_RECONCILED_FLASH_COUNT",
+      "equivalent": false
+    },
+    {
+      "left": "VISIBLE_ECLIPSE_HALO",
+      "right": "CONFIRMED_SOLAR_CORONA_ONLY",
+      "equivalent": false
+    }
+  ],
+  "outputs": {
+    "reference_json": "data/reference/artemis_ii_lunar_science_archive_index.json",
+    "processed_summary_json": "data/processed/lunar_science/artemis_ii_lunar_science_archive_summary.json",
+    "collection_csv": "data/processed/lunar_science/artemis_ii_lunar_science_collections.csv",
+    "figure": "docs/assets/lunar_science/phase6a_lunar_science_archive_index.svg"
+  }
+}
