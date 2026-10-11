@@ -60855,3 +60855,157 @@ publication-quality release
 The Phase 9 publication layer must preserve all established evidence boundaries and should consume the validated Phase 1-8 products rather than recreate them.
 
 ---
+
+---
+
+# Phase 9A — Publication Documentation Pack
+
+## Goal
+
+Replace stale Phase 0-facing documentation with publication-grade documentation generated from the validated Phase 0-8 MissionLab evidence stack.
+
+## Generated
+
+```text
+README.md
+docs/METHODOLOGY.md
+docs/VALIDATION_REPORT.md
+docs/ANALYST_GUIDE.md
+docs/PUBLICATION_SUMMARY.md
+data/reference/artemis_ii_publication_manifest.json
+```
+
+Builder:
+
+```text
+scripts/publication/build_publication_pack.py
+```
+
+Validator:
+
+```text
+scripts/validation/validate_publication_pack.py
+```
+
+## Publication Metrics
+
+```text
+indexed reference datasets: 25
+normalized public sources: 81
+shared mission events: 24
+decision threads: 10
+postflight engineering records: 6
+unified searchable analyst records: 146
+deterministic analyst tools: 8
+deterministic answer routes: 8
+```
+
+## Documentation Coverage
+
+```text
+README stale Phase 0 status removed: PASS
+README current project status: PASS
+README Mission Analyst coverage: PASS
+README evidence boundaries: PASS
+
+Methodology evidence classes: PASS
+Methodology mission-clock policy: PASS
+Methodology reconstruction boundaries: PASS
+Methodology known/unknown policy: PASS
+
+Phase 0-8 validation summary: PASS
+No-paid-model validation boundary: PASS
+Preserved unknowns documentation: PASS
+
+Analyst guide commands: PASS
+8 analyst routes documented: PASS
+Optional LLM handoff documented: PASS
+
+Publication summary scope: PASS
+Publication engineering philosophy: PASS
+```
+
+## Publication Boundaries
+
+```text
+no new mission reconstruction: PASS
+public evidence only: PASS
+unknowns remain unknown: PASS
+no paid-model dependency: PASS
+no private NASA material: PASS
+```
+
+Critical boundaries remain:
+
+```text
+MISSIONLAB DERIVED
+!=
+NASA REPORTED
+```
+
+```text
+PUBLIC EVENT SEQUENCE
+!=
+COMPLETE PRIVATE FLIGHT LOOP
+```
+
+```text
+TEMPORAL SEQUENCE
+!=
+CAUSATION
+```
+
+```text
+TROUBLESHOOTING ACTION
+!=
+CONFIRMED ROOT CAUSE
+```
+
+```text
+UNKNOWN PUBLIC FACT
+!=
+PERMISSION TO INVENT
+```
+
+## Validation
+
+```text
+Manifest identity: PASS
+Mission identity: PASS
+Phase identity: PASS
+Publication status: PASS
+
+25 indexed datasets: PASS
+81 normalized public sources: PASS
+24 shared mission events: PASS
+10 decision threads: PASS
+6 postflight records: PASS
+146 searchable records: PASS
+8 deterministic tools: PASS
+8 deterministic answer routes: PASS
+
+Phase 9A documentation coverage: PASS
+Phase 9B handoff state: PASS
+Phase 9C handoff state: PASS
+```
+
+Final result:
+
+```text
+PHASE 9A VALIDATION PASSED
+```
+
+## Phase 9 Status
+
+```text
+Phase 9A — publication documentation
+COMPLETE
+
+Phase 9B — accessibility, responsive behavior, tests/CI, performance, deployment readiness
+NEXT
+
+Phase 9C — final cross-phase publication validation
+PENDING
+```
+
+---

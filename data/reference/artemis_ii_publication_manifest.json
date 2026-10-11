@@ -1,0 +1,47 @@
+{
+  "dataset_id": "phase9a_artemis_ii_publication_manifest",
+  "mission": "Artemis II",
+  "phase": "9A",
+  "status": "PUBLICATION_DOCUMENTATION_PACK_COMPLETE",
+  "mission_clock": {
+    "launch_epoch_utc": "2026-04-01T22:35:12Z",
+    "source": "data/config/mission.json"
+  },
+  "publication_metrics": {
+    "datasets": 25,
+    "sources": 81,
+    "events": 24,
+    "decision_threads": 10,
+    "postflight_records": 6,
+    "searchable_records": 146,
+    "tools": 8,
+    "answer_routes": 8
+  },
+  "generated_documents": [
+    "README.md",
+    "docs/METHODOLOGY.md",
+    "docs/VALIDATION_REPORT.md",
+    "docs/ANALYST_GUIDE.md",
+    "docs/PUBLICATION_SUMMARY.md"
+  ],
+  "principles": {
+    "no_new_mission_reconstruction": true,
+    "public_evidence_only": true,
+    "unknowns_remain_unknown": true,
+    "no_paid_model_dependency": true,
+    "no_private_nasa_material": true
+  },
+  "phase9_state": {
+    "documentation": "COMPLETE_PHASE9A",
+    "readme": "COMPLETE_PHASE9A",
+    "methodology": "COMPLETE_PHASE9A",
+    "validation_summary": "COMPLETE_PHASE9A",
+    "analyst_guide": "COMPLETE_PHASE9A",
+    "web_accessibility": "PENDING_PHASE9B",
+    "mobile_desktop_behavior": "PENDING_PHASE9B",
+    "tests_ci": "PENDING_PHASE9B",
+    "performance_optimization": "PENDING_PHASE9B",
+    "deployment_readiness": "PENDING_PHASE9B",
+    "final_validation": "PENDING_PHASE9C"
+  }
+}
