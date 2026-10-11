@@ -34234,3 +34234,16 @@ COMPLETE
 ```
 
 Git workflow closure remains pending until the documented implementation is committed, pushed, and the working tree is verified clean.
+
+---
+
+# Phase 2J.3 — Navigation & State-Estimation Reconstruction
+
+## Goal
+
+Phase 2J.3 reconstructs the public Artemis II / Orion navigation architecture and the boundaries between:
+
+```text
+onboard navigation
+ground navigation support
+public trajectory products
