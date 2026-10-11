@@ -1,0 +1,380 @@
+{
+  "dataset_id": "phase3b1_artemis_ii_waste_management_evidence",
+  "mission": "Artemis II",
+  "phase": "3B.1",
+  "title": "Artemis II Waste Management Public Evidence Reconstruction",
+  "status": "REFERENCE_EVIDENCE_ASSEMBLED",
+  "scope": {
+    "system": "Orion Universal Waste Management System",
+    "abbreviation": "UWMS",
+    "threads": [
+      "flight_day_1_toilet_fault_and_recovery",
+      "flight_day_4_urine_wastewater_vent_line_issue"
+    ],
+    "purpose": "Preserve NASA-reported waste-management facts, chronology, operational responses, uncertainties, and evidence boundaries before MissionLab constructs derived operational threads."
+  },
+  "system_architecture": {
+    "system_name": "Universal Waste Management System",
+    "spacecraft": "Orion",
+    "functions": {
+      "urine_collection": {
+        "public_description": "Orion uses airflow to draw liquid waste away from the crew member and into the waste-management system.",
+        "pretreatment": "Collected urine is pretreated to inhibit ammonia generation.",
+        "storage": "Pretreated urine is stored in a dedicated tank.",
+        "disposal": "Urine is normally vented overboard.",
+        "normal_venting_cadence": "NASA describes overboard urine venting as a daily crew activity."
+      },
+      "fecal_collection": {
+        "public_description": "Solid waste is collected separately in fecal canisters.",
+        "storage": "Fecal canisters remain aboard Orion for later disposal.",
+        "vent_line_relationship": "The publicly reported Artemis II urine vent-line issue does not establish a failure of the fecal collection path."
+      },
+      "contingency_collection": {
+        "available": true,
+        "public_description": "Orion carries contingency urine collection devices for use if normal UWMS urine collection is unavailable or restricted."
+      }
+    },
+    "evidence_class": "NASA_REPORTED_SYSTEM_ARCHITECTURE"
+  },
+  "events": [
+    {
+      "event_id": "A2_UWMS_FD1_FAULT_LIGHT",
+      "thread": "flight_day_1_toilet_fault_and_recovery",
+      "mission_day": "FLIGHT_DAY_1",
+      "date_utc": "2026-04-01",
+      "timestamp_utc": null,
+      "time_precision": "RELATIVE_EVENT_ORDER_ONLY",
+      "relative_time_description": "Ahead of the apogee raise burn during toilet-system checkout.",
+      "event_type": "UWMS_FAULT_INDICATION",
+      "system": "Universal Waste Management System",
+      "nasa_reported": {
+        "crew_action": "The crew performed spacecraft configuration activities including a checkout of the toilet system.",
+        "observation": "The crew reported a blinking fault light.",
+        "ground_response": "Mission Control assessed available data and worked with the crew to troubleshoot the issue.",
+        "root_cause": null,
+        "root_cause_status": "NOT_PUBLICLY_ESTABLISHED_IN_CURATED_SOURCE_SET",
+        "toilet_operational_status_at_initial_report": "FAULT_INDICATION_UNDER_TROUBLESHOOTING"
+      },
+      "missionlab_interpretation_limits": [
+        "A blinking fault light does not identify the failed component.",
+        "The public source does not disclose an internal fault code.",
+        "The public source does not establish the exact root cause.",
+        "The public source does not establish that the complete UWMS was unavailable.",
+        "No exact event UTC is assigned because the NASA update provides only relative timing."
+      ],
+      "provenance": "NASA_REPORTED",
+      "source_ids": [
+        "NASA_A2_APOGEE_RAISE_UPDATE_2026_04_01",
+        "NASA_A2_TOILET_RECOVERY_UPDATE_2026_04_02"
+      ]
+    },
+    {
+      "event_id": "A2_UWMS_FD1_RESTORED",
+      "thread": "flight_day_1_toilet_fault_and_recovery",
+      "mission_day": "FLIGHT_DAY_1_TO_2_TRANSITION",
+      "date_utc": "2026-04-02",
+      "timestamp_utc": null,
+      "time_precision": "RELATIVE_EVENT_ORDER_ONLY",
+      "relative_time_description": "Following the proximity operations demonstration and before the crew sleep period described in the April 2 NASA update.",
+      "event_type": "UWMS_RETURN_TO_NORMAL_OPERATION",
+      "system": "Universal Waste Management System",
+      "nasa_reported": {
+        "crew_ground_coordination": true,
+        "outcome": "Crew and Mission Control restored Orion's toilet to normal operations.",
+        "root_cause": null,
+        "root_cause_status": "NOT_PUBLICLY_ESTABLISHED_IN_CURATED_SOURCE_SET",
+        "operational_status": "NORMAL_OPERATIONS_RESTORED"
+      },
+      "missionlab_interpretation_limits": [
+        "Successful troubleshooting does not reveal the underlying fault mechanism.",
+        "Normal operations restored does not establish which component or procedure corrected the fault.",
+        "No repair action should be invented beyond NASA's public description."
+      ],
+      "provenance": "NASA_REPORTED",
+      "source_ids": [
+        "NASA_A2_TOILET_RECOVERY_UPDATE_2026_04_02"
+      ]
+    },
+    {
+      "event_id": "A2_UWMS_FD4_WASTEWATER_VENT_EARLY_END",
+      "thread": "flight_day_4_urine_wastewater_vent_line_issue",
+      "mission_day": "FLIGHT_DAY_4",
+      "date_utc": "2026-04-04",
+      "timestamp_utc": null,
+      "time_precision": "RELATIVE_EVENT_ORDER_ONLY",
+      "relative_time_description": "NASA reported that controllers vented wastewater overboard overnight before the Flight Day 4 update.",
+      "event_type": "URINE_WASTEWATER_VENT_OPERATION_ENDED_EARLY",
+      "system": "UWMS urine and wastewater vent path",
+      "nasa_reported": {
+        "planned_activity": "Wastewater was vented overboard to create additional capacity in the waste-management system tank.",
+        "observed_outcome": "The vent activity ended earlier than expected.",
+        "tank_full": false,
+        "toilet_operational": true,
+        "root_cause": null,
+        "root_cause_status": "UNDER_INVESTIGATION",
+        "potential_cause_under_review": "Possible ice obstructing the vent line was one hypothesis under evaluation, but NASA also stated teams were reviewing other potential causes."
+      },
+      "missionlab_interpretation_limits": [
+        "Early termination of the vent does not prove complete vent-line blockage.",
+        "Possible ice was a working hypothesis, not a confirmed root cause.",
+        "The wastewater tank was explicitly reported as not full.",
+        "The toilet was explicitly reported as operational.",
+        "The public source does not provide an exact vent start or stop UTC."
+      ],
+      "provenance": "NASA_REPORTED",
+      "source_ids": [
+        "NASA_A2_FLIGHT_DAY_4_UPDATE_2026_04_04",
+        "NASA_A2_INITIAL_POSTFLIGHT_ASSESSMENT_2026_04_20"
+      ]
+    },
+    {
+      "event_id": "A2_UWMS_FD4_VENT_HEATER_RESPONSE",
+      "thread": "flight_day_4_urine_wastewater_vent_line_issue",
+      "mission_day": "FLIGHT_DAY_4",
+      "date_utc": "2026-04-04",
+      "timestamp_utc": null,
+      "time_precision": "RELATIVE_EVENT_ORDER_ONLY",
+      "relative_time_description": "During troubleshooting after the overboard vent activity ended earlier than expected.",
+      "event_type": "VENT_LINE_TROUBLESHOOTING",
+      "system": "UWMS urine and wastewater vent path",
+      "nasa_reported": {
+        "action": "Engineers used vent heaters to melt any potential ice that could be clogging the line.",
+        "confirmed_ice_blockage": false,
+        "other_causes_under_review": true
+      },
+      "missionlab_interpretation_limits": [
+        "Use of heaters does not prove that ice was present.",
+        "Use of heaters does not establish successful removal of a blockage.",
+        "No internal vent-line pressure, temperature, flow-rate, or heater telemetry is publicly reconstructed here."
+      ],
+      "provenance": "NASA_REPORTED",
+      "source_ids": [
+        "NASA_A2_FLIGHT_DAY_4_UPDATE_2026_04_04"
+      ]
+    },
+    {
+      "event_id": "A2_UWMS_FD4_SOLAR_POINTING",
+      "thread": "flight_day_4_urine_wastewater_vent_line_issue",
+      "mission_day": "FLIGHT_DAY_4",
+      "date_utc": "2026-04-04",
+      "timestamp_utc": null,
+      "time_precision": "RELATIVE_EVENT_ORDER_ONLY",
+      "relative_time_description": "During continued vent-line troubleshooting on Flight Day 4.",
+      "event_type": "SPACECRAFT_ATTITUDE_SUPPORT_TO_VENT_TROUBLESHOOTING",
+      "system": "Orion attitude and waste-management operational interaction",
+      "nasa_reported": {
+        "action": "The spacecraft attitude was adjusted to point the vent toward the Sun.",
+        "purpose": "NASA described the Sun-pointing orientation as an action intended to help clear the wastewater vent line.",
+        "trajectory_impact": "NASA reported that the associated change in the trajectory-correction schedule did not impact Orion's current trajectory."
+      },
+      "missionlab_interpretation_limits": [
+        "Sun-pointing was a troubleshooting action and does not establish the physical root cause.",
+        "The attitude change must not be interpreted as an unplanned trajectory maneuver.",
+        "The public source does not disclose detailed thermal predictions or vent-line temperature telemetry."
+      ],
+      "provenance": "NASA_REPORTED",
+      "source_ids": [
+        "NASA_A2_FLIGHT_DAY_4_UPDATE_2026_04_04"
+      ]
+    },
+    {
+      "event_id": "A2_UWMS_FD4_BACKUP_COLLECTION_POSTURE",
+      "thread": "flight_day_4_urine_wastewater_vent_line_issue",
+      "mission_day": "FLIGHT_DAY_4",
+      "date_utc": "2026-04-04",
+      "timestamp_utc": null,
+      "time_precision": "RELATIVE_EVENT_ORDER_ONLY",
+      "relative_time_description": "During the vent-line troubleshooting period.",
+      "event_type": "CONTINGENCY_WASTE_COLLECTION_POSTURE",
+      "system": "Crew waste management operations",
+      "nasa_reported": {
+        "toilet_operational": true,
+        "tank_full": false,
+        "crew_instruction": "The crew was instructed to use backup collection devices overnight if needed."
+      },
+      "missionlab_interpretation_limits": [
+        "Availability or use of contingency collection devices does not establish complete UWMS failure.",
+        "NASA explicitly reported that the toilet remained operational.",
+        "The source does not establish whether every crew member actually used a backup collection device."
+      ],
+      "provenance": "NASA_REPORTED",
+      "source_ids": [
+        "NASA_A2_FLIGHT_DAY_4_UPDATE_2026_04_04"
+      ]
+    },
+    {
+      "event_id": "A2_UWMS_POSTFLIGHT_URINE_VENT_INVESTIGATION",
+      "thread": "flight_day_4_urine_wastewater_vent_line_issue",
+      "mission_day": "POSTFLIGHT",
+      "date_utc": "2026-04-20",
+      "timestamp_utc": null,
+      "time_precision": "ARTICLE_DATE",
+      "relative_time_description": "NASA initial postflight assessment published April 20, 2026.",
+      "event_type": "POSTFLIGHT_INVESTIGATION",
+      "system": "Orion urine vent line",
+      "nasa_reported": {
+        "investigation_status": "ONGOING",
+        "hardware_assessment": true,
+        "data_review": true,
+        "public_statement": "NASA reported that the team was assessing hardware and gathering data to support the postflight investigation of the urine vent-line issue."
+      },
+      "missionlab_interpretation_limits": [
+        "An ongoing postflight investigation means MissionLab must not assign a final root cause from earlier in-flight hypotheses.",
+        "The April 20 assessment does not establish final corrective action.",
+        "The April 20 assessment does not establish a confirmed ice blockage."
+      ],
+      "provenance": "NASA_REPORTED",
+      "source_ids": [
+        "NASA_A2_INITIAL_POSTFLIGHT_ASSESSMENT_2026_04_20"
+      ]
+    }
+  ],
+  "operational_threads": {
+    "flight_day_1_toilet_fault_and_recovery": {
+      "sequence": [
+        "Toilet-system checkout",
+        "Blinking fault light reported by crew",
+        "Mission Control assesses data",
+        "Crew and ground troubleshoot",
+        "Normal toilet operations restored"
+      ],
+      "public_outcome": "RESOLVED_IN_FLIGHT",
+      "root_cause_publicly_established": false,
+      "mission_impact_publicly_reported": "No mission-ending impact reported."
+    },
+    "flight_day_4_urine_wastewater_vent_line_issue": {
+      "sequence": [
+        "Wastewater vented overboard",
+        "Vent activity ended earlier than expected",
+        "Possible ice considered among potential causes",
+        "Vent heaters used",
+        "Vent oriented toward Sun",
+        "Other potential causes reviewed",
+        "Tank remained not full",
+        "Toilet remained operational",
+        "Backup collection devices available if needed",
+        "Postflight hardware and data investigation continued"
+      ],
+      "public_outcome": "MANAGED_IN_FLIGHT_WITH_POSTFLIGHT_INVESTIGATION",
+      "root_cause_publicly_established": false,
+      "mission_impact_publicly_reported": "Operational workarounds and troubleshooting were performed without evidence in the curated source set of mission termination."
+    }
+  },
+  "critical_non_equivalences": [
+    "BLINKING_FAULT_LIGHT != IDENTIFIED_FAILED_COMPONENT",
+    "TOILET_FAULT_INDICATION != COMPLETE_UWMS_FAILURE",
+    "TOILET_RETURNED_TO_NORMAL != ROOT_CAUSE_PUBLICLY_KNOWN",
+    "VENT_ENDED_EARLY != CONFIRMED_COMPLETE_BLOCKAGE",
+    "POSSIBLE_ICE != CONFIRMED_ICE",
+    "VENT_HEATER_USE != PROOF_OF_ICE",
+    "SUN_POINTING != ROOT_CAUSE_CONFIRMATION",
+    "BACKUP_COLLECTION_AVAILABLE != TOILET_INOPERATIVE",
+    "TANK_NOT_FULL != NOMINAL_VENT_LINE",
+    "TOILET_OPERATIONAL != NOMINAL_URINE_VENT_PATH",
+    "POSTFLIGHT_INVESTIGATION != FINAL_ROOT_CAUSE",
+    "WASTEWATER_VENT_ISSUE != FECAL_COLLECTION_FAILURE"
+  ],
+  "reconstructable_from_public_sources": [
+    "UWMS high-level architecture",
+    "Flight Day 1 blinking fault-light report",
+    "Ground and crew troubleshooting",
+    "Return to normal toilet operations",
+    "Flight Day 4 wastewater vent operation ending early",
+    "Tank not full status",
+    "Toilet operational status",
+    "Vent-heater troubleshooting",
+    "Sun-pointing troubleshooting action",
+    "Backup collection posture",
+    "Postflight urine vent-line investigation"
+  ],
+  "not_reconstructable_from_current_public_sources": [
+    "Exact Flight Day 1 fault timestamp",
+    "Internal UWMS fault code",
+    "Exact failed component for the Flight Day 1 fault indication",
+    "Flight Day 1 root cause",
+    "Exact wastewater vent start time",
+    "Exact wastewater vent stop time",
+    "Exact vented wastewater quantity",
+    "Vent-line pressure telemetry",
+    "Vent-line temperature telemetry",
+    "Vent flow-rate telemetry",
+    "Exact heater duty cycle",
+    "Confirmed presence of ice",
+    "Final urine vent-line root cause from the early mission updates",
+    "Complete crew waste-management usage history",
+    "Complete internal ECLSS telemetry"
+  ],
+  "evidence_boundary": {
+    "flight_day_1_fault_was_nasa_reported": true,
+    "flight_day_1_root_cause_publicly_established": false,
+    "flight_day_1_normal_operations_restored": true,
+    "flight_day_4_vent_ended_early": true,
+    "flight_day_4_tank_was_full": false,
+    "flight_day_4_toilet_was_operational": true,
+    "flight_day_4_ice_was_confirmed": false,
+    "flight_day_4_other_causes_were_under_review": true,
+    "postflight_investigation_was_ongoing": true,
+    "public_record_supports_final_root_cause": false,
+    "missionlab_may_infer_internal_fault_code": false,
+    "missionlab_may_infer_confirmed_ice_blockage": false,
+    "missionlab_may_infer_exact_unreported_event_times": false
+  },
+  "sources": [
+    {
+      "source_id": "NASA_A2_APOGEE_RAISE_UPDATE_2026_04_01",
+      "agency": "NASA",
+      "title": "Artemis II Flight Update: Apogee Raise Burn Complete, Crew Looks Ahead to Proximity Operations",
+      "publication_date": "2026-04-01",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/01/artemis-ii-flight-update-apogee-raise-burn-complete-crew-looks-ahead-to-proximity-operations/",
+      "source_type": "NASA_MISSION_UPDATE"
+    },
+    {
+      "source_id": "NASA_A2_TOILET_RECOVERY_UPDATE_2026_04_02",
+      "agency": "NASA",
+      "title": "Artemis II Flight Update: Crew and Ground Teams Successfully Troubleshoot Orion's Toilet",
+      "publication_date": "2026-04-02",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/02/artemis-ii-flight-update-crew-and-ground-teams-successfully-troubleshoot-orions-toilet/",
+      "source_type": "NASA_MISSION_UPDATE"
+    },
+    {
+      "source_id": "NASA_A2_FLIGHT_DAY_4_UPDATE_2026_04_04",
+      "agency": "NASA",
+      "title": "Artemis II Flight Day 4: Deep-Space Flying, Lunar Flyby Prep",
+      "publication_date": "2026-04-04",
+      "url": "https://www.nasa.gov/blogs/missions/2026/04/04/artemis-ii-flight-day-4-deep-space-flying-lunar-flyby-prep/",
+      "source_type": "NASA_MISSION_UPDATE"
+    },
+    {
+      "source_id": "NASA_A2_INITIAL_POSTFLIGHT_ASSESSMENT_2026_04_20",
+      "agency": "NASA",
+      "title": "NASA on Track for Future Missions with Initial Artemis II Assessments",
+      "publication_date": "2026-04-20",
+      "url": "https://www.nasa.gov/missions/nasa-on-track-for-future-missions-with-initial-artemis-ii-assessments/",
+      "source_type": "NASA_POSTFLIGHT_ASSESSMENT"
+    },
+    {
+      "source_id": "NASA_ORION_CREW_SYSTEMS_UWMS",
+      "agency": "NASA",
+      "title": "Crew Systems - Universal Waste Management System",
+      "publication_date": null,
+      "url": "https://www.nasa.gov/reference/crew-systems/",
+      "source_type": "NASA_SYSTEM_REFERENCE"
+    },
+    {
+      "source_id": "NASA_A2_REFERENCE_GUIDE_UWMS",
+      "agency": "NASA",
+      "title": "Artemis II Reference Guide - Universal Waste Management System",
+      "publication_date": "2026",
+      "url": "https://www.nasa.gov/wp-content/uploads/2026/01/a2-reference-guide-012825.pdf",
+      "source_type": "NASA_REFERENCE_GUIDE"
+    },
+    {
+      "source_id": "NASA_NTRS_ORION_UWMS_ARTEMIS_II",
+      "agency": "NASA",
+      "title": "NASA Orion Exploration Toilet on Artemis-II",
+      "publication_date": "2026-07-12",
+      "url": "https://ntrs.nasa.gov/citations/20260003005",
+      "source_type": "NASA_TECHNICAL_REPORT"
+    }
+  ]
+}

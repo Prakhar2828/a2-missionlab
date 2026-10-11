@@ -39517,3 +39517,824 @@ resolution / mission outcome
 using mission-source evidence rather than inferring these events from the environmental logger data.
 
 ---
+
+---
+
+# Phase 3B.1 — Artemis II Waste Management Public Evidence Reconstruction
+
+## Goal
+
+Establish a source-grounded Artemis II waste-management evidence base before constructing any derived operational interpretation.
+
+Phase 3B.1 reconstructs two separate publicly documented Orion Universal Waste Management System threads:
+
+```text
+Flight Day 1
+Toilet fault indication and recovery
+
+Flight Day 4
+Urine / wastewater vent-line issue
+```
+
+These threads are deliberately kept separate.
+
+No relationship between them is inferred unless supported by public evidence.
+
+---
+
+# Reference Product
+
+Created:
+
+```text
+data/reference/artemis_ii_waste_management_evidence.json
+```
+
+Validated by:
+
+```text
+scripts/validation/validate_waste_management_evidence.py
+```
+
+Reference dataset:
+
+```text
+phase3b1_artemis_ii_waste_management_evidence
+```
+
+Mission:
+
+```text
+Artemis II
+```
+
+System:
+
+```text
+Orion Universal Waste Management System
+UWMS
+```
+
+---
+
+# Public System Architecture
+
+The public NASA evidence supports the following high-level waste-management architecture.
+
+## Urine Collection
+
+Publicly reconstructable functions:
+
+```text
+crew urine collection
+
+airflow-assisted transport
+
+urine pretreatment
+
+dedicated urine storage
+
+overboard urine venting
+```
+
+NASA describes overboard urine venting as a normal recurring crew activity.
+
+---
+
+## Fecal Collection
+
+Solid waste is handled separately using:
+
+```text
+fecal canisters
+```
+
+The Flight Day 4 urine / wastewater vent-line issue does not establish a failure in the fecal collection path.
+
+Therefore:
+
+```text
+URINE VENT ISSUE
+!=
+FECAL COLLECTION FAILURE
+```
+
+---
+
+## Contingency Collection
+
+NASA publicly documented the availability of backup collection devices.
+
+Therefore:
+
+```text
+BACKUP COLLECTION AVAILABLE
+```
+
+does not establish:
+
+```text
+COMPLETE UWMS FAILURE
+```
+
+---
+
+# Flight Day 1 — Toilet Fault and Recovery
+
+## Initial Event
+
+NASA reported that during toilet-system checkout ahead of the apogee raise burn, the Artemis II crew observed:
+
+```text
+a blinking fault light
+```
+
+Mission Control assessed available data and coordinated troubleshooting with the crew.
+
+The public record does not provide:
+
+```text
+exact fault UTC
+
+internal UWMS fault code
+
+identified failed component
+
+confirmed root cause
+```
+
+Therefore:
+
+```text
+BLINKING FAULT LIGHT
+!=
+IDENTIFIED FAILED COMPONENT
+```
+
+and:
+
+```text
+FAULT INDICATION
+!=
+COMPLETE UWMS FAILURE
+```
+
+---
+
+## Return to Normal Operations
+
+NASA subsequently reported that:
+
+```text
+crew + Mission Control troubleshooting
+```
+
+restored Orion's toilet to:
+
+```text
+NORMAL OPERATIONS
+```
+
+The successful recovery establishes operational restoration.
+
+It does not establish the mechanism that originally produced the fault indication.
+
+Therefore:
+
+```text
+NORMAL OPERATIONS RESTORED
+!=
+ROOT CAUSE PUBLICLY KNOWN
+```
+
+Phase 3B.1 preserves:
+
+```text
+root cause = unresolved in curated public evidence
+```
+
+---
+
+# Flight Day 4 — Wastewater Vent-Line Issue
+
+NASA reported that wastewater was vented overboard to create additional waste-system tank capacity.
+
+The vent activity:
+
+```text
+ENDED EARLIER THAN EXPECTED
+```
+
+At the time NASA reported:
+
+```text
+wastewater tank was NOT full
+
+toilet remained operational
+```
+
+This distinction is critical.
+
+Therefore:
+
+```text
+EARLY VENT TERMINATION
+!=
+TOILET FAILURE
+```
+
+and:
+
+```text
+TANK NOT FULL
+!=
+NOMINAL VENT PATH
+```
+
+and:
+
+```text
+TOILET OPERATIONAL
+!=
+NOMINAL URINE VENT PATH
+```
+
+---
+
+# Possible Ice Hypothesis
+
+NASA publicly discussed:
+
+```text
+possible ice obstructing the vent line
+```
+
+as one hypothesis under evaluation.
+
+NASA also stated that teams were considering other possible causes.
+
+Therefore:
+
+```text
+POSSIBLE ICE
+!=
+CONFIRMED ICE
+```
+
+and:
+
+```text
+WORKING HYPOTHESIS
+!=
+FINAL ROOT CAUSE
+```
+
+---
+
+# Vent Heater Response
+
+NASA reported that engineers used:
+
+```text
+vent heaters
+```
+
+to attempt to melt any possible ice affecting the vent line.
+
+This is an operational troubleshooting action.
+
+It does not establish that ice was present.
+
+Therefore:
+
+```text
+VENT HEATER USE
+!=
+PROOF OF ICE
+```
+
+No public reconstruction is made here of:
+
+```text
+heater duty cycle
+
+heater temperature
+
+vent-line internal temperature
+
+vent pressure
+
+vent flow rate
+```
+
+---
+
+# Sun-Pointing Response
+
+NASA also reported that Orion was oriented so the vent could face the Sun.
+
+Purpose:
+
+```text
+support vent-line troubleshooting
+```
+
+NASA reported that the associated change to the trajectory-correction schedule did not impact Orion's current trajectory.
+
+Therefore:
+
+```text
+SUN POINTING
+!=
+CONFIRMED ROOT CAUSE
+```
+
+and:
+
+```text
+SUN POINTING
+!=
+UNPLANNED TRAJECTORY MANEUVER
+```
+
+The action is preserved as an operational spacecraft-attitude response to a waste-management troubleshooting problem.
+
+---
+
+# Backup Collection Posture
+
+During Flight Day 4 troubleshooting:
+
+```text
+toilet remained operational
+
+wastewater tank was not full
+
+backup collection devices were available if needed
+```
+
+Therefore:
+
+```text
+BACKUP COLLECTION AVAILABLE
+!=
+TOILET INOPERATIVE
+```
+
+The public evidence does not establish complete loss of toilet function.
+
+---
+
+# Postflight Investigation
+
+NASA's initial Artemis II postflight assessment reported continued investigation of the:
+
+```text
+urine vent-line issue
+```
+
+The assessment included:
+
+```text
+hardware evaluation
+
+data gathering
+
+continued postflight investigation
+```
+
+Therefore:
+
+```text
+POSTFLIGHT INVESTIGATION
+!=
+FINAL ROOT CAUSE
+```
+
+Phase 3B.1 does not assign:
+
+```text
+confirmed ice blockage
+
+hardware failure
+
+software failure
+
+sensor failure
+
+procedural error
+
+crew error
+```
+
+as the cause of the vent-line issue.
+
+---
+
+# Two Separate Operational Threads
+
+## Thread 1
+
+```text
+Toilet-system checkout
+        ↓
+Blinking fault light
+        ↓
+Mission Control data assessment
+        ↓
+Crew + ground troubleshooting
+        ↓
+Normal toilet operations restored
+```
+
+Public outcome:
+
+```text
+RESOLVED IN FLIGHT
+```
+
+Root cause:
+
+```text
+NOT PUBLICLY ESTABLISHED
+```
+
+---
+
+## Thread 2
+
+```text
+Wastewater vent activity
+        ↓
+Vent ended earlier than expected
+        ↓
+Possible ice considered
+        ↓
+Vent heaters used
+        ↓
+Vent pointed toward Sun
+        ↓
+Other causes reviewed
+        ↓
+Tank remained not full
+        ↓
+Toilet remained operational
+        ↓
+Backup collection posture available
+        ↓
+Postflight investigation continued
+```
+
+Public outcome:
+
+```text
+MANAGED IN FLIGHT
+WITH
+POSTFLIGHT INVESTIGATION
+```
+
+Root cause:
+
+```text
+NOT PUBLICLY ESTABLISHED
+```
+
+---
+
+# Temporal Precision Boundary
+
+The public sources used in Phase 3B.1 do not provide exact UTC timestamps for the principal waste-management events.
+
+Therefore the reference product preserves:
+
+```text
+date
+
+flight-day context
+
+relative event order
+```
+
+without inventing:
+
+```text
+exact UTC timestamps
+```
+
+Therefore:
+
+```text
+PUBLIC EVENT ORDER
+!=
+EXACT EVENT TIME
+```
+
+---
+
+# Reconstructable Public Evidence
+
+Phase 3B.1 supports reconstruction of:
+
+```text
+UWMS high-level architecture
+
+Flight Day 1 fault indication
+
+crew + Mission Control troubleshooting
+
+return to normal toilet operations
+
+Flight Day 4 wastewater vent ending early
+
+tank-not-full status
+
+toilet-operational status
+
+possible-ice hypothesis
+
+vent-heater response
+
+Sun-pointing response
+
+backup collection posture
+
+postflight urine vent-line investigation
+```
+
+---
+
+# Not Reconstructable from Current Public Evidence
+
+The current source set does not support reconstruction of:
+
+```text
+exact Flight Day 1 fault UTC
+
+internal UWMS fault code
+
+exact failed component
+
+Flight Day 1 root cause
+
+exact wastewater vent start UTC
+
+exact wastewater vent stop UTC
+
+exact wastewater quantity vented
+
+vent-line pressure telemetry
+
+vent-line temperature telemetry
+
+vent flow telemetry
+
+exact heater duty cycle
+
+confirmed ice presence
+
+final vent-line root cause from early mission updates
+
+complete crew waste-management usage history
+
+complete Orion ECLSS telemetry
+```
+
+These remain explicitly unresolved.
+
+---
+
+# Critical Non-Equivalences
+
+Phase 3B.1 enforces the following evidence boundaries:
+
+```text
+BLINKING_FAULT_LIGHT
+!=
+IDENTIFIED_FAILED_COMPONENT
+```
+
+```text
+TOILET_FAULT_INDICATION
+!=
+COMPLETE_UWMS_FAILURE
+```
+
+```text
+TOILET_RETURNED_TO_NORMAL
+!=
+ROOT_CAUSE_PUBLICLY_KNOWN
+```
+
+```text
+VENT_ENDED_EARLY
+!=
+CONFIRMED_COMPLETE_BLOCKAGE
+```
+
+```text
+POSSIBLE_ICE
+!=
+CONFIRMED_ICE
+```
+
+```text
+VENT_HEATER_USE
+!=
+PROOF_OF_ICE
+```
+
+```text
+SUN_POINTING
+!=
+ROOT_CAUSE_CONFIRMATION
+```
+
+```text
+BACKUP_COLLECTION_AVAILABLE
+!=
+TOILET_INOPERATIVE
+```
+
+```text
+TANK_NOT_FULL
+!=
+NOMINAL_VENT_LINE
+```
+
+```text
+TOILET_OPERATIONAL
+!=
+NOMINAL_URINE_VENT_PATH
+```
+
+```text
+POSTFLIGHT_INVESTIGATION
+!=
+FINAL_ROOT_CAUSE
+```
+
+```text
+WASTEWATER_VENT_ISSUE
+!=
+FECAL_COLLECTION_FAILURE
+```
+
+---
+
+# Independent Validation
+
+Created:
+
+```text
+scripts/validation/validate_waste_management_evidence.py
+```
+
+Validation result:
+
+```text
+Reference identity: PASS
+
+Phase 3B.1 scope: PASS
+
+UWMS architecture model: PASS
+
+NASA source registry: PASS
+
+NASA source URLs: PASS
+
+Event registry: PASS
+
+Event-source resolution: PASS
+
+No fabricated exact UTCs: PASS
+```
+
+Flight Day 1:
+
+```text
+toilet fault evidence: PASS
+
+restoration evidence: PASS
+
+root-cause boundary: PASS
+```
+
+Flight Day 4:
+
+```text
+early vent termination evidence: PASS
+
+tank-not-full status: PASS
+
+toilet-operational status: PASS
+
+vent-heater response: PASS
+
+ice-confirmation boundary: PASS
+
+Sun-pointing response: PASS
+
+backup collection posture: PASS
+
+postflight investigation status: PASS
+```
+
+Cross-product validation:
+
+```text
+Operational thread reconstruction: PASS
+
+Critical non-equivalences: PASS
+
+Public evidence limits: PASS
+
+Evidence-boundary policy: PASS
+
+Cross-thread chronology: PASS
+
+FD1 / FD4 issue separation: PASS
+```
+
+Validated reference content:
+
+```text
+NASA sources
+7
+
+events
+7
+
+operational threads
+2
+```
+
+Final result:
+
+```text
+PHASE 3B.1 VALIDATION PASSED
+```
+
+---
+
+# Phase 3B.1 Status
+
+```text
+NASA SOURCE SET: ASSEMBLED
+
+UWMS ARCHITECTURE: RECONSTRUCTED
+
+FLIGHT DAY 1 TOILET FAULT THREAD: RECONSTRUCTED
+
+FLIGHT DAY 1 RECOVERY: RECONSTRUCTED
+
+FLIGHT DAY 4 WASTEWATER VENT THREAD: RECONSTRUCTED
+
+VENT-HEATER RESPONSE: RECONSTRUCTED
+
+SUN-POINTING RESPONSE: RECONSTRUCTED
+
+BACKUP COLLECTION POSTURE: RECONSTRUCTED
+
+POSTFLIGHT INVESTIGATION STATUS: RECONSTRUCTED
+
+EXACT UNREPORTED EVENT UTCs: NOT FABRICATED
+
+FINAL ROOT CAUSE: NOT CLAIMED
+
+NASA SOURCE RESOLUTION: PASS
+
+EVIDENCE BOUNDARIES: PASS
+
+INDEPENDENT VALIDATION: PASS
+
+PHASE 3B.1: COMPLETE
+```
+
+Next:
+
+```text
+Phase 3B.2
+Waste Management Operational Decision Reconstruction
+```
+
+Phase 3B.2 will transform the validated NASA-reported evidence into explicit mission-operations decision threads:
+
+```text
+observation
+↓
+constraint
+↓
+available evidence
+↓
+crew / ground options
+↓
+selected response
+↓
+operational outcome
+↓
+remaining uncertainty
+```
+
+without converting public operational reporting into unavailable internal Mission Control rationale or telemetry.
+
+---
