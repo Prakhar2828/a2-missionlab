@@ -38772,3 +38772,748 @@ MISSIONLAB DERIVED
 unless a NASA operational source independently identifies the same event.
 
 ---
+
+---
+
+# Phase 3A.3 — Environmental Change-Point and Anomaly-Evidence Analysis
+
+## Goal
+
+Extend the validated Artemis II environmental reconstruction from descriptive trends into statistically derived change-point and anomaly-evidence candidates while maintaining strict separation between:
+
+```text
+NASA PDS SENSOR MEASUREMENT
+
+MISSIONLAB-DERIVED STATISTICAL SIGNAL
+
+NASA-REPORTED OPERATIONAL EVENT
+
+CONFIRMED SPACECRAFT ANOMALY
+```
+
+Phase 3A.3 does not convert statistical excursions into spacecraft anomaly claims.
+
+Its purpose is to identify statistically unusual environmental behavior that can later be compared against independently documented mission events.
+
+---
+
+## Dependencies
+
+Phase 3A.3 depends on the completed environmental reconstruction stack:
+
+```text
+Phase 3A.1
+Orion Environment Data Ingestion and Normalization
+
+Phase 3A.2
+Orion Environmental Trend Reconstruction
+```
+
+Validated normalized records:
+
+```text
+75,396
+```
+
+Dependency status:
+
+```text
+Phase 3A.1: PASS
+
+Phase 3A.2: PASS
+```
+
+---
+
+# Statistical Analysis
+
+Created:
+
+```text
+scripts/analysis/analyze_orion_environment_changes.py
+```
+
+Generated:
+
+```text
+data/processed/eclss/orion_environment_change_candidates.csv
+
+data/processed/eclss/orion_environment_anomaly_candidates.csv
+
+data/processed/eclss/orion_environment_change_analysis.json
+```
+
+Documentation figures:
+
+```text
+docs/assets/eclss/phase3a3_change_point_scores.svg
+
+docs/assets/eclss/phase3a3_anomaly_scores.svg
+```
+
+---
+
+# Analysis Grid
+
+The original NASA PDS measurements remain unchanged.
+
+For statistical analysis, the 60-second measurements were reduced to:
+
+```text
+15-minute median bins
+```
+
+Observed aggregate-bin counts:
+
+```text
+SN 1104
+2,515 bins
+
+SN 1105
+2,514 bins
+```
+
+This aggregation is:
+
+```text
+MISSIONLAB DERIVED
+```
+
+and exists only for statistical analysis.
+
+It does not replace or alter the original PDS measurements.
+
+---
+
+# Change-Point Evidence Method
+
+Change-point evidence compares:
+
+```text
+1 hour before candidate boundary
+
+versus
+
+1 hour after candidate boundary
+```
+
+using median environmental values.
+
+The score is based on:
+
+```text
+absolute pre/post median change
+
+divided by
+
+robust first-difference scale
+```
+
+Configured statistical threshold:
+
+```text
+8.0
+```
+
+Minimum separation between retained candidates:
+
+```text
+180 minutes
+```
+
+Classification:
+
+```text
+STATISTICAL_CHANGE_CANDIDATE_ONLY
+```
+
+Provenance:
+
+```text
+MISSIONLAB_DERIVED
+```
+
+---
+
+# Change-Point Results
+
+Total statistical change candidates:
+
+```text
+107
+```
+
+Public-context classifications:
+
+```text
+MISSION_BOUNDARY_LAUNCH_CONTEXT
+2
+
+MISSION_BOUNDARY_SPLASHDOWN_CONTEXT
+7
+
+NASA_REPORTED_CARGO_HANDOVER_CONTEXT
+4
+
+NASA_REPORTED_LOGGER_RELOCATION_CONTEXT
+2
+
+NO_MATCHING_PUBLIC_CONTEXT_IN_CURATED_SET
+92
+```
+
+Therefore:
+
+```text
+15 candidates
+```
+
+occur near one of the currently encoded mission or operational context boundaries.
+
+The remaining:
+
+```text
+92 candidates
+```
+
+have no matching context in the current curated event set.
+
+This does not imply that those 92 candidates represent spacecraft anomalies.
+
+---
+
+# Local Anomaly-Evidence Method
+
+Local anomaly evidence uses a robust local baseline around each 15-minute aggregate.
+
+Method:
+
+```text
+LOCAL MEDIAN + MAD
+```
+
+Local half-window:
+
+```text
+180 minutes
+```
+
+Candidate threshold:
+
+```text
+absolute robust score >= 6.0
+```
+
+Nearby threshold crossings are clustered into single candidate events.
+
+Classification:
+
+```text
+STATISTICAL_ANOMALY_CANDIDATE_ONLY
+```
+
+Provenance:
+
+```text
+MISSIONLAB_DERIVED
+```
+
+---
+
+# Anomaly-Evidence Results
+
+Total retained statistical anomaly-evidence candidates:
+
+```text
+13
+```
+
+Current public-context classifications:
+
+```text
+NO_MATCHING_PUBLIC_CONTEXT_IN_CURATED_SET
+13
+```
+
+No anomaly-evidence candidate currently overlaps one of the limited operational-context windows encoded in Phase 3A.3.
+
+This result must not be interpreted as:
+
+```text
+13 confirmed Orion anomalies
+```
+
+or:
+
+```text
+13 undocumented spacecraft failures
+```
+
+Instead:
+
+```text
+13 STATISTICALLY UNUSUAL ENVIRONMENTAL CANDIDATES
+```
+
+were identified for potential later mission-context correlation.
+
+---
+
+# SN 1105 Logger Relocation Context
+
+NASA-reported location history constrains SN 1105 as follows.
+
+Initial location:
+
+```text
+Locker D
+Bag L_022
+```
+
+Later location:
+
+```text
+Locker F
+Bag R_027
+```
+
+Reported transfer window:
+
+```text
+2026-04-09T18:00:00Z
+through
+2026-04-09T21:00:00Z
+```
+
+Exact relocation time:
+
+```text
+UNKNOWN
+```
+
+Two change candidates occur within the relocation context window.
+
+Therefore:
+
+```text
+SN 1105 STATISTICAL CHANGE
+NEAR
+LOGGER RELOCATION
+```
+
+does not establish:
+
+```text
+ECLSS EVENT
+```
+
+or:
+
+```text
+SPACECRAFT ENVIRONMENTAL ANOMALY
+```
+
+A local environmental change could reflect the sensor's change in physical surroundings.
+
+---
+
+# Mission and Recovery Context
+
+The Phase 3A.3 context layer includes the following boundaries.
+
+Launch:
+
+```text
+2026-04-01T22:35:12Z
+```
+
+Splashdown:
+
+```text
+2026-04-11T00:07:00Z
+```
+
+Orion power down:
+
+```text
+2026-04-11T00:30:00Z
+```
+
+Recovery well-deck context:
+
+```text
+2026-04-11T08:14:00Z
+```
+
+Cargo-handover context boundary:
+
+```text
+2026-04-14T19:00:00Z
+```
+
+These timestamps provide operational context for environmental transitions.
+
+They do not establish causal explanations for statistical changes merely because a candidate occurs nearby.
+
+---
+
+# Public-Context Boundary
+
+A candidate with:
+
+```text
+NO_MATCHING_PUBLIC_CONTEXT_IN_CURATED_SET
+```
+
+means only that the candidate does not overlap an event currently encoded in this MissionLab analysis.
+
+It does not mean:
+
+```text
+NASA reported no event
+```
+
+and does not mean:
+
+```text
+no public explanation exists
+```
+
+and does not mean:
+
+```text
+the candidate represents a spacecraft failure
+```
+
+Therefore:
+
+```text
+ABSENCE FROM CURATED CONTEXT
+!=
+ABSENCE FROM PUBLIC RECORD
+```
+
+and:
+
+```text
+ABSENCE FROM CURATED CONTEXT
+!=
+ANOMALY CONFIRMATION
+```
+
+---
+
+# Statistical Candidate Boundary
+
+A change-point candidate indicates:
+
+```text
+STATISTICALLY MEANINGFUL LOCAL CHANGE
+```
+
+under the chosen MissionLab analysis method.
+
+It does not establish:
+
+```text
+SPACECRAFT ANOMALY
+```
+
+Therefore:
+
+```text
+STATISTICAL CHANGE CANDIDATE
+!=
+SPACECRAFT ANOMALY
+```
+
+Likewise:
+
+```text
+STATISTICAL ANOMALY CANDIDATE
+!=
+CONFIRMED SPACECRAFT ANOMALY
+```
+
+The term anomaly in the statistical artifact refers only to deviation from a local statistical baseline.
+
+---
+
+# Causal-Inference Boundary
+
+Phase 3A.3 performs:
+
+```text
+NO CAUSAL INFERENCE
+```
+
+Temporal proximity alone does not establish causation.
+
+Therefore:
+
+```text
+EVENT A OCCURS NEAR EVENT B
+!=
+EVENT A CAUSED EVENT B
+```
+
+This applies to:
+
+```text
+launch
+
+splashdown
+
+power down
+
+recovery operations
+
+cargo handover
+
+logger relocation
+
+future operational events added to MissionLab
+```
+
+---
+
+# Postflight Boundary
+
+The environmental logger records continue well beyond splashdown.
+
+Postflight measurements may reflect changing physical conditions associated with:
+
+```text
+spacecraft recovery
+
+power-down state
+
+recovery-ship environment
+
+hardware access
+
+cargo movement
+
+sensor relocation
+
+ground handling
+```
+
+Therefore:
+
+```text
+POSTFLIGHT LOGGER ENVIRONMENT
+!=
+INFLIGHT ORION ENVIRONMENT
+```
+
+Postflight changes must not automatically be interpreted using inflight spacecraft-system assumptions.
+
+---
+
+# Independent Validation
+
+Created:
+
+```text
+scripts/validation/validate_orion_environment_changes.py
+```
+
+Validation independently reproduced:
+
+```text
+15-minute aggregation
+
+change-point candidate detection
+
+candidate separation
+
+local robust anomaly detection
+
+candidate clustering
+
+public-context correlation
+
+candidate values
+
+method configuration
+
+NASA-reported context metadata
+
+evidence boundaries
+```
+
+Validation results:
+
+```text
+Phase 3A.1 dependency: PASS
+
+Phase 3A.2 dependency: PASS
+
+Analysis identity: PASS
+
+15-minute aggregation: PASS
+
+Change-point reconstruction: PASS
+
+Change-point candidate values: PASS
+
+Local anomaly reconstruction: PASS
+
+Anomaly candidate values: PASS
+
+Public-context correlation: PASS
+
+Candidate totals: PASS
+
+Statistical method metadata: PASS
+
+NASA-reported context metadata: PASS
+
+Evidence-boundary policy: PASS
+
+Documentation figures: PASS
+```
+
+Validated aggregate bins:
+
+```text
+SN 1104
+2,515
+
+SN 1105
+2,514
+```
+
+Validated change candidates:
+
+```text
+107
+```
+
+Validated anomaly-evidence candidates:
+
+```text
+13
+```
+
+Validated change contexts:
+
+```text
+MISSION_BOUNDARY_LAUNCH_CONTEXT
+2
+
+MISSION_BOUNDARY_SPLASHDOWN_CONTEXT
+7
+
+NASA_REPORTED_CARGO_HANDOVER_CONTEXT
+4
+
+NASA_REPORTED_LOGGER_RELOCATION_CONTEXT
+2
+
+NO_MATCHING_PUBLIC_CONTEXT_IN_CURATED_SET
+92
+```
+
+Validated anomaly contexts:
+
+```text
+NO_MATCHING_PUBLIC_CONTEXT_IN_CURATED_SET
+13
+```
+
+Final validation result:
+
+```text
+PHASE 3A.3 VALIDATION PASSED
+```
+
+---
+
+# Phase 3A Environmental Reconstruction Status
+
+Phase 3A now provides a complete public-data environmental analysis chain:
+
+```text
+NASA PDS SOURCE PRODUCTS
+        ↓
+CHECKSUM VALIDATION
+        ↓
+60-SECOND LOGGER NORMALIZATION
+        ↓
+UTC + MISSION ELAPSED TIME
+        ↓
+MISSION-PERIOD RECONSTRUCTION
+        ↓
+DESCRIPTIVE ENVIRONMENTAL STATISTICS
+        ↓
+NEAR-SYNCHRONOUS LOGGER COMPARISON
+        ↓
+15-MINUTE STATISTICAL ANALYSIS GRID
+        ↓
+CHANGE-POINT EVIDENCE
+        ↓
+LOCAL ANOMALY EVIDENCE
+        ↓
+PUBLIC-CONTEXT CORRELATION
+        ↓
+STRICT EVIDENCE BOUNDARIES
+```
+
+Phase 3A status:
+
+```text
+Phase 3A.1: COMPLETE
+
+Phase 3A.2: COMPLETE
+
+Phase 3A.3: COMPLETE
+
+NASA PDS SOURCE INTEGRITY: PASS
+
+75,396 RAW-NORMALIZED RECORDS
+
+13,052 INFLIGHT LOGGER PAIRS
+
+107 STATISTICAL CHANGE CANDIDATES
+
+13 STATISTICAL ANOMALY-EVIDENCE CANDIDATES
+
+CAUSAL INFERENCE: FALSE
+
+SPACECRAFT ANOMALY CLAIMS FROM LOGGER DATA: NONE
+
+PHASE 3A: COMPLETE
+```
+
+---
+
+# Next
+
+```text
+Phase 3B
+Orion Waste Management Operational Reconstruction
+```
+
+Phase 3B will move from passive environmental measurements into documented spacecraft operations and reconstruct the public evidence surrounding:
+
+```text
+Orion toilet / waste-management fault
+
+wastewater system behavior
+
+wastewater venting
+
+crew response
+
+ground response
+
+operational constraints
+
+resolution / mission outcome
+```
+
+using mission-source evidence rather than inferring these events from the environmental logger data.
+
+---
