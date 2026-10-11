@@ -38182,3 +38182,593 @@ Orion Environmental Trend Reconstruction
 Phase 3A.2 will quantify the released environmental measurements across prelaunch, inflight, and postflight periods and establish the baseline environmental behavior required before any project-derived change-point or anomaly analysis.
 
 ---
+
+---
+
+# Phase 3A.2 — Orion Environmental Trend Reconstruction
+
+## Goal
+
+Establish the baseline behavior of the publicly released Artemis II Orion environmental logger measurements before performing any change-point or anomaly analysis.
+
+Phase 3A.2 uses the validated Phase 3A.1 normalized dataset to characterize:
+
+```text
+temperature
+
+relative humidity
+
+dew point
+```
+
+across:
+
+```text
+PRELAUNCH
+
+IN_FLIGHT
+
+POSTFLIGHT
+```
+
+for both released HOBO MX1101 environmental loggers.
+
+The phase also compares the two inflight logger records using an explicit near-synchronous pairing method while preserving the fact that their timestamp grids do not match exactly.
+
+---
+
+## Dependency
+
+Validated Phase 3A.1 dataset:
+
+```text
+data/processed/eclss/orion_environment_normalized.csv
+```
+
+Input records:
+
+```text
+75,396
+```
+
+Dependency status:
+
+```text
+PASS
+```
+
+---
+
+## Analysis
+
+Created:
+
+```text
+scripts/analysis/analyze_orion_environment_trends.py
+```
+
+Generated:
+
+```text
+data/processed/eclss/orion_environment_period_summary.csv
+
+data/processed/eclss/orion_environment_daily_summary.csv
+
+data/processed/eclss/orion_environment_logger_comparison.csv
+
+data/processed/eclss/orion_environment_trend_summary.json
+```
+
+Documentation figures:
+
+```text
+docs/assets/eclss/phase3a2_temperature_trends.svg
+
+docs/assets/eclss/phase3a2_humidity_trends.svg
+
+docs/assets/eclss/phase3a2_dew_point_trends.svg
+
+docs/assets/eclss/phase3a2_logger_temperature_difference.svg
+```
+
+---
+
+# Mission-Period Environmental Statistics
+
+## Logger SN 1104
+
+### Prelaunch
+
+Temperature mean:
+
+```text
+21.275 °C
+```
+
+Temperature range:
+
+```text
+20.860 to 22.150 °C
+```
+
+Relative humidity mean:
+
+```text
+27.269 %
+```
+
+Dew-point mean:
+
+```text
+1.673 °C
+```
+
+### In Flight
+
+Temperature mean:
+
+```text
+23.954 °C
+```
+
+Temperature range:
+
+```text
+21.010 to 25.570 °C
+```
+
+Relative humidity mean:
+
+```text
+23.509 %
+```
+
+Dew-point mean:
+
+```text
+1.830 °C
+```
+
+### Postflight
+
+Temperature mean:
+
+```text
+20.934 °C
+```
+
+Temperature range:
+
+```text
+17.770 to 23.520 °C
+```
+
+Relative humidity mean:
+
+```text
+57.498 %
+```
+
+Dew-point mean:
+
+```text
+12.215 °C
+```
+
+---
+
+## Logger SN 1105
+
+### Prelaunch
+
+Temperature mean:
+
+```text
+21.327 °C
+```
+
+Temperature range:
+
+```text
+21.010 to 22.490 °C
+```
+
+Relative humidity mean:
+
+```text
+26.999 %
+```
+
+Dew-point mean:
+
+```text
+1.571 °C
+```
+
+### In Flight
+
+Temperature mean:
+
+```text
+22.614 °C
+```
+
+Temperature range:
+
+```text
+20.460 to 26.040 °C
+```
+
+Relative humidity mean:
+
+```text
+25.717 %
+```
+
+Dew-point mean:
+
+```text
+1.918 °C
+```
+
+### Postflight
+
+Temperature mean:
+
+```text
+21.421 °C
+```
+
+Temperature range:
+
+```text
+16.820 to 27.110 °C
+```
+
+Relative humidity mean:
+
+```text
+48.671 %
+```
+
+Dew-point mean:
+
+```text
+10.100 °C
+```
+
+---
+
+# Inflight Logger Comparison
+
+The two logger streams each contain:
+
+```text
+13,052 inflight measurements
+```
+
+The two timestamp grids do not match exactly.
+
+Observed sampling-grid relationship:
+
+```text
+SN 1104 sample second: :46
+
+SN 1105 sample second: :26
+```
+
+Therefore:
+
+```text
+SN 1105 - SN 1104
+=
+-20 seconds
+```
+
+for the complete inflight overlap.
+
+Exact timestamp matching is therefore not possible.
+
+Phase 3A.2 uses:
+
+```text
+one-to-one nearest-time pairing
+```
+
+with:
+
+```text
+±30 second tolerance
+```
+
+Observed pairing result:
+
+```text
+SN 1104 inflight records: 13,052
+
+SN 1105 inflight records: 13,052
+
+paired records: 13,052
+
+unmatched SN 1104 records: 0
+
+unmatched SN 1105 records: 0
+```
+
+Maximum absolute pairing offset:
+
+```text
+20 seconds
+```
+
+Mean signed pairing offset:
+
+```text
+-20 seconds
+```
+
+Therefore all inflight samples were paired one-to-one without interpolation.
+
+---
+
+# Inflight Logger Differences
+
+For the complete 13,052-pair inflight comparison:
+
+Mean temperature difference:
+
+```text
+SN 1105 - SN 1104
+=
+-1.341 °C
+```
+
+Mean relative-humidity difference:
+
+```text
+SN 1105 - SN 1104
+=
++2.208 %
+```
+
+Mean dew-point difference:
+
+```text
+SN 1105 - SN 1104
+=
++0.089 °C
+```
+
+These differences are descriptive relationships between two local sensor locations.
+
+They are not interpreted as spacecraft-wide environmental gradients.
+
+---
+
+# Near-Synchronous Pairing Boundary
+
+The comparison is explicitly classified as:
+
+```text
+MISSIONLAB_DERIVED_NEAR_SYNCHRONOUS_COMPARISON
+```
+
+The paired measurements are not simultaneous.
+
+Therefore:
+
+```text
+NEAR-SYNCHRONOUS
+!=
+SIMULTANEOUS
+```
+
+and:
+
+```text
+LOGGER DIFFERENCE
+!=
+SPACECRAFT-WIDE ENVIRONMENTAL GRADIENT
+```
+
+and:
+
+```text
+LOGGER DIFFERENCE
+!=
+ECLSS PERFORMANCE METRIC
+```
+
+---
+
+# Descriptive Statistics Boundary
+
+The direct environmental measurements remain:
+
+```text
+NASA PDS FLIGHT SENSOR DATA
+```
+
+The following Phase 3A.2 products are MissionLab-derived:
+
+```text
+period statistics
+
+daily statistics
+
+percentiles
+
+standard deviations
+
+logger differences
+
+near-time pairing
+
+mission-period comparisons
+```
+
+Therefore:
+
+```text
+DIRECT SENSOR MEASUREMENT
+!=
+DERIVED STATISTIC
+```
+
+---
+
+# Anomaly Boundary
+
+Phase 3A.2 performs no anomaly detection.
+
+Specifically:
+
+```text
+change-point detection: FALSE
+
+anomaly detection: FALSE
+
+causal inference: FALSE
+```
+
+Therefore:
+
+```text
+ENVIRONMENTAL TREND
+!=
+ANOMALY
+```
+
+and:
+
+```text
+LOGGER DIFFERENCE
+!=
+ECLSS ANOMALY
+```
+
+No temperature, relative-humidity, or dew-point excursion identified in this phase is classified as a spacecraft anomaly solely from the environmental logger data.
+
+---
+
+# Independent Validation
+
+Created:
+
+```text
+scripts/validation/validate_orion_environment_trends.py
+```
+
+Validation result:
+
+```text
+Dependency dataset: PASS
+
+Analysis identity: PASS
+
+Mission-period statistics: PASS
+
+Summary JSON statistics: PASS
+
+Daily aggregation: PASS
+
+Near-synchronous pairing: PASS
+
+Pair-by-pair derived differences: PASS
+
+Logger time-grid offset: PASS
+
+Logger comparison summary: PASS
+
+Analysis-scope boundaries: PASS
+
+Evidence-boundary policy: PASS
+
+Documentation figures: PASS
+```
+
+Validated products:
+
+```text
+normalized records: 75,396
+
+period-summary rows: 18
+
+daily-summary rows: 54
+
+inflight logger pairs: 13,052
+
+logger offset: -20.0 s
+```
+
+Validated inflight differences:
+
+```text
+temperature
+SN 1105 - SN 1104
+=
+-1.341 °C
+
+relative humidity
+SN 1105 - SN 1104
+=
++2.208 %
+
+dew point
+SN 1105 - SN 1104
+=
++0.089 °C
+```
+
+Final result:
+
+```text
+PHASE 3A.2 VALIDATION PASSED
+```
+
+---
+
+# Phase 3A.2 Status
+
+```text
+DEPENDENCY VALIDATION: PASS
+
+DESCRIPTIVE STATISTICS: COMPLETE
+
+MISSION-PERIOD RECONSTRUCTION: COMPLETE
+
+DAILY AGGREGATION: COMPLETE
+
+NEAR-SYNCHRONOUS LOGGER COMPARISON: COMPLETE
+
+13,052 / 13,052 INFLIGHT PAIRS RECONSTRUCTED
+
+LOGGER CLOCK OFFSET: VERIFIED
+
+EVIDENCE BOUNDARIES: PASS
+
+DOCUMENTATION FIGURES: PASS
+
+INDEPENDENT VALIDATION: PASS
+
+PHASE 3A.2: COMPLETE
+```
+
+Next:
+
+```text
+Phase 3A.3
+Environmental Change-Point and Anomaly-Evidence Analysis
+```
+
+Phase 3A.3 may now use the validated Phase 3A.2 baseline to search for statistically meaningful environmental changes.
+
+Any detected change point or anomaly candidate must remain explicitly:
+
+```text
+MISSIONLAB DERIVED
+```
+
+unless a NASA operational source independently identifies the same event.
+
+---
