@@ -40338,3 +40338,954 @@ remaining uncertainty
 without converting public operational reporting into unavailable internal Mission Control rationale or telemetry.
 
 ---
+
+---
+
+# Phase 3B.2 — Waste Management Operational Decision Reconstruction
+
+## Goal
+
+Transform the validated Phase 3B.1 NASA-reported waste-management evidence into explicit mission-operations decision threads without reconstructing unavailable internal console logic, flight-rule reasoning, telemetry, or root-cause determinations.
+
+Phase 3B.2 models the public operational sequence as:
+
+```text
+observation
+↓
+constraint / evidence state
+↓
+NASA-reported response
+↓
+operational outcome
+↓
+remaining uncertainty
+```
+
+This structure is MissionLab-derived.
+
+It is not presented as an internal Mission Control decision log.
+
+---
+
+# Dependency
+
+Phase 3B.2 depends directly on:
+
+```text
+data/reference/artemis_ii_waste_management_evidence.json
+```
+
+Dependency dataset:
+
+```text
+phase3b1_artemis_ii_waste_management_evidence
+```
+
+Validated Phase 3B.1 evidence:
+
+```text
+NASA sources
+7
+
+events
+7
+
+operational threads
+2
+```
+
+Dependency validation:
+
+```text
+PASS
+```
+
+---
+
+# Analysis
+
+Created:
+
+```text
+scripts/analysis/analyze_waste_management_operations.py
+```
+
+Generated:
+
+```text
+data/processed/eclss/waste_management_operational_threads.json
+
+data/processed/eclss/waste_management_operational_steps.csv
+```
+
+Documentation figure:
+
+```text
+docs/assets/eclss/phase3b2_waste_management_decision_threads.svg
+```
+
+---
+
+# Reconstruction Scope
+
+Phase 3B.2 reconstructs two independent operational threads:
+
+```text
+Flight Day 1
+Toilet Fault and Recovery
+
+Flight Day 4
+Urine / Wastewater Vent-Line Issue
+```
+
+Total derived operational steps:
+
+```text
+16
+```
+
+Breakdown:
+
+```text
+Flight Day 1
+6 steps
+
+Flight Day 4
+10 steps
+```
+
+---
+
+# Flight Day 1 Operational Thread
+
+Thread:
+
+```text
+flight_day_1_toilet_fault_and_recovery
+```
+
+Classification:
+
+```text
+IN_FLIGHT_OPERATIONAL_ISSUE_RESOLVED
+```
+
+Outcome:
+
+```text
+RESOLVED_IN_FLIGHT_WITH_ROOT_CAUSE_UNRESOLVED
+```
+
+---
+
+## Step 1 — Observation
+
+```text
+Toilet-system checkout
+↓
+Blinking fault light reported
+```
+
+Evidence class:
+
+```text
+NASA_REPORTED
+```
+
+The public record establishes a fault indication.
+
+It does not establish the internal failure mechanism.
+
+---
+
+## Step 2 — Operational Constraint
+
+The public evidence supports:
+
+```text
+fault indication exists
+```
+
+but does not support:
+
+```text
+internal fault code
+
+failed component
+
+complete UWMS failure
+
+root cause
+```
+
+Therefore:
+
+```text
+FAULT INDICATION
+!=
+COMPLETE UWMS FAILURE
+```
+
+---
+
+## Step 3 — Evidence Assessment
+
+NASA reported:
+
+```text
+Mission Control assessed available data
+```
+
+while working with the crew.
+
+This is directly reported.
+
+The specific telemetry, internal console products, fault trees, and decision criteria remain unavailable.
+
+---
+
+## Step 4 — Response
+
+NASA reported:
+
+```text
+crew + Mission Control troubleshooting
+```
+
+Phase 3B.2 preserves the existence of troubleshooting.
+
+It does not invent:
+
+```text
+specific corrective procedure
+
+internal troubleshooting branch
+
+console recommendation chain
+
+flight-rule trigger
+
+fault-code interpretation
+```
+
+Therefore:
+
+```text
+PUBLIC TROUBLESHOOTING REPORT
+!=
+COMPLETE INTERNAL DECISION TREE
+```
+
+---
+
+## Step 5 — Outcome
+
+NASA reported:
+
+```text
+NORMAL TOILET OPERATIONS RESTORED
+```
+
+Therefore:
+
+```text
+normal_operations_restored = TRUE
+```
+
+and:
+
+```text
+complete_uwms_failure_established = FALSE
+```
+
+---
+
+## Step 6 — Remaining Uncertainty
+
+The public record does not establish:
+
+```text
+failed component
+
+fault code
+
+specific repair action
+
+root cause
+```
+
+Therefore:
+
+```text
+RESTORED OPERATION
+!=
+KNOWN ROOT CAUSE
+```
+
+Final Flight Day 1 boundary:
+
+```text
+root_cause_publicly_established = FALSE
+```
+
+---
+
+# Flight Day 4 Operational Thread
+
+Thread:
+
+```text
+flight_day_4_urine_wastewater_vent_line_issue
+```
+
+Classification:
+
+```text
+IN_FLIGHT_OPERATIONAL_ISSUE_MANAGED
+```
+
+Outcome:
+
+```text
+MANAGED_IN_FLIGHT_WITH_POSTFLIGHT_INVESTIGATION
+```
+
+---
+
+## Step 1 — Planned Operation
+
+NASA reported normal waste-management activity involving:
+
+```text
+wastewater venting overboard
+```
+
+Purpose:
+
+```text
+create additional tank capacity
+```
+
+---
+
+## Step 2 — Observation
+
+NASA reported:
+
+```text
+vent activity ended earlier than expected
+```
+
+This establishes an off-nominal operational observation.
+
+It does not establish a complete blockage.
+
+Therefore:
+
+```text
+VENT ENDED EARLY
+!=
+CONFIRMED BLOCKAGE
+```
+
+---
+
+## Step 3 — Operational State
+
+NASA explicitly reported:
+
+```text
+wastewater tank was not full
+
+toilet remained operational
+```
+
+This significantly constrains interpretation.
+
+Therefore:
+
+```text
+VENT-LINE ISSUE
+!=
+COMPLETE TOILET FAILURE
+```
+
+and:
+
+```text
+TANK NOT FULL
+!=
+NOMINAL VENT PATH
+```
+
+---
+
+## Step 4 — Evidence Assessment
+
+NASA publicly considered:
+
+```text
+possible ice
+```
+
+as one potential cause.
+
+NASA also reported:
+
+```text
+other causes under review
+```
+
+Therefore:
+
+```text
+possible_ice_considered = TRUE
+
+ice_confirmed = FALSE
+
+other_causes_reviewed = TRUE
+```
+
+and:
+
+```text
+POSSIBLE ICE
+!=
+CONFIRMED ICE
+```
+
+---
+
+## Step 5 — Vent-Heater Response
+
+NASA reported:
+
+```text
+vent heaters used
+```
+
+as part of troubleshooting.
+
+This is preserved as a reported response.
+
+It does not establish:
+
+```text
+actual ice presence
+
+successful ice removal
+
+vent-line internal temperature
+
+vent flow restoration
+```
+
+Therefore:
+
+```text
+VENT HEATER USE
+!=
+PROOF OF ICE
+```
+
+---
+
+## Step 6 — Sun-Pointing Response
+
+NASA reported that Orion was oriented so the vent faced the Sun.
+
+Phase 3B.2 preserves this as:
+
+```text
+NASA_REPORTED_RESPONSE
+```
+
+The action supports troubleshooting.
+
+It does not establish the physical root cause.
+
+Therefore:
+
+```text
+SUN POINTING
+!=
+ROOT CAUSE CONFIRMATION
+```
+
+---
+
+## Step 7 — Contingency Posture
+
+NASA reported:
+
+```text
+backup collection devices available if needed
+```
+
+while also reporting:
+
+```text
+toilet remained operational
+```
+
+Therefore:
+
+```text
+CONTINGENCY AVAILABLE
+!=
+TOILET INOPERATIVE
+```
+
+---
+
+## Step 8 — Inflight Outcome
+
+The public evidence supports the following MissionLab operational synthesis:
+
+```text
+issue managed in flight
+
+toilet operation continued
+
+operational workarounds existed
+
+complete loss of waste-management capability not established
+```
+
+This synthesis is:
+
+```text
+MISSIONLAB_DERIVED_OPERATIONAL_SYNTHESIS
+```
+
+It is not a verbatim NASA console conclusion.
+
+The evidence does not establish that the vent-line issue was fully resolved during flight.
+
+---
+
+## Step 9 — Postflight Follow-Up
+
+NASA's initial postflight assessment reported:
+
+```text
+hardware assessment
+
+data gathering
+
+continued investigation
+```
+
+related to the urine vent-line issue.
+
+Therefore:
+
+```text
+postflight_investigation_continued = TRUE
+```
+
+---
+
+## Step 10 — Remaining Uncertainty
+
+The curated public record does not establish:
+
+```text
+confirmed ice
+
+specific failed hardware
+
+software fault
+
+sensor fault
+
+procedural root cause
+
+final root cause
+```
+
+Therefore:
+
+```text
+root_cause_publicly_established = FALSE
+```
+
+and:
+
+```text
+POSTFLIGHT INVESTIGATION
+!=
+FINAL ROOT CAUSE
+```
+
+---
+
+# Flight Day 1 / Flight Day 4 Separation
+
+Phase 3B.2 explicitly preserves:
+
+```text
+FD1 issue == FD4 issue
+FALSE
+```
+
+Shared system domain:
+
+```text
+Orion waste management
+```
+
+Shared root cause:
+
+```text
+NOT ESTABLISHED
+```
+
+Causal relationship:
+
+```text
+NOT ESTABLISHED
+```
+
+Therefore:
+
+```text
+SAME SPACECRAFT SYSTEM DOMAIN
+!=
+SAME FAILURE
+```
+
+and:
+
+```text
+FD1 PRECEDES FD4
+!=
+FD1 CAUSED FD4
+```
+
+---
+
+# Internal Decision-Rationale Boundary
+
+Phase 3B.2 reconstructs:
+
+```text
+public observation
+
+publicly stated system condition
+
+NASA-reported troubleshooting action
+
+public operational outcome
+
+remaining public uncertainty
+```
+
+Phase 3B.2 does not reconstruct:
+
+```text
+internal console loops
+
+flight-controller discipline assignments
+
+private voice loops
+
+internal fault-tree logic
+
+flight-rule triggers
+
+telemetry thresholds
+
+engineering backroom discussions
+
+exact option ranking
+
+internal risk trades
+```
+
+Therefore:
+
+```text
+MISSIONLAB OPERATIONAL THREAD
+!=
+MISSION CONTROL CONSOLE LOG
+```
+
+and:
+
+```text
+MISSIONLAB OPERATIONAL THREAD
+!=
+FLIGHT RULE LOGIC
+```
+
+---
+
+# Temporal Boundary
+
+None of the Phase 3B.2 operational steps assign exact event UTC values.
+
+Therefore:
+
+```text
+exact_utc_known = FALSE
+```
+
+for every derived operational step.
+
+This preserves the Phase 3B.1 evidence limit:
+
+```text
+relative order known
+
+exact event timing unresolved
+```
+
+No timestamps are fabricated.
+
+---
+
+# Root-Cause Boundary
+
+Every operational step enforces:
+
+```text
+root_cause_claim = FALSE
+```
+
+Both operational threads enforce:
+
+```text
+root_cause_publicly_established = FALSE
+```
+
+Therefore:
+
+```text
+OPERATIONAL RESPONSE
+!=
+ROOT CAUSE DETERMINATION
+```
+
+and:
+
+```text
+SUCCESSFUL TROUBLESHOOTING
+!=
+KNOWN FAILURE MECHANISM
+```
+
+---
+
+# Traceability
+
+Every Phase 3B.2 operational step includes:
+
+```text
+source event IDs
+
+NASA source IDs
+
+evidence class
+
+public status
+
+MissionLab provenance
+```
+
+Derived-step provenance:
+
+```text
+MISSIONLAB_DERIVED_OPERATIONAL_RECONSTRUCTION
+```
+
+This maintains a traceable chain:
+
+```text
+NASA SOURCE
+↓
+PHASE 3B.1 REFERENCE EVENT
+↓
+PHASE 3B.2 OPERATIONAL STEP
+↓
+MISSIONLAB INTERPRETATION BOUNDARY
+```
+
+---
+
+# Independent Validation
+
+Created:
+
+```text
+scripts/validation/validate_waste_management_operations.py
+```
+
+Validation result:
+
+```text
+Analysis identity: PASS
+
+Phase 3B.1 dependency: PASS
+
+Reconstruction model: PASS
+```
+
+Operational structure:
+
+```text
+Operational thread set: PASS
+
+Step ordering and numbering: PASS
+
+16-step reconstruction: PASS
+```
+
+Flight Day 1:
+
+```text
+fault thread: PASS
+
+recovery: PASS
+
+root-cause boundary: PASS
+```
+
+Flight Day 4:
+
+```text
+vent thread: PASS
+
+tank-not-full status: PASS
+
+toilet-operational status: PASS
+
+possible-ice hypothesis: PASS
+
+ice-confirmation boundary: PASS
+
+postflight investigation: PASS
+
+root-cause boundary: PASS
+```
+
+Traceability:
+
+```text
+Step-event traceability: PASS
+
+Step-source traceability: PASS
+
+No inferred internal rationale: PASS
+
+No fabricated exact UTCs: PASS
+
+No root-cause claims: PASS
+
+Reference evidence alignment: PASS
+```
+
+Cross-thread boundaries:
+
+```text
+FD1 / FD4 issue separation: PASS
+
+Shared-root-cause boundary: PASS
+
+Cross-thread causality boundary: PASS
+```
+
+Product validation:
+
+```text
+Evidence-boundary policy: PASS
+
+Operational CSV / JSON consistency: PASS
+
+Documentation figure: PASS
+```
+
+Validated reconstruction:
+
+```text
+operational threads
+2
+
+Flight Day 1 steps
+6
+
+Flight Day 4 steps
+10
+
+total operational steps
+16
+```
+
+Final result:
+
+```text
+PHASE 3B.2 VALIDATION PASSED
+```
+
+---
+
+# Phase 3B.2 Status
+
+```text
+PHASE 3B.1 DEPENDENCY: PASS
+
+OPERATIONAL THREADS: 2
+
+TOTAL DECISION STEPS: 16
+
+FLIGHT DAY 1 THREAD: COMPLETE
+
+FLIGHT DAY 4 THREAD: COMPLETE
+
+PUBLIC OBSERVATIONS: PRESERVED
+
+PUBLIC RESPONSES: PRESERVED
+
+PUBLIC OUTCOMES: PRESERVED
+
+EVENT TRACEABILITY: PASS
+
+SOURCE TRACEABILITY: PASS
+
+INTERNAL CONSOLE RATIONALE: NOT RECONSTRUCTED
+
+EXACT UNREPORTED UTCs: NOT INVENTED
+
+ROOT CAUSES: NOT INFERRED
+
+FD1 / FD4 CAUSAL LINK: NOT ESTABLISHED
+
+INDEPENDENT VALIDATION: PASS
+
+PHASE 3B.2: COMPLETE
+```
+
+Next:
+
+```text
+Phase 3B.3
+Waste Management Mission-Impact and Cross-Domain Correlation
+```
+
+Phase 3B.3 will connect the validated waste-management operations to mission-level effects that are actually supported publicly, including:
+
+```text
+spacecraft attitude response
+
+trajectory-correction scheduling interaction
+
+crew contingency posture
+
+mission continuation
+
+postflight investigation
+```
+
+while explicitly preventing unsupported claims that the waste-management issues caused trajectory changes, propulsion anomalies, ECLSS-wide failures, or mission-risk outcomes not stated in the public record.
+
+---
