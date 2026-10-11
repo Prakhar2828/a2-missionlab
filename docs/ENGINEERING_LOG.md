@@ -44665,3 +44665,1526 @@ COMPLETE
 ```
 
 ---
+
+---
+
+# Phase 4A.1 — Artemis II Entry, Descent, Splashdown, and Recovery Public Evidence Reconstruction
+
+## Goal
+
+Establish the public evidence foundation for Artemis II:
+
+```text
+entry preparation
+↓
+atmospheric entry
+↓
+planned communications blackout
+↓
+parachute descent
+↓
+splashdown
+↓
+crew recovery
+↓
+spacecraft recovery
+```
+
+Phase 4A.1 deliberately reuses the validated Phase 2 quantitative entry reconstruction rather than rebuilding:
+
+```text
+trajectory
+
+atmosphere
+
+Mach
+
+rarefaction
+
+convective heating
+
+entry-event trajectory correlations
+
+TPS physics
+```
+
+The new Phase 4 scope extends the mission record beyond the Phase 2 entry analysis into the full operational return and recovery sequence.
+
+---
+
+# Reference Product
+
+Created:
+
+```text
+data/reference/artemis_ii_entry_descent_recovery_evidence.json
+```
+
+Dataset:
+
+```text
+phase4a1_artemis_ii_entry_descent_recovery_evidence
+```
+
+Status:
+
+```text
+REFERENCE_EVIDENCE_ASSEMBLED
+```
+
+---
+
+# Evidence Sources
+
+Validated NASA / NASA-reference sources:
+
+```text
+5
+```
+
+Source registry:
+
+```text
+NASA_A2_FLIGHT_DAY_10_LIVE_REENTRY_2026_04_10
+
+NASA_A2_PRESS_KIT
+
+NASA_ORION_FUN_FACTS
+
+NASA_ARTEMIS_II_REFERENCE_GUIDE_2026
+
+NASA_ORION_CREW_MODULE_REFERENCE
+```
+
+Primary as-flown source:
+
+```text
+Artemis II Flight Day 10:
+Live Re-Entry Updates
+```
+
+The primary live mission source provides the public operational timeline from final return preparation through crew and spacecraft recovery.
+
+---
+
+# Time Interpretation
+
+NASA live-update timestamps are preserved as:
+
+```text
+PUBLIC UPDATE MINUTES
+```
+
+They are not promoted into:
+
+```text
+exact second-level telemetry epochs
+```
+
+Timezone interpretation:
+
+```text
+Eastern Daylight Time
+UTC - 4
+```
+
+The UTC date rollover after midnight is preserved.
+
+Example:
+
+```text
+Entry Interface
+2026-04-10T23:53:00Z
+
+communications reacquisition
+2026-04-11T00:00:00Z
+
+drogues
+2026-04-11T00:03:00Z
+
+mains
+2026-04-11T00:04:00Z
+
+splashdown
+2026-04-11T00:07:00Z
+```
+
+Validation:
+
+```text
+UTC midnight rollover
+PASS
+```
+
+---
+
+# Phase 2 Reuse Boundary
+
+Phase 4A.1 explicitly depends on:
+
+```text
+data/reference/artemis_ii_entry_events.json
+```
+
+and the existing Phase 2 entry analysis stack:
+
+```text
+scripts/analysis/analyze_entry_dynamics.py
+
+scripts/analysis/build_entry_atmosphere.py
+
+scripts/analysis/build_entry_mach.py
+
+scripts/analysis/build_entry_rarefaction.py
+
+scripts/analysis/build_entry_heating.py
+
+scripts/analysis/correlate_entry_events.py
+```
+
+Already reconstructed in Phase 2:
+
+```text
+Entry Interface trajectory state
+
+atmospheric density
+
+Mach
+
+rarefaction
+
+external convective heating
+
+drogue altitude correlation
+
+main-parachute altitude correlation
+
+derived zero-altitude surface crossing
+
+splashdown public-minute correlation
+```
+
+Therefore:
+
+```text
+PHASE 4 REUSES PHASE 2 ENTRY PHYSICS
+```
+
+and:
+
+```text
+PHASE 4 DOES NOT RECOMPUTE PHASE 2 ENTRY PHYSICS
+```
+
+---
+
+# Orion Parachute Architecture
+
+NASA reference material establishes the Orion parachute system architecture.
+
+Total:
+
+```text
+11 parachutes
+```
+
+Architecture:
+
+```text
+3 forward bay cover parachutes
+7 ft each
+
+2 drogue parachutes
+23 ft each
+
+3 pilot parachutes
+11 ft each
+
+3 main parachutes
+116 ft each
+```
+
+Functional sequence:
+
+```text
+forward bay cover parachutes
+↓
+forward bay cover removal
+↓
+drogue parachutes
+↓
+stabilization / deceleration
+↓
+pilot parachutes
+↓
+main parachute deployment
+↓
+three main parachutes
+↓
+final descent
+↓
+ocean splashdown
+```
+
+---
+
+# Architecture / As-Flown Boundary
+
+The 11-parachute system description is:
+
+```text
+NASA_REPORTED_SYSTEM_ARCHITECTURE
+```
+
+It is not itself:
+
+```text
+an Artemis II as-flown event log
+```
+
+Therefore:
+
+```text
+PLANNED / SYSTEM ARCHITECTURE
+!=
+AS-FLOWN DEPLOYMENT CONFIRMATION
+```
+
+The primary live mission record explicitly confirms:
+
+```text
+drogue deployment
+TRUE
+
+three main parachutes deployed
+TRUE
+```
+
+It does not separately timestamp:
+
+```text
+forward bay cover parachutes
+
+pilot parachutes
+```
+
+Therefore their exact Artemis II deployment times are not inferred.
+
+---
+
+# Public Operational Evidence Set
+
+Validated public events:
+
+```text
+15
+```
+
+Chronological evidence sequence:
+
+```text
+1.
+DSN → NSN handover
+
+2.
+crew module / service module separation
+
+3.
+crew module raise burn
+
+4.
+Entry Interface
+
+5.
+planned plasma communications blackout
+
+6.
+communications reacquisition
+
+7.
+drogue deployment
+
+8.
+three main parachutes deployed
+
+9.
+splashdown
+
+10.
+post-splashdown spacecraft powerdown
+
+11.
+recovery-team approach
+
+12.
+crew extracted
+
+13.
+helicopter transfer
+
+14.
+crew aboard USS John P. Murtha
+
+15.
+Orion secured in recovery-ship well deck
+```
+
+---
+
+# Final Communications Network Handover
+
+NASA reported completion of the transition from:
+
+```text
+Deep Space Network
+```
+
+to:
+
+```text
+Near Space Network /
+Tracking and Data Relay Satellite system
+```
+
+Public minute:
+
+```text
+2026-04-10T23:15:00Z
+```
+
+This marks the communications transition associated with the final return phase.
+
+---
+
+# Crew Module / Service Module Separation
+
+Public minute:
+
+```text
+2026-04-10T23:33:00Z
+```
+
+NASA reported:
+
+```text
+crew module separated from service module
+```
+
+Operational consequence:
+
+```text
+crew module continues toward entry
+
+service module no longer part of crew-module entry configuration
+
+heat shield exposed for atmospheric return
+```
+
+Exact separation second:
+
+```text
+NOT PUBLICLY ESTABLISHED
+```
+
+---
+
+# Crew Module Raise Burn
+
+Public minute:
+
+```text
+2026-04-10T23:37:00Z
+```
+
+NASA reported the crew module raise burn as part of entry preparation.
+
+Public interpretation:
+
+```text
+spacecraft orientation adjusted
+↓
+heat shield aligned for re-entry
+```
+
+Not publicly established:
+
+```text
+burn duration
+
+delta-v
+
+complete guidance law
+
+private targeting logic
+```
+
+---
+
+# Entry Interface
+
+Public minute:
+
+```text
+2026-04-10T23:53:00Z
+```
+
+NASA reported:
+
+```text
+altitude
+400,000 ft
+
+speed description
+approximately Mach 35
+
+distance to splashdown site
+about 1,956 statute miles
+```
+
+This event already exists in the Phase 2 trajectory reconstruction and Phase 4 preserves exact traceability to it.
+
+Phase 2 cross-reference:
+
+```text
+entry_interface
+PASS
+```
+
+---
+
+# Planned Plasma Communications Blackout
+
+NASA reported a planned entry communications blackout beginning shortly after Entry Interface.
+
+Reported expected duration:
+
+```text
+about 6 minutes
+```
+
+Cause classification:
+
+```text
+PLASMA COMMUNICATIONS BLOCKAGE DURING ENTRY
+```
+
+Operational classification:
+
+```text
+PLANNED
+```
+
+Anomaly classification:
+
+```text
+FALSE
+```
+
+Therefore:
+
+```text
+PLASMA BLACKOUT
+!=
+COMMUNICATIONS ANOMALY
+```
+
+---
+
+# Blackout Precision Boundary
+
+The public evidence does not provide:
+
+```text
+exact blackout start second
+
+exact blackout end second
+```
+
+Therefore MissionLab does not manufacture them.
+
+The reported phrase:
+
+```text
+about six minutes
+```
+
+is preserved as an approximate public mission statement.
+
+Thus:
+
+```text
+EXPECTED SIX-MINUTE BLACKOUT
+!=
+EXACT MEASURED SIX-MINUTE INTERVAL
+```
+
+---
+
+# Communications Reacquisition
+
+Public minute:
+
+```text
+2026-04-11T00:00:00Z
+```
+
+NASA reported communications contact with Orion reestablished.
+
+The existence of:
+
+```text
+Entry Interface at 23:53
+
+reacquisition update at 00:00
+```
+
+does not justify deriving an exact seven-minute blackout because the public event times are minute-resolution mission updates rather than exact telemetry epochs.
+
+Therefore:
+
+```text
+blackout_exact_duration_derivable
+FALSE
+```
+
+---
+
+# Drogue Deployment
+
+Public minute:
+
+```text
+2026-04-11T00:03:00Z
+```
+
+NASA reported:
+
+```text
+drogue deployment
+23,400 ft
+
+reported speed
+479 ft/s
+
+reported distance from splashdown
+0.8 statute miles
+```
+
+Architecture:
+
+```text
+2 drogue parachutes
+```
+
+Operational role:
+
+```text
+slow and stabilize Orion
+```
+
+Phase 2 cross-reference:
+
+```text
+drogue_deploy
+PASS
+```
+
+---
+
+# Drogue Data Precision Boundary
+
+The NASA live update reports several associated conditions around the drogue event.
+
+MissionLab does not assume that:
+
+```text
+23,400 ft
+
+479 ft/s
+
+0.8 miles from splashdown
+```
+
+all represent one identical sub-second spacecraft state.
+
+Therefore:
+
+```text
+PUBLIC EVENT UPDATE VALUES
+!=
+SYNCHRONIZED SUB-SECOND TELEMETRY SAMPLE
+```
+
+---
+
+# Main Parachute Deployment
+
+Public minute:
+
+```text
+2026-04-11T00:04:00Z
+```
+
+NASA reported:
+
+```text
+drogues cut
+5,400 ft
+
+three main parachutes deployed
+
+velocity reduced to
+less than 200 ft/s
+```
+
+Architecture:
+
+```text
+3 main parachutes
+```
+
+As-flown deployment confirmation:
+
+```text
+TRUE
+```
+
+Reported deployed count:
+
+```text
+3
+```
+
+Phase 2 cross-reference:
+
+```text
+main_deploy
+PASS
+```
+
+---
+
+# Individual Parachute Telemetry Boundary
+
+Public confirmation of parachute deployment does not expose:
+
+```text
+individual canopy inflation histories
+
+reefing-stage timing
+
+individual suspension-line loads
+
+individual canopy loads
+
+individual deployment seconds
+
+parachute sensor telemetry
+```
+
+Therefore:
+
+```text
+PARACHUTE DEPLOYMENT REPORT
+!=
+INDIVIDUAL PARACHUTE PERFORMANCE TELEMETRY
+```
+
+---
+
+# Splashdown
+
+Public minute:
+
+```text
+2026-04-11T00:07:00Z
+```
+
+NASA reported successful parachute-assisted splashdown:
+
+```text
+Pacific Ocean
+off the coast of San Diego
+```
+
+Phase 2 cross-reference:
+
+```text
+splashdown
+PASS
+```
+
+The curated public source does not establish precise coordinates.
+
+Therefore:
+
+```text
+PARACHUTE-ASSISTED SPLASHDOWN REPORT
+!=
+EXACT SPLASHDOWN COORDINATES
+```
+
+No coordinates are invented.
+
+---
+
+# Post-Splashdown Powerdown
+
+NASA reported Orion entering crew-module powerdown after splashdown.
+
+Flight controllers:
+
+```text
+shut down nonessential systems
+```
+
+and transitioned Orion toward:
+
+```text
+recovery configuration
+```
+
+Exact UTC:
+
+```text
+NOT PUBLICLY ESTABLISHED
+```
+
+The event is therefore preserved as:
+
+```text
+AFTER_SPLASHDOWN
+```
+
+rather than assigned an invented timestamp.
+
+---
+
+# Recovery-Team Approach
+
+Public minute:
+
+```text
+2026-04-11T00:12:00Z
+```
+
+NASA reported that:
+
+```text
+NASA and U.S. military recovery personnel
+```
+
+began approaching Orion in inflatable boats at the direction of the NASA recovery director.
+
+This begins the direct recovery-team interaction with the spacecraft.
+
+---
+
+# Crew Extraction
+
+Public minute:
+
+```text
+2026-04-11T01:34:00Z
+```
+
+NASA reported:
+
+```text
+all four Artemis II crewmembers
+safely extracted
+```
+
+Crew status:
+
+```text
+SAFELY_EXTRACTED
+```
+
+The crew was reported on the inflatable recovery raft known as:
+
+```text
+the front porch
+```
+
+---
+
+# Crew Extraction Boundary
+
+Safe extraction establishes:
+
+```text
+successful crew removal from spacecraft
+```
+
+It does not establish:
+
+```text
+complete postflight medical results
+```
+
+Therefore:
+
+```text
+CREW SAFELY EXTRACTED
+!=
+COMPLETE MEDICAL ASSESSMENT
+```
+
+---
+
+# Helicopter Transfer
+
+Public minute:
+
+```text
+2026-04-11T01:56:00Z
+```
+
+NASA reported the Artemis II crew hoisted into U.S. military helicopters for transport to:
+
+```text
+USS John P. Murtha
+```
+
+---
+
+# Crew Aboard Recovery Ship
+
+Public minute:
+
+```text
+2026-04-11T01:58:00Z
+```
+
+NASA reported:
+
+```text
+Artemis II crew safely aboard
+USS John P. Murtha
+```
+
+Crew status:
+
+```text
+ABOARD_RECOVERY_SHIP
+```
+
+Post-mission medical evaluation followed aboard the ship.
+
+---
+
+# Spacecraft Recovery
+
+NASA's public recovery architecture describes:
+
+```text
+recovery-team approach
+
+diver operations
+
+winch-line attachment
+
+tending lines
+
+spacecraft tow
+
+well-deck positioning
+
+placement over recovery cradle
+
+well-deck drainage
+
+spacecraft securing
+```
+
+These procedural elements explain the recovery process.
+
+They are not automatically assigned exact timestamps unless NASA separately reports them.
+
+Therefore:
+
+```text
+RECOVERY PROCEDURE DESCRIPTION
+!=
+EXACT AS-FLOWN EVENT TIMELINE
+```
+
+---
+
+# Orion Secured in Well Deck
+
+Public minute:
+
+```text
+2026-04-11T08:27:00Z
+```
+
+NASA reported:
+
+```text
+Orion secured in the well deck
+of USS John P. Murtha
+```
+
+Spacecraft status:
+
+```text
+SECURED_IN_RECOVERY_SHIP_WELL_DECK
+```
+
+This closes the Phase 4A.1 operational evidence sequence.
+
+---
+
+# Recovery Completion Boundary
+
+Securing Orion aboard the recovery ship does not mean:
+
+```text
+postflight spacecraft analysis complete
+```
+
+Therefore:
+
+```text
+SPACECRAFT RECOVERY
+!=
+POSTFLIGHT ENGINEERING CLOSURE
+```
+
+Orion postflight transport and engineering analysis occur downstream.
+
+---
+
+# Operational Threads
+
+Phase 4A.1 defines five evidence-backed operational threads:
+
+```text
+1.
+entry_preparation_and_configuration
+
+2.
+entry_communications_blackout
+
+3.
+parachute_descent_and_splashdown
+
+4.
+crew_recovery
+
+5.
+spacecraft_recovery
+```
+
+Total:
+
+```text
+5
+```
+
+---
+
+# Thread 1 — Entry Preparation and Configuration
+
+Sequence:
+
+```text
+DSN → NSN handover
+↓
+crew module / service module separation
+↓
+crew module raise burn
+↓
+Entry Interface
+```
+
+Interpretation:
+
+```text
+Orion transitioned from deep-space return configuration
+to crew-module atmospheric-entry configuration
+```
+
+---
+
+# Thread 2 — Entry Communications Blackout
+
+Sequence:
+
+```text
+Entry Interface
+↓
+planned plasma blackout
+↓
+communications reacquisition
+```
+
+Interpretation:
+
+```text
+planned communications interruption
+during atmospheric entry
+```
+
+No anomaly is inferred.
+
+---
+
+# Thread 3 — Parachute Descent and Splashdown
+
+Sequence:
+
+```text
+drogue deployment
+↓
+main parachute deployment
+↓
+splashdown
+```
+
+NASA explicitly confirmed:
+
+```text
+drogues
+
+all three main parachutes
+
+successful splashdown
+```
+
+---
+
+# Thread 4 — Crew Recovery
+
+Sequence:
+
+```text
+splashdown
+↓
+spacecraft powerdown
+↓
+recovery-team approach
+↓
+crew extraction
+↓
+helicopter transfer
+↓
+crew aboard recovery ship
+```
+
+---
+
+# Thread 5 — Spacecraft Recovery
+
+Sequence:
+
+```text
+splashdown
+↓
+recovery-team operations
+↓
+Orion secured in ship well deck
+```
+
+This separates:
+
+```text
+crew recovery
+```
+
+from:
+
+```text
+spacecraft recovery
+```
+
+while preserving their shared operational context.
+
+---
+
+# Critical Non-Equivalences
+
+Phase 4A.1 explicitly preserves ten non-equivalences.
+
+```text
+PLANNED PARACHUTE ARCHITECTURE
+!=
+AS-FLOWN DEPLOYMENT CONFIRMATION
+```
+
+```text
+PUBLIC UPDATE MINUTE
+!=
+EXACT TELEMETRY EPOCH
+```
+
+```text
+EXPECTED SIX-MINUTE BLACKOUT
+!=
+EXACT SIX-MINUTE MEASURED BLACKOUT
+```
+
+```text
+COMMUNICATIONS BLACKOUT
+!=
+COMMUNICATIONS ANOMALY
+```
+
+```text
+DROGUE DEPLOYMENT REPORT
+!=
+INDIVIDUAL DROGUE PERFORMANCE TELEMETRY
+```
+
+```text
+THREE MAIN PARACHUTES REPORTED DEPLOYED
+!=
+COMPLETE MAIN-PARACHUTE LOAD TELEMETRY
+```
+
+```text
+PARACHUTE-ASSISTED SPLASHDOWN
+!=
+EXACT SPLASHDOWN COORDINATES
+```
+
+```text
+RECOVERY PROCEDURE DESCRIPTION
+!=
+EXACT AS-FLOWN RECOVERY EVENT TIME
+```
+
+```text
+CREW SAFELY EXTRACTED
+!=
+COMPLETE POSTFLIGHT MEDICAL RESULT
+```
+
+```text
+ORION SECURED IN WELL DECK
+!=
+POSTFLIGHT SPACECRAFT ANALYSIS COMPLETE
+```
+
+---
+
+# Public Evidence Limits
+
+Not publicly reconstructed from the curated evidence:
+
+```text
+exact second-level CM/SM separation time
+
+raise-burn duration
+
+raise-burn delta-v
+
+complete raise-burn guidance law
+
+exact plasma-blackout start second
+
+exact plasma-blackout end second
+
+exact measured blackout duration
+
+complete communications signal-strength history
+
+individual forward bay cover parachute deployment times
+
+individual drogue deployment times
+
+individual pilot parachute deployment times
+
+individual main parachute deployment times
+
+individual canopy inflation histories
+
+individual suspension-line loads
+
+reefing telemetry
+
+exact splashdown coordinates
+
+exact water-impact velocity
+
+complete post-splashdown attitude history
+
+exact powerdown start / completion seconds
+
+complete recovery command timeline
+
+complete crew medical data
+
+exact Orion winch-line attachment time
+
+exact well-deck ingress start time
+```
+
+These remain deliberately unresolved.
+
+---
+
+# Evidence Boundary Policy
+
+Validated:
+
+```text
+Phase 2 quantitative entry products reused
+TRUE
+
+Phase 4 recomputes Phase 2 entry physics
+FALSE
+
+public event minutes preserved
+TRUE
+
+exact unreported seconds invented
+FALSE
+
+planned blackout treated as anomaly
+FALSE
+
+parachute architecture treated as as-flown log
+FALSE
+
+forward bay cover deployment time inferred
+FALSE
+
+pilot parachute deployment time inferred
+FALSE
+
+individual parachute loads inferred
+FALSE
+
+exact splashdown coordinates inferred
+FALSE
+
+recovery procedure converted into invented timestamps
+FALSE
+
+private console rationale inferred
+FALSE
+```
+
+---
+
+# Independent Validation
+
+Created:
+
+```text
+scripts/validation/validate_entry_descent_recovery_evidence.py
+```
+
+Validation results:
+
+```text
+Reference identity: PASS
+
+Scope definition: PASS
+
+Source registry: PASS
+
+Public time-resolution policy: PASS
+
+Phase 2 reuse boundary: PASS
+```
+
+Parachute architecture:
+
+```text
+Orion parachute architecture: PASS
+
+11-parachute architecture: PASS
+
+Architecture / as-flown separation: PASS
+```
+
+Event set:
+
+```text
+15-event public evidence set: PASS
+
+Event chronology: PASS
+
+UTC midnight rollover: PASS
+```
+
+Communications blackout:
+
+```text
+Plasma-blackout evidence: PASS
+
+Planned blackout / anomaly boundary: PASS
+
+No fabricated blackout seconds: PASS
+```
+
+Entry / descent:
+
+```text
+Entry Interface evidence: PASS
+
+Drogue deployment evidence: PASS
+
+Main-parachute deployment evidence: PASS
+
+Splashdown evidence: PASS
+
+Phase 2 event cross-reference: PASS
+```
+
+Parachute evidence boundaries:
+
+```text
+Forward bay cover evidence boundary: PASS
+
+Drogue as-flown confirmation: PASS
+
+Pilot-parachute evidence boundary: PASS
+
+Three-main as-flown confirmation: PASS
+```
+
+Recovery:
+
+```text
+Post-splashdown powerdown evidence: PASS
+
+Recovery-team approach: PASS
+
+Crew extraction: PASS
+
+Helicopter transfer: PASS
+
+Crew aboard recovery ship: PASS
+
+Orion secured in well deck: PASS
+```
+
+Evidence integrity:
+
+```text
+Operational-thread set: PASS
+
+Operational event traceability: PASS
+
+Critical non-equivalences: PASS
+
+Evidence-boundary policy: PASS
+```
+
+Final result:
+
+```text
+PHASE 4A.1 VALIDATION PASSED
+```
+
+---
+
+# Validated Phase 4A.1 Totals
+
+```text
+NASA / NASA-reference sources
+5
+
+public operational events
+15
+
+operational threads
+5
+
+Orion parachute architecture
+11 parachutes
+
+critical non-equivalences
+10
+```
+
+---
+
+# Phase 4A.1 Status
+
+```text
+ENTRY PREPARATION PUBLIC EVIDENCE
+COMPLETE
+
+ENTRY INTERFACE CROSS-REFERENCE
+COMPLETE
+
+PLASMA BLACKOUT PUBLIC EVIDENCE
+COMPLETE
+
+DROGUE PUBLIC EVIDENCE
+COMPLETE
+
+MAIN PARACHUTE PUBLIC EVIDENCE
+COMPLETE
+
+SPLASHDOWN PUBLIC EVIDENCE
+COMPLETE
+
+CREW RECOVERY PUBLIC EVIDENCE
+COMPLETE
+
+SPACECRAFT RECOVERY PUBLIC EVIDENCE
+COMPLETE
+
+PARACHUTE ARCHITECTURE
+DOCUMENTED
+
+ARCHITECTURE / AS-FLOWN SEPARATION
+PRESERVED
+
+PHASE 2 ENTRY REUSE BOUNDARY
+PRESERVED
+
+EXACT UNREPORTED EVENT SECONDS
+NOT INVENTED
+
+PHASE 4A.1
+COMPLETE
+```
+
+---
+
+# Next
+
+```text
+Phase 4A.2
+Entry-to-Recovery Operational Timeline Reconstruction
+```
+
+Phase 4A.2 will transform the validated 15-event evidence set into a unified operational timeline with:
+
+```text
+event ordering
+
+public-minute intervals
+
+relative-duration relationships
+
+Phase 2 entry-state cross-links
+
+communications-state transitions
+
+parachute-state transitions
+
+crew-recovery state transitions
+
+spacecraft-recovery state transitions
+```
+
+while preserving:
+
+```text
+minute-resolution public evidence
+!=
+second-level telemetry
+```
+
+and avoiding reconstruction of unavailable parachute or recovery telemetry.
+
+---
