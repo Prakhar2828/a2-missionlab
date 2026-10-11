@@ -48218,3 +48218,975 @@ astronaut absorbed / effective dose
 ```
 
 ---
+
+---
+
+# Phase 5A — Artemis II Mission Space-Weather Context
+
+## Goal
+
+Establish a mission-clock-aligned near-Earth space-weather context for the complete Artemis II mission window using NASA SPDF / CDAWeb OMNI data.
+
+Phase 5A covers:
+
+```text
+NASA OMNI ingestion
+↓
+mission-window normalization
+↓
+UTC / MET correlation
+↓
+parameter completeness accounting
+↓
+mission-window extrema
+↓
+space-weather visualization
+↓
+explicit radiation / spacecraft interpretation boundaries
+```
+
+---
+
+# Analysis
+
+Created:
+
+```text
+scripts/analysis/analyze_space_weather_context.py
+```
+
+Created independent validator:
+
+```text
+scripts/validation/validate_space_weather_context.py
+```
+
+Generated processed products:
+
+```text
+data/processed/space_weather/omni_hro2_1min_artemis_ii.csv
+
+data/processed/space_weather/artemis_ii_space_weather_context.json
+```
+
+Raw downloaded product:
+
+```text
+data/raw/space_weather/omni_hro2_1min_artemis_ii.json
+```
+
+Documentation figure:
+
+```text
+docs/assets/space_weather/phase5a_space_weather_context.svg
+```
+
+Dataset:
+
+```text
+phase5a_artemis_ii_space_weather_context
+```
+
+Status:
+
+```text
+MISSION_SPACE_WEATHER_CONTEXT_COMPLETE
+```
+
+---
+
+# Mission Window
+
+Mission launch:
+
+```text
+2026-04-01T22:35:12Z
+```
+
+Public splashdown minute:
+
+```text
+2026-04-11T00:07:00Z
+```
+
+OMNI query interval:
+
+```text
+start
+2026-04-01T22:35:00Z
+
+stop
+2026-04-11T00:08:00Z
+```
+
+The query therefore spans the entire Artemis II mission window at one-minute cadence.
+
+Validation:
+
+```text
+Mission-window alignment
+PASS
+```
+
+---
+
+# NASA Space-Weather Source
+
+Source organization:
+
+```text
+NASA GSFC Space Physics Data Facility
+```
+
+Service:
+
+```text
+CDAWeb HAPI
+```
+
+Dataset:
+
+```text
+OMNI_HRO2_1MIN
+```
+
+Cadence:
+
+```text
+1 minute
+```
+
+Context:
+
+```text
+Combined definitive IMF and plasma data
+time-shifted to the nose of Earth's bow shock
+plus geomagnetic indices
+```
+
+Validation:
+
+```text
+NASA SPDF / CDAWeb source
+PASS
+
+OMNI_HRO2_1MIN dataset
+PASS
+
+Requested parameter registry
+PASS
+```
+
+---
+
+# Requested Quantities
+
+Phase 5A ingested:
+
+```text
+F
+
+BX_GSE
+
+BY_GSM
+
+BZ_GSM
+
+flow_speed
+
+proton_density
+
+T
+
+Pressure
+
+E
+
+Beta
+
+Mach_num
+
+AE_INDEX
+
+SYM_H
+```
+
+These provide:
+
+```text
+interplanetary magnetic-field context
+
+solar-wind plasma context
+
+solar-wind pressure context
+
+solar-wind electric-field context
+
+geomagnetic activity context
+```
+
+---
+
+# Mission-Window Data Volume
+
+Downloaded mission-window rows:
+
+```text
+13,053
+```
+
+Nominal mission-window minute slots:
+
+```text
+13,053
+```
+
+Temporal coverage:
+
+```text
+2026-04-01T22:35:00Z
+through
+2026-04-11T00:07:00Z
+```
+
+Validation:
+
+```text
+13,053 mission-window minute rows
+PASS
+
+Mission-window temporal coverage
+PASS
+```
+
+---
+
+# Coverage Policy
+
+MissionLab does not silently interpret:
+
+```text
+missing OMNI parameter value
+```
+
+as:
+
+```text
+quiet space-weather conditions
+```
+
+Parameter-level completeness is preserved explicitly.
+
+Continuous complete parameter coverage is therefore:
+
+```text
+NOT ASSUMED
+```
+
+Validation:
+
+```text
+No silent continuous-coverage assumption
+PASS
+```
+
+---
+
+# Parameter Completeness
+
+Validated:
+
+```text
+BZ_GSM
+12,438 / 13,053
+95.3%
+```
+
+```text
+flow_speed
+7,828 / 13,053
+60.0%
+```
+
+```text
+proton_density
+7,828 / 13,053
+60.0%
+```
+
+```text
+Pressure
+7,828 / 13,053
+60.0%
+```
+
+```text
+E
+7,745 / 13,053
+59.3%
+```
+
+```text
+AE_INDEX
+13,053 / 13,053
+100%
+```
+
+```text
+SYM_H
+13,053 / 13,053
+100%
+```
+
+Validation:
+
+```text
+Bz GSM completeness
+PASS
+
+Solar-wind speed completeness
+PASS
+
+Proton-density completeness
+PASS
+
+Flow-pressure completeness
+PASS
+
+Electric-field completeness
+PASS
+
+AE-index completeness
+PASS
+
+SYM/H completeness
+PASS
+```
+
+---
+
+# Mission-Clock Bz Minimum
+
+Strongest southward Bz in the mission-window dataset:
+
+```text
+BZ_GSM
+-14.460 nT
+```
+
+UTC:
+
+```text
+2026-04-02T07:09:00Z
+```
+
+Mission elapsed time:
+
+```text
+00:08:33:48
+```
+
+Provenance:
+
+```text
+MISSIONLAB_DERIVED_FROM_NASA_OMNI_HRO2_1MIN
+```
+
+Validation:
+
+```text
+Mission-clock Bz minimum
+PASS
+```
+
+---
+
+# Mission-Clock Solar-Wind-Speed Maximum
+
+Maximum available solar-wind speed:
+
+```text
+789.700 km/s
+```
+
+UTC:
+
+```text
+2026-04-03T15:52:00Z
+```
+
+MET:
+
+```text
+01:17:16:48
+```
+
+Validation:
+
+```text
+Mission-clock solar-wind-speed maximum
+PASS
+```
+
+---
+
+# Mission-Clock Proton-Density Maximum
+
+Maximum available proton density:
+
+```text
+35.880 n/cc
+```
+
+UTC:
+
+```text
+2026-04-10T07:16:00Z
+```
+
+MET:
+
+```text
+08:08:40:48
+```
+
+Validation:
+
+```text
+Mission-clock proton-density maximum
+PASS
+```
+
+---
+
+# Mission-Clock Flow-Pressure Maximum
+
+Maximum available flow pressure:
+
+```text
+11.750 nPa
+```
+
+UTC:
+
+```text
+2026-04-10T07:16:00Z
+```
+
+MET:
+
+```text
+08:08:40:48
+```
+
+The coincidence with the proton-density maximum is preserved from the source data.
+
+No spacecraft consequence is inferred solely from that coincidence.
+
+Validation:
+
+```text
+Mission-clock flow-pressure maximum
+PASS
+```
+
+---
+
+# Mission-Clock Electric-Field Maximum
+
+Maximum available electric-field quantity:
+
+```text
+8.490 mV/m
+```
+
+UTC:
+
+```text
+2026-04-02T07:04:00Z
+```
+
+MET:
+
+```text
+00:08:28:48
+```
+
+Validation:
+
+```text
+Mission-clock electric-field maximum
+PASS
+```
+
+---
+
+# Mission-Clock AE Maximum
+
+Maximum AE index:
+
+```text
+3266 nT
+```
+
+UTC:
+
+```text
+2026-04-03T16:47:00Z
+```
+
+MET:
+
+```text
+01:18:11:48
+```
+
+Validation:
+
+```text
+Mission-clock AE maximum
+PASS
+```
+
+---
+
+# Mission-Clock SYM/H Minimum
+
+Minimum SYM/H:
+
+```text
+-104 nT
+```
+
+UTC:
+
+```text
+2026-04-02T08:41:00Z
+```
+
+MET:
+
+```text
+00:10:05:48
+```
+
+Validation:
+
+```text
+Mission-clock SYM/H minimum
+PASS
+```
+
+---
+
+# Mission Clock Integration
+
+Each normalized OMNI row contains:
+
+```text
+UTC timestamp
+
+MET seconds
+
+MET DD:HH:MM:SS
+```
+
+This aligns the external near-Earth space-weather environment with the same Artemis II mission clock used throughout MissionLab.
+
+Validation:
+
+```text
+UTC / MET correlation
+PASS
+```
+
+---
+
+# Near-Earth Context Boundary
+
+OMNI_HRO2_1MIN data are time-shifted near-Earth measurements.
+
+They are not:
+
+```text
+Orion-local environmental measurements
+```
+
+Therefore:
+
+```text
+OMNI BOW-SHOCK CONTEXT
+!=
+ORION-LOCAL ENVIRONMENT
+```
+
+Validation:
+
+```text
+Near-Earth / Orion-local boundary
+PASS
+```
+
+---
+
+# Radiation Boundary
+
+Solar-wind plasma and IMF quantities describe heliophysical conditions.
+
+They do not directly establish:
+
+```text
+ionizing-radiation flux at Orion
+
+absorbed dose
+
+dose equivalent
+
+effective dose
+
+individual astronaut exposure
+```
+
+Therefore:
+
+```text
+SOLAR-WIND PARAMETERS
+!=
+IONIZING-RADIATION DOSE
+```
+
+Validation:
+
+```text
+Solar-wind / radiation-dose boundary
+PASS
+```
+
+---
+
+# Geomagnetic Activity Boundary
+
+Geomagnetic indices such as:
+
+```text
+AE_INDEX
+
+SYM_H
+```
+
+describe terrestrial magnetic activity.
+
+They are not:
+
+```text
+astronaut radiation dose
+```
+
+Therefore:
+
+```text
+GEOMAGNETIC ACTIVITY
+!=
+ASTRONAUT EFFECTIVE DOSE
+```
+
+Validation:
+
+```text
+Geomagnetic-index / crew-dose boundary
+PASS
+```
+
+---
+
+# Anomaly Boundary
+
+Large mission-window extrema are environmental context.
+
+They are not automatically:
+
+```text
+spacecraft anomalies
+```
+
+Therefore:
+
+```text
+SPACE-WEATHER EXTREMUM
+!=
+SPACECRAFT ANOMALY
+```
+
+Validation:
+
+```text
+Extrema / spacecraft-anomaly boundary
+PASS
+```
+
+---
+
+# Causality Boundary
+
+Temporal overlap between a mission event and space-weather condition does not prove:
+
+```text
+causal spacecraft effect
+```
+
+Therefore:
+
+```text
+MISSION-WINDOW CORRELATION
+!=
+CAUSAL SPACECRAFT EFFECT
+```
+
+---
+
+# Data-Gap Boundary
+
+Unavailable OMNI values are preserved as missing.
+
+Therefore:
+
+```text
+OMNI DATA GAP
+!=
+QUIET SPACE WEATHER
+```
+
+MissionLab does not interpolate missing environmental evidence into an unsupported physical conclusion.
+
+---
+
+# Critical Non-Equivalences
+
+Phase 5A validates five explicit non-equivalences:
+
+```text
+OMNI_BOW_SHOCK_CONTEXT
+!=
+ORION_LOCAL_ENVIRONMENT
+```
+
+```text
+SOLAR_WIND_PARAMETERS
+!=
+IONIZING_RADIATION_DOSE
+```
+
+```text
+GEOMAGNETIC_ACTIVITY
+!=
+ASTRONAUT_EFFECTIVE_DOSE
+```
+
+```text
+MISSION_WINDOW_CORRELATION
+!=
+CAUSAL_SPACECRAFT_EFFECT
+```
+
+```text
+OMNI_DATA_GAP
+!=
+QUIET_SPACE_WEATHER
+```
+
+Validation:
+
+```text
+Critical non-equivalences
+PASS
+```
+
+---
+
+# Visualization
+
+Created:
+
+```text
+docs/assets/space_weather/phase5a_space_weather_context.svg
+```
+
+The figure provides mission-window context for:
+
+```text
+Bz GSM
+
+solar-wind speed
+
+flow pressure
+
+SYM/H
+```
+
+The visualization explicitly states that the OMNI series represent:
+
+```text
+near-Earth space-weather context
+```
+
+and not:
+
+```text
+Orion-local radiation measurements
+
+crew dose
+```
+
+Validation:
+
+```text
+Documentation figure
+PASS
+```
+
+---
+
+# Independent Validation
+
+Created:
+
+```text
+scripts/validation/validate_space_weather_context.py
+```
+
+Validation result:
+
+```text
+Analysis identity
+PASS
+
+Mission-window alignment
+PASS
+
+NASA SPDF / CDAWeb source
+PASS
+
+OMNI_HRO2_1MIN dataset
+PASS
+
+Requested parameter registry
+PASS
+
+13,053 mission-window minute rows
+PASS
+
+Mission-window temporal coverage
+PASS
+
+No silent continuous-coverage assumption
+PASS
+
+Parameter completeness
+PASS
+
+Mission-clock extrema
+PASS
+
+Near-Earth / Orion-local boundary
+PASS
+
+Solar-wind / radiation-dose boundary
+PASS
+
+Geomagnetic-index / crew-dose boundary
+PASS
+
+Extrema / spacecraft-anomaly boundary
+PASS
+
+Critical non-equivalences
+PASS
+
+Normalized CSV row count
+PASS
+
+Normalized CSV schema
+PASS
+
+UTC / MET correlation
+PASS
+
+Documentation figure
+PASS
+```
+
+Final result:
+
+```text
+PHASE 5A VALIDATION PASSED
+```
+
+---
+
+# Phase 5A Status
+
+```text
+NASA OMNI INGESTION
+COMPLETE
+
+MISSION-WINDOW NORMALIZATION
+COMPLETE
+
+UTC / MET CORRELATION
+COMPLETE
+
+PARAMETER COMPLETENESS ACCOUNTING
+COMPLETE
+
+SPACE-WEATHER EXTREMA
+COMPLETE
+
+SPACE-WEATHER VISUALIZATION
+COMPLETE
+
+NEAR-EARTH / ORION-LOCAL BOUNDARY
+PRESERVED
+
+SOLAR-WIND / RADIATION-DOSE BOUNDARY
+PRESERVED
+
+GEOMAGNETIC / CREW-DOSE BOUNDARY
+PRESERVED
+
+CORRELATION / CAUSATION BOUNDARY
+PRESERVED
+
+DATA-GAP / QUIET-CONDITION BOUNDARY
+PRESERVED
+
+PHASE 5A
+COMPLETE
+```
+
+---
+
+# Next
+
+```text
+Phase 5B — Radiation Environment and NAIRAS Integration Boundary
+```
+
+Phase 5B will close the remaining Phase 5 roadmap requirements:
+
+```text
+prepare Artemis II trajectory input for NAIRAS 3.0
+
+define trajectory / radiation-environment interface
+
+define explicit shielding assumptions
+
+separate external environment from absorbed dose
+
+separate absorbed dose from dose equivalent / effective dose
+
+record NAIRAS Runs-on-Request workflow without fabricating a run
+
+close Phase 5 relative to defensible public evidence
+```
+
+---
