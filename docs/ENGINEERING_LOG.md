@@ -55072,3 +55072,2238 @@ Phase 7 roadmap validation
 ```
 
 ---
+
+---
+
+# Phase 7B — Artemis II Mission Control Decision Threads and Phase 7 Closure
+
+## Goal
+
+Complete Phase 7 by converting the validated Artemis II mission evidence spine into disciplined Mission Control / engineering decision threads.
+
+Each decision thread uses the common structure:
+
+```text
+detection
+↓
+evidence
+↓
+constraint
+↓
+options
+↓
+decision
+↓
+action
+↓
+outcome
+```
+
+Phase 7B also adds:
+
+```text
+postflight engineering timeline
+
+open-investigation registry
+
+decision-evidence maturity tracking
+
+Phase 7 roadmap closure
+```
+
+The reconstruction remains explicitly bounded by public evidence.
+
+MissionLab does not reconstruct:
+
+```text
+private Mission Control transcripts
+
+private console dialogue
+
+complete internal option trees
+
+undisclosed decision authority
+
+unpublished flight-loop history
+
+unknown root causes
+```
+
+---
+
+# Analysis
+
+Created:
+
+```text
+scripts/analysis/build_mission_control_decision_threads.py
+```
+
+Created independent validator:
+
+```text
+scripts/validation/validate_mission_control_decision_threads.py
+```
+
+Generated:
+
+```text
+data/reference/artemis_ii_decision_threads.json
+
+data/processed/mission_control/artemis_ii_decision_threads.json
+
+data/processed/mission_control/artemis_ii_decision_threads.csv
+
+data/processed/mission_control/artemis_ii_postflight_engineering_timeline.csv
+
+docs/assets/mission_control/phase7b_decision_thread_matrix.svg
+```
+
+Dataset:
+
+```text
+phase7b_artemis_ii_mission_control_decision_threads
+```
+
+Status:
+
+```text
+MISSION_CONTROL_DECISION_SYNTHESIS_COMPLETE
+```
+
+---
+
+# Dependencies
+
+Validated cross-phase dependencies:
+
+```text
+PHASE7A
+
+PHASE2
+
+WASTE_MANAGEMENT
+
+TPS_EVIDENCE
+
+ENTRY_RECOVERY
+
+LUNAR_SCIENCE
+```
+
+Validation:
+
+```text
+6 cross-phase dependencies
+PASS
+```
+
+---
+
+# Decision-Thread Model
+
+Decision threads:
+
+```text
+10
+```
+
+Stages per thread:
+
+```text
+7
+```
+
+Required sequence:
+
+```text
+detection
+→
+evidence
+→
+constraint
+→
+options
+→
+decision
+→
+action
+→
+outcome
+```
+
+Validation:
+
+```text
+Seven-stage decision model
+PASS
+
+Detection -> evidence -> constraint -> options -> decision -> action -> outcome
+PASS
+
+Seven stages present in every thread
+PASS
+```
+
+---
+
+# Decision Evidence States
+
+Each stage is explicitly classified as one of:
+
+```text
+PUBLICLY_ESTABLISHED
+
+MISSIONLAB_SYNTHESIS
+
+NOT_PUBLICLY_ENUMERATED
+
+NOT_APPLICABLE
+```
+
+This prevents MissionLab interpretation from being silently promoted into NASA-reported fact.
+
+Validation:
+
+```text
+Stage evidence classifications
+PASS
+
+Decision-maturity accounting
+PASS
+
+No complete private-decision-history claim
+PASS
+```
+
+---
+
+# Decision Thread 1 — Outbound Trajectory Adaptation
+
+Thread ID:
+
+```text
+OUTBOUND_TRAJECTORY_ADAPTATION
+```
+
+Classification:
+
+```text
+NOMINAL_ADAPTIVE_MISSION_OPERATIONS
+```
+
+Anomaly:
+
+```text
+NO
+```
+
+Primary lenses:
+
+```text
+FLIGHT
+
+FDO
+
+FAO
+```
+
+Evidence sequence:
+
+```text
+trajectory remained sufficiently on course
+↓
+earlier outbound correction opportunities cancelled
+↓
+OTC3 retained
+↓
+OTC3 executed
+↓
+mission continued into lunar encounter
+```
+
+OTC3:
+
+```text
+2026-04-06T03:03:00Z
+```
+
+MissionLab-derived lunar SOI entry:
+
+```text
+2026-04-06T04:38:07.532302Z
+```
+
+Decision maturity:
+
+```text
+5 publicly established stages
+
+1 MissionLab synthesis stage
+
+1 not-publicly-enumerated stage
+
+0 N/A stages
+```
+
+Critical boundaries:
+
+```text
+CANCELLED_CORRECTION
+!=
+FAILED_BURN
+```
+
+```text
+CANCELLED_CORRECTION
+!=
+PROPULSION_ANOMALY
+```
+
+```text
+PUBLIC_CORRECTION_SEQUENCE
+!=
+COMPLETE_TARGETING_LOGIC
+```
+
+Validation:
+
+```text
+Outbound correction adaptation thread
+PASS
+```
+
+---
+
+# Decision Thread 2 — Flight Day 1 UWMS Fault Recovery
+
+Thread ID:
+
+```text
+FD1_UWMS_FAULT_RECOVERY
+```
+
+Classification:
+
+```text
+IN_FLIGHT_SYSTEM_TROUBLESHOOTING
+```
+
+Anomaly:
+
+```text
+YES
+```
+
+Primary lenses:
+
+```text
+FLIGHT
+
+FAO
+
+EECOM
+
+ENGINEERING_SUPPORT
+```
+
+Public sequence:
+
+```text
+toilet-system checkout
+↓
+blinking fault light
+↓
+Mission Control data assessment
+↓
+crew / ground troubleshooting
+↓
+normal toilet operation restored
+```
+
+Publicly established final root cause:
+
+```text
+NO
+```
+
+Decision maturity:
+
+```text
+5 public
+
+1 MissionLab synthesis
+
+1 not-public
+
+0 N/A
+```
+
+Critical boundaries:
+
+```text
+FAULT_LIGHT
+!=
+IDENTIFIED_FAILED_COMPONENT
+```
+
+```text
+RESTORED_OPERATION
+!=
+KNOWN_ROOT_CAUSE
+```
+
+```text
+TOILET_FAULT
+!=
+COMPLETE_UWMS_FAILURE
+```
+
+Validation:
+
+```text
+Flight Day 1 UWMS recovery thread
+PASS
+```
+
+---
+
+# Decision Thread 3 — Flight Day 4 Wastewater Vent-Line Response
+
+Thread ID:
+
+```text
+FD4_WASTEWATER_VENT_RESPONSE
+```
+
+Classification:
+
+```text
+MANAGED_IN_FLIGHT_SYSTEM_ANOMALY
+```
+
+Anomaly:
+
+```text
+YES
+```
+
+Primary lenses:
+
+```text
+FLIGHT
+
+FAO
+
+EECOM
+
+ENGINEERING_SUPPORT
+```
+
+Detection:
+
+```text
+wastewater venting ended earlier than expected
+```
+
+Public evidence:
+
+```text
+tank not full
+
+toilet operational
+
+possible ice considered
+
+other possible causes under review
+```
+
+Actions:
+
+```text
+vent heaters used
+
+vent oriented toward Sun
+
+other potential causes reviewed
+
+backup collection capability maintained
+```
+
+Outcome:
+
+```text
+toilet remained operational
+
+mission continued
+
+postflight investigation remained open
+```
+
+Decision maturity:
+
+```text
+6 public
+
+0 synthesis
+
+1 not-public
+
+0 N/A
+```
+
+Critical boundaries:
+
+```text
+POSSIBLE_ICE
+!=
+CONFIRMED_ICE
+```
+
+```text
+HEATER_USE
+!=
+PROOF_OF_ICE
+```
+
+```text
+SUN_POINTING
+!=
+ROOT_CAUSE_CONFIRMATION
+```
+
+```text
+BACKUP_COLLECTION
+!=
+TOILET_INOPERATIVE
+```
+
+Validation:
+
+```text
+Flight Day 4 vent-line response thread
+PASS
+```
+
+---
+
+# Decision Thread 4 — Lunar Communications Constraint
+
+Thread ID:
+
+```text
+LUNAR_COMMUNICATIONS_CONSTRAINT
+```
+
+Classification:
+
+```text
+EXPECTED_OPERATIONAL_CONSTRAINT
+```
+
+Anomaly:
+
+```text
+NO
+```
+
+Primary lenses:
+
+```text
+FLIGHT
+
+FDO
+
+COMM
+
+SCIENCE
+```
+
+Evidence chain:
+
+```text
+Earthset
+
+lunar occultation geometry
+
+far-side operations
+
+Earthrise
+
+communications return
+```
+
+The loss of direct Earth line of sight is treated as:
+
+```text
+expected lunar geometry
+```
+
+not:
+
+```text
+communications failure
+```
+
+Decision maturity:
+
+```text
+5 public
+
+1 synthesis
+
+0 not-public
+
+1 N/A
+```
+
+Critical boundaries:
+
+```text
+EXPECTED_LUNAR_BLACKOUT
+!=
+COMMUNICATIONS_ANOMALY
+```
+
+```text
+EARTHRISE_IMAGE_TIME
+!=
+EXACT_LINK_REACQUISITION_TIME
+```
+
+Validation:
+
+```text
+Lunar communications constraint thread
+PASS
+```
+
+---
+
+# Decision Thread 5 — Lunar Science Execution
+
+Thread ID:
+
+```text
+LUNAR_SCIENCE_EXECUTION
+```
+
+Classification:
+
+```text
+MISSION_SCIENCE_EXECUTION
+```
+
+Primary lenses:
+
+```text
+FLIGHT
+
+FDO
+
+FAO
+
+SCIENCE
+```
+
+Science opportunity chain:
+
+```text
+preflight targeting plan
+↓
+mission geometry
+↓
+science observation window
+↓
+crew imaging / observations
+↓
+audio / annotation evidence
+↓
+postflight science interpretation
+```
+
+Confirmed science products include:
+
+```text
+Earthset
+
+Earthrise
+
+terminator terrain
+
+Vavilov / Hertzsprung observations
+
+solar eclipse
+
+impact flashes
+
+coronal structure
+
+zodiacal light
+```
+
+Decision maturity:
+
+```text
+5 public
+
+1 synthesis
+
+1 not-public
+
+0 N/A
+```
+
+Critical boundaries:
+
+```text
+TARGETING_OPPORTUNITY
+!=
+CONFIRMED_OBSERVATION
+```
+
+```text
+IMAGE_TIME
+!=
+CREW_REMARK_TIME
+```
+
+```text
+LRO_CONTEXT
+!=
+ARTEMIS_II_IMAGE
+```
+
+Validation:
+
+```text
+Lunar science decision thread
+PASS
+```
+
+---
+
+# Decision Thread 6 — Return-Link Anomaly and RTC2
+
+Thread ID:
+
+```text
+RETURN_LINK_ANOMALY_RTC2
+```
+
+Classification:
+
+```text
+COMMUNICATIONS_ANOMALY_WITH_MISSION_CONTINUATION
+```
+
+Anomaly:
+
+```text
+YES
+```
+
+Primary lenses:
+
+```text
+FLIGHT
+
+FDO
+
+FAO
+
+COMM
+
+ENGINEERING_SUPPORT
+```
+
+Public sequence:
+
+```text
+unexpected return-link loss
+↓
+communications recovery
+↓
+burn preparation resumed
+↓
+RTC2 executed
+↓
+return mission continued
+```
+
+RTC2:
+
+```text
+2026-04-10T02:53:00Z
+```
+
+Decision maturity:
+
+```text
+6 public
+
+0 synthesis
+
+1 not-public
+
+0 N/A
+```
+
+Critical boundary:
+
+```text
+TEMPORAL_SEQUENCE
+!=
+CAUSATION
+```
+
+MissionLab does not claim:
+
+```text
+return-link loss caused RTC2
+
+communications anomaly caused a propulsion problem
+
+communications anomaly changed maneuver targeting
+```
+
+Additional boundaries:
+
+```text
+RETURN_LINK_LOSS
+!=
+PROVEN_COMPLETE_TWO_WAY_OUTAGE
+```
+
+```text
+COMMUNICATIONS_ANOMALY
+!=
+PROPULSION_ANOMALY
+```
+
+```text
+RTC2_SUCCESS
+!=
+PUBLIC_ROOT_CAUSE
+```
+
+Validation:
+
+```text
+Return-link anomaly / RTC2 thread
+PASS
+```
+
+---
+
+# Decision Thread 7 — TPS Risk Mitigation and Closure
+
+Thread ID:
+
+```text
+TPS_RISK_MITIGATION_CLOSURE
+```
+
+Classification:
+
+```text
+ENGINEERING_RISK_MITIGATION_THREAD
+```
+
+Primary lenses:
+
+```text
+FLIGHT
+
+FDO
+
+ENGINEERING_SUPPORT
+```
+
+Decision maturity:
+
+```text
+7 publicly established
+
+0 synthesis
+
+0 not-public
+
+0 N/A
+```
+
+This is the most publicly mature Phase 7 decision thread.
+
+Evidence chain:
+
+```text
+Artemis I unexpected Avcoat char loss
+↓
+postflight investigation
+↓
+low-permeability material mechanism identified
+↓
+gas-pressure / cracking mechanism established
+↓
+skip-entry thermal history recognized as contributing condition
+↓
+Artemis II entry environment changed
+↓
+Artemis II flew modified entry without Artemis I-style skip
+↓
+postflight inspection showed expected TPS performance
+↓
+char-loss behavior significantly reduced
+```
+
+Critical boundaries:
+
+```text
+REDUCED_CHAR_LOSS
+!=
+ZERO_CHAR_LOSS
+```
+
+```text
+INITIAL_POSTFLIGHT_ASSESSMENT
+!=
+COMPLETE_MATERIAL_DATASET
+```
+
+```text
+MISSIONLAB_HEATING_MODEL
+!=
+TPS_SENSOR_TELEMETRY
+```
+
+Validation:
+
+```text
+TPS mitigation and closure thread
+PASS
+```
+
+---
+
+# Decision Thread 8 — Final Correction to Entry Handoff
+
+Thread ID:
+
+```text
+FINAL_CORRECTION_ENTRY_HANDOFF
+```
+
+Classification:
+
+```text
+NOMINAL_DYNAMIC_PHASE_HANDOFF
+```
+
+Primary lenses:
+
+```text
+FLIGHT
+
+FDO
+
+FAO
+
+ENGINEERING_SUPPORT
+```
+
+Public anchors:
+
+```text
+RTC3
+2026-04-10T18:53:00Z
+```
+
+```text
+Entry Interface
+2026-04-10T23:53:00Z
+```
+
+Elapsed public anchor separation:
+
+```text
+5 hours
+```
+
+Decision maturity:
+
+```text
+5 public
+
+1 synthesis
+
+1 not-public
+
+0 N/A
+```
+
+Critical boundaries:
+
+```text
+FINAL_PUBLIC_CORRECTION
+!=
+FINAL_ONBOARD_NAVIGATION_STATE
+```
+
+```text
+PUBLIC_HANDOFF
+!=
+ENTRY_GUIDANCE_LAW
+```
+
+---
+
+# Decision Thread 9 — Entry Blackout and Reacquisition
+
+Thread ID:
+
+```text
+ENTRY_BLACKOUT_REACQUISITION
+```
+
+Classification:
+
+```text
+EXPECTED_ENTRY_COMMUNICATIONS_CONSTRAINT
+```
+
+Anomaly:
+
+```text
+NO
+```
+
+Primary lenses:
+
+```text
+FLIGHT
+
+FDO
+
+EECOM
+
+COMM
+
+ENGINEERING_SUPPORT
+```
+
+Sequence:
+
+```text
+Entry Interface
+↓
+plasma formation
+↓
+planned communications blackout
+↓
+public communications reacquisition
+↓
+parachute descent
+```
+
+Public reacquisition minute:
+
+```text
+2026-04-11T00:00:00Z
+```
+
+Decision maturity:
+
+```text
+5 public
+
+1 synthesis
+
+0 not-public
+
+1 N/A
+```
+
+Critical boundaries:
+
+```text
+PLANNED_ENTRY_BLACKOUT
+!=
+COMMUNICATIONS_ANOMALY
+```
+
+```text
+PUBLIC_REACQUISITION_MINUTE
+!=
+EXACT_BLACKOUT_END_SECOND
+```
+
+Validation:
+
+```text
+Entry blackout / reacquisition thread
+PASS
+```
+
+---
+
+# Decision Thread 10 — Descent, Splashdown, and Recovery
+
+Thread ID:
+
+```text
+DESCENT_SPLASHDOWN_RECOVERY
+```
+
+Classification:
+
+```text
+NOMINAL_RETURN_AND_RECOVERY_SEQUENCE
+```
+
+Primary lenses:
+
+```text
+FLIGHT
+
+FDO
+
+FAO
+
+EECOM
+
+ENGINEERING_SUPPORT
+```
+
+Public sequence:
+
+```text
+entry communications reacquisition
+↓
+drogue deployment
+↓
+main deployment
+↓
+splashdown
+↓
+recovery-team approach
+↓
+crew extraction
+↓
+crew transfer
+↓
+spacecraft recovery
+```
+
+Decision maturity:
+
+```text
+4 public
+
+2 synthesis
+
+1 not-public
+
+0 N/A
+```
+
+Critical boundaries:
+
+```text
+PARACHUTE_ARCHITECTURE
+!=
+INDIVIDUAL_PARACHUTE_TELEMETRY
+```
+
+```text
+PUBLIC_RECOVERY_SEQUENCE
+!=
+PRIVATE_RECOVERY_DECISION_LOG
+```
+
+Validation:
+
+```text
+Descent / splashdown / recovery decision thread
+PASS
+```
+
+---
+
+# Overall Decision-Thread Maturity
+
+Validated:
+
+```text
+OUTBOUND_TRAJECTORY_ADAPTATION
+5 public / 1 synthesis / 1 not-public / 0 N/A
+
+FD1_UWMS_FAULT_RECOVERY
+5 public / 1 synthesis / 1 not-public / 0 N/A
+
+FD4_WASTEWATER_VENT_RESPONSE
+6 public / 0 synthesis / 1 not-public / 0 N/A
+
+LUNAR_COMMUNICATIONS_CONSTRAINT
+5 public / 1 synthesis / 0 not-public / 1 N/A
+
+LUNAR_SCIENCE_EXECUTION
+5 public / 1 synthesis / 1 not-public / 0 N/A
+
+RETURN_LINK_ANOMALY_RTC2
+6 public / 0 synthesis / 1 not-public / 0 N/A
+
+TPS_RISK_MITIGATION_CLOSURE
+7 public / 0 synthesis / 0 not-public / 0 N/A
+
+FINAL_CORRECTION_ENTRY_HANDOFF
+5 public / 1 synthesis / 1 not-public / 0 N/A
+
+ENTRY_BLACKOUT_REACQUISITION
+5 public / 1 synthesis / 0 not-public / 1 N/A
+
+DESCENT_SPLASHDOWN_RECOVERY
+4 public / 2 synthesis / 1 not-public / 0 N/A
+```
+
+Validation:
+
+```text
+Decision-maturity accounting
+PASS
+```
+
+---
+
+# Postflight Engineering Timeline
+
+Phase 7B reconstructs six postflight engineering records.
+
+---
+
+## April 11, 2026 — Recovery Transition
+
+Record:
+
+```text
+POSTFLIGHT_RECOVERY_TRANSITION
+```
+
+Status:
+
+```text
+COMPLETE
+```
+
+Mission state transition:
+
+```text
+flight operations
+↓
+crew / spacecraft recovery
+↓
+inspection
+↓
+postflight engineering
+```
+
+---
+
+## April 20, 2026 — Initial Orion Assessment
+
+Record:
+
+```text
+POSTFLIGHT_INITIAL_ORION_ASSESSMENT
+```
+
+Status:
+
+```text
+INITIAL_ASSESSMENT
+```
+
+NASA reported initial evidence that:
+
+```text
+Orion TPS performed as expected
+
+Artemis I-type char loss was significantly reduced
+```
+
+This remains an initial assessment rather than the complete engineering dataset.
+
+---
+
+## April 20, 2026 — Urine Vent-Line Investigation
+
+Record:
+
+```text
+POSTFLIGHT_URINE_VENT_INVESTIGATION
+```
+
+Status:
+
+```text
+OPEN_IN_CURATED_PUBLIC_EVIDENCE
+```
+
+NASA reported:
+
+```text
+hardware assessment
+
+data gathering
+
+root-cause investigation
+
+future corrective-action support
+```
+
+Publicly confirmed root cause:
+
+```text
+NO
+```
+
+Validation:
+
+```text
+Urine vent-line investigation remains open
+PASS
+
+No fabricated urine vent-line root cause
+PASS
+```
+
+---
+
+## April 21, 2026 — Mission and Fault Management Analysis
+
+Record:
+
+```text
+POSTFLIGHT_MISSION_FAULT_MANAGEMENT_ANALYSIS
+```
+
+Status:
+
+```text
+POSTFLIGHT_ANALYSIS_ONGOING
+```
+
+NASA Ames publicly described continuing analysis of Mission and Fault Management performance.
+
+Final public result in the curated source:
+
+```text
+NOT ESTABLISHED
+```
+
+Validation:
+
+```text
+Mission/Fault Management analysis remains ongoing
+PASS
+
+No fabricated final Mission/Fault Management result
+PASS
+```
+
+---
+
+## September 24, 2026 — TPS Engineering Knowledge Update
+
+Record:
+
+```text
+POSTFLIGHT_TPS_ENGINEERING_KNOWLEDGE_UPDATE
+```
+
+Status:
+
+```text
+ENGINEERING_KNOWLEDGE_INTEGRATED
+```
+
+The updated public Orion engineering record connects:
+
+```text
+Artemis I root-cause knowledge
+
+Avcoat permeability
+
+Artemis II entry mitigation
+
+Artemis II successful entry experience
+
+future heat-shield manufacturing knowledge
+```
+
+Validation:
+
+```text
+TPS engineering knowledge update
+PASS
+```
+
+---
+
+## October 7, 2026 — Lunar Science Release
+
+Record:
+
+```text
+POSTFLIGHT_LUNAR_SCIENCE_RELEASE
+```
+
+Status:
+
+```text
+PRELIMINARY_SCIENCE_RESULTS_RELEASED
+```
+
+Public postflight results included:
+
+```text
+lunar-science archive release
+
+five impact flashes
+
+coronal structure
+
+zodiacal light
+
+crew imagery
+
+science audio
+
+crew annotations
+```
+
+Validation:
+
+```text
+October lunar-science release
+PASS
+```
+
+---
+
+# Open Engineering Issue Registry
+
+Phase 7 closes without forcing unresolved engineering questions into false certainty.
+
+Open issues:
+
+```text
+URINE_VENT_LINE_ROOT_CAUSE
+```
+
+Status:
+
+```text
+OPEN_IN_CURATED_PUBLIC_EVIDENCE
+```
+
+Publicly confirmed final root cause:
+
+```text
+NO
+```
+
+Second open item:
+
+```text
+MISSION_AND_FAULT_MANAGEMENT_POSTFLIGHT_ANALYSIS
+```
+
+Status:
+
+```text
+ANALYSIS_REPORTED_ONGOING
+```
+
+Publicly confirmed final result:
+
+```text
+NO
+```
+
+Validation:
+
+```text
+2-item open engineering issue registry
+PASS
+
+Open-investigation preservation
+PASS
+```
+
+---
+
+# Public Source Registry
+
+Phase 7B added five public postflight source records covering:
+
+```text
+initial Artemis II postflight assessment
+
+NASA Ames postflight Mission and Fault Management analysis
+
+updated Orion testing / TPS engineering knowledge
+
+October 7 lunar-science results
+
+NASA technical heat-shield success reporting
+```
+
+Validation:
+
+```text
+5 postflight public source records
+PASS
+```
+
+---
+
+# Decision Reconstruction Policy
+
+Phase 7B enforces:
+
+```text
+public evidence
+!=
+MissionLab synthesis
+```
+
+MissionLab records the difference explicitly at every decision stage.
+
+The following are prohibited:
+
+```text
+inventing private console dialogue
+
+inventing complete option trees
+
+assigning undisclosed decision authority
+
+turning hypotheses into confirmed root causes
+
+turning expected constraints into anomalies
+
+turning temporal adjacency into causation
+
+forcing open investigations closed
+```
+
+Validation:
+
+```text
+Public evidence / MissionLab synthesis separation
+PASS
+
+Private console dialogue non-reconstruction
+PASS
+
+Private option-tree non-reconstruction
+PASS
+
+Controller decision-authority non-inference
+PASS
+
+Unknown root-cause non-promotion
+PASS
+
+Expected-constraint / anomaly separation
+PASS
+
+Temporal-sequence / causation separation
+PASS
+
+Open-investigation preservation
+PASS
+```
+
+---
+
+# Critical Non-Equivalences
+
+Phase 7B validates nine mission-operations evidence boundaries:
+
+```text
+MISSIONLAB_DECISION_THREAD
+!=
+NASA_PRIVATE_CONSOLE_TRANSCRIPT
+```
+
+```text
+PUBLIC_SEQUENCE
+!=
+COMPLETE_INTERNAL_DECISION_LOGIC
+```
+
+```text
+PUBLIC_ACTION
+!=
+COMPLETE_OPTION_SET
+```
+
+```text
+DISCIPLINE_RELEVANCE
+!=
+DECISION_AUTHORITY
+```
+
+```text
+TEMPORAL_SEQUENCE
+!=
+CAUSATION
+```
+
+```text
+TROUBLESHOOTING_ACTION
+!=
+CONFIRMED_ROOT_CAUSE
+```
+
+```text
+EXPECTED_OPERATIONAL_CONSTRAINT
+!=
+ANOMALY
+```
+
+```text
+INITIAL_POSTFLIGHT_ASSESSMENT
+!=
+FINAL_ENGINEERING_DATASET
+```
+
+```text
+OPEN_PUBLIC_INVESTIGATION
+!=
+RESOLVED_ROOT_CAUSE
+```
+
+Validation:
+
+```text
+9 critical non-equivalences
+PASS
+```
+
+---
+
+# Decision Thread CSV
+
+Generated:
+
+```text
+data/processed/mission_control/artemis_ii_decision_threads.csv
+```
+
+Records:
+
+```text
+10
+```
+
+Each row contains:
+
+```text
+thread identity
+
+classification
+
+anomaly state
+
+primary discipline lenses
+
+anchor mission events
+
+all seven decision-stage evidence states
+
+decision maturity totals
+```
+
+Validation:
+
+```text
+Decision-thread CSV
+PASS
+
+Decision-thread CSV schema
+PASS
+```
+
+---
+
+# Postflight Engineering CSV
+
+Generated:
+
+```text
+data/processed/mission_control/artemis_ii_postflight_engineering_timeline.csv
+```
+
+Records:
+
+```text
+6
+```
+
+Open records:
+
+```text
+2
+```
+
+Validation:
+
+```text
+Postflight engineering CSV
+PASS
+
+Postflight engineering CSV schema
+PASS
+```
+
+---
+
+# Documentation Figure
+
+Created:
+
+```text
+docs/assets/mission_control/phase7b_decision_thread_matrix.svg
+```
+
+The figure compares:
+
+```text
+10 decision threads
+x
+7 decision stages
+```
+
+Evidence-state values distinguish:
+
+```text
+publicly established
+
+MissionLab synthesis
+
+not publicly enumerated
+
+not applicable
+```
+
+The figure explicitly states that these are evidence reconstructions rather than private NASA decision logs.
+
+Validation:
+
+```text
+Documentation figure
+PASS
+```
+
+---
+
+# Independent Validation
+
+Created:
+
+```text
+scripts/validation/validate_mission_control_decision_threads.py
+```
+
+Validation result:
+
+```text
+Analysis identity
+PASS
+
+Reference / processed manifest consistency
+PASS
+
+Phase 7A dependency
+PASS
+
+Seven-stage decision model
+PASS
+
+Detection -> evidence -> constraint -> options -> decision -> action -> outcome
+PASS
+
+6 cross-phase dependencies
+PASS
+
+5 postflight public source records
+PASS
+
+10 decision threads
+PASS
+
+Decision-thread ID uniqueness
+PASS
+
+Seven stages present in every thread
+PASS
+
+Stage evidence classifications
+PASS
+
+Decision-maturity accounting
+PASS
+
+No complete private-decision-history claim
+PASS
+
+Outbound correction adaptation thread
+PASS
+
+Flight Day 1 UWMS recovery thread
+PASS
+
+Flight Day 4 vent-line response thread
+PASS
+
+Lunar communications constraint thread
+PASS
+
+Return-link anomaly / RTC2 thread
+PASS
+
+TPS mitigation and closure thread
+PASS
+
+Entry blackout / reacquisition thread
+PASS
+
+6-record postflight engineering timeline
+PASS
+
+Recovery transition
+PASS
+
+Initial Orion postflight assessment
+PASS
+
+Urine vent-line investigation remains open
+PASS
+
+Mission/Fault Management analysis remains ongoing
+PASS
+
+TPS engineering knowledge update
+PASS
+
+October lunar-science release
+PASS
+
+2-item open engineering issue registry
+PASS
+
+No fabricated urine vent-line root cause
+PASS
+
+No fabricated final Mission/Fault Management result
+PASS
+
+Public evidence / MissionLab synthesis separation
+PASS
+
+Private console dialogue non-reconstruction
+PASS
+
+Private option-tree non-reconstruction
+PASS
+
+Controller decision-authority non-inference
+PASS
+
+Unknown root-cause non-promotion
+PASS
+
+Expected-constraint / anomaly separation
+PASS
+
+Temporal-sequence / causation separation
+PASS
+
+Open-investigation preservation
+PASS
+
+9 critical non-equivalences
+PASS
+
+Decision-thread / private-transcript boundary
+PASS
+
+Public-sequence / internal-logic boundary
+PASS
+
+Public-action / complete-option-set boundary
+PASS
+
+Discipline-relevance / decision-authority boundary
+PASS
+
+Temporal-sequence / causation boundary
+PASS
+
+Troubleshooting / root-cause boundary
+PASS
+
+Expected-constraint / anomaly boundary
+PASS
+
+Initial-assessment / final-dataset boundary
+PASS
+
+Open-investigation / resolved-root-cause boundary
+PASS
+
+All seven discipline lenses
+PASS
+
+Shared prioritized mission timeline
+PASS
+
+Decision-thread roadmap coverage
+PASS
+
+Postflight engineering timeline roadmap coverage
+PASS
+
+Phase 7 roadmap coverage
+PASS
+
+Decision-thread CSV
+PASS
+
+Postflight engineering CSV
+PASS
+
+Documentation figure
+PASS
+```
+
+Final result:
+
+```text
+PHASE 7B VALIDATION PASSED
+
+PHASE 7 ROADMAP COVERAGE PASSED
+```
+
+---
+
+# Phase 7 Roadmap Closure
+
+## FLIGHT Perspective
+
+```text
+COMPLETE
+```
+
+---
+
+## FDO Perspective
+
+```text
+COMPLETE
+```
+
+---
+
+## FAO Perspective
+
+```text
+COMPLETE
+```
+
+---
+
+## EECOM Perspective
+
+```text
+COMPLETE
+```
+
+---
+
+## COMM Perspective
+
+```text
+COMPLETE
+```
+
+---
+
+## SCIENCE Perspective
+
+```text
+COMPLETE
+```
+
+---
+
+## ENGINEERING_SUPPORT Perspective
+
+```text
+COMPLETE
+```
+
+---
+
+## Shared Discipline-Prioritized Timeline
+
+```text
+COMPLETE
+```
+
+Coverage:
+
+```text
+24 mission events
+
+7 discipline lenses
+
+4 priority levels
+```
+
+---
+
+## Decision Threads
+
+Roadmap structure:
+
+```text
+detection
+→
+evidence
+→
+constraint
+→
+options
+→
+decision
+→
+action
+→
+outcome
+```
+
+Status:
+
+```text
+COMPLETE
+```
+
+Decision threads:
+
+```text
+10
+```
+
+---
+
+## Postflight Engineering Timeline
+
+Status:
+
+```text
+COMPLETE
+```
+
+Records:
+
+```text
+6
+```
+
+Open public engineering issues preserved:
+
+```text
+2
+```
+
+---
+
+# Phase 7 Final Status
+
+```text
+PHASE 7 — MISSION CONTROL / ENGINEERING PERSPECTIVES
+```
+
+FLIGHT lens:
+
+```text
+COMPLETE
+```
+
+FDO lens:
+
+```text
+COMPLETE
+```
+
+FAO lens:
+
+```text
+COMPLETE
+```
+
+EECOM lens:
+
+```text
+COMPLETE
+```
+
+COMM lens:
+
+```text
+COMPLETE
+```
+
+SCIENCE lens:
+
+```text
+COMPLETE
+```
+
+ENGINEERING_SUPPORT lens:
+
+```text
+COMPLETE
+```
+
+Shared prioritized mission timeline:
+
+```text
+COMPLETE
+```
+
+Decision-thread synthesis:
+
+```text
+COMPLETE
+```
+
+Seven-stage decision model:
+
+```text
+COMPLETE
+```
+
+Postflight engineering timeline:
+
+```text
+COMPLETE
+```
+
+Decision-evidence maturity:
+
+```text
+COMPLETE
+```
+
+Open investigation preservation:
+
+```text
+COMPLETE
+```
+
+Private console-dialogue boundary:
+
+```text
+PRESERVED
+```
+
+Private option-tree boundary:
+
+```text
+PRESERVED
+```
+
+Decision-authority boundary:
+
+```text
+PRESERVED
+```
+
+Root-cause evidence boundary:
+
+```text
+PRESERVED
+```
+
+Expected-constraint / anomaly boundary:
+
+```text
+PRESERVED
+```
+
+Temporal-sequence / causation boundary:
+
+```text
+PRESERVED
+```
+
+Independent validation:
+
+```text
+PASS
+```
+
+Overall:
+
+```text
+PHASE 7
+COMPLETE RELATIVE TO DEFENSIBLE PUBLIC EVIDENCE
+```
+
+---
+
+# Phase 8 Handoff
+
+Next roadmap phase:
+
+```text
+PHASE 8 — EVIDENCE-GROUNDED MISSION ANALYST
+```
+
+Phase 8 should build the analytical layer that can answer mission questions directly from the validated evidence spine.
+
+The work should focus on:
+
+```text
+cross-phase evidence retrieval
+
+mission-event lookup
+
+mission-clock reasoning
+
+discipline-aware analysis
+
+decision-thread retrieval
+
+provenance-aware answers
+
+NASA-reported vs MissionLab-derived distinction
+
+known vs unknown state handling
+
+evidence confidence
+
+source traceability
+
+anti-hallucination guardrails
+
+analyst-ready outputs
+```
+
+Phase 8 should consume the validated products from Phases 1 through 7 rather than recreating them.
+
+---

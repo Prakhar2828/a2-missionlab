@@ -1,0 +1,992 @@
+{
+  "dataset_id": "phase7b_artemis_ii_mission_control_decision_threads",
+  "mission": "Artemis II",
+  "phase": "7B",
+  "status": "MISSION_CONTROL_DECISION_SYNTHESIS_COMPLETE",
+  "purpose": "Integrate validated Artemis II public evidence into MissionLab decision threads and a postflight engineering timeline while preserving private-console and root-cause boundaries.",
+  "decision_stage_model": [
+    "detection",
+    "evidence",
+    "constraint",
+    "options",
+    "decision",
+    "action",
+    "outcome"
+  ],
+  "input_dependencies": [
+    {
+      "dependency_id": "PHASE7A",
+      "dataset_id": "phase7a_artemis_ii_mission_control_perspectives"
+    },
+    {
+      "dependency_id": "PHASE2",
+      "dataset_id": "phase2k_artemis_ii_phase2_integrated_operations"
+    },
+    {
+      "dependency_id": "WASTE_MANAGEMENT",
+      "dataset_id": "phase3b1_artemis_ii_waste_management_evidence"
+    },
+    {
+      "dependency_id": "TPS_EVIDENCE",
+      "dataset_id": "phase2f1_orion_tps_heritage_evidence"
+    },
+    {
+      "dependency_id": "ENTRY_RECOVERY",
+      "dataset_id": "phase4a1_artemis_ii_entry_descent_recovery_evidence"
+    },
+    {
+      "dependency_id": "LUNAR_SCIENCE",
+      "dataset_id": "phase6b_artemis_ii_lunar_observation_reconstruction"
+    }
+  ],
+  "public_postflight_source_registry": [
+    {
+      "source_id": "NASA_INITIAL_POSTFLIGHT_ASSESSMENT_2026_04_20",
+      "publisher": "NASA",
+      "publication_date": "2026-04-20",
+      "title": "NASA on Track for Future Missions with Initial Artemis II Assessments",
+      "url": "https://www.nasa.gov/missions/nasa-on-track-for-future-missions-with-initial-artemis-ii-assessments/",
+      "role": "Initial Orion, heat-shield, wastewater vent-line, SLS, and postflight engineering assessment."
+    },
+    {
+      "source_id": "NASA_AMES_ARTEMIS_II_POSTFLIGHT_ANALYSIS_2026_04_21",
+      "publisher": "NASA",
+      "publication_date": "2026-04-21",
+      "title": "What Are Ames' Contributions to Artemis II?",
+      "url": "https://www.nasa.gov/centers-and-facilities/ames/what-are-ames-contributions-to-artemis-ii/",
+      "role": "Public evidence that postflight Mission and Fault Management performance analysis continued."
+    },
+    {
+      "source_id": "NASA_ORION_TESTING_UPDATED_2026_09_24",
+      "publisher": "NASA",
+      "publication_date": "2026-09-24",
+      "title": "Testing",
+      "url": "https://www.nasa.gov/reference/testing/",
+      "role": "Updated Orion engineering reference describing heat-shield investigation knowledge, Artemis II mitigation, and future heat-shield manufacturing lessons."
+    },
+    {
+      "source_id": "NASA_ARTEMIS_II_PRELIMINARY_LUNAR_SCIENCE_2026_10_07",
+      "publisher": "NASA Science",
+      "publication_date": "2026-10-07",
+      "title": "Artemis II Preliminary Lunar Science Report",
+      "url": "https://science.nasa.gov/feature/artemis-ii-preliminary-lunar-science-report/",
+      "role": "Postflight lunar-science results including impact-flash and eclipse/corona interpretation."
+    },
+    {
+      "source_id": "NASA_NTRS_ARTEMIS_II_HEATSHIELD_SUCCESS_2026",
+      "publisher": "NASA Technical Reports Server",
+      "publication_date": "2026",
+      "title": "Under Pressure: The Artemis I Heatshield Char Loss Investigation and Artemis II's Successful Entry",
+      "url": "https://ntrs.nasa.gov/citations/20260006849",
+      "role": "Technical public linkage from Artemis I root cause through Artemis II trajectory mitigation to reduced postflight char loss."
+    }
+  ],
+  "decision_threads": [
+    {
+      "thread_id": "OUTBOUND_TRAJECTORY_ADAPTATION",
+      "title": "Outbound correction cancellation and OTC3 execution",
+      "classification": "NOMINAL_ADAPTIVE_MISSION_OPERATIONS",
+      "anomaly": false,
+      "primary_lenses": [
+        "FLIGHT",
+        "FDO",
+        "FAO"
+      ],
+      "anchor_event_ids": [
+        "A2_OTC3",
+        "A2_LUNAR_SOI_ENTRY"
+      ],
+      "stages": {
+        "detection": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "Public mission reporting established that Orion's trajectory remained sufficiently on track for earlier planned outbound corrections to be cancelled.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "evidence": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "Two planned outbound trajectory corrections were cancelled while OTC3 was later executed before lunar sphere-of-influence entry.",
+          "evidence_class": "NASA_REPORTED_PLUS_MISSIONLAB_GEOMETRY",
+          "public_detail_complete": true
+        },
+        "constraint": {
+          "status": "MISSIONLAB_SYNTHESIS",
+          "summary": "Trajectory correction activity must balance the current flight solution with downstream lunar geometry and mission timeline.",
+          "evidence_class": "MISSIONLAB_OPERATIONAL_SYNTHESIS",
+          "public_detail_complete": false
+        },
+        "options": {
+          "status": "NOT_PUBLICLY_ENUMERATED",
+          "summary": "The complete set of alternatives, targeting thresholds, and console trade discussions is not public.",
+          "evidence_class": "PUBLIC_EVIDENCE_BOUNDARY",
+          "public_detail_complete": false
+        },
+        "decision": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "OTC1 and OTC2 were cancelled and OTC3 was retained and executed.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "action": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "OTC3 executed on 2026-04-06T03:03:00Z.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "outcome": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "The mission continued into the lunar encounter sequence. MissionLab derived lunar SOI entry at 2026-04-06T04:38:07.532302Z.",
+          "evidence_class": "NASA_REPORTED_PLUS_MISSIONLAB_DERIVED_GEOMETRY",
+          "public_detail_complete": true
+        }
+      },
+      "guardrails": [
+        "CANCELLED_CORRECTION != FAILED_BURN",
+        "CANCELLED_CORRECTION != PROPULSION_ANOMALY",
+        "PUBLIC_CORRECTION_SEQUENCE != COMPLETE_TARGETING_LOGIC"
+      ]
+    },
+    {
+      "thread_id": "FD1_UWMS_FAULT_RECOVERY",
+      "title": "Flight Day 1 toilet fault and in-flight recovery",
+      "classification": "IN_FLIGHT_SYSTEM_TROUBLESHOOTING",
+      "anomaly": true,
+      "primary_lenses": [
+        "FLIGHT",
+        "FAO",
+        "EECOM",
+        "ENGINEERING_SUPPORT"
+      ],
+      "anchor_event_ids": [
+        "A2_UWMS_FD1_FAULT",
+        "A2_UWMS_FD1_RESTORED"
+      ],
+      "stages": {
+        "detection": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "Crew reported a blinking fault light during toilet-system checkout.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "evidence": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "Mission Control assessed available data and coordinated troubleshooting with the crew.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "constraint": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "The public evidence established a system fault indication but did not identify the failed component or root cause.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "options": {
+          "status": "NOT_PUBLICLY_ENUMERATED",
+          "summary": "Private troubleshooting branches and internal fault-isolation options were not publicly released.",
+          "evidence_class": "PUBLIC_EVIDENCE_BOUNDARY",
+          "public_detail_complete": false
+        },
+        "decision": {
+          "status": "MISSIONLAB_SYNTHESIS",
+          "summary": "The public sequence supports continued troubleshooting rather than abandonment of the system.",
+          "evidence_class": "MISSIONLAB_OPERATIONAL_SYNTHESIS",
+          "public_detail_complete": false
+        },
+        "action": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "Crew and Mission Control performed troubleshooting.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "outcome": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "Normal toilet operations were restored. The underlying root cause remained unavailable in the curated public source set.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        }
+      },
+      "guardrails": [
+        "FAULT_LIGHT != IDENTIFIED_FAILED_COMPONENT",
+        "RESTORED_OPERATION != KNOWN_ROOT_CAUSE",
+        "TOILET_FAULT != COMPLETE_UWMS_FAILURE"
+      ]
+    },
+    {
+      "thread_id": "FD4_WASTEWATER_VENT_RESPONSE",
+      "title": "Flight Day 4 wastewater vent-line response",
+      "classification": "MANAGED_IN_FLIGHT_SYSTEM_ANOMALY",
+      "anomaly": true,
+      "primary_lenses": [
+        "FLIGHT",
+        "FAO",
+        "EECOM",
+        "ENGINEERING_SUPPORT"
+      ],
+      "anchor_event_ids": [
+        "A2_UWMS_FD4_VENT_ISSUE"
+      ],
+      "stages": {
+        "detection": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "Wastewater venting ended earlier than expected.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "evidence": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "NASA reported that the tank was not full, the toilet remained operational, possible ice was considered, and other causes were also under review.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "constraint": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "Waste-management capacity and continued crew operations had to be protected while the physical cause remained uncertain.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "options": {
+          "status": "NOT_PUBLICLY_ENUMERATED",
+          "summary": "NASA publicly described several responses but did not publish the complete internal option set or decision trade matrix.",
+          "evidence_class": "PUBLIC_EVIDENCE_BOUNDARY",
+          "public_detail_complete": false
+        },
+        "decision": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "The mission adopted a managed mitigation posture while continuing to investigate.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "action": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "Engineers used vent heaters, oriented the vent toward the Sun, reviewed other potential causes, and maintained backup collection capability if needed.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "outcome": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "The toilet remained operational and the mission continued. NASA's April 20 postflight assessment still described the urine vent-line root-cause investigation as ongoing.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        }
+      },
+      "guardrails": [
+        "POSSIBLE_ICE != CONFIRMED_ICE",
+        "HEATER_USE != PROOF_OF_ICE",
+        "SUN_POINTING != ROOT_CAUSE_CONFIRMATION",
+        "BACKUP_COLLECTION != TOILET_INOPERATIVE"
+      ]
+    },
+    {
+      "thread_id": "LUNAR_COMMUNICATIONS_CONSTRAINT",
+      "title": "Expected lunar communications constraint and reacquisition",
+      "classification": "EXPECTED_OPERATIONAL_CONSTRAINT",
+      "anomaly": false,
+      "primary_lenses": [
+        "FLIGHT",
+        "FDO",
+        "COMM",
+        "SCIENCE"
+      ],
+      "anchor_event_ids": [
+        "A2_EARTHSET",
+        "A2_PERICYNTHION",
+        "A2_EARTHRISE"
+      ],
+      "stages": {
+        "detection": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "Lunar geometry created an expected period in which direct Earth communications were blocked.",
+          "evidence_class": "NASA_REPORTED_PLUS_MISSIONLAB_GEOMETRY",
+          "public_detail_complete": true
+        },
+        "evidence": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "Earthset, lunar occultation geometry, Earthrise, and the communications sequence are mutually consistent.",
+          "evidence_class": "NASA_REPORTED_PLUS_MISSIONLAB_GEOMETRY",
+          "public_detail_complete": true
+        },
+        "constraint": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "The lunar body physically blocked the direct line of sight between Orion and Earth.",
+          "evidence_class": "GEOMETRIC_CONSTRAINT",
+          "public_detail_complete": true
+        },
+        "options": {
+          "status": "NOT_APPLICABLE",
+          "summary": "MissionLab treats the expected occultation as a planned geometric constraint rather than an anomaly requiring fault-response options.",
+          "evidence_class": "MISSIONLAB_CLASSIFICATION",
+          "public_detail_complete": true
+        },
+        "decision": {
+          "status": "MISSIONLAB_SYNTHESIS",
+          "summary": "Mission planning accepted the expected loss-of-contact window within the lunar-flyby sequence.",
+          "evidence_class": "MISSIONLAB_OPERATIONAL_SYNTHESIS",
+          "public_detail_complete": false
+        },
+        "action": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "The mission proceeded through the lunar-flyby observation sequence and later reacquired Earth communications.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "outcome": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "The expected communications constraint ended as Earth re-emerged from behind the Moon.",
+          "evidence_class": "NASA_REPORTED_PLUS_MISSIONLAB_GEOMETRY",
+          "public_detail_complete": true
+        }
+      },
+      "guardrails": [
+        "EXPECTED_LUNAR_BLACKOUT != COMMUNICATIONS_ANOMALY",
+        "EARTHRISE_IMAGE_TIME != EXACT_LINK_REACQUISITION_TIME"
+      ]
+    },
+    {
+      "thread_id": "LUNAR_SCIENCE_EXECUTION",
+      "title": "Lunar science opportunity to confirmed observation",
+      "classification": "MISSION_SCIENCE_EXECUTION",
+      "anomaly": false,
+      "primary_lenses": [
+        "FLIGHT",
+        "FDO",
+        "FAO",
+        "SCIENCE"
+      ],
+      "anchor_event_ids": [
+        "A2_EARTHSET",
+        "A2_PERICYNTHION",
+        "A2_EARTHRISE",
+        "A2_TOTAL_SOLAR_ECLIPSE"
+      ],
+      "stages": {
+        "detection": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "Preflight targeting identified science opportunities tied to lunar-flyby geometry.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "evidence": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "Postflight imagery, audio, crew annotations, and LRO context confirm observations of Earthset, Earthrise, terminator terrain, eclipse phenomena, and impact flashes.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "constraint": {
+          "status": "MISSIONLAB_SYNTHESIS",
+          "summary": "Observation opportunities were bounded by flight geometry, illumination, crew timeline, and available viewing conditions.",
+          "evidence_class": "MISSIONLAB_OPERATIONAL_SYNTHESIS",
+          "public_detail_complete": false
+        },
+        "options": {
+          "status": "NOT_PUBLICLY_ENUMERATED",
+          "summary": "The complete real-time science prioritization trade space is not reconstructed from public data.",
+          "evidence_class": "PUBLIC_EVIDENCE_BOUNDARY",
+          "public_detail_complete": false
+        },
+        "decision": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "The mission executed the public lunar observation program.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "action": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "Crew captured imagery, provided spoken observations, and produced annotations during the lunar sequence.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "outcome": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "Postflight science products document confirmed lunar observations, five impact flashes, coronal structure, zodiacal light, and selected terrain interpretations.",
+          "evidence_class": "NASA_POSTFLIGHT_REPORTED",
+          "public_detail_complete": true
+        }
+      },
+      "guardrails": [
+        "TARGETING_OPPORTUNITY != CONFIRMED_OBSERVATION",
+        "IMAGE_TIME != CREW_REMARK_TIME",
+        "LRO_CONTEXT != ARTEMIS_II_IMAGE"
+      ]
+    },
+    {
+      "thread_id": "RETURN_LINK_ANOMALY_RTC2",
+      "title": "Unexpected return-link loss, recovery, and RTC2 continuation",
+      "classification": "COMMUNICATIONS_ANOMALY_WITH_MISSION_CONTINUATION",
+      "anomaly": true,
+      "primary_lenses": [
+        "FLIGHT",
+        "FDO",
+        "FAO",
+        "COMM",
+        "ENGINEERING_SUPPORT"
+      ],
+      "anchor_event_ids": [
+        "A2_RETURN_LINK_LOSS",
+        "A2_RTC2"
+      ],
+      "stages": {
+        "detection": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "NASA reported an unexpected return-link communications loss before RTC2.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "evidence": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "Public reporting establishes the communications interruption, recovery, resumed burn preparation, and subsequent RTC2 execution.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "constraint": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "The communications condition had to be resolved sufficiently for nominal mission operations and burn preparation to continue.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "options": {
+          "status": "NOT_PUBLICLY_ENUMERATED",
+          "summary": "The complete fault-recovery option set and internal console discussion are not public.",
+          "evidence_class": "PUBLIC_EVIDENCE_BOUNDARY",
+          "public_detail_complete": false
+        },
+        "decision": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "Following communications recovery, burn preparation resumed.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "action": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "RTC2 executed at 2026-04-10T02:53:00Z.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "outcome": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "RTC2 was completed successfully and the return mission continued.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        }
+      },
+      "guardrails": [
+        "TEMPORAL_SEQUENCE != CAUSATION",
+        "RETURN_LINK_LOSS != PROVEN_COMPLETE_TWO_WAY_OUTAGE",
+        "COMMUNICATIONS_ANOMALY != PROPULSION_ANOMALY",
+        "RTC2_SUCCESS != PUBLIC_ROOT_CAUSE"
+      ]
+    },
+    {
+      "thread_id": "TPS_RISK_MITIGATION_CLOSURE",
+      "title": "Artemis I heat-shield finding to Artemis II mitigation and postflight outcome",
+      "classification": "ENGINEERING_RISK_MITIGATION_THREAD",
+      "anomaly": false,
+      "primary_lenses": [
+        "FLIGHT",
+        "FDO",
+        "ENGINEERING_SUPPORT"
+      ],
+      "anchor_event_ids": [
+        "A2_ENTRY_INTERFACE",
+        "A2_SPLASHDOWN"
+      ],
+      "stages": {
+        "detection": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "Artemis I postflight inspection identified unexpected Avcoat char liberation.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "evidence": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "NASA's investigation linked low-permeability Avcoat, internal gas-pressure buildup, cracking, and the Artemis I skip-entry thermal history.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "constraint": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "The Artemis II heat shield was already integrated, requiring a flight-rationale and mitigation approach compatible with the existing spacecraft.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "options": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "NASA publicly described the engineering principle that the material or the entry environment could be changed to control the known mechanism.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "decision": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "For Artemis II, NASA changed the entry environment by flying a modified trajectory without the Artemis I-style skip entry.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "action": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "Artemis II executed the modified entry profile and completed atmospheric entry.",
+          "evidence_class": "NASA_REPORTED_PLUS_MISSIONLAB_ENTRY_CONTEXT",
+          "public_detail_complete": true
+        },
+        "outcome": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "Initial postflight assessment reported expected TPS performance and significantly reduced char loss. NASA technical reporting later described the Artemis II entry as successful.",
+          "evidence_class": "NASA_POSTFLIGHT_REPORTED",
+          "public_detail_complete": true
+        }
+      },
+      "guardrails": [
+        "REDUCED_CHAR_LOSS != ZERO_CHAR_LOSS",
+        "INITIAL_POSTFLIGHT_ASSESSMENT != COMPLETE_MATERIAL_DATASET",
+        "MISSIONLAB_HEATING_MODEL != TPS_SENSOR_TELEMETRY"
+      ]
+    },
+    {
+      "thread_id": "FINAL_CORRECTION_ENTRY_HANDOFF",
+      "title": "Final return correction to Entry Interface",
+      "classification": "NOMINAL_DYNAMIC_PHASE_HANDOFF",
+      "anomaly": false,
+      "primary_lenses": [
+        "FLIGHT",
+        "FDO",
+        "FAO",
+        "ENGINEERING_SUPPORT"
+      ],
+      "anchor_event_ids": [
+        "A2_RTC3",
+        "A2_ENTRY_INTERFACE"
+      ],
+      "stages": {
+        "detection": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "The return trajectory entered its final publicly reported correction opportunity before entry.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "evidence": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "RTC3 occurred at 18:53 UTC and Entry Interface at 23:53 UTC.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "constraint": {
+          "status": "MISSIONLAB_SYNTHESIS",
+          "summary": "The final return state had to support the required transition into the entry sequence.",
+          "evidence_class": "MISSIONLAB_OPERATIONAL_SYNTHESIS",
+          "public_detail_complete": false
+        },
+        "options": {
+          "status": "NOT_PUBLICLY_ENUMERATED",
+          "summary": "Public evidence does not expose the complete targeting trade space, covariance, or final guidance decision thresholds.",
+          "evidence_class": "PUBLIC_EVIDENCE_BOUNDARY",
+          "public_detail_complete": false
+        },
+        "decision": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "RTC3 was executed as the final publicly reported trajectory correction before entry.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "action": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "The spacecraft proceeded through entry preparation and reached Entry Interface five hours later.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "outcome": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "The mission transitioned from return trajectory management into atmospheric entry.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        }
+      },
+      "guardrails": [
+        "FINAL_PUBLIC_CORRECTION != FINAL_ONBOARD_NAVIGATION_STATE",
+        "PUBLIC_HANDOFF != ENTRY_GUIDANCE_LAW"
+      ]
+    },
+    {
+      "thread_id": "ENTRY_BLACKOUT_REACQUISITION",
+      "title": "Planned entry plasma blackout and communications reacquisition",
+      "classification": "EXPECTED_ENTRY_COMMUNICATIONS_CONSTRAINT",
+      "anomaly": false,
+      "primary_lenses": [
+        "FLIGHT",
+        "FDO",
+        "EECOM",
+        "COMM",
+        "ENGINEERING_SUPPORT"
+      ],
+      "anchor_event_ids": [
+        "A2_ENTRY_INTERFACE",
+        "A2_ENTRY_BLACKOUT",
+        "A2_ENTRY_REACQUISITION"
+      ],
+      "stages": {
+        "detection": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "NASA expected communications loss shortly after Entry Interface as plasma developed around Orion.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "evidence": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "The public sequence reports Entry Interface, planned blackout, and communications reacquisition.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "constraint": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "The ionized plasma environment temporarily obstructed normal communications during atmospheric entry.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "options": {
+          "status": "NOT_APPLICABLE",
+          "summary": "The blackout is treated as an expected entry constraint rather than an unexpected fault requiring a reconstructed response tree.",
+          "evidence_class": "MISSIONLAB_CLASSIFICATION",
+          "public_detail_complete": true
+        },
+        "decision": {
+          "status": "MISSIONLAB_SYNTHESIS",
+          "summary": "The entry sequence proceeded through the expected blackout window.",
+          "evidence_class": "MISSIONLAB_OPERATIONAL_SYNTHESIS",
+          "public_detail_complete": false
+        },
+        "action": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "NASA later reported communications reestablished at the public 00:00 UTC minute.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "outcome": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "Contact was restored before the publicly reported parachute deployment sequence.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        }
+      },
+      "guardrails": [
+        "PLANNED_ENTRY_BLACKOUT != COMMUNICATIONS_ANOMALY",
+        "PUBLIC_REACQUISITION_MINUTE != EXACT_BLACKOUT_END_SECOND"
+      ]
+    },
+    {
+      "thread_id": "DESCENT_SPLASHDOWN_RECOVERY",
+      "title": "Parachute descent, splashdown, and recovery transition",
+      "classification": "NOMINAL_RETURN_AND_RECOVERY_SEQUENCE",
+      "anomaly": false,
+      "primary_lenses": [
+        "FLIGHT",
+        "FDO",
+        "FAO",
+        "EECOM",
+        "ENGINEERING_SUPPORT"
+      ],
+      "anchor_event_ids": [
+        "A2_DROGUE_DEPLOYMENT",
+        "A2_MAIN_DEPLOYMENT",
+        "A2_SPLASHDOWN"
+      ],
+      "stages": {
+        "detection": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "Following entry and communications reacquisition, Orion entered the publicly reported parachute descent sequence.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "evidence": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "NASA reported drogue deployment, all three main parachutes, splashdown, crew extraction, and spacecraft recovery.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "constraint": {
+          "status": "MISSIONLAB_SYNTHESIS",
+          "summary": "The sequence had to transition safely from atmospheric flight to water landing and maritime recovery.",
+          "evidence_class": "MISSIONLAB_OPERATIONAL_SYNTHESIS",
+          "public_detail_complete": false
+        },
+        "options": {
+          "status": "NOT_PUBLICLY_ENUMERATED",
+          "summary": "MissionLab does not reconstruct private recovery-team contingency decision trees or unreported parachute-response logic.",
+          "evidence_class": "PUBLIC_EVIDENCE_BOUNDARY",
+          "public_detail_complete": false
+        },
+        "decision": {
+          "status": "MISSIONLAB_SYNTHESIS",
+          "summary": "The public record shows the nominal descent and recovery sequence proceeding to completion.",
+          "evidence_class": "MISSIONLAB_OPERATIONAL_SYNTHESIS",
+          "public_detail_complete": false
+        },
+        "action": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "Drogues deployed, mains deployed, Orion splashed down, recovery forces approached, crew were extracted, and Orion was recovered.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        },
+        "outcome": {
+          "status": "PUBLICLY_ESTABLISHED",
+          "summary": "The crew and spacecraft were recovered, closing the flight phase and opening detailed postflight engineering analysis.",
+          "evidence_class": "NASA_REPORTED",
+          "public_detail_complete": true
+        }
+      },
+      "guardrails": [
+        "PARACHUTE_ARCHITECTURE != INDIVIDUAL_PARACHUTE_TELEMETRY",
+        "PUBLIC_RECOVERY_SEQUENCE != PRIVATE_RECOVERY_DECISION_LOG"
+      ]
+    }
+  ],
+  "decision_maturity": {
+    "OUTBOUND_TRAJECTORY_ADAPTATION": {
+      "publicly_established_stages": 5,
+      "missionlab_synthesis_stages": 1,
+      "not_publicly_enumerated_stages": 1,
+      "not_applicable_stages": 0,
+      "total_stages": 7,
+      "complete_private_decision_history_claimed": false
+    },
+    "FD1_UWMS_FAULT_RECOVERY": {
+      "publicly_established_stages": 5,
+      "missionlab_synthesis_stages": 1,
+      "not_publicly_enumerated_stages": 1,
+      "not_applicable_stages": 0,
+      "total_stages": 7,
+      "complete_private_decision_history_claimed": false
+    },
+    "FD4_WASTEWATER_VENT_RESPONSE": {
+      "publicly_established_stages": 6,
+      "missionlab_synthesis_stages": 0,
+      "not_publicly_enumerated_stages": 1,
+      "not_applicable_stages": 0,
+      "total_stages": 7,
+      "complete_private_decision_history_claimed": false
+    },
+    "LUNAR_COMMUNICATIONS_CONSTRAINT": {
+      "publicly_established_stages": 5,
+      "missionlab_synthesis_stages": 1,
+      "not_publicly_enumerated_stages": 0,
+      "not_applicable_stages": 1,
+      "total_stages": 7,
+      "complete_private_decision_history_claimed": false
+    },
+    "LUNAR_SCIENCE_EXECUTION": {
+      "publicly_established_stages": 5,
+      "missionlab_synthesis_stages": 1,
+      "not_publicly_enumerated_stages": 1,
+      "not_applicable_stages": 0,
+      "total_stages": 7,
+      "complete_private_decision_history_claimed": false
+    },
+    "RETURN_LINK_ANOMALY_RTC2": {
+      "publicly_established_stages": 6,
+      "missionlab_synthesis_stages": 0,
+      "not_publicly_enumerated_stages": 1,
+      "not_applicable_stages": 0,
+      "total_stages": 7,
+      "complete_private_decision_history_claimed": false
+    },
+    "TPS_RISK_MITIGATION_CLOSURE": {
+      "publicly_established_stages": 7,
+      "missionlab_synthesis_stages": 0,
+      "not_publicly_enumerated_stages": 0,
+      "not_applicable_stages": 0,
+      "total_stages": 7,
+      "complete_private_decision_history_claimed": false
+    },
+    "FINAL_CORRECTION_ENTRY_HANDOFF": {
+      "publicly_established_stages": 5,
+      "missionlab_synthesis_stages": 1,
+      "not_publicly_enumerated_stages": 1,
+      "not_applicable_stages": 0,
+      "total_stages": 7,
+      "complete_private_decision_history_claimed": false
+    },
+    "ENTRY_BLACKOUT_REACQUISITION": {
+      "publicly_established_stages": 5,
+      "missionlab_synthesis_stages": 1,
+      "not_publicly_enumerated_stages": 0,
+      "not_applicable_stages": 1,
+      "total_stages": 7,
+      "complete_private_decision_history_claimed": false
+    },
+    "DESCENT_SPLASHDOWN_RECOVERY": {
+      "publicly_established_stages": 4,
+      "missionlab_synthesis_stages": 2,
+      "not_publicly_enumerated_stages": 1,
+      "not_applicable_stages": 0,
+      "total_stages": 7,
+      "complete_private_decision_history_claimed": false
+    }
+  },
+  "postflight_engineering_timeline": [
+    {
+      "order": 1,
+      "record_id": "POSTFLIGHT_RECOVERY_TRANSITION",
+      "date": "2026-04-11",
+      "date_precision": "MISSION_RETURN_DATE",
+      "category": "SPACECRAFT_RECOVERY",
+      "status": "COMPLETE",
+      "summary": "Orion recovery transitioned the mission from flight operations into spacecraft inspection and postflight engineering analysis.",
+      "source_ids": [],
+      "open_issue": false
+    },
+    {
+      "order": 2,
+      "record_id": "POSTFLIGHT_INITIAL_ORION_ASSESSMENT",
+      "date": "2026-04-20",
+      "date_precision": "PUBLICATION_DATE",
+      "category": "ORION_POSTFLIGHT_ASSESSMENT",
+      "status": "INITIAL_ASSESSMENT",
+      "summary": "NASA reported that initial Orion thermal-protection assessments found expected performance and significantly reduced Artemis I-type char-loss behavior.",
+      "source_ids": [
+        "NASA_INITIAL_POSTFLIGHT_ASSESSMENT_2026_04_20"
+      ],
+      "open_issue": false
+    },
+    {
+      "order": 3,
+      "record_id": "POSTFLIGHT_URINE_VENT_INVESTIGATION",
+      "date": "2026-04-20",
+      "date_precision": "PUBLICATION_DATE",
+      "category": "WASTE_MANAGEMENT_INVESTIGATION",
+      "status": "OPEN_IN_CURATED_PUBLIC_EVIDENCE",
+      "summary": "NASA reported hardware assessment and data gathering were continuing to identify the urine vent-line root cause and support corrective action for a future mission.",
+      "source_ids": [
+        "NASA_INITIAL_POSTFLIGHT_ASSESSMENT_2026_04_20"
+      ],
+      "open_issue": true
+    },
+    {
+      "order": 4,
+      "record_id": "POSTFLIGHT_MISSION_FAULT_MANAGEMENT_ANALYSIS",
+      "date": "2026-04-21",
+      "date_precision": "PUBLICATION_DATE",
+      "category": "MISSION_AND_FAULT_MANAGEMENT",
+      "status": "POSTFLIGHT_ANALYSIS_ONGOING",
+      "summary": "NASA Ames reported continued postflight analysis of Mission and Fault Management logic performance during Artemis II.",
+      "source_ids": [
+        "NASA_AMES_ARTEMIS_II_POSTFLIGHT_ANALYSIS_2026_04_21"
+      ],
+      "open_issue": true
+    },
+    {
+      "order": 5,
+      "record_id": "POSTFLIGHT_TPS_ENGINEERING_KNOWLEDGE_UPDATE",
+      "date": "2026-09-24",
+      "date_precision": "NASA_PAGE_UPDATE_DATE",
+      "category": "THERMAL_PROTECTION_ENGINEERING",
+      "status": "ENGINEERING_KNOWLEDGE_INTEGRATED",
+      "summary": "NASA's updated Orion testing reference linked heat-shield permeability knowledge and Artemis II mitigation experience to future heat-shield manufacturing improvements.",
+      "source_ids": [
+        "NASA_ORION_TESTING_UPDATED_2026_09_24",
+        "NASA_NTRS_ARTEMIS_II_HEATSHIELD_SUCCESS_2026"
+      ],
+      "open_issue": false
+    },
+    {
+      "order": 6,
+      "record_id": "POSTFLIGHT_LUNAR_SCIENCE_RELEASE",
+      "date": "2026-10-07",
+      "date_precision": "PUBLICATION_DATE",
+      "category": "LUNAR_SCIENCE_POSTFLIGHT",
+      "status": "PRELIMINARY_SCIENCE_RESULTS_RELEASED",
+      "summary": "NASA released the preliminary Artemis II lunar-science results and archive, resolving selected early observations including the five-flash postflight result and coronal / zodiacal-light interpretation.",
+      "source_ids": [
+        "NASA_ARTEMIS_II_PRELIMINARY_LUNAR_SCIENCE_2026_10_07"
+      ],
+      "open_issue": false
+    }
+  ],
+  "postflight_open_issue_registry": [
+    {
+      "issue_id": "URINE_VENT_LINE_ROOT_CAUSE",
+      "status": "OPEN_IN_CURATED_PUBLIC_EVIDENCE",
+      "publicly_confirmed_root_cause": false,
+      "latest_curated_public_state": "NASA reported hardware assessment and data gathering in support of root-cause identification and future corrective action."
+    },
+    {
+      "issue_id": "MISSION_AND_FAULT_MANAGEMENT_POSTFLIGHT_ANALYSIS",
+      "status": "ANALYSIS_REPORTED_ONGOING",
+      "publicly_confirmed_final_result": false,
+      "latest_curated_public_state": "NASA Ames publicly described postflight performance analysis as ongoing."
+    }
+  ],
+  "phase7_integration_policy": {
+    "decision_thread_requires_seven_stage_schema": true,
+    "public_evidence_and_missionlab_synthesis_separated": true,
+    "private_console_dialogue_reconstructed": false,
+    "private_option_tree_reconstructed": false,
+    "specific_controller_decision_authority_inferred": false,
+    "unknown_root_cause_promoted_to_confirmed": false,
+    "expected_constraint_promoted_to_anomaly": false,
+    "temporal_sequence_promoted_to_causation": false,
+    "postflight_open_investigations_forced_closed": false
+  },
+  "critical_non_equivalences": [
+    {
+      "left": "MISSIONLAB_DECISION_THREAD",
+      "right": "NASA_PRIVATE_CONSOLE_TRANSCRIPT",
+      "equivalent": false
+    },
+    {
+      "left": "PUBLIC_SEQUENCE",
+      "right": "COMPLETE_INTERNAL_DECISION_LOGIC",
+      "equivalent": false
+    },
+    {
+      "left": "PUBLIC_ACTION",
+      "right": "COMPLETE_OPTION_SET",
+      "equivalent": false
+    },
+    {
+      "left": "DISCIPLINE_RELEVANCE",
+      "right": "DECISION_AUTHORITY",
+      "equivalent": false
+    },
+    {
+      "left": "TEMPORAL_SEQUENCE",
+      "right": "CAUSATION",
+      "equivalent": false
+    },
+    {
+      "left": "TROUBLESHOOTING_ACTION",
+      "right": "CONFIRMED_ROOT_CAUSE",
+      "equivalent": false
+    },
+    {
+      "left": "EXPECTED_OPERATIONAL_CONSTRAINT",
+      "right": "ANOMALY",
+      "equivalent": false
+    },
+    {
+      "left": "INITIAL_POSTFLIGHT_ASSESSMENT",
+      "right": "FINAL_ENGINEERING_DATASET",
+      "equivalent": false
+    },
+    {
+      "left": "OPEN_PUBLIC_INVESTIGATION",
+      "right": "RESOLVED_ROOT_CAUSE",
+      "equivalent": false
+    }
+  ],
+  "roadmap_assessment": {
+    "flight_lens": "COMPLETE",
+    "fdo_lens": "COMPLETE",
+    "fao_lens": "COMPLETE",
+    "eecom_lens": "COMPLETE",
+    "comm_lens": "COMPLETE",
+    "science_lens": "COMPLETE",
+    "engineering_support_lens": "COMPLETE",
+    "shared_timeline_with_discipline_prioritization": "COMPLETE",
+    "decision_threads_detection_to_outcome": "COMPLETE",
+    "postflight_engineering_timeline": "COMPLETE",
+    "phase7_overall": "COMPLETE_RELATIVE_TO_DEFENSIBLE_PUBLIC_EVIDENCE"
+  },
+  "outputs": {
+    "reference_json": "data/reference/artemis_ii_decision_threads.json",
+    "processed_json": "data/processed/mission_control/artemis_ii_decision_threads.json",
+    "decision_thread_csv": "data/processed/mission_control/artemis_ii_decision_threads.csv",
+    "postflight_timeline_csv": "data/processed/mission_control/artemis_ii_postflight_engineering_timeline.csv",
+    "figure": "docs/assets/mission_control/phase7b_decision_thread_matrix.svg"
+  }
+}
