@@ -43294,3 +43294,1374 @@ MissionLab-derived engineering synthesis
 The goal is to produce the roadmap's thermal-protection/material-science explainer without inventing proprietary Avcoat properties or extending the existing Sutton-Graves model beyond its defensible quantitative boundary.
 
 ---
+
+---
+
+# Phase 3C.2 — Artemis II Thermal Protection and Materials Engineering Synthesis
+
+## Goal
+
+Complete the Phase 3 thermal-protection and materials-science requirement by connecting the validated Artemis II entry environment, Orion Avcoat architecture, Artemis I material-response investigation, Artemis II risk mitigation, and Artemis II postflight evidence into one engineering synthesis.
+
+Phase 3C.2 explicitly separates:
+
+```text
+MissionLab quantitative external aerothermodynamics
+
+NASA-reported internal material physics
+
+NASA-reported flight observations
+
+MissionLab-derived engineering synthesis
+```
+
+The purpose is not to create an unavailable Avcoat material-response model.
+
+The purpose is to explain the full engineering chain while maintaining a strict quantitative boundary at the external entry environment.
+
+---
+
+# Dependencies
+
+Phase 3C.2 depends on:
+
+```text
+Phase 2E.4
+Sutton-Graves Convective Heating Reconstruction
+
+Phase 2F.1
+Orion TPS Heritage Evidence
+
+Phase 2F.4
+TPS Physics Boundary
+
+Phase 3C.1
+Artemis I → Artemis II TPS Heritage-to-Flight Risk Closure
+```
+
+Dependency products:
+
+```text
+data/reference/artemis_ii_convective_heating_model.json
+
+data/reference/artemis_tps_evidence.json
+
+data/reference/artemis_tps_physics_boundary.json
+
+data/processed/thermal/artemis_tps_risk_closure.json
+```
+
+Dependency validation:
+
+```text
+PASS
+```
+
+---
+
+# Analysis
+
+Created:
+
+```text
+scripts/analysis/analyze_tps_materials_synthesis.py
+```
+
+Generated:
+
+```text
+data/processed/thermal/artemis_tps_materials_synthesis.json
+
+data/processed/thermal/artemis_tps_materials_synthesis_stages.csv
+```
+
+Documentation figure:
+
+```text
+docs/assets/thermal/phase3c2_tps_materials_synthesis.svg
+```
+
+---
+
+# Synthesis Structure
+
+Phase 3C.2 reconstructs:
+
+```text
+9 engineering stages
+
+7 engineering relations
+```
+
+The nine stages are:
+
+```text
+1. Orion heat-shield architecture
+
+2. external entry environment
+
+3. ablative surface response
+
+4. pyrolysis and gas generation
+
+5. permeability and gas transport
+
+6. internal gas-pressure response
+
+7. cracking and char liberation
+
+8. trajectory-based risk mitigation
+
+9. Artemis II flight evidence
+```
+
+---
+
+# Stage 1 — Orion Heat-Shield Architecture
+
+Material:
+
+```text
+Avcoat
+```
+
+Validated architecture context:
+
+```text
+heat-shield diameter
+16.5 ft
+
+Avcoat blocks
+186
+```
+
+Primary engineering role:
+
+```text
+ABLATIVE THERMAL PROTECTION
+```
+
+The heat shield protects the Orion crew module from the energy associated with lunar-return atmospheric entry.
+
+The Avcoat material is designed to undergo controlled ablative response.
+
+Therefore:
+
+```text
+EXPECTED MATERIAL LOSS THROUGH ABLATION
+=
+NORMAL TPS FUNCTION
+```
+
+while:
+
+```text
+UNEXPECTED CHAR LIBERATION
+!=
+NORMAL ABLATION
+```
+
+This distinction is fundamental to interpreting the Artemis I heat-shield investigation.
+
+---
+
+# Stage 2 — External Entry Environment
+
+MissionLab quantitatively reconstructs:
+
+```text
+trajectory
+
+Earth-relative flow conditions
+
+atmospheric density
+
+Mach
+
+Knudsen number
+
+external convective heating
+
+integrated external heat load
+```
+
+The external heating model is based on:
+
+```text
+Sutton-Graves stagnation-point convective heating correlation
+```
+
+Provenance:
+
+```text
+MODEL_DERIVED
+```
+
+The result is an engineering estimate of:
+
+```text
+external stagnation-point convective heat flux
+```
+
+It is not:
+
+```text
+measured Artemis II heat flux
+```
+
+and is not:
+
+```text
+an internal Avcoat material-response solution
+```
+
+---
+
+# Sutton-Graves Model Boundary
+
+The Phase 2E.4 heating model explicitly preserves:
+
+```text
+cold-wall approximation
+
+radiative heating not included
+
+finite wall temperature not modeled
+
+Avcoat ablation not modeled
+
+pyrolysis not modeled
+
+blowing not modeled
+
+surface recession not modeled
+
+detailed nonequilibrium chemistry not modeled
+```
+
+Therefore:
+
+```text
+MODEL-DERIVED EXTERNAL HEATING
+!=
+FLIGHT-MEASURED HEATING
+```
+
+and:
+
+```text
+EXTERNAL HEATING MODEL
+!=
+TPS MATERIAL-RESPONSE MODEL
+```
+
+---
+
+# Stage 3 — Ablative Surface Response
+
+NASA evidence establishes Avcoat as an ablative TPS material.
+
+Its thermal-protection function involves controlled material response under severe heating.
+
+Phase 3C.2 preserves that qualitative engineering behavior.
+
+MissionLab does not calculate:
+
+```text
+surface temperature
+
+wall temperature
+
+surface recession
+
+local ablation rate
+
+material mass loss
+
+char thickness
+```
+
+Therefore:
+
+```text
+can_missionlab_calculate
+FALSE
+```
+
+for the ablative material-response stage.
+
+---
+
+# Normal Ablation / Abnormal Char-Loss Boundary
+
+Phase 3C.2 explicitly distinguishes:
+
+```text
+expected controlled ablation
+```
+
+from:
+
+```text
+unexpected Artemis I char liberation
+```
+
+Therefore:
+
+```text
+EXPECTED ABLATION
+!=
+UNEXPECTED CHAR LIBERATION
+```
+
+The Artemis I phenomenon must not be described simply as the expected operation of an ablative heat shield.
+
+---
+
+# Stage 4 — Pyrolysis and Gas Generation
+
+NASA's Artemis I investigation establishes that as Avcoat heats:
+
+```text
+material response occurs
+↓
+pyrolysis / ablation generates gases
+```
+
+The internal material state may continue evolving even as the external heating environment changes.
+
+This is important because the Artemis I mechanism cannot be represented by:
+
+```text
+peak external heat flux only
+```
+
+The relevant behavior depends on:
+
+```text
+thermal history
+
+internal energy
+
+gas generation
+
+gas transport
+
+material permeability
+```
+
+MissionLab preserves this physics as:
+
+```text
+NASA_REPORTED_MECHANISM
+```
+
+MissionLab does not calculate:
+
+```text
+pyrolysis rate
+
+gas-generation rate
+
+internal stored thermal energy
+
+chemical decomposition rate
+```
+
+---
+
+# Stage 5 — Permeability and Gas Transport
+
+NASA identified:
+
+```text
+low Avcoat permeability
+```
+
+as a central factor in the Artemis I root-cause mechanism.
+
+The engineering sequence is:
+
+```text
+gases generated internally
+↓
+gases attempt to escape through material
+↓
+low permeability restricts venting
+```
+
+NASA also reported that more permeable regions did not exhibit the same behavior.
+
+Therefore:
+
+```text
+LOW PERMEABILITY
+→
+RESTRICTED GAS TRANSPORT
+```
+
+is preserved as NASA-reported material physics.
+
+MissionLab does not possess:
+
+```text
+public flight permeability field
+
+sample-by-sample permeability distribution
+
+gas-transport coefficients
+
+porous-flow material model
+```
+
+Therefore:
+
+```text
+permeability field calculated by MissionLab
+FALSE
+```
+
+---
+
+# Stage 6 — Internal Gas-Pressure Response
+
+NASA's root-cause investigation established:
+
+```text
+restricted gas escape
+↓
+internal gas-pressure buildup
+```
+
+The internal pressure described here is a material-response quantity.
+
+It is not the same quantity as:
+
+```text
+external static pressure
+
+external dynamic pressure
+
+aerodynamic pressure reconstructed from trajectory
+```
+
+Therefore:
+
+```text
+EXTERNAL DYNAMIC PRESSURE
+!=
+AVCOAT INTERNAL GAS PRESSURE
+```
+
+MissionLab does not calculate:
+
+```text
+pore pressure
+
+internal gas pressure
+
+pressure gradients inside Avcoat
+```
+
+---
+
+# Stage 7 — Cracking and Char Liberation
+
+NASA's Artemis I root-cause chain continues:
+
+```text
+internal gas-pressure buildup
+↓
+cracking
+↓
+charred material liberation
+```
+
+Phase 3C.2 preserves this as:
+
+```text
+NASA_REPORTED_CAUSAL_OUTCOME
+```
+
+MissionLab does not calculate:
+
+```text
+stress
+
+strain
+
+fracture mechanics
+
+crack initiation
+
+crack propagation
+
+crack probability
+
+char-loss area
+
+char-loss mass
+
+recession depth
+```
+
+Therefore:
+
+```text
+OBSERVED / NASA-REPORTED MATERIAL RESPONSE
+!=
+MISSIONLAB DAMAGE PREDICTION
+```
+
+---
+
+# Stage 8 — Trajectory-Based Risk Mitigation
+
+Phase 3C.1 established the Artemis II mitigation chain.
+
+NASA retained the already-integrated Artemis II heat shield and changed the entry environment.
+
+The mitigation included flying:
+
+```text
+MODIFIED TRAJECTORY WITHOUT ARTEMIS I-STYLE SKIP ENTRY
+```
+
+Therefore:
+
+```text
+Artemis II entry environment modified
+TRUE
+```
+
+```text
+Artemis I-style skip entry flown
+FALSE
+```
+
+```text
+modified no-skip profile flown
+TRUE
+```
+
+The engineering strategy reduced exposure to conditions associated with the Artemis I cracking mechanism.
+
+---
+
+# Thermal-History Risk Management
+
+The mitigation connects:
+
+```text
+entry trajectory
+↓
+external thermal history
+↓
+material-response environment
+```
+
+without implying that trajectory alone constitutes the material model.
+
+Therefore:
+
+```text
+TRAJECTORY MITIGATION
+!=
+COMPLETE MATERIAL-RESPONSE MODEL
+```
+
+The public evidence supports the mitigation strategy.
+
+It does not expose:
+
+```text
+complete internal trajectory optimization
+
+all entry guidance constraints
+
+guidance gains
+
+private TPS limits
+
+flight-rule logic
+```
+
+---
+
+# Stage 9 — Artemis II Flight Evidence
+
+NASA's initial Artemis II postflight assessment reported:
+
+```text
+TPS performed as expected
+```
+
+and:
+
+```text
+no unusual TPS conditions identified initially
+```
+
+NASA also reported that Artemis I-type char loss was:
+
+```text
+significantly reduced
+```
+
+in:
+
+```text
+quantity
+
+and
+
+size
+```
+
+NASA further reported consistency with:
+
+```text
+post-Artemis I arc-jet testing
+```
+
+Therefore the flight record supports:
+
+```text
+INITIAL FLIGHT MITIGATION EFFECTIVENESS
+```
+
+---
+
+# Quantitative Postflight Boundary
+
+NASA's public description does not supply a calibrated numerical flight damage map.
+
+Therefore MissionLab does not calculate:
+
+```text
+percent char-loss reduction
+
+lost char mass
+
+lost char area
+
+local recession map
+
+crack-density reduction
+
+failure probability
+```
+
+Thus:
+
+```text
+SIGNIFICANTLY REDUCED
+!=
+KNOWN NUMERICAL PERCENTAGE
+```
+
+---
+
+# Artemis I Investigation Context
+
+Phase 3C.2 preserves the scale of NASA's Artemis I investigation.
+
+Instrumentation included:
+
+```text
+pressure sensors
+
+strain gauges
+
+thermocouples
+```
+
+Material campaign:
+
+```text
+approximate Avcoat samples
+200
+```
+
+Thermal test campaign:
+
+```text
+campaigns
+8
+
+individual tests
+121
+```
+
+Ground reproduction of the behavior:
+
+```text
+REPORTED
+```
+
+---
+
+# Investigation Data Boundary
+
+MissionLab does not possess the complete raw investigation dataset.
+
+It does not contain complete public time-series products for:
+
+```text
+pressure sensors
+
+strain gauges
+
+internal thermocouple depths
+
+material sample measurements
+
+full arc-jet facility instrumentation
+
+full coupled material-response model
+```
+
+Therefore:
+
+```text
+NASA INVESTIGATION EVIDENCE
+!=
+MISSIONLAB RAW MATERIAL TEST DATASET
+```
+
+and:
+
+```text
+MissionLab reproduces NASA material test campaign
+FALSE
+```
+
+---
+
+# Nine-Stage Engineering Chain
+
+Phase 3C.2 now provides:
+
+```text
+ORION HEAT-SHIELD ARCHITECTURE
+        ↓
+EXTERNAL ENTRY ENVIRONMENT
+        ↓
+ABLATIVE SURFACE RESPONSE
+        ↓
+PYROLYSIS / GAS GENERATION
+        ↓
+PERMEABILITY / GAS TRANSPORT
+        ↓
+INTERNAL GAS-PRESSURE RESPONSE
+        ↓
+CRACKING / CHAR LIBERATION
+        ↓
+TRAJECTORY-BASED RISK MITIGATION
+        ↓
+ARTEMIS II FLIGHT EVIDENCE
+```
+
+---
+
+# Seven Engineering Relations
+
+Phase 3C.2 defines seven explicit engineering relations:
+
+```text
+1.
+external flow
+→
+heating / material boundary
+```
+
+```text
+2.
+heating / material response
+→
+pyrolysis and gas generation
+```
+
+```text
+3.
+gas generation
+→
+gas transport through material
+```
+
+```text
+4.
+restricted transport
+→
+internal pressure buildup
+```
+
+```text
+5.
+internal pressure
+→
+cracking and char liberation
+```
+
+```text
+6.
+entry environment
+→
+trajectory-based risk mitigation
+```
+
+```text
+7.
+mitigation
+→
+Artemis II flight outcome
+```
+
+---
+
+# Quantitative Bridge Policy
+
+Every Phase 3C.2 engineering relation enforces:
+
+```text
+quantitative_bridge_allowed = FALSE
+```
+
+This means the synthesis may explain NASA-reported physics but may not fabricate equations linking MissionLab external quantities to unavailable internal material states.
+
+Examples:
+
+```text
+Sutton-Graves heat flux
+!=
+Avcoat surface temperature
+```
+
+```text
+external heat load
+!=
+pyrolysis rate
+```
+
+```text
+external dynamic pressure
+!=
+internal Avcoat gas pressure
+```
+
+```text
+external heating history
+!=
+crack probability
+```
+
+```text
+external heating history
+!=
+char-loss quantity
+```
+
+---
+
+# MissionLab Quantitative Frontier
+
+Validated quantitative reconstruction:
+
+```text
+trajectory / external flow
+TRUE
+
+external convective heating
+TRUE
+```
+
+Validated non-quantitative material stages:
+
+```text
+surface temperature
+FALSE
+
+internal Avcoat temperature
+FALSE
+
+pyrolysis rate
+FALSE
+
+permeability field
+FALSE
+
+internal gas pressure
+FALSE
+
+cracking / fracture
+FALSE
+
+char-loss quantity
+FALSE
+```
+
+Total quantitative internal material stages:
+
+```text
+0
+```
+
+This is intentional.
+
+It is an evidence-quality boundary rather than a missing implementation.
+
+---
+
+# Material Mechanism Summary
+
+Validated mechanism:
+
+```text
+external entry heating
+↓
+Avcoat thermal response
+↓
+pyrolysis and gas generation
+↓
+gas transport through material
+↓
+restricted venting in low-permeability regions
+↓
+internal gas-pressure buildup
+↓
+cracking
+↓
+char liberation
+```
+
+Mechanism provenance:
+
+```text
+NASA_REPORTED
+```
+
+MissionLab quantitative material model:
+
+```text
+FALSE
+```
+
+---
+
+# Engineering Boundaries
+
+Phase 3C.2 explicitly enforces:
+
+```text
+EXPECTED ABLATION
+!=
+UNEXPECTED CHAR LIBERATION
+```
+
+```text
+EXTERNAL HEAT FLUX
+!=
+SURFACE TEMPERATURE
+```
+
+```text
+EXTERNAL HEAT FLUX
+!=
+INTERNAL AVCOAT TEMPERATURE
+```
+
+```text
+EXTERNAL HEAT LOAD
+!=
+PYROLYSIS RATE
+```
+
+```text
+EXTERNAL DYNAMIC PRESSURE
+!=
+INTERNAL GAS PRESSURE
+```
+
+```text
+EXTERNAL HEAT LOAD
+!=
+CRACK PROBABILITY
+```
+
+```text
+EXTERNAL HEATING HISTORY
+!=
+CHAR-LOSS QUANTITY
+```
+
+```text
+NO-SKIP ENTRY
+!=
+NO ALTITUDE REBOUND
+```
+
+```text
+TRAJECTORY MITIGATION
+!=
+COMPLETE MATERIAL MODEL
+```
+
+```text
+SIGNIFICANTLY REDUCED
+!=
+KNOWN REDUCTION PERCENTAGE
+```
+
+```text
+INITIAL POSTFLIGHT RESULT
+!=
+FINAL MATERIAL CLOSURE
+```
+
+---
+
+# Independent Validation
+
+Created:
+
+```text
+scripts/validation/validate_tps_materials_synthesis.py
+```
+
+Validation results:
+
+```text
+Analysis identity: PASS
+
+Dependency registry: PASS
+```
+
+Materials evidence:
+
+```text
+Materials evidence set: PASS
+
+Orion heat-shield architecture: PASS
+
+Artemis I instrumentation: PASS
+
+Artemis I sample campaign: PASS
+
+Artemis I thermal testing: PASS
+```
+
+External aerothermal model:
+
+```text
+Sutton-Graves model identity: PASS
+
+External-heating interpretation limits: PASS
+```
+
+Physics boundary:
+
+```text
+TPS quantitative frontier: PASS
+
+Material-response boundary: PASS
+
+Internal material stages remain non-quantitative: PASS
+
+Forbidden material-model assertions: PASS
+```
+
+Materials synthesis:
+
+```text
+Nine-stage materials synthesis: PASS
+
+Stage ordering: PASS
+
+Stage evidence traceability: PASS
+
+Stage physics traceability: PASS
+
+Quantitative frontier enforcement: PASS
+```
+
+Engineering relations:
+
+```text
+Seven engineering relations: PASS
+
+Relation topology: PASS
+
+Unsupported quantitative bridges prohibited: PASS
+
+NASA-supported causal relations preserved: PASS
+```
+
+Summary products:
+
+```text
+Architecture summary: PASS
+
+External-model boundary summary: PASS
+
+Artemis I investigation summary: PASS
+
+Material-mechanism summary: PASS
+
+Artemis II mitigation / flight summary: PASS
+
+Engineering-boundary policy: PASS
+```
+
+Roadmap and artifact validation:
+
+```text
+Phase 3 roadmap coverage: PASS
+
+Synthesis CSV / JSON consistency: PASS
+
+Documentation figure: PASS
+```
+
+Final result:
+
+```text
+PHASE 3C.2 VALIDATION PASSED
+```
+
+---
+
+# Validated Phase 3C.2 Totals
+
+```text
+materials synthesis stages
+9
+
+engineering relations
+7
+
+quantitative internal material stages
+0
+
+approximate Artemis I Avcoat samples
+200
+
+Artemis I thermal test campaigns
+8
+
+individual Artemis I thermal tests
+121
+```
+
+---
+
+# Phase 3C Complete Reconstruction Chain
+
+Phase 3C now provides:
+
+```text
+ARTEMIS I HEAT-SHIELD ANOMALY
+        ↓
+NASA ROOT-CAUSE INVESTIGATION
+        ↓
+LOW-PERMEABILITY AVCOAT MECHANISM
+        ↓
+ENTRY THERMAL-HISTORY INTERACTION
+        ↓
+ARTEMIS II RISK MITIGATION
+        ↓
+MODIFIED NO-SKIP PROFILE FLOWN
+        ↓
+INITIAL ARTEMIS II POSTFLIGHT RESULT
+        ↓
+SIGNIFICANTLY REDUCED ARTEMIS I-TYPE CHAR LOSS
+        ↓
+NASA ARC-JET CONSISTENCY
+        ↓
+THERMAL / MATERIALS ENGINEERING SYNTHESIS
+        ↓
+STRICT QUANTITATIVE MODEL BOUNDARY
+```
+
+---
+
+# Phase 3C Status
+
+```text
+Phase 3C.1
+TPS HERITAGE-TO-FLIGHT RISK CLOSURE
+COMPLETE
+
+Phase 3C.2
+THERMAL PROTECTION / MATERIALS ENGINEERING SYNTHESIS
+COMPLETE
+
+PHASE 3C
+COMPLETE
+```
+
+---
+
+# Phase 3 Roadmap Closure Assessment
+
+The Phase 3 roadmap requires:
+
+```text
+cabin / environmental trends from released sensors
+
+toilet fault and wastewater vent decision threads
+
+change-point / anomaly analysis labeled project-derived
+
+Artemis I heat-shield root cause
+→
+Artemis II risk mitigation
+→
+postflight closure chain
+
+thermal protection / material-science explainer
+```
+
+Current implementation status:
+
+```text
+environmental sensor normalization
+COMPLETE
+
+environmental trend reconstruction
+COMPLETE
+
+environmental change-point / anomaly analysis
+COMPLETE
+
+waste-management public evidence reconstruction
+COMPLETE
+
+waste-management operational decision reconstruction
+COMPLETE
+
+waste-management cross-domain correlation
+COMPLETE
+
+TPS heritage-to-flight risk closure
+COMPLETE
+
+thermal protection / materials engineering synthesis
+COMPLETE
+```
+
+Therefore:
+
+```text
+PHASE 3A
+COMPLETE
+
+PHASE 3B
+COMPLETE
+
+PHASE 3C
+COMPLETE
+```
+
+and:
+
+```text
+PHASE 3 ROADMAP DELIVERABLES
+COMPLETE
+```
+
+---
+
+# Phase 3 Evidence Boundaries Preserved
+
+Phase 3 completion does not imply reconstruction of unavailable internal spacecraft telemetry or proprietary engineering models.
+
+The following remain intentionally unresolved or non-quantitative:
+
+```text
+complete Orion cabin atmosphere telemetry
+
+complete ECLSS telemetry
+
+internal UWMS fault codes
+
+final public waste-management root causes
+
+exact unreported waste-management UTCs
+
+complete internal Mission Control reasoning
+
+internal Avcoat temperature fields
+
+pyrolysis rates
+
+gas-generation rates
+
+permeability fields
+
+internal gas-pressure fields
+
+stress / strain fields
+
+fracture mechanics
+
+crack probabilities
+
+char-loss mass
+
+char-loss area
+
+numerical char-loss reduction percentage
+
+final sample-level Artemis II material closure
+```
+
+These boundaries are part of the project methodology.
+
+---
+
+# Phase 3 Final Status
+
+```text
+PHASE 3 — ECLSS, VEHICLE SYSTEMS, THERMAL, MATERIALS
+
+Environmental data
+COMPLETE
+
+Environmental trends
+COMPLETE
+
+Derived change-point / anomaly analysis
+COMPLETE
+
+Waste-management evidence
+COMPLETE
+
+Waste-management operational threads
+COMPLETE
+
+Waste-management cross-domain reconstruction
+COMPLETE
+
+Artemis I TPS root-cause chain
+COMPLETE
+
+Artemis II TPS mitigation chain
+COMPLETE
+
+Initial Artemis II TPS postflight closure
+COMPLETE
+
+Thermal / materials engineering explainer
+COMPLETE
+
+Evidence boundaries
+PRESERVED
+
+Independent subphase validation
+PASS
+
+PHASE 3
+COMPLETE
+```
+
+---
