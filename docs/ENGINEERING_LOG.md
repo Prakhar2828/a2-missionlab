@@ -50436,3 +50436,1292 @@ mission-clock correlation of observation windows
 ```
 
 ---
+
+---
+
+# Phase 6A — Artemis II Lunar Science Archive and Evidence Index
+
+## Goal
+
+Establish the authoritative public-evidence layer for Phase 6 before performing observation reconstruction.
+
+Phase 6A indexes:
+
+```text
+NASA lunar-science release evidence
+
+PDS crew-camera archive structure
+
+PDS Orion-camera archive structure
+
+PDS mission-audio / transcript / annotation archive structure
+
+initial public observation evidence
+
+source-evolution conflicts that must remain unresolved until stronger evidence exists
+```
+
+Phase 6A does not claim:
+
+```text
+complete download of the 800+ GB archive
+
+exact PDS product counts from NASA summary figures
+
+product-level image / transcript correlation
+
+LRO target integration
+
+complete observation reconstruction
+```
+
+Those remain Phase 6B work.
+
+---
+
+# Analysis
+
+Created:
+
+```text
+scripts/analysis/build_lunar_science_archive_index.py
+```
+
+Created independent validator:
+
+```text
+scripts/validation/validate_lunar_science_archive_index.py
+```
+
+Generated:
+
+```text
+data/reference/artemis_ii_lunar_science_archive_index.json
+
+data/processed/lunar_science/artemis_ii_lunar_science_archive_summary.json
+
+data/processed/lunar_science/artemis_ii_lunar_science_collections.csv
+
+docs/assets/lunar_science/phase6a_lunar_science_archive_index.svg
+```
+
+Dataset:
+
+```text
+phase6a_artemis_ii_lunar_science_archive_index
+```
+
+Status:
+
+```text
+PUBLIC_LUNAR_SCIENCE_ARCHIVE_INDEXED
+```
+
+---
+
+# NASA Public Lunar-Science Release
+
+Release date:
+
+```text
+2026-10-07
+```
+
+NASA public summary reports:
+
+```text
+archive volume
+>800 GB
+
+full-resolution images / video
+>11,000
+
+science audio
+8.5 hours
+```
+
+These values are preserved as public summary figures.
+
+They are not treated as exact archive product counts.
+
+Therefore:
+
+```text
+NASA RELEASE SUMMARY COUNT
+!=
+EXACT PDS PRODUCT COUNT
+```
+
+Validation:
+
+```text
+October 7 public release summary
+PASS
+
+800+ GB non-exact boundary
+PASS
+
+11,000+ image/video non-exact boundary
+PASS
+
+8.5-hour science-audio summary
+PASS
+```
+
+---
+
+# Source Registry
+
+Authoritative source records indexed:
+
+```text
+8
+```
+
+Sources include:
+
+```text
+NASA October 7 Artemis II lunar-science data release
+
+NASA Artemis II crew Moon photo annotations
+
+NASA Artemis II official Moon flyby imagery release
+
+NASA Artemis II Lunar Targeting Plan
+
+PDS Artemis II crew-camera bundle
+
+PDS Artemis II Orion-camera bundle
+
+PDS Artemis II mission-audio bundle
+
+NASA preliminary lunar-science report page
+```
+
+Validation:
+
+```text
+8-source registry
+PASS
+
+NASA source identities
+PASS
+
+PDS source identities
+PASS
+```
+
+---
+
+# PDS Bundle Registry
+
+Indexed PDS bundles:
+
+```text
+3
+```
+
+Bundles:
+
+```text
+crew_camera
+
+orion_camera
+
+mission_audio
+```
+
+Validation:
+
+```text
+3 PDS bundles
+PASS
+```
+
+---
+
+# Crew Camera Bundle
+
+PDS identifier:
+
+```text
+urn:nasa:pds:artemis2_crew_camera::1.0
+```
+
+DOI:
+
+```text
+10.17189/x52v-tb80
+```
+
+Coverage:
+
+```text
+2026-04-02T11:35:16.960Z
+through
+2026-04-09T04:28:31.990Z
+```
+
+Targets:
+
+```text
+Earth
+
+Moon
+```
+
+Indexed collections:
+
+```text
+4
+```
+
+Collections:
+
+```text
+native source imagery
+
+raw imagery
+
+processed imagery
+
+browse imagery
+```
+
+Validation:
+
+```text
+Crew-camera bundle metadata
+PASS
+
+Crew-camera 4-collection set
+PASS
+```
+
+---
+
+# Orion Camera Bundle
+
+PDS identifier:
+
+```text
+urn:nasa:pds:artemis2_orion_camera::1.0
+```
+
+DOI:
+
+```text
+10.17189/hzev-nq50
+```
+
+Coverage:
+
+```text
+2026-04-02T12:49:07.000Z
+through
+2026-04-10T08:13:18.000Z
+```
+
+Targets:
+
+```text
+Earth
+
+Moon
+```
+
+Indexed collections:
+
+```text
+3
+```
+
+Collections:
+
+```text
+raw imagery
+
+video
+
+browse imagery
+```
+
+Validation:
+
+```text
+Orion-camera bundle metadata
+PASS
+
+Orion-camera 3-collection set
+PASS
+```
+
+---
+
+# Mission Audio Bundle
+
+PDS identifier:
+
+```text
+urn:nasa:pds:artemis2_mission_audio::1.0
+```
+
+DOI:
+
+```text
+10.17189/4a29-dz64
+```
+
+Coverage:
+
+```text
+2026-04-05T05:36:35.000Z
+through
+2026-04-07T11:59:59.000Z
+```
+
+Targets:
+
+```text
+Earth
+
+Moon
+```
+
+Indexed collections:
+
+```text
+5
+```
+
+Collections:
+
+```text
+crew audio
+
+crew audio transcripts
+
+mission voice-loop audio
+
+mission voice-loop transcripts
+
+crew annotations
+```
+
+Validation:
+
+```text
+Mission-audio bundle metadata
+PASS
+
+Mission-audio 5-collection set
+PASS
+```
+
+---
+
+# PDS Collection Index
+
+Total indexed collections:
+
+```text
+12
+```
+
+Breakdown:
+
+```text
+crew camera
+4
+
+Orion camera
+3
+
+mission audio
+5
+```
+
+Output:
+
+```text
+data/processed/lunar_science/artemis_ii_lunar_science_collections.csv
+```
+
+Validation:
+
+```text
+12 PDS collections
+PASS
+
+Collection CSV schema
+PASS
+
+Collection ID uniqueness
+PASS
+```
+
+---
+
+# Archive Index Boundary
+
+Phase 6A indexes archive metadata.
+
+It does not download the complete media archive.
+
+Therefore:
+
+```text
+PDS COLLECTION INDEX
+!=
+FULL MEDIA DOWNLOAD
+```
+
+Validation:
+
+```text
+No full-media-download claim
+PASS
+```
+
+---
+
+# Initial Observation Evidence Registry
+
+Indexed public observation evidence records:
+
+```text
+5
+```
+
+Observation classes:
+
+```text
+Earth imagery
+
+terminator observation
+
+eclipse / corona observation
+
+impact-flash observation
+```
+
+Validation:
+
+```text
+5 observation evidence records
+PASS
+```
+
+---
+
+# Earthset Observation
+
+Observation ID:
+
+```text
+A2_LUNAR_EARTHSET
+```
+
+Class:
+
+```text
+EARTH_IMAGERY
+```
+
+NASA-reported time:
+
+```text
+2026-04-06T22:41:00Z
+```
+
+Timing precision:
+
+```text
+MINUTE
+```
+
+Reported image ID:
+
+```text
+art002e009288
+```
+
+Interpretation:
+
+```text
+Earthset behind the lunar limb during the far-side flyby
+```
+
+Evidence state:
+
+```text
+NASA_REPORTED
+```
+
+Validation:
+
+```text
+Earthset evidence
+PASS
+```
+
+---
+
+# Earthrise Observation
+
+Observation ID:
+
+```text
+A2_LUNAR_EARTHRISE
+```
+
+Class:
+
+```text
+EARTH_IMAGERY
+```
+
+NASA-reported time:
+
+```text
+2026-04-06T23:22:00Z
+```
+
+Timing precision:
+
+```text
+MINUTE
+```
+
+Reported image ID:
+
+```text
+art002e021278
+```
+
+Interpretation:
+
+```text
+Earthrise photographed through an Orion spacecraft window
+```
+
+Evidence state:
+
+```text
+NASA_REPORTED
+```
+
+Validation:
+
+```text
+Earthrise evidence
+PASS
+```
+
+---
+
+# Terminator / Vavilov Observation
+
+Observation ID:
+
+```text
+A2_LUNAR_TERMINATOR_VAVILOV
+```
+
+Class:
+
+```text
+TERMINATOR_OBSERVATION
+```
+
+Target context:
+
+```text
+Vavilov Crater / Hertzsprung basin region
+```
+
+Reported date:
+
+```text
+2026-04-06
+```
+
+Exact UTC in curated source:
+
+```text
+NONE
+```
+
+Timing classification:
+
+```text
+DATE_ONLY_IN_CURATED_SOURCE
+```
+
+Reported image ID:
+
+```text
+art002e009282
+```
+
+Evidence state:
+
+```text
+NASA_REPORTED
+```
+
+MissionLab does not invent an exact timestamp.
+
+Validation:
+
+```text
+Terminator / Vavilov evidence
+PASS
+```
+
+---
+
+# Solar Eclipse Observation
+
+Observation ID:
+
+```text
+A2_LUNAR_SOLAR_ECLIPSE
+```
+
+Class:
+
+```text
+ECLIPSE_CORONA_OBSERVATION
+```
+
+Reported date:
+
+```text
+2026-04-06
+```
+
+Exact public start / stop times in the curated evidence:
+
+```text
+NONE
+```
+
+Reported totality duration:
+
+```text
+nearly 54 minutes
+```
+
+Reported image ID:
+
+```text
+art002e009301
+```
+
+Evidence state:
+
+```text
+NASA_REPORTED
+```
+
+NASA reported that the visible halo was under investigation as:
+
+```text
+solar corona
+
+zodiacal light
+
+or a combination
+```
+
+Therefore:
+
+```text
+VISIBLE ECLIPSE HALO
+!=
+CONFIRMED SOLAR CORONA ONLY
+```
+
+Validation:
+
+```text
+Solar eclipse evidence
+PASS
+
+Eclipse-halo / corona-only boundary
+PASS
+```
+
+---
+
+# Impact-Flash Observation Evidence
+
+Observation ID:
+
+```text
+A2_LUNAR_IMPACT_FLASH_REPORT
+```
+
+Class:
+
+```text
+IMPACT_FLASH_OBSERVATION
+```
+
+Target:
+
+```text
+lunar night side
+```
+
+Individual flash timestamps established in the Phase 6A curated source:
+
+```text
+NO
+```
+
+Evidence state:
+
+```text
+SOURCE_EVOLUTION_REQUIRES_RECONCILIATION
+```
+
+---
+
+# Impact-Flash Source Evolution
+
+Early public NASA report:
+
+```text
+publication date
+2026-04-07
+
+reported flash count
+6
+
+status
+EARLY_PUBLIC_REPORT
+```
+
+Later postflight NASA annotation release:
+
+```text
+publication date
+2026-10-07
+
+reported flash count
+5
+
+status
+POSTFLIGHT_DATA_RELEASE_REPORT
+```
+
+MissionLab-selected final count:
+
+```text
+NONE
+```
+
+MissionLab intentionally preserves:
+
+```text
+6
+vs
+5
+```
+
+rather than silently selecting one value.
+
+Therefore:
+
+```text
+EARLY PUBLIC FLASH COUNT
+!=
+FINAL RECONCILED FLASH COUNT
+```
+
+Validation:
+
+```text
+Impact-flash evidence
+PASS
+
+Apr 7 early public report
+6
+
+Oct 7 postflight report
+5
+
+MissionLab selected count
+NONE
+
+silent reconciliation prohibition
+PASS
+```
+
+---
+
+# Image-Time / Crew-Remark Boundary
+
+Image capture time and crew remark time may represent different timestamps.
+
+Therefore:
+
+```text
+IMAGE CAPTURE TIME
+!=
+CREW REMARK TIME
+```
+
+Phase 6B must correlate them independently where public transcript evidence permits.
+
+Validation:
+
+```text
+Image-time / remark-time boundary
+PASS
+```
+
+---
+
+# Observation Opportunity Boundary
+
+A scientifically favorable geometry or target opportunity does not prove that the crew actually observed or photographed it.
+
+Therefore:
+
+```text
+OBSERVATION OPPORTUNITY
+!=
+CONFIRMED OBSERVATION
+```
+
+Validation:
+
+```text
+Opportunity / confirmed-observation boundary
+PASS
+```
+
+---
+
+# Critical Non-Equivalences
+
+Phase 6A validates six explicit non-equivalences:
+
+```text
+NASA_RELEASE_SUMMARY_COUNT
+!=
+EXACT_PDS_PRODUCT_COUNT
+```
+
+```text
+PDS_COLLECTION_INDEX
+!=
+FULL_MEDIA_DOWNLOAD
+```
+
+```text
+IMAGE_CAPTURE_TIME
+!=
+CREW_REMARK_TIME
+```
+
+```text
+OBSERVATION_OPPORTUNITY
+!=
+CONFIRMED_OBSERVATION
+```
+
+```text
+EARLY_PUBLIC_FLASH_COUNT
+!=
+FINAL_RECONCILED_FLASH_COUNT
+```
+
+```text
+VISIBLE_ECLIPSE_HALO
+!=
+CONFIRMED_SOLAR_CORONA_ONLY
+```
+
+Validation:
+
+```text
+6 critical non-equivalences
+PASS
+```
+
+---
+
+# Phase 6 Roadmap Mapping After 6A
+
+Crew imagery metadata:
+
+```text
+COLLECTION LEVEL
+COMPLETE
+
+PRODUCT LEVEL
+PENDING
+```
+
+Orion imagery metadata:
+
+```text
+COLLECTION LEVEL
+COMPLETE
+
+PRODUCT LEVEL
+PENDING
+```
+
+Mission audio / transcripts / annotations:
+
+```text
+COLLECTION LEVEL
+COMPLETE
+
+PRODUCT LEVEL
+PENDING
+```
+
+Observation time / view / image / remark / target correlation:
+
+```text
+PARTIAL
+
+PHASE 6B REQUIRED
+```
+
+LRO context:
+
+```text
+PENDING PHASE 6B
+```
+
+Impact-flash reconstruction:
+
+```text
+PENDING PHASE 6B
+```
+
+Terminator reconstruction:
+
+```text
+PENDING PHASE 6B
+```
+
+Eclipse / corona reconstruction:
+
+```text
+PENDING PHASE 6B
+```
+
+Earth imagery reconstruction:
+
+```text
+PENDING PHASE 6B
+```
+
+Validation:
+
+```text
+Collection-level crew imagery indexing
+PASS
+
+Collection-level Orion imagery indexing
+PASS
+
+Collection-level audio/transcript indexing
+PASS
+
+Phase 6B product-level handoff
+PASS
+
+LRO context correctly left to 6B
+PASS
+
+Observation reconstruction correctly left to 6B
+PASS
+```
+
+---
+
+# Documentation Figure
+
+Created:
+
+```text
+docs/assets/lunar_science/phase6a_lunar_science_archive_index.svg
+```
+
+The figure records the collection-level structure:
+
+```text
+Crew camera
+4 collections
+
+Orion camera
+3 collections
+
+Mission audio
+5 collections
+```
+
+and explicitly preserves the distinction between:
+
+```text
+archive summary figures
+
+and
+
+exact PDS product counts
+```
+
+Validation:
+
+```text
+Documentation figure
+PASS
+```
+
+---
+
+# Independent Validation
+
+Created:
+
+```text
+scripts/validation/validate_lunar_science_archive_index.py
+```
+
+Validation result:
+
+```text
+Analysis identity
+PASS
+
+Reference / processed manifest consistency
+PASS
+
+October 7 public release summary
+PASS
+
+800+ GB non-exact boundary
+PASS
+
+11,000+ image/video non-exact boundary
+PASS
+
+8.5-hour science-audio summary
+PASS
+
+8-source registry
+PASS
+
+NASA source identities
+PASS
+
+PDS source identities
+PASS
+
+3 PDS bundles
+PASS
+
+Crew-camera bundle metadata
+PASS
+
+Orion-camera bundle metadata
+PASS
+
+Mission-audio bundle metadata
+PASS
+
+12 PDS collections
+PASS
+
+Crew-camera 4-collection set
+PASS
+
+Orion-camera 3-collection set
+PASS
+
+Mission-audio 5-collection set
+PASS
+
+Collection CSV schema
+PASS
+
+Collection ID uniqueness
+PASS
+
+No full-media-download claim
+PASS
+
+5 observation evidence records
+PASS
+
+Earthset evidence
+PASS
+
+Earthrise evidence
+PASS
+
+Terminator / Vavilov evidence
+PASS
+
+Solar eclipse evidence
+PASS
+
+Impact-flash evidence
+PASS
+
+silent impact-flash reconciliation prohibition
+PASS
+
+Collection-level crew imagery indexing
+PASS
+
+Collection-level Orion imagery indexing
+PASS
+
+Collection-level audio/transcript indexing
+PASS
+
+Phase 6B product-level handoff
+PASS
+
+LRO context correctly left to 6B
+PASS
+
+Observation reconstruction correctly left to 6B
+PASS
+
+6 critical non-equivalences
+PASS
+
+Summary-count / product-count boundary
+PASS
+
+Archive-index / full-download boundary
+PASS
+
+Image-time / remark-time boundary
+PASS
+
+Opportunity / confirmed-observation boundary
+PASS
+
+Flash-count reconciliation boundary
+PASS
+
+Eclipse-halo / corona-only boundary
+PASS
+
+Documentation figure
+PASS
+```
+
+Final result:
+
+```text
+PHASE 6A VALIDATION PASSED
+```
+
+---
+
+# Phase 6A Final Status
+
+```text
+AUTHORITATIVE SOURCE REGISTRY
+COMPLETE
+
+PDS BUNDLE REGISTRY
+COMPLETE
+
+PDS COLLECTION REGISTRY
+COMPLETE
+
+INITIAL OBSERVATION EVIDENCE
+COMPLETE
+
+CREW CAMERA COLLECTION INDEX
+COMPLETE
+
+ORION CAMERA COLLECTION INDEX
+COMPLETE
+
+MISSION AUDIO / TRANSCRIPT / ANNOTATION COLLECTION INDEX
+COMPLETE
+
+EARTHSET PUBLIC EVIDENCE
+INDEXED
+
+EARTHRISE PUBLIC EVIDENCE
+INDEXED
+
+TERMINATOR / VAVILOV PUBLIC EVIDENCE
+INDEXED
+
+ECLIPSE PUBLIC EVIDENCE
+INDEXED
+
+IMPACT-FLASH SOURCE EVOLUTION
+PRESERVED
+
+PRODUCT-LEVEL CORRELATION
+PENDING 6B
+
+LRO CONTEXT
+PENDING 6B
+
+OBSERVATION RECONSTRUCTION
+PENDING 6B
+
+PHASE 6A
+COMPLETE
+```
+
+---
+
+# Phase 6B Handoff
+
+Next:
+
+```text
+PHASE 6B — LUNAR OBSERVATION RECONSTRUCTION AND PHASE 6 CLOSURE
+```
+
+Phase 6B must complete:
+
+```text
+product-level observation indexing where publicly accessible
+
+mission audio / transcript / annotation correlation
+
+observation time
++
+view direction
++
+image
++
+crew remark
++
+science target
+
+Earthset / Earthrise geometry correlation
+
+terminator / Vavilov observation reconstruction
+
+eclipse geometry and halo interpretation boundary
+
+impact-flash source reconciliation or explicit unresolved closure
+
+selected LRO target context
+
+Phase 6 roadmap validation
+```
+
+---
