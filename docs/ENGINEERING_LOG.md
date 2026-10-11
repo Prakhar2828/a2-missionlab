@@ -49190,3 +49190,1249 @@ close Phase 5 relative to defensible public evidence
 ```
 
 ---
+
+---
+
+# Phase 5B — Artemis II Radiation Environment and NAIRAS Interface
+
+## Goal
+
+Close the remaining Phase 5 roadmap requirements by preparing Artemis II flight-derived trajectory geometry for the NASA NAIRAS 3.0 trajectory interface while preserving strict boundaries between:
+
+```text
+space-weather context
+
+external radiation environment
+
+material / shielding transport
+
+absorbed dose
+
+dose equivalent
+
+effective dose
+
+model output
+
+crew dosimetry measurement
+```
+
+Phase 5B deliberately does not fabricate:
+
+```text
+Orion shielding depth
+
+NAIRAS run execution
+
+NAIRAS run ID
+
+NAIRAS model output
+
+crew radiation dose
+```
+
+---
+
+# Analysis
+
+Created:
+
+```text
+scripts/analysis/prepare_nairas_radiation_interface.py
+```
+
+Created independent validator:
+
+```text
+scripts/validation/validate_nairas_radiation_interface.py
+```
+
+Generated:
+
+```text
+data/processed/radiation/artemis_ii_nairas_trajectory_fields.csv
+
+data/processed/radiation/artemis_ii_nairas_radiation_interface.json
+```
+
+Reference manifest:
+
+```text
+data/reference/artemis_ii_nairas_interface.json
+```
+
+Documentation figure:
+
+```text
+docs/assets/radiation/phase5b_nairas_radiation_interface.svg
+```
+
+Dataset:
+
+```text
+phase5b_artemis_ii_nairas_radiation_interface
+```
+
+Status:
+
+```text
+NAIRAS_TRAJECTORY_INTERFACE_PREPARED
+```
+
+---
+
+# Dependencies
+
+Validated dependencies:
+
+```text
+Artemis II mission configuration
+PASS
+
+Phase 5A mission space-weather context
+PASS
+
+flight-derived mission trajectory
+PASS
+```
+
+---
+
+# Flight-Derived Source Trajectory
+
+Source:
+
+```text
+data/processed/trajectory/trajectory_with_mission_phases.csv
+```
+
+Provenance:
+
+```text
+NASA_FLIGHT_DERIVED_OEM_WITH_MISSIONLAB_DERIVED_GEOMETRY
+```
+
+Source state count:
+
+```text
+3262
+```
+
+Validated:
+
+```text
+Flight-derived source trajectory
+PASS
+
+3,262 source states
+PASS
+```
+
+---
+
+# Public OEM Coverage Boundary
+
+Trajectory start:
+
+```text
+2026-04-02T01:57:37.084Z
+```
+
+Trajectory stop:
+
+```text
+2026-04-10T23:53:16.723Z
+```
+
+Therefore:
+
+```text
+complete launch-to-splashdown trajectory coverage
+NO
+```
+
+MissionLab does not extend the public OEM outside the available trajectory states.
+
+Therefore:
+
+```text
+PUBLIC OEM COVERAGE
+!=
+FABRICATED FULL-MISSION TRAJECTORY
+```
+
+Validation:
+
+```text
+Public OEM coverage boundary
+PASS
+```
+
+---
+
+# NAIRAS Model Interface
+
+Model:
+
+```text
+NAIRAS
+```
+
+Version family:
+
+```text
+3.0
+```
+
+Trajectory run support:
+
+```text
+YES
+```
+
+Spacecraft trajectory support:
+
+```text
+YES
+```
+
+Validated:
+
+```text
+NAIRAS model identity
+PASS
+
+Trajectory-run capability
+PASS
+```
+
+---
+
+# NAIRAS Required Trajectory Fields
+
+Prepared fields:
+
+```text
+date
+
+time
+
+geocentric_latitude_deg
+
+geocentric_longitude_deg
+
+altitude_km
+```
+
+Output:
+
+```text
+data/processed/radiation/artemis_ii_nairas_trajectory_fields.csv
+```
+
+Output trajectory points:
+
+```text
+3262
+```
+
+Validated:
+
+```text
+3,262 NAIRAS trajectory points
+PASS
+
+NAIRAS field schema
+PASS
+
+Trajectory start / stop coverage
+PASS
+```
+
+---
+
+# Portal Syntax Boundary
+
+MissionLab prepares the published trajectory field content.
+
+MissionLab does not claim knowledge of an undocumented parser-specific upload syntax.
+
+Therefore:
+
+```text
+REQUIRED FIELD CONTENT
+!=
+UNDOCUMENTED PORTAL FILE FORMAT
+```
+
+Validation:
+
+```text
+Portal-syntax non-claim
+PASS
+```
+
+---
+
+# Coordinate Transformation
+
+Input frame:
+
+```text
+J2000
+```
+
+Output frame:
+
+```text
+IAU_EARTH
+```
+
+Transformation:
+
+```text
+J2000 inertial position
+↓
+SPICE Earth-fixed transformation
+↓
+geocentric latitude
+↓
+geocentric longitude
+↓
+Earth-center radius
+↓
+mean-radius altitude
+```
+
+Validated:
+
+```text
+J2000 -> IAU_EARTH transformation
+PASS
+
+Geocentric latitude range
+PASS
+
+Geocentric longitude range
+PASS
+
+Mean-radius altitude range
+PASS
+```
+
+---
+
+# Prepared Geometry Range
+
+Minimum derived geocentric altitude:
+
+```text
+143.951 km
+```
+
+Maximum derived geocentric altitude:
+
+```text
+406,773.436 km
+```
+
+These quantities describe trajectory geometry.
+
+They are not radiation quantities.
+
+Therefore:
+
+```text
+TRAJECTORY GEOMETRY
+!=
+RADIATION DOSE
+```
+
+---
+
+# NAIRAS Radiation Sources
+
+The model interface is documented around radiation sources including:
+
+```text
+GCR
+
+SEP
+
+TRP where model applicability permits
+```
+
+MissionLab records these as model radiation-source categories.
+
+It does not infer actual Orion exposure merely from their availability in the model.
+
+---
+
+# Dosimetric Quantities Available Through NAIRAS
+
+Recorded model output classes:
+
+```text
+absorbed dose in silicon
+
+absorbed dose in tissue
+
+dose equivalent
+
+ambient dose equivalent
+
+effective dose
+```
+
+Count:
+
+```text
+5
+```
+
+Validation:
+
+```text
+Dosimetric-output registry
+PASS
+```
+
+---
+
+# Radiation Response Chain
+
+Phase 5B explicitly models the conceptual chain:
+
+```text
+external radiation environment
+↓
+transport through material / shielding
+↓
+absorbed dose
+↓
+dose-equivalent / effective-dose response quantities
+```
+
+Validated:
+
+```text
+Radiation-response chain
+PASS
+
+External environment / absorbed-dose separation
+PASS
+
+Absorbed-dose / response-quantity separation
+PASS
+```
+
+---
+
+# External Environment Boundary
+
+External radiation fields such as:
+
+```text
+GCR
+
+SEP
+
+trapped particles where applicable
+```
+
+describe the radiation environment.
+
+They do not directly equal:
+
+```text
+absorbed dose
+```
+
+Therefore:
+
+```text
+EXTERNAL RADIATION ENVIRONMENT
+!=
+ABSORBED DOSE
+```
+
+---
+
+# Absorbed Dose Boundary
+
+Absorbed dose is not automatically equivalent to:
+
+```text
+dose equivalent
+```
+
+Therefore:
+
+```text
+ABSORBED DOSE
+!=
+DOSE EQUIVALENT
+```
+
+---
+
+# Effective Dose Boundary
+
+Dose equivalent does not automatically equal:
+
+```text
+effective dose
+```
+
+Therefore:
+
+```text
+DOSE EQUIVALENT
+!=
+EFFECTIVE DOSE
+```
+
+---
+
+# Shielding Input Boundary
+
+NAIRAS accepts user-selectable aluminum-equivalent shielding depths.
+
+However, Phase 5B does not establish an Orion-specific effective shielding depth at a crew location.
+
+Therefore:
+
+```text
+Orion-specific effective aluminum-equivalent depth established
+NO
+```
+
+MissionLab shielding assumptions used:
+
+```text
+NONE
+```
+
+Shielding-depth list used:
+
+```text
+[]
+```
+
+Dose calculation performed:
+
+```text
+NO
+```
+
+Validated:
+
+```text
+No unsupported Orion shielding depth
+PASS
+
+No shielding assumption used
+PASS
+
+No dose calculation performed
+PASS
+```
+
+---
+
+# Shielding Evidence Rule
+
+MissionLab preserves:
+
+```text
+ASSUMED SHIELDING DEPTH
+!=
+ORION CREW-LOCATION SHIELDING
+```
+
+A shielding value cannot be promoted to an Orion crew dose model unless supported by defensible vehicle-specific evidence.
+
+---
+
+# Phase 5A Relationship
+
+Phase 5A dataset:
+
+```text
+phase5a_artemis_ii_space_weather_context
+```
+
+Phase 5A provides:
+
+```text
+mission-clock-aligned near-Earth OMNI context
+```
+
+Phase 5B does not manually feed that OMNI dataset into NAIRAS.
+
+Therefore:
+
+```text
+PHASE 5A OMNI CONTEXT
+!=
+NAIRAS INTERNAL RADIATION ENVIRONMENT DRIVER
+```
+
+Validated:
+
+```text
+Phase 5A OMNI crosslink
+PASS
+
+OMNI / NAIRAS-driver separation
+PASS
+```
+
+---
+
+# OMNI / Orion Radiation Boundary
+
+Phase 5A OMNI quantities are:
+
+```text
+near-Earth solar-wind
+
+IMF
+
+plasma
+
+geomagnetic context
+```
+
+They are not:
+
+```text
+Orion-local radiation field
+```
+
+Therefore:
+
+```text
+PHASE5A OMNI CONTEXT
+!=
+ORION LOCAL RADIATION
+```
+
+---
+
+# NAIRAS Execution Boundary
+
+MissionLab currently has:
+
+```text
+trajectory interface prepared
+YES
+```
+
+MissionLab currently has not:
+
+```text
+submitted a NAIRAS run
+```
+
+Run submitted:
+
+```text
+NO
+```
+
+Run ID:
+
+```text
+NONE
+```
+
+Run output ingested:
+
+```text
+NO
+```
+
+Dose values reported:
+
+```text
+NO
+```
+
+Status:
+
+```text
+TRAJECTORY_PREPARED_NO_RUN_CLAIMED
+```
+
+Validated:
+
+```text
+NAIRAS interface prepared
+PASS
+
+No fabricated NAIRAS run
+PASS
+
+No fabricated NAIRAS run ID
+PASS
+
+No fabricated NAIRAS dose
+PASS
+```
+
+---
+
+# Future NAIRAS Execution Path
+
+The prepared trajectory product can support a future authenticated CCMC Runs-on-Request execution.
+
+Required future chain:
+
+```text
+prepared Artemis II trajectory fields
+↓
+explicit shielding-depth choice
+↓
+authenticated NAIRAS Runs-on-Request execution
+↓
+actual run identifier
+↓
+exported model result
+↓
+MissionLab ingestion
+↓
+model-output analysis
+```
+
+Until that chain occurs:
+
+```text
+NO NAIRAS-DERIVED ARTEMIS II DOSE IS CLAIMED
+```
+
+---
+
+# Model Output / Measurement Boundary
+
+A future NAIRAS result would remain:
+
+```text
+MODEL OUTPUT
+```
+
+It would not automatically become:
+
+```text
+CREW DOSIMETER MEASUREMENT
+```
+
+Therefore:
+
+```text
+NAIRAS MODEL OUTPUT
+!=
+CREW DOSIMETER MEASUREMENT
+```
+
+---
+
+# Critical Non-Equivalences
+
+Phase 5B validates eight critical non-equivalences:
+
+```text
+PHASE5A_OMNI_CONTEXT
+!=
+ORION_LOCAL_RADIATION_FIELD
+```
+
+```text
+EXTERNAL_RADIATION_ENVIRONMENT
+!=
+ABSORBED_DOSE
+```
+
+```text
+ABSORBED_DOSE
+!=
+DOSE_EQUIVALENT
+```
+
+```text
+DOSE_EQUIVALENT
+!=
+EFFECTIVE_DOSE
+```
+
+```text
+TRAJECTORY_GEOMETRY
+!=
+RADIATION_DOSE
+```
+
+```text
+ASSUMED_SHIELDING_DEPTH
+!=
+ORION_CREW_LOCATION_SHIELDING
+```
+
+```text
+NAIRAS_INTERFACE_PREPARED
+!=
+NAIRAS_RUN_EXECUTED
+```
+
+```text
+NAIRAS_MODEL_OUTPUT
+!=
+CREW_DOSIMETER_MEASUREMENT
+```
+
+Validation:
+
+```text
+8 critical non-equivalences
+PASS
+```
+
+---
+
+# Phase 5 Evidence Boundaries
+
+Validated false equivalences:
+
+```text
+trajectory fields
+!=
+radiation dose
+```
+
+```text
+OMNI context
+!=
+Orion-local radiation
+```
+
+```text
+unsupported shielding depth
+!=
+valid Orion shielding input
+```
+
+```text
+interface preparation
+!=
+NAIRAS run execution
+```
+
+```text
+model output
+!=
+dosimeter measurement
+```
+
+```text
+external environment
+!=
+absorbed dose
+```
+
+```text
+absorbed dose
+!=
+effective dose
+```
+
+```text
+available OEM states
+!=
+fabricated full mission trajectory
+```
+
+Validation:
+
+```text
+Phase 5 evidence-boundary policy
+PASS
+```
+
+---
+
+# Documentation Figure
+
+Created:
+
+```text
+docs/assets/radiation/phase5b_nairas_radiation_interface.svg
+```
+
+The figure shows:
+
+```text
+mission elapsed time
+
+flight-derived geocentric altitude
+
+flight-derived geocentric latitude
+```
+
+and explicitly preserves:
+
+```text
+trajectory geometry
+!=
+radiation dose
+```
+
+Validation:
+
+```text
+Documentation figure
+PASS
+```
+
+---
+
+# Independent Validation
+
+Created:
+
+```text
+scripts/validation/validate_nairas_radiation_interface.py
+```
+
+Validation:
+
+```text
+Analysis identity
+PASS
+
+Processed / reference manifest consistency
+PASS
+
+Phase 5A dependency
+PASS
+
+Flight-derived source trajectory
+PASS
+
+3,262 source states
+PASS
+
+Public OEM coverage boundary
+PASS
+
+NAIRAS model identity
+PASS
+
+Trajectory-run capability
+PASS
+
+Required trajectory fields
+PASS
+
+Dosimetric-output registry
+PASS
+
+User-selectable shielding input
+PASS
+
+3,262 NAIRAS trajectory points
+PASS
+
+NAIRAS field schema
+PASS
+
+Trajectory start / stop coverage
+PASS
+
+Portal-syntax non-claim
+PASS
+
+J2000 -> IAU_EARTH transformation
+PASS
+
+Geocentric latitude range
+PASS
+
+Geocentric longitude range
+PASS
+
+Mean-radius altitude range
+PASS
+
+No unsupported Orion shielding depth
+PASS
+
+No shielding assumption used
+PASS
+
+No dose calculation performed
+PASS
+
+Phase 5A OMNI crosslink
+PASS
+
+OMNI / NAIRAS-driver separation
+PASS
+
+Radiation-response chain
+PASS
+
+External environment / absorbed-dose separation
+PASS
+
+Absorbed-dose / response-quantity separation
+PASS
+
+NAIRAS interface prepared
+PASS
+
+No fabricated NAIRAS run
+PASS
+
+No fabricated NAIRAS run ID
+PASS
+
+No fabricated NAIRAS dose
+PASS
+
+8 critical non-equivalences
+PASS
+
+OMNI / CDAWeb roadmap item
+PASS
+
+Mission-clock correlation roadmap item
+PASS
+
+NAIRAS trajectory preparation roadmap item
+PASS
+
+NAIRAS execution boundary roadmap item
+PASS
+
+Shielding-assumption roadmap item
+PASS
+
+External environment / astronaut-dose boundary
+PASS
+
+Phase 5 roadmap coverage
+PASS
+
+Phase 5 evidence-boundary policy
+PASS
+
+Documentation figure
+PASS
+```
+
+Final result:
+
+```text
+PHASE 5B VALIDATION PASSED
+
+PHASE 5 ROADMAP COVERAGE PASSED
+```
+
+---
+
+# Phase 5 Roadmap Closure
+
+Phase 5 roadmap requirements:
+
+```text
+ingest OMNI / CDAWeb-compatible heliophysics quantities
+
+correlate space-weather data with the mission clock
+
+prepare Artemis II trajectory for NAIRAS 3.0
+
+ingest / export NAIRAS runs where permitted
+
+make shielding assumptions explicit
+
+separate external radiation environment from astronaut dose
+```
+
+Validated status:
+
+```text
+OMNI / CDAWeb ingestion
+COMPLETE
+
+mission-clock space-weather correlation
+COMPLETE
+
+NAIRAS trajectory preparation
+COMPLETE
+
+NAIRAS interface
+PREPARED
+
+NAIRAS run execution
+NOT CLAIMED
+
+NAIRAS run output ingestion
+NOT CLAIMED
+
+shielding assumptions
+EXPLICIT
+
+shielding assumption actually used
+NONE
+
+external radiation environment vs absorbed dose
+SEPARATED
+
+absorbed dose vs dose equivalent
+SEPARATED
+
+dose equivalent vs effective dose
+SEPARATED
+```
+
+---
+
+# Phase 5 Final Status
+
+```text
+PHASE 5 — SPACE WEATHER AND RADIATION
+```
+
+NASA OMNI ingestion:
+
+```text
+COMPLETE
+```
+
+Mission-window space-weather normalization:
+
+```text
+COMPLETE
+```
+
+Mission-clock correlation:
+
+```text
+COMPLETE
+```
+
+OMNI parameter completeness accounting:
+
+```text
+COMPLETE
+```
+
+Space-weather extrema:
+
+```text
+COMPLETE
+```
+
+OMNI / Orion-local boundary:
+
+```text
+PRESERVED
+```
+
+NAIRAS trajectory preparation:
+
+```text
+COMPLETE
+```
+
+J2000 to Earth-fixed conversion:
+
+```text
+COMPLETE
+```
+
+NAIRAS required trajectory fields:
+
+```text
+COMPLETE
+```
+
+Orion-specific shielding depth:
+
+```text
+NOT ASSUMED
+```
+
+NAIRAS run:
+
+```text
+NOT CLAIMED
+```
+
+NAIRAS run ID:
+
+```text
+NONE
+```
+
+NAIRAS dose result:
+
+```text
+NOT CLAIMED
+```
+
+External environment / dose separation:
+
+```text
+PRESERVED
+```
+
+Model / measurement separation:
+
+```text
+PRESERVED
+```
+
+Independent validation:
+
+```text
+PASS
+```
+
+Overall:
+
+```text
+PHASE 5
+COMPLETE WITH NAIRAS EXECUTION BOUNDARY
+```
+
+---
+
+# Phase 6 Handoff
+
+Next roadmap phase:
+
+```text
+PHASE 6 — LUNAR SCIENCE AND CREW OBSERVATIONS
+```
+
+Next work will focus on:
+
+```text
+Artemis II lunar science objectives
+
+crew observation opportunities
+
+lunar flyby geometry integration
+
+Earth / Moon observation timing
+
+candidate illumination and viewing geometry
+
+publicly reported crew observations
+
+science opportunity vs confirmed observation
+
+mission-clock correlation of observation windows
+```
+
+---
