@@ -32748,3 +32748,1489 @@ COMPLETE
 ```
 
 Git workflow closure remains pending until the documented implementation is committed, pushed, and the working tree is verified clean.
+
+---
+
+# Phase 2J.2 — Manual Piloting and Control-Mode Reconstruction
+
+## Goal
+
+Phase 2J.2 reconstructs the publicly documented Artemis II manual-control demonstrations and their relationship to Orion's Guidance, Navigation, and Control architecture.
+
+The phase addresses four questions:
+
+```text
+What manual-control interfaces did the crew use?
+
+What proximity-operations sequence was planned?
+
+What parts of that sequence are actually confirmed as flown?
+
+What can and cannot be inferred from the public 6-DOF / 3-DOF control-mode evidence?
+```
+
+The governing evidence boundary is:
+
+```text
+PREMISSION PLAN
+!=
+AS-FLOWN EVENT LOG
+```
+
+and:
+
+```text
+CONTROL-MODE LABEL
+!=
+CONTROL-LAW DISCLOSURE
+```
+
+---
+
+# Permanent Reference Dataset
+
+Created:
+
+```text
+data/reference/artemis_ii_manual_piloting_control_modes.json
+```
+
+Dataset identifier:
+
+```text
+phase2j2_artemis_ii_manual_piloting_control_modes
+```
+
+Provenance:
+
+```text
+NASA_REPORTED_WITH_MISSIONLAB_DERIVED_CLOCK_CORRELATION
+```
+
+Dependencies:
+
+```text
+data/config/mission.json
+
+data/reference/artemis_ii_gnc_architecture.json
+
+data/reference/artemis_ii_esm_propulsion_architecture.json
+```
+
+---
+
+# Manual-Control Architecture
+
+The manual-control architecture remains consistent with Phase 2J.1.
+
+## Rotational Hand Controller
+
+Short name:
+
+```text
+RHC
+```
+
+Command domain:
+
+```text
+ATTITUDE
+```
+
+Axes:
+
+```text
+ROLL
+PITCH
+YAW
+```
+
+---
+
+## Translational Hand Controller
+
+Short name:
+
+```text
+THC
+```
+
+Command domain:
+
+```text
+TRANSLATION
+```
+
+Axes:
+
+```text
+FORWARD / BACK
+UP / DOWN
+LEFT / RIGHT
+```
+
+---
+
+# Manual-Control Command Path
+
+The public architecture is represented as:
+
+```text
+CREW_CONTROLLER_INPUT
+↓
+GNC_FLIGHT_SOFTWARE
+↓
+EFFECTOR_SELECTION
+↓
+RCS_THRUSTER_COMMAND
+```
+
+Therefore:
+
+```text
+hand controller
+!=
+direct thruster switch
+```
+
+The crew requests vehicle motion through the controller interface.
+
+The GNC flight software remains part of the command path and determines effector commanding.
+
+---
+
+# Manual-Control History Boundary
+
+The current public source set does not contain:
+
+```text
+exact RHC input history
+exact THC input history
+exact individual thruster command history
+complete control-law state history
+thruster-allocation history
+```
+
+Therefore:
+
+```text
+controller command
+!=
+published individual thruster-firing history
+```
+
+and:
+
+```text
+reported RCS use
+!=
+exact RCS allocation sequence
+```
+
+---
+
+# Premission Proximity-Operations Reference Sequence
+
+The Artemis II public reference material provides a 17-step premission proximity-operations sequence.
+
+MissionLab preserves it explicitly as:
+
+```text
+PREMISSION_PLAN
+```
+
+It is not classified as an as-flown event log.
+
+The 17 reference steps are:
+
+```text
+01. PRE-SEPARATION
+02. SEPARATION / DRIFT
+03. 180° PITCH MANEUVER
+04. NULL SEPARATION ΔV
+05. COARSE HQ
+06. APPROACH
+07. HQ 10m EVAL #1
+08. BACK AWAY
+09. STATIONKEEP
+10. ICPS MANEUVER
+11. APPROACH #2
+12. HQ 15m EVAL #2
+13. MULTI-AXIS TEST
+14. MANUAL BACK-OUT
+15. TURN TO ATT BURN
+16. AUX DEPARTURE
+17. LONG RANGE FTO
+```
+
+---
+
+# Premission Proximity Geometry
+
+The source material contains several planned geometry statements.
+
+The mission-update narrative includes:
+
+```text
+approximately 300 ft
+```
+
+for manual-control takeover context.
+
+It also describes:
+
+```text
+about 30 ft
+```
+
+for close-range handling-quality evaluation context.
+
+The SLS reference sequence separately contains:
+
+```text
+HQ 10m EVAL #1
+
+HQ 15m EVAL #2
+```
+
+These values are preserved separately.
+
+MissionLab does not force:
+
+```text
+30 ft
+=
+10 m
+```
+
+or:
+
+```text
+30 ft
+=
+15 m
+```
+
+because the sources use different descriptions and planning representations.
+
+---
+
+# Premission Geometry Boundary
+
+All of the following are planning values:
+
+```text
+~300 ft
+~30 ft
+10 m
+15 m
+```
+
+They are not promoted to:
+
+```text
+measured Artemis II as-flown relative range
+```
+
+Permanent rule:
+
+```text
+planned range gate
+!=
+measured achieved range
+```
+
+---
+
+# As-Flown Proximity Operations
+
+The public as-flown evidence confirms:
+
+```text
+execution:
+COMPLETED
+
+duration:
+APPROXIMATELY 70 MINUTES
+
+controlled approach:
+CONFIRMED
+
+controlled retreat:
+CONFIRMED
+
+onboard navigation sensors:
+USED
+
+reaction-control thrusters:
+USED
+
+automated departure:
+CONFIRMED
+```
+
+Reference target:
+
+```text
+DETACHED ICPS
+```
+
+---
+
+# As-Flown Sequence Boundary
+
+The broader proximity demonstration was successfully completed.
+
+That does not establish that every premission reference-guide step executed exactly as planned.
+
+Permanent status:
+
+```text
+all 17 planned steps individually confirmed as flown:
+FALSE
+```
+
+Therefore:
+
+```text
+successful demonstration completion
+!=
+proof of each planned step
+```
+
+---
+
+# As-Flown Geometry Boundary
+
+The current public evidence does not provide a complete relative-range time series.
+
+Therefore the project does not claim that the spacecraft actually reached or stopped at measured values of:
+
+```text
+300 ft
+30 ft
+10 m
+15 m
+```
+
+based solely on the planning documents.
+
+Permanent statuses:
+
+```text
+planned 300 ft gate confirmed as measured flight value:
+FALSE
+
+planned 30 ft gate confirmed as measured flight value:
+FALSE
+
+planned 10 m evaluation confirmed as measured flight value:
+FALSE
+
+planned 15 m evaluation confirmed as measured flight value:
+FALSE
+```
+
+---
+
+# Unavailable As-Flown Proximity Histories
+
+The current curated source set does not contain:
+
+```text
+exact relative-range time history
+exact relative-velocity time history
+exact attitude time history
+exact RHC input history
+exact THC input history
+exact individual RCS-thruster history
+```
+
+This prevents MissionLab from reconstructing a second-by-second piloting trajectory or exact crew control-input sequence.
+
+---
+
+# Control-Authority Reconstruction
+
+Phase 2J.2 represents three evidence-backed control-authority states.
+
+## State 1
+
+```text
+AUTOMATED_PRE_MANUAL_PROXIMITY_OPERATIONS
+```
+
+Evidence scope:
+
+```text
+PREMISSION_ARCHITECTURE_AND_PLAN
+```
+
+Exact transition UTC:
+
+```text
+NOT AVAILABLE
+```
+
+---
+
+## State 2
+
+```text
+CREW_MANUAL_PROXIMITY_OPERATIONS
+```
+
+Evidence scope:
+
+```text
+AS_FLOWN_CONFIRMED
+```
+
+Exact transition UTC:
+
+```text
+NOT AVAILABLE
+```
+
+---
+
+## State 3
+
+```text
+AUTOMATED_DEPARTURE
+```
+
+Evidence scope:
+
+```text
+AS_FLOWN_CONFIRMED
+```
+
+Exact transition UTC:
+
+```text
+NOT AVAILABLE
+```
+
+The authority transition can therefore be reconstructed qualitatively:
+
+```text
+automated context
+↓
+crew manual proximity operations
+↓
+automated departure
+```
+
+but not with second-level transition timestamps.
+
+---
+
+# Automated Departure Boundary
+
+The automated departure is confirmed as flown.
+
+However:
+
+```text
+automated departure confirmed
+!=
+exact automation-transition timestamp
+```
+
+The public source set does not provide the exact instant when manual control ended and automated departure authority began.
+
+---
+
+# Docking-Camera Context
+
+The proximity-operations planning material describes docking-camera positioning measurements during departure.
+
+MissionLab classifies these as:
+
+```text
+FUTURE_RENDEZVOUS_NAVIGATION_ENGINEERING_KNOWLEDGE
+```
+
+The docking camera is not promoted in this phase to:
+
+```text
+CONFIRMED CLOSED-LOOP ARTEMIS II NAVIGATION INPUT
+```
+
+Permanent boundary:
+
+```text
+engineering positioning measurement
+!=
+confirmed closed-loop navigation input
+```
+
+---
+
+# Flight Day 4 Manual Piloting
+
+Execution:
+
+```text
+COMPLETED
+```
+
+Reported local start:
+
+```text
+2026-04-04 21:09 EDT
+```
+
+Source precision:
+
+```text
+MINUTE_LEVEL
+```
+
+NASA explicitly reported the local timezone as:
+
+```text
+EDT
+```
+
+The fixed source offset is:
+
+```text
+UTC-04:00
+```
+
+---
+
+# Flight Day 4 UTC Conversion
+
+Using the source-reported EDT offset:
+
+```text
+2026-04-04 21:09 EDT
++
+4 hours
+=
+2026-04-05T01:09:00Z
+```
+
+Derived UTC:
+
+```text
+2026-04-05T01:09:00Z
+```
+
+---
+
+# Flight Day 4 Mission Elapsed Time
+
+Configured launch epoch:
+
+```text
+2026-04-01T22:35:12Z
+```
+
+Derived manual-piloting start MET:
+
+```text
+03:02:33:48
+```
+
+Interpretation:
+
+```text
+3 days
+2 hours
+33 minutes
+48 seconds
+after launch
+```
+
+---
+
+# Flight Day 4 Duration
+
+Reported duration:
+
+```text
+41 MINUTES
+```
+
+Derived end UTC:
+
+```text
+2026-04-05T01:50:00Z
+```
+
+Derived end MET:
+
+```text
+03:03:14:48
+```
+
+The end time is derived from:
+
+```text
+reported minute-level start
++
+reported 41-minute duration
+```
+
+It is therefore not an independently observed source timestamp.
+
+---
+
+# Flight Day 4 Crew
+
+The public source-backed dataset identifies:
+
+```text
+Christina Koch
+Jeremy Hansen
+```
+
+as the crew members who took turns controlling Orion during this demonstration.
+
+---
+
+# Flight Day 4 Control Modes
+
+Publicly reported mode labels:
+
+```text
+SIX_DEGREES_OF_FREEDOM
+
+THREE_DEGREES_OF_FREEDOM
+```
+
+These mode labels are preserved exactly as evidence categories.
+
+MissionLab does not use the labels to manufacture undocumented control behavior.
+
+---
+
+# 6-DOF Boundary
+
+The public source confirms that a six-degrees-of-freedom thruster mode was tested.
+
+The source set does not expose:
+
+```text
+complete six-DOF control algorithm
+controller gains
+axis-coupling logic
+rate-command law
+attitude-command law
+translation-command law
+thruster-allocation logic
+individual firing history
+```
+
+Therefore:
+
+```text
+6-DOF mode label
+!=
+reconstructed 6-DOF control law
+```
+
+---
+
+# 3-DOF Boundary
+
+The public source also confirms that a three-degrees-of-freedom thruster mode was tested.
+
+The source set does not disclose the implementation sufficiently to reconstruct:
+
+```text
+which state variables were explicitly controlled
+complete axis-selection logic
+control-law gains
+thruster-allocation rules
+command shaping
+```
+
+Therefore:
+
+```text
+3-DOF mode label
+!=
+reconstructed 3-DOF control law
+```
+
+---
+
+# Flight Day 8 Planned Manual Demonstration
+
+A later manual piloting demonstration was planned.
+
+Reported planned local time:
+
+```text
+2026-04-08 22:55 EDT
+```
+
+Source precision:
+
+```text
+MINUTE_LEVEL_PLANNED_ANCHOR
+```
+
+Planned objectives represented in MissionLab:
+
+```text
+CENTER_DESIGNATED_TARGET
+
+GUIDE_TO_TAIL_TO_SUN_ATTITUDE
+
+COMPARE_SIX_DOF_AND_THREE_DOF_ATTITUDE_CONTROL_MODES
+```
+
+---
+
+# Flight Day 8 Planned UTC Conversion
+
+Using the source-reported EDT offset:
+
+```text
+2026-04-08 22:55 EDT
++
+4 hours
+=
+2026-04-09T02:55:00Z
+```
+
+Derived planned UTC:
+
+```text
+2026-04-09T02:55:00Z
+```
+
+Derived planned MET:
+
+```text
+07:04:19:48
+```
+
+---
+
+# Flight Day 8 Execution Status
+
+Final status:
+
+```text
+FOREGONE
+```
+
+Performed:
+
+```text
+FALSE
+```
+
+Therefore:
+
+```text
+planned timestamp
+!=
+executed GNC event timestamp
+```
+
+and:
+
+```text
+planned demonstration
+!=
+as-flown manual-control data
+```
+
+No as-flown controller history can be generated from this event because the event was not performed.
+
+---
+
+# Time Conversion Policy
+
+The initial inspection attempted to use:
+
+```text
+zoneinfo.ZoneInfo("America/New_York")
+```
+
+The local Windows / Anaconda environment did not have the external IANA tzdata package available.
+
+Observed error:
+
+```text
+ZoneInfoNotFoundError:
+No time zone found with key America/New_York
+```
+
+No repository change resulted from the failure.
+
+The implementation was corrected to preserve the source's explicitly reported timezone label directly.
+
+NASA reported:
+
+```text
+EDT
+```
+
+Therefore MissionLab uses:
+
+```text
+EDT = UTC-04:00
+```
+
+through Python's fixed-offset timezone support.
+
+IANA tzdata dependency:
+
+```text
+FALSE
+```
+
+This is preferable for these particular source timestamps because it preserves the timezone semantics stated by the source and avoids an unnecessary dependency.
+
+---
+
+# Mission-Clock Correlation
+
+Flight Day 4:
+
+```text
+reported:
+2026-04-04 21:09 EDT
+
+derived UTC:
+2026-04-05T01:09:00Z
+
+derived MET:
+03:02:33:48
+
+duration:
+41 min
+
+derived end UTC:
+2026-04-05T01:50:00Z
+
+derived end MET:
+03:03:14:48
+
+execution:
+COMPLETED
+```
+
+Flight Day 8:
+
+```text
+reported planned:
+2026-04-08 22:55 EDT
+
+derived planned UTC:
+2026-04-09T02:55:00Z
+
+derived planned MET:
+07:04:19:48
+
+execution:
+FOREGONE
+```
+
+---
+
+# Processed Manual-Piloting Event Table
+
+Generated:
+
+```text
+data/processed/gnc/manual_piloting_events.csv
+```
+
+Rows:
+
+```text
+3
+```
+
+Events:
+
+```text
+proximity_operations_demonstration
+
+flight_day_4_manual_piloting
+
+flight_day_8_manual_piloting
+```
+
+The processed file remains ignored from Git.
+
+---
+
+# Processed Proximity Plan Table
+
+Generated:
+
+```text
+data/processed/gnc/proximity_plan_vs_as_flown.csv
+```
+
+Rows:
+
+```text
+17
+```
+
+Each row preserves:
+
+```text
+planned step number
+source label
+normalized identifier
+premission-plan status
+individual as-flown confirmation status
+interpretation class
+```
+
+Every row remains:
+
+```text
+individually_confirmed_as_flown:
+false
+```
+
+because the public as-flown report confirms the broader demonstration rather than each individual reference-guide step.
+
+The processed file remains ignored from Git.
+
+---
+
+# Processed Summary
+
+Generated:
+
+```text
+data/processed/gnc/manual_piloting_control_modes_summary.json
+```
+
+Product identifier:
+
+```text
+phase2j2_manual_piloting_control_modes_analysis
+```
+
+The summary preserves:
+
+```text
+premission step count
+as-flown proximity status
+Flight Day 4 clock correlation
+Flight Day 8 planned clock correlation
+evidence boundaries
+guardrails
+output paths
+```
+
+The processed file remains ignored from Git.
+
+---
+
+# Manual-Piloting Timeline Figure
+
+Created:
+
+```text
+docs/assets/gnc/phase2j2_manual_piloting_timeline.svg
+```
+
+The figure distinguishes:
+
+```text
+Proximity Operations
+COMPLETED
+
+Flight Day 4 Manual Piloting
+COMPLETED
+
+Flight Day 8 Manual Piloting
+FOREGONE
+```
+
+It also shows the control architecture:
+
+```text
+crew controller
+↓
+GNC flight software
+↓
+effector selection
+↓
+RCS
+```
+
+---
+
+# Proximity Plan-vs-As-Flown Figure
+
+Created:
+
+```text
+docs/assets/gnc/phase2j2_proximity_plan_vs_as_flown.svg
+```
+
+The figure explicitly separates:
+
+```text
+PREMISSION REFERENCE SEQUENCE
+```
+
+from:
+
+```text
+AS-FLOWN CONFIRMED EVIDENCE
+```
+
+This prevents the planned 17-step sequence from being visually or analytically misrepresented as an observed step-by-step flight log.
+
+---
+
+# Independent Validator
+
+Created:
+
+```text
+scripts/validation/validate_manual_piloting_control_modes.py
+```
+
+The validator independently checks:
+
+```text
+dataset identity
+Phase 2J.1 dependency identity
+six NASA source records
+canonical NASA URLs
+EDT fixed-offset time policy
+Flight Day 4 UTC conversion
+Flight Day 4 MET conversion
+Flight Day 4 derived end time
+Flight Day 8 planned UTC conversion
+Flight Day 8 planned MET conversion
+Flight Day 8 foregone status
+RHC command domain
+THC command domain
+manual command path
+direct-thruster-switch boundary
+17-step proximity reference sequence
+source labels
+300 ft planning context
+30 ft planning context
+10 m reference evaluation
+15 m reference evaluation
+geometry non-equivalence
+as-flown proximity completion
+70-minute duration semantics
+approach / retreat evidence
+navigation-sensor use
+RCS use
+automated departure
+planned-vs-flown boundary
+control-authority sequence
+exact-transition-time boundary
+6-DOF label
+3-DOF label
+control-law non-inference
+event CSV integrity
+proximity CSV integrity
+summary integrity
+SVG integrity
+```
+
+---
+
+# Independent Validation Result
+
+Manual-control architecture:
+
+```text
+RHC -> attitude:
+PASS
+
+THC -> translation:
+PASS
+
+direct thruster switching:
+FALSE
+```
+
+Premission proximity reference:
+
+```text
+17 steps:
+PASS
+
+300 ft planning context:
+PASS
+
+30 ft planning context:
+PASS
+
+10 m evaluation:
+PASS
+
+15 m evaluation:
+PASS
+
+planning geometry treated as measured flight data:
+FALSE
+
+30 ft forced equal to 10 m / 15 m:
+FALSE
+```
+
+As-flown proximity operations:
+
+```text
+completed:
+PASS
+
+approximately 70 minutes:
+PASS
+
+approach / retreat:
+PASS
+
+onboard navigation sensors:
+PASS
+
+RCS:
+PASS
+
+automated departure:
+PASS
+
+all 17 steps individually confirmed:
+FALSE
+```
+
+Control authority:
+
+```text
+automated pre-manual context:
+PASS
+
+crew manual proximity operations:
+PASS
+
+automated departure:
+PASS
+
+exact transition times public:
+FALSE
+```
+
+Flight Day 4:
+
+```text
+start UTC:
+2026-04-05T01:09:00Z
+
+start MET:
+03:02:33:48
+
+duration:
+41 min
+
+derived end UTC:
+2026-04-05T01:50:00Z
+
+derived end MET:
+03:03:14:48
+
+six-DOF label:
+PASS
+
+three-DOF label:
+PASS
+
+underlying algorithms reconstructed:
+FALSE
+```
+
+Flight Day 8:
+
+```text
+planned UTC:
+2026-04-09T02:55:00Z
+
+planned MET:
+07:04:19:48
+
+execution:
+FOREGONE
+
+performed:
+FALSE
+
+planned timestamp treated as executed:
+FALSE
+```
+
+Generated products:
+
+```text
+manual-piloting event CSV rows:
+3
+
+proximity reference CSV rows:
+17
+
+summary:
+PASS
+
+timeline figure:
+PASS
+
+plan-vs-as-flown figure:
+PASS
+```
+
+Independent validation:
+
+```text
+PASS
+```
+
+---
+
+# Permanent Phase 2J.2 Guardrails
+
+## Guardrail 1
+
+```text
+premission proximity sequence
+!=
+as-flown step-by-step event log
+```
+
+## Guardrail 2
+
+```text
+planned range value
+!=
+measured as-flown range
+```
+
+## Guardrail 3
+
+```text
+~70-minute duration
+!=
+exact proximity start / stop timestamps
+```
+
+## Guardrail 4
+
+```text
+manual control
+!=
+direct individual-thruster switching
+```
+
+## Guardrail 5
+
+```text
+crew controller input
+!=
+individual thruster-firing history
+```
+
+## Guardrail 6
+
+```text
+reported RCS use
+!=
+exact thruster-allocation history
+```
+
+## Guardrail 7
+
+```text
+6-DOF mode label
+!=
+6-DOF control-law disclosure
+```
+
+## Guardrail 8
+
+```text
+3-DOF mode label
+!=
+3-DOF control-law disclosure
+```
+
+## Guardrail 9
+
+```text
+successful proximity demonstration
+!=
+proof all 17 planned steps executed
+```
+
+## Guardrail 10
+
+```text
+~300 ft / ~30 ft / 10 m / 15 m planning geometry
+!=
+confirmed as-flown relative-range history
+```
+
+## Guardrail 11
+
+```text
+30 ft narrative value
+!=
+silently forced equivalence with 10 m or 15 m reference step
+```
+
+## Guardrail 12
+
+```text
+automated departure confirmed
+!=
+exact manual-to-automatic transition time
+```
+
+## Guardrail 13
+
+```text
+Flight Day 8 planned demonstration
+!=
+executed demonstration
+```
+
+## Guardrail 14
+
+```text
+Flight Day 8 planned timestamp
+!=
+executed GNC event timestamp
+```
+
+## Guardrail 15
+
+```text
+docking-camera engineering measurement
+!=
+confirmed closed-loop navigation input
+```
+
+---
+
+# Engineering Significance
+
+Phase 2J.2 provides the first mission-operations-level reconstruction of how crew manual control fits inside Orion's broader GNC architecture.
+
+MissionLab can now answer:
+
+```text
+Which controller governs rotation?
+
+Which controller governs translation?
+
+Does the crew directly switch individual thrusters?
+
+What was the planned proximity-operations sequence?
+
+What range gates were planning values?
+
+What parts of proximity operations are actually confirmed as flown?
+
+When did the Flight Day 4 manual demonstration begin?
+
+How long did it last?
+
+Which control-mode labels were tested?
+
+Was the later Flight Day 8 demonstration executed?
+
+Where did manual authority transition back to automation conceptually?
+
+What control details remain unavailable publicly?
+```
+
+without inventing:
+
+```text
+controller deflections
+attitude histories
+relative-state histories
+control gains
+guidance laws
+individual RCS firings
+thruster-allocation logic
+```
+
+---
+
+# Phase 2J.2 Status
+
+Manual-control architecture:
+
+```text
+PASS
+```
+
+Premission proximity reference:
+
+```text
+PASS
+```
+
+Planning-geometry boundaries:
+
+```text
+PASS
+```
+
+As-flown proximity evidence:
+
+```text
+PASS
+```
+
+Control-authority reconstruction:
+
+```text
+PASS
+```
+
+Flight Day 4 mission-clock correlation:
+
+```text
+PASS
+```
+
+6-DOF / 3-DOF evidence boundary:
+
+```text
+PASS
+```
+
+Flight Day 8 plan/execution distinction:
+
+```text
+PASS
+```
+
+Independent validation:
+
+```text
+PASS
+```
+
+Phase 2J.2 implementation status:
+
+```text
+COMPLETE
+```
+
+Git workflow closure remains pending until the documented implementation is committed, pushed, and the working tree is verified clean.
