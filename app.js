@@ -1,128 +1,306 @@
-const state = { events: [], selectedId: null };
+const state = {
+  events: [],
+  disciplines: [],
+  selectedId: null,
+};
 
 const els = {
   eventList: document.querySelector('#event-list'),
   eventCount: document.querySelector('#event-count'),
   detail: document.querySelector('#detail-panel'),
-  domain: document.querySelector('#domain-filter'),
-  provenance: document.querySelector('#provenance-filter'),
-  criticality: document.querySelector('#criticality-filter'),
+  discipline: document.querySelector('#discipline-filter'),
+  evidence: document.querySelector('#evidence-filter'),
   reset: document.querySelector('#reset-btn'),
   clockTime: document.querySelector('#clock-time'),
   clockPhase: document.querySelector('#clock-phase'),
+  metricGrid: document.querySelector('#metric-grid'),
+  appStatus: document.querySelector('#app-status'),
 };
 
-function badgeClass(provenance) {
-  return ({
-    FLIGHT_DATA: 'flight',
-    NASA_REPORTED: 'nasa',
-    DERIVED: 'derived',
-    MODEL: 'model',
-    SYNTHETIC: 'synthetic',
-  })[provenance] || 'nasa';
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
 }
 
-function prettyUtc(value) {
-  return new Intl.DateTimeFormat('en-US', {
-    timeZone: 'UTC', year: 'numeric', month: 'short', day: '2-digit',
-    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false,
-  }).format(new Date(value)) + ' UTC';
+function evidenceLabel(value) {
+  return String(value ?? 'UNKNOWN').replaceAll('_', ' ');
+}
+
+function eventTimeLabel(event) {
+  if (event.timestamp_utc) {
+    return `${event.timestamp_utc} UTC`;
+  }
+
+  if (event.date_utc) {
+    return `${event.date_utc} · ${event.time_precision}`;
+  }
+
+  return event.time_precision || 'No exact public time';
+}
+
+function eventMetLabel(event) {
+  return event.met || 'Not assigned at this public precision';
 }
 
 function filteredEvents() {
-  return state.events.filter(event => {
-    const domain = els.domain.value === 'ALL' || event.domain === els.domain.value;
-    const provenance = els.provenance.value === 'ALL' || event.provenance_class === els.provenance.value;
-    const criticality = els.criticality.value === 'ALL' || event.mission_criticality === els.criticality.value;
-    return domain && provenance && criticality;
+  return state.events.filter((event) => {
+    const disciplineMatch =
+      els.discipline.value === 'ALL'
+      || event.primary_lenses.includes(els.discipline.value);
+
+    const evidenceMatch =
+      els.evidence.value === 'ALL'
+      || event.evidence_class === els.evidence.value;
+
+    return disciplineMatch && evidenceMatch;
   });
 }
 
-function renderList() {
-  const events = filteredEvents().sort((a,b) => new Date(a.timestamp_utc) - new Date(b.timestamp_utc));
-  els.eventCount.textContent = events.length;
-  els.eventList.innerHTML = events.map(event => `
-    <button class="event-item ${state.selectedId === event.id ? 'active' : ''}" data-id="${event.id}">
-      <div class="event-meta">
-        <span class="badge ${badgeClass(event.provenance_class)}">${event.provenance_class.replace('_',' ')}</span>
-        <span class="criticality ${event.mission_criticality}">${event.mission_criticality}</span>
-      </div>
-      <strong>${event.title}</strong>
-      <time>${prettyUtc(event.timestamp_utc)}</time>
-    </button>
-  `).join('') || '<div style="padding:1rem;color:#91a4ba">No events match the current filters.</div>';
-
-  els.eventList.querySelectorAll('.event-item').forEach(button => {
-    button.addEventListener('click', () => selectEvent(button.dataset.id));
-  });
-}
-
-function decisionHtml(thread) {
-  if (!thread) return '<p class="detail-summary">No decision thread is attached to this event yet.</p>';
-  const order = [
-    ['DETECTION', thread.detection], ['EVIDENCE', thread.evidence], ['CONSTRAINT', thread.constraint],
-    ['OPTIONS', thread.options?.join(' · ')], ['DECISION', thread.decision], ['ACTION', thread.action], ['OUTCOME', thread.outcome]
+function renderMetrics(metrics) {
+  const values = [
+    ['Datasets', metrics.datasets],
+    ['Public sources', metrics.sources],
+    ['Mission events', metrics.events],
+    ['Decision threads', metrics.decision_threads],
+    ['Searchable records', metrics.searchable_records],
+    ['Analyst tools', metrics.tools],
+    ['Answer routes', metrics.answer_routes],
   ];
-  return order.filter(([,value]) => value).map(([label,value]) => `
-    <div class="thread-step"><strong>${label}</strong><p>${value}</p></div>
+
+  els.metricGrid.innerHTML = values.map(([label, value]) => `
+    <div class="metric-card">
+      <strong>${escapeHtml(value)}</strong>
+      <span>${escapeHtml(label)}</span>
+    </div>
   `).join('');
 }
 
-function selectEvent(id) {
-  const event = state.events.find(item => item.id === id);
-  if (!event) return;
-  state.selectedId = id;
-  els.clockTime.textContent = prettyUtc(event.timestamp_utc);
-  els.clockPhase.textContent = event.mission_phase;
+function renderList() {
+  const events = filteredEvents()
+    .slice()
+    .sort((a, b) => a.order - b.order);
+
+  els.eventCount.textContent = String(events.length);
+
+  if (!events.length) {
+    els.eventList.innerHTML = `
+      <p class="no-results">No validated events match these filters.</p>
+    `;
+    return;
+  }
+
+  els.eventList.innerHTML = events.map((event) => {
+    const active = state.selectedId === event.event_id;
+
+    return `
+      <button
+        class="event-item${active ? ' active' : ''}"
+        type="button"
+        data-id="${escapeHtml(event.event_id)}"
+        aria-pressed="${active ? 'true' : 'false'}"
+      >
+        <div class="event-meta">
+          <span class="evidence-badge">
+            ${escapeHtml(evidenceLabel(event.evidence_class))}
+          </span>
+          <span class="order-badge">
+            #${escapeHtml(event.order)}
+          </span>
+        </div>
+
+        <strong>${escapeHtml(event.name)}</strong>
+        <time>${escapeHtml(eventTimeLabel(event))}</time>
+      </button>
+    `;
+  }).join('');
+
+  els.eventList.querySelectorAll('.event-item').forEach((button) => {
+    button.addEventListener('click', () => {
+      selectEvent(button.dataset.id);
+    });
+  });
+}
+
+function renderPriorities(event) {
+  return Object.entries(event.priority_labels)
+    .map(([discipline, priority]) => `
+      <div class="priority-row">
+        <strong>${escapeHtml(discipline)}</strong>
+        <span>${escapeHtml(priority)}</span>
+      </div>
+    `)
+    .join('');
+}
+
+function selectEvent(eventId) {
+  const event = state.events.find(
+    (item) => item.event_id === eventId
+  );
+
+  if (!event) {
+    return;
+  }
+
+  state.selectedId = eventId;
+
+  els.clockTime.textContent = eventTimeLabel(event);
+  els.clockPhase.textContent = event.classification;
+
+  const primaryLenses = event.primary_lenses
+    .map((lens) => `<span class="lens-chip">${escapeHtml(lens)}</span>`)
+    .join('');
+
   els.detail.innerHTML = `
     <div class="event-meta">
-      <span class="badge ${badgeClass(event.provenance_class)}">${event.provenance_class.replace('_',' ')}</span>
-      <span class="criticality ${event.mission_criticality}">${event.mission_criticality}</span>
+      <span class="evidence-badge">
+        ${escapeHtml(evidenceLabel(event.evidence_class))}
+      </span>
+      <span class="order-badge">
+        EVENT ${escapeHtml(event.order)}
+      </span>
     </div>
-    <h2>${event.title}</h2>
-    <p class="detail-summary">${event.summary}</p>
+
+    <h2 id="detail-title">${escapeHtml(event.name)}</h2>
+
+    <p class="detail-summary">${escapeHtml(event.summary)}</p>
+
     <div class="detail-grid">
-      <div class="metric"><small>UTC</small><strong>${prettyUtc(event.timestamp_utc)}</strong></div>
-      <div class="metric"><small>Mission phase</small><strong>${event.mission_phase}</strong></div>
-      <div class="metric"><small>Domain</small><strong>${event.domain}</strong></div>
+      <div class="metric">
+        <small>UTC / public timing</small>
+        <strong>${escapeHtml(eventTimeLabel(event))}</strong>
+      </div>
+
+      <div class="metric">
+        <small>Mission Elapsed Time</small>
+        <strong>${escapeHtml(eventMetLabel(event))}</strong>
+      </div>
+
+      <div class="metric">
+        <small>Classification</small>
+        <strong>${escapeHtml(event.classification)}</strong>
+      </div>
+
+      <div class="metric">
+        <small>Time precision</small>
+        <strong>${escapeHtml(event.time_precision)}</strong>
+      </div>
     </div>
-    <div class="section-title">AFFECTED DISCIPLINES</div>
-    <div class="disciplines">${event.affected_disciplines.map(x => `<span class="discipline">${x}</span>`).join('')}</div>
-    <div class="section-title">DECISION THREAD</div>
-    <div class="decision-thread">${decisionHtml(event.decision_thread)}</div>
-    <div class="section-title">SOURCE & PROVENANCE</div>
+
+    <div class="section-title">PRIMARY DISCIPLINE LENSES</div>
+    <div class="lens-list">${primaryLenses}</div>
+
+    <div class="section-title">DISCIPLINE PRIORITIES</div>
+    <div class="priority-grid">${renderPriorities(event)}</div>
+
+    <div class="section-title">EVIDENCE DEPENDENCY</div>
     <div class="source-card">
-      <strong>${event.source_title}</strong>
-      <p>${event.source_agency} · ${event.provenance_class}</p>
-      <a href="${event.source_url}" target="_blank" rel="noreferrer">Open primary public source ↗</a>
+      <strong>${escapeHtml(event.source_dependency)}</strong>
+      <p>
+        Evidence class:
+        ${escapeHtml(evidenceLabel(event.evidence_class))}
+      </p>
     </div>
-    <div class="section-title">LIMITATIONS</div>
-    <div class="limitations">${event.limitations || 'No limitation note recorded.'}</div>
   `;
+
   renderList();
+
+  els.appStatus.textContent =
+    `Selected ${event.name}. ${eventTimeLabel(event)}.`;
+}
+
+function populateFilters() {
+  state.disciplines.forEach((discipline) => {
+    const option = document.createElement('option');
+    option.value = discipline.discipline_id;
+    option.textContent = discipline.discipline_id;
+    els.discipline.appendChild(option);
+  });
+
+  [...new Set(state.events.map((event) => event.evidence_class))]
+    .sort()
+    .forEach((evidence) => {
+      const option = document.createElement('option');
+      option.value = evidence;
+      option.textContent = evidenceLabel(evidence);
+      els.evidence.appendChild(option);
+    });
+}
+
+function bindControls() {
+  [els.discipline, els.evidence].forEach((control) => {
+    control.addEventListener('change', renderList);
+  });
+
+  els.reset.addEventListener('click', () => {
+    els.discipline.value = 'ALL';
+    els.evidence.value = 'ALL';
+    renderList();
+  });
+}
+
+async function fetchJson(path) {
+  const response = await fetch(path);
+
+  if (!response.ok) {
+    throw new Error(
+      `Could not load ${path}: HTTP ${response.status}`
+    );
+  }
+
+  return response.json();
 }
 
 async function init() {
-  const response = await fetch('./data/seed/mission_events.json');
-  if (!response.ok) throw new Error(`Could not load mission events: ${response.status}`);
-  state.events = await response.json();
+  const [perspectives, publication] = await Promise.all([
+    fetchJson('./data/reference/artemis_ii_mission_control_perspectives.json'),
+    fetchJson('./data/reference/artemis_ii_publication_manifest.json'),
+  ]);
 
-  [...new Set(state.events.map(event => event.domain))].sort().forEach(domain => {
-    const option = document.createElement('option');
-    option.value = domain;
-    option.textContent = domain;
-    els.domain.appendChild(option);
-  });
+  if (
+    perspectives.dataset_id
+    !== 'phase7a_artemis_ii_mission_control_perspectives'
+  ) {
+    throw new Error('Validated shared-timeline dataset identity mismatch');
+  }
 
-  [els.domain, els.provenance, els.criticality].forEach(control => control.addEventListener('change', renderList));
-  els.reset.addEventListener('click', () => {
-    els.domain.value = 'ALL'; els.provenance.value = 'ALL'; els.criticality.value = 'ALL'; renderList();
-  });
+  if (perspectives.shared_timeline.length !== 24) {
+    throw new Error('Expected 24 validated shared-timeline events');
+  }
+
+  state.events = perspectives.shared_timeline;
+  state.disciplines = perspectives.discipline_registry;
+
+  populateFilters();
+  bindControls();
+  renderMetrics(publication.publication_metrics);
   renderList();
-  if (state.events.length) selectEvent(state.events[0].id);
+
+  if (state.events.length) {
+    selectEvent(state.events[0].event_id);
+  }
+
+  els.appStatus.textContent =
+    'A2 MissionLab publication interface loaded successfully.';
 }
 
-init().catch(error => {
+init().catch((error) => {
   console.error(error);
-  els.eventList.innerHTML = `<div style="padding:1rem;color:#ff9a9a">${error.message}. Run this project from a local web server instead of opening index.html directly.</div>`;
+
+  els.eventList.innerHTML = `
+    <p class="error-message">
+      ${escapeHtml(error.message)}
+    </p>
+  `;
+
+  els.metricGrid.innerHTML = `
+    <p class="error-message">
+      Publication metrics could not be loaded.
+    </p>
+  `;
+
+  els.appStatus.textContent = error.message;
 });

@@ -1,0 +1,58 @@
+{
+  "dataset_id": "phase9b_artemis_ii_publication_web_manifest",
+  "mission": "Artemis II",
+  "phase": "9B",
+  "status": "PUBLIC_WEB_AND_CI_COMPLETE",
+  "dependencies": [
+    {
+      "dataset_id": "phase7a_artemis_ii_mission_control_perspectives",
+      "path": "data/reference/artemis_ii_mission_control_perspectives.json",
+      "role": "validated 24-event public timeline"
+    },
+    {
+      "dataset_id": "phase9a_artemis_ii_publication_manifest",
+      "path": "data/reference/artemis_ii_publication_manifest.json",
+      "role": "validated publication metrics and documentation state"
+    }
+  ],
+  "publication_features": {
+    "validated_shared_timeline": true,
+    "phase0_seed_timeline_removed_from_frontend": true,
+    "keyboard_navigation": true,
+    "visible_focus": true,
+    "skip_navigation": true,
+    "aria_live_regions": true,
+    "responsive_tablet_layout": true,
+    "responsive_mobile_layout": true,
+    "reduced_motion_support": true,
+    "minimum_interactive_target_px": 44,
+    "output_escaping": true,
+    "github_actions_ci": true,
+    "github_pages_workflow": true
+  },
+  "publication_principles": {
+    "validated_timeline_only": true,
+    "no_phase0_seed_dependency": true,
+    "no_new_mission_reconstruction": true,
+    "public_evidence_boundaries_preserved": true,
+    "unknown_timing_not_fabricated": true
+  },
+  "phase9_state": {
+    "documentation": "COMPLETE_PHASE9A",
+    "accessibility": "COMPLETE_PHASE9B",
+    "mobile_desktop_behavior": "COMPLETE_PHASE9B",
+    "tests_and_ci": "COMPLETE_PHASE9B",
+    "performance_optimization": "COMPLETE_PHASE9B_STATIC_ZERO_FRAMEWORK",
+    "public_deployment_readiness": "COMPLETE_PHASE9B_GITHUB_PAGES_WORKFLOW",
+    "final_cross_phase_validation": "PENDING_PHASE9C"
+  },
+  "outputs": [
+    "index.html",
+    "app.js",
+    "styles.css",
+    ".github/workflows/ci.yml",
+    ".github/workflows/pages.yml",
+    "scripts/validation/validate_publication_web.py",
+    "data/reference/artemis_ii_publication_web_manifest.json"
+  ]
+}

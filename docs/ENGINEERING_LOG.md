@@ -61009,3 +61009,197 @@ PENDING
 ```
 
 ---
+
+---
+
+# Phase 9B — Public Web, Accessibility, CI, and Deployment Readiness
+
+## Goal
+
+Replace the obsolete Phase 0 public interface with a publication-ready web experience driven by validated Phase 7A and Phase 9A artifacts.
+
+## Generated / Updated
+
+```text
+index.html
+app.js
+styles.css
+.github/workflows/ci.yml
+.github/workflows/pages.yml
+scripts/publication/build_publication_web.py
+scripts/validation/validate_publication_web.py
+data/reference/artemis_ii_publication_web_manifest.json
+```
+
+## Public Web
+
+```text
+validated Phase 7A shared timeline: 24 events
+Phase 0 seed timeline frontend dependency: REMOVED
+Phase 9 project status: CURRENT
+publication metrics integration: COMPLETE
+validated event timing / precision handling: COMPLETE
+```
+
+## Accessibility
+
+```text
+skip navigation: PASS
+semantic navigation: PASS
+ARIA live regions: PASS
+keyboard-focusable detail panel: PASS
+visible keyboard focus: PASS
+44 px minimum interactive targets: PASS
+reduced-motion support: PASS
+```
+
+## Responsive Behavior
+
+```text
+desktop layout: PASS
+tablet breakpoint: PASS
+mobile breakpoint: PASS
+responsive event timeline: PASS
+responsive metrics / detail grids: PASS
+```
+
+## Evidence Integrity
+
+```text
+validated timeline frontend source: PASS
+Phase 0 seed dependency removed: PASS
+missing vs exact timing distinction: PASS
+HTML output escaping: PASS
+no new mission reconstruction: PASS
+```
+
+Critical publication boundaries remain:
+
+```text
+MISSIONLAB DERIVED
+!=
+NASA REPORTED
+```
+
+```text
+TEMPORAL SEQUENCE
+!=
+CAUSATION
+```
+
+```text
+UNKNOWN PUBLIC FACT
+!=
+PERMISSION TO INVENT
+```
+
+## CI
+
+GitHub Actions workflow created:
+
+```text
+.github/workflows/ci.yml
+```
+
+Validated CI coverage:
+
+```text
+Python source compilation: PASS
+Phase 9A publication validator: INCLUDED
+Phase 9B public-web validator: INCLUDED
+```
+
+## Deployment Readiness
+
+GitHub Pages workflow created:
+
+```text
+.github/workflows/pages.yml
+```
+
+Deployment model:
+
+```text
+static zero-framework site
+GitHub Pages artifact deployment
+main-branch deployment trigger
+manual workflow dispatch available
+```
+
+Validation:
+
+```text
+GitHub Pages workflow: PASS
+static-site artifact deployment: PASS
+Pages permission model: PASS
+```
+
+## Performance
+
+```text
+static zero-framework architecture: COMPLETE
+no frontend framework runtime: PASS
+small HTML / CSS / JavaScript surface: PASS
+validated JSON artifacts loaded directly: PASS
+```
+
+## Phase 9B Validation
+
+```text
+Phase 7A validated timeline dependency: PASS
+24-event shared timeline: PASS
+Phase 9A publication dependency: PASS
+Phase 9B web manifest identity: PASS
+
+Skip navigation: PASS
+Semantic main navigation: PASS
+ARIA live regions: PASS
+Keyboard-focusable detail panel: PASS
+Current Phase 9 status: PASS
+Stale Phase 0 status removed: PASS
+
+Validated timeline frontend source: PASS
+Phase 0 seed dependency removed: PASS
+Missing/exact timing distinction: PASS
+HTML output escaping: PASS
+
+Visible keyboard focus: PASS
+44px interactive targets: PASS
+Tablet responsive breakpoint: PASS
+Mobile responsive breakpoint: PASS
+Reduced-motion support: PASS
+
+GitHub Actions CI workflow: PASS
+Python syntax check in CI: PASS
+Phase 9A validator in CI: PASS
+Phase 9B validator in CI: PASS
+
+GitHub Pages workflow: PASS
+Static-site artifact deployment: PASS
+Pages permission model: PASS
+
+Validated timeline only: PASS
+No Phase 0 seed dependency: PASS
+No new mission reconstruction: PASS
+```
+
+Final result:
+
+```text
+PHASE 9B VALIDATION PASSED
+```
+
+## Phase 9 Status
+
+```text
+Phase 9A — publication documentation
+COMPLETE
+
+Phase 9B — public web, accessibility, responsive behavior, CI, performance, deployment readiness
+COMPLETE
+
+Phase 9C — final cross-phase publication validation
+NEXT
+```
+
+---

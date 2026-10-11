@@ -1,0 +1,30 @@
+name: MissionLab CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile Python sources
+        run: python -m compileall -q scripts
+
+      - name: Validate Phase 9A publication pack
+        run: python scripts/validation/validate_publication_pack.py
+
+      - name: Validate Phase 9B public web
+        run: python scripts/validation/validate_publication_web.py
