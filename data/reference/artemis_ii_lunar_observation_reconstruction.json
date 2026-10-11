@@ -1,0 +1,562 @@
+{
+  "dataset_id": "phase6b_artemis_ii_lunar_observation_reconstruction",
+  "mission": "Artemis II",
+  "phase": "6B",
+  "status": "LUNAR_SCIENCE_OBSERVATION_RECONSTRUCTION_COMPLETE",
+  "dependencies": {
+    "phase6a_dataset_id": "phase6a_artemis_ii_lunar_science_archive_index",
+    "flight_derived_trajectory": "data/processed/trajectory/trajectory_with_mission_phases.csv",
+    "spice_kernels": [
+      "naif0012.tls",
+      "de440s.bsp",
+      "pck00011.tpc"
+    ]
+  },
+  "selected_product_registry": [
+    {
+      "product_id": "art002e009288",
+      "product_type": "NASA_PUBLIC_IMAGE",
+      "observation_id": "A2_LUNAR_EARTHSET",
+      "capture_time_utc": "2026-04-06T22:41:00Z",
+      "time_precision": "MINUTE_IN_NASA_PUBLIC_RELEASE",
+      "target": "Earth / lunar limb",
+      "view_direction": "from Orion toward Earth across the lunar limb",
+      "source": "NASA Artemis II Lunar Flyby gallery"
+    },
+    {
+      "product_id": "art002e021278",
+      "product_type": "NASA_PUBLIC_IMAGE",
+      "observation_id": "A2_LUNAR_EARTHRISE",
+      "capture_time_utc": "2026-04-06T23:22:00Z",
+      "time_precision": "MINUTE_IN_NASA_PUBLIC_RELEASE",
+      "target": "Earth / lunar limb",
+      "view_direction": "from Orion toward Earth across the lunar limb",
+      "source": "NASA Artemis II Lunar Flyby gallery"
+    },
+    {
+      "product_id": "art002e009282",
+      "product_type": "NASA_PUBLIC_IMAGE",
+      "observation_id": "A2_LUNAR_TERMINATOR_VAVILOV",
+      "capture_time_utc": null,
+      "reported_date": "2026-04-06",
+      "time_precision": "DATE_ONLY_IN_CURATED_PUBLIC_SOURCE",
+      "target": "Vavilov Crater / Hertzsprung Basin",
+      "view_direction": "handheld 400 mm observation toward lunar farside terrain near the terminator",
+      "source": "NASA Artemis II Moon flyby release"
+    },
+    {
+      "product_id": "art002e009301",
+      "product_type": "NASA_PUBLIC_IMAGE",
+      "observation_id": "A2_LUNAR_SOLAR_ECLIPSE",
+      "capture_time_utc": null,
+      "reported_date": "2026-04-06",
+      "time_precision": "DATE_ONLY_IN_CURATED_PUBLIC_SOURCE",
+      "target": "Sun behind lunar limb",
+      "view_direction": "from Orion toward the Sun through the lunar occultation geometry",
+      "source": "NASA Artemis II Moon flyby release"
+    },
+    {
+      "product_id": "015A9930.NEF",
+      "product_type": "NASA_POSTFLIGHT_CREW_IMAGE",
+      "observation_id": "A2_LUNAR_TERMINATOR_GENERAL",
+      "capture_time_utc": null,
+      "reported_date": "2026-04-06",
+      "time_precision": "DATE_ONLY_ON_PUBLIC_HIGHLIGHT_PAGE",
+      "target": "lunar terminator / Carnot region",
+      "view_direction": "crew handheld view toward low-angle illuminated lunar terrain",
+      "source": "NASA Artemis II Preliminary Lunar Science Report"
+    },
+    {
+      "product_id": "019A0860.NEF",
+      "product_type": "NASA_POSTFLIGHT_CREW_IMAGE",
+      "observation_id": "A2_LUNAR_ECLIPSE_CORONA",
+      "capture_time_utc": null,
+      "reported_date": "2026-04-06",
+      "time_precision": "DATE_ONLY_ON_PUBLIC_HIGHLIGHT_PAGE",
+      "target": "solar eclipse / lunar limb",
+      "view_direction": "toward the occulted Sun at the lunar limb",
+      "source": "NASA Artemis II Preliminary Lunar Science Report"
+    }
+  ],
+  "audio_annotation_registry": [
+    {
+      "record_id": "AUDIO_OBSERVING_EARTHSET",
+      "title": "Observing Earthset",
+      "record_type": "PUBLIC_SCIENCE_AUDIO",
+      "observation_ids": [
+        "A2_LUNAR_EARTHSET"
+      ],
+      "exact_audio_start_utc_curated_here": false
+    },
+    {
+      "record_id": "AUDIO_VAVILOV_COLOR_TERRAIN",
+      "title": "Vavilov Crater: Color and Terrain",
+      "record_type": "PUBLIC_SCIENCE_AUDIO",
+      "observation_ids": [
+        "A2_LUNAR_TERMINATOR_VAVILOV"
+      ],
+      "exact_audio_start_utc_curated_here": false
+    },
+    {
+      "record_id": "AUDIO_TERMINATOR_CRATERS_ELEVATION",
+      "title": "Terminator: Craters and Elevation",
+      "record_type": "PUBLIC_SCIENCE_AUDIO",
+      "observation_ids": [
+        "A2_LUNAR_TERMINATOR_GENERAL"
+      ],
+      "exact_audio_start_utc_curated_here": false
+    },
+    {
+      "record_id": "AUDIO_RUMINATIONS_TERMINATOR",
+      "title": "Ruminations on the Terminator",
+      "record_type": "PUBLIC_SCIENCE_AUDIO",
+      "observation_ids": [
+        "A2_LUNAR_TERMINATOR_GENERAL"
+      ],
+      "exact_audio_start_utc_curated_here": false
+    },
+    {
+      "record_id": "AUDIO_SEARCH_IMPACT_FLASH_DUST",
+      "title": "Searching for Impact Flashes and Lofted Dust",
+      "record_type": "PUBLIC_SCIENCE_AUDIO",
+      "observation_ids": [
+        "A2_LUNAR_IMPACT_FLASH_REPORT"
+      ],
+      "exact_audio_start_utc_curated_here": false
+    },
+    {
+      "record_id": "ANNOTATION_IMPACT_FLASHES",
+      "title": "Crew tablet impact-flash annotation",
+      "record_type": "CREW_ANNOTATION",
+      "observation_ids": [
+        "A2_LUNAR_IMPACT_FLASH_REPORT"
+      ],
+      "reference_visualization_utc": "2026-04-07T01:04:00Z",
+      "reference_visualization_time_is_flash_time": false,
+      "crew_participants": [
+        "Reid Wiseman",
+        "Victor Glover",
+        "Jeremy Hansen"
+      ],
+      "postflight_confirmed_flash_count": 5
+    },
+    {
+      "record_id": "ANNOTATION_CORONA_STREAMER",
+      "title": "Crew tablet solar-corona annotation",
+      "record_type": "CREW_ANNOTATION",
+      "observation_ids": [
+        "A2_LUNAR_ECLIPSE_CORONA"
+      ],
+      "crew_participants": [
+        "Jeremy Hansen"
+      ],
+      "summary": "Annotation records a changing coronal streamer observed during the lunar occultation of the Sun."
+    }
+  ],
+  "observation_records": [
+    {
+      "observation_id": "A2_LUNAR_EARTHSET",
+      "observation_class": "EARTH_IMAGERY",
+      "evidence_state": "NASA_REPORTED_PLUS_MISSIONLAB_GEOMETRY_CORRELATION",
+      "reported_utc": "2026-04-06T22:41:00Z",
+      "time_precision": "NASA_REPORTED_MINUTE",
+      "image_ids": [
+        "art002e009288"
+      ],
+      "audio_records": [
+        "AUDIO_OBSERVING_EARTHSET"
+      ],
+      "target": "Earth / lunar limb",
+      "view_direction": "Orion toward Earth across lunar limb",
+      "crew_remark_summary": "Public science audio records crew observations of Earthset.",
+      "geometry_status_at_reported_time": "PARTIAL_LIMB_OVERLAP",
+      "geometry_link": "earth_occultation",
+      "confirmed_observation": true
+    },
+    {
+      "observation_id": "A2_LUNAR_EARTHRISE",
+      "observation_class": "EARTH_IMAGERY",
+      "evidence_state": "NASA_REPORTED_PLUS_MISSIONLAB_GEOMETRY_CORRELATION",
+      "reported_utc": "2026-04-06T23:22:00Z",
+      "time_precision": "NASA_REPORTED_MINUTE",
+      "image_ids": [
+        "art002e021278"
+      ],
+      "audio_records": [],
+      "target": "Earth / lunar limb",
+      "view_direction": "Orion toward Earth re-emerging beyond lunar limb",
+      "crew_remark_summary": "NASA publicly identified the image as Artemis-era Earthrise.",
+      "geometry_status_at_reported_time": "PARTIAL_LIMB_OVERLAP",
+      "geometry_link": "earth_occultation",
+      "confirmed_observation": true
+    },
+    {
+      "observation_id": "A2_LUNAR_TERMINATOR_VAVILOV",
+      "observation_class": "TERMINATOR_OBSERVATION",
+      "evidence_state": "NASA_REPORTED",
+      "reported_utc": null,
+      "reported_date": "2026-04-06",
+      "time_precision": "DATE_ONLY_IN_CURATED_SOURCE",
+      "image_ids": [
+        "art002e009282"
+      ],
+      "audio_records": [
+        "AUDIO_VAVILOV_COLOR_TERRAIN"
+      ],
+      "target": "Vavilov Crater / Hertzsprung Basin",
+      "view_direction": "toward farside lunar terrain near the terminator",
+      "crew_remark_summary": "Crew observations emphasized terrain relief, color, albedo, and structure under low-angle light.",
+      "lro_context_ids": [
+        "LRO_CONTEXT_HERTZSPRUNG",
+        "TARGET_CONTEXT_VAVILOV"
+      ],
+      "exact_image_time_inferred": false,
+      "confirmed_observation": true
+    },
+    {
+      "observation_id": "A2_LUNAR_TERMINATOR_GENERAL",
+      "observation_class": "TERMINATOR_OBSERVATION",
+      "evidence_state": "NASA_POSTFLIGHT_REPORTED",
+      "reported_utc": null,
+      "reported_date": "2026-04-06",
+      "time_precision": "DATE_ONLY_IN_CURATED_SOURCE",
+      "image_ids": [
+        "015A9930.NEF"
+      ],
+      "audio_records": [
+        "AUDIO_TERMINATOR_CRATERS_ELEVATION",
+        "AUDIO_RUMINATIONS_TERMINATOR"
+      ],
+      "target": "lunar terminator terrain",
+      "view_direction": "toward low-angle illuminated lunar surface",
+      "crew_remark_summary": "Victor Glover described the terminator as the most striking view he had seen to that point. Christina Koch noted that mountain relief was visible along the limb.",
+      "confirmed_observation": true
+    },
+    {
+      "observation_id": "A2_LUNAR_SOLAR_ECLIPSE",
+      "observation_class": "ECLIPSE_OBSERVATION",
+      "evidence_state": "NASA_REPORTED_PLUS_MISSIONLAB_GEOMETRY_RECONSTRUCTION",
+      "reported_utc": null,
+      "reported_date": "2026-04-06",
+      "time_precision": "NO_EXACT_PUBLIC_START_STOP_USED_AS_TELEMETRY",
+      "image_ids": [
+        "art002e009301",
+        "019A0860.NEF"
+      ],
+      "audio_records": [],
+      "target": "Sun behind lunar disk",
+      "view_direction": "Orion toward Sun through lunar occultation",
+      "crew_remark_summary": "Crew observed the prolonged total eclipse and faint structures normally overwhelmed by sunlight.",
+      "derived_totality_intervals": [
+        {
+          "classification": "TOTAL_SOLAR_ECLIPSE",
+          "start_utc": "2026-04-07T00:34:27.220Z",
+          "stop_utc": "2026-04-07T01:28:53.125Z",
+          "start_met": "05:01:59:15",
+          "stop_met": "05:02:53:41",
+          "duration_seconds": 3265.90499,
+          "duration_minutes": 54.431749833333335,
+          "provenance": "MISSIONLAB_DERIVED_FROM_NASA_FLIGHT_DERIVED_OEM_AND_SPICE",
+          "precision_boundary": "Boundary is a MissionLab geometric reconstruction using linear interpolation between public OEM states and SPICE body ephemerides. It is not onboard event telemetry."
+        }
+      ],
+      "nasa_reported_duration": "nearly 54 minutes",
+      "confirmed_observation": true
+    },
+    {
+      "observation_id": "A2_LUNAR_ECLIPSE_CORONA",
+      "observation_class": "ECLIPSE_CORONA_OBSERVATION",
+      "evidence_state": "POSTFLIGHT_SCIENCE_INTERPRETATION",
+      "reported_utc": null,
+      "reported_date": "2026-04-06",
+      "time_precision": "WITHIN_ECLIPSE_WINDOW_EXACT_REMARK_TIME_NOT_ASSIGNED",
+      "image_ids": [
+        "019A0860.NEF"
+      ],
+      "audio_records": [
+        "ANNOTATION_CORONA_STREAMER"
+      ],
+      "target": "solar corona / lunar limb",
+      "view_direction": "toward the occulted Sun",
+      "crew_remark_summary": "Postflight report identifies coronal structure, including a changing streamer, and separately reports zodiacal light.",
+      "source_evolution": {
+        "early_status": "HALO_UNDER_INVESTIGATION",
+        "postflight_status": "CORONAL_STRUCTURE_AND_ZODIACAL_LIGHT_REPORTED"
+      },
+      "confirmed_observation": true
+    },
+    {
+      "observation_id": "A2_LUNAR_IMPACT_FLASH_REPORT",
+      "observation_class": "IMPACT_FLASH_OBSERVATION",
+      "evidence_state": "POSTFLIGHT_RECONCILED",
+      "reported_utc": null,
+      "reported_date": "2026-04-06",
+      "time_precision": "INDIVIDUAL_FLASH_TIMES_NOT_ASSIGNED",
+      "image_ids": [],
+      "audio_records": [
+        "AUDIO_SEARCH_IMPACT_FLASH_DUST",
+        "ANNOTATION_IMPACT_FLASHES"
+      ],
+      "target": "dark lunar surface",
+      "view_direction": "toward eclipsed / night-side lunar disk",
+      "crew_remark_summary": "Three crew members annotated extremely faint impact flashes. Two crew members independently described seeing one flash together.",
+      "source_evolution": {
+        "early_reported_count": 6,
+        "early_report_date": "2026-04-07",
+        "postflight_reported_count": 5,
+        "postflight_report_date": "2026-10-07",
+        "missionlab_final_count": 5,
+        "selection_basis": "The October 7 postflight preliminary science report states that five flashes were reported and that other candidate sources such as cosmic rays or spacecraft reflections were ruled out."
+      },
+      "reference_annotation_utc": "2026-04-07T01:04:00Z",
+      "reference_annotation_utc_is_flash_time": false,
+      "within_total_eclipse_context": true,
+      "confirmed_observation": true
+    },
+    {
+      "observation_id": "A2_LRO_ORIENTALE_CONTEXT",
+      "observation_class": "LRO_CONTEXT_INTEGRATION",
+      "evidence_state": "NASA_POSTFLIGHT_CONTEXT",
+      "reported_utc": null,
+      "reported_date": "2026-04-06",
+      "time_precision": "CONTEXT_NOT_SINGLE_EVENT",
+      "image_ids": [],
+      "audio_records": [],
+      "target": "Orientale Basin",
+      "view_direction": "crew lunar-surface observations correlated with orbital context products",
+      "lro_context_ids": [
+        "LRO_CONTEXT_ORIENTALE"
+      ],
+      "crew_remark_summary": "Postflight science analysis compares crew imagery with LRO imaging, topography, roughness, rock abundance, and brightness context.",
+      "confirmed_observation": true
+    }
+  ],
+  "geometry_reconstruction": {
+    "geometry_window": {
+      "start_utc": "2026-04-06T21:30:00Z",
+      "stop_utc": "2026-04-07T02:30:00Z"
+    },
+    "earth_occultation": {
+      "partial_or_full_overlap_intervals": [
+        {
+          "classification": "EARTH_LUNAR_LIMB_OVERLAP",
+          "start_utc": "2026-04-06T22:40:05.443Z",
+          "stop_utc": "2026-04-06T23:23:13.914Z",
+          "start_met": "05:00:04:53",
+          "stop_met": "05:00:48:02",
+          "duration_seconds": 2588.471736,
+          "duration_minutes": 43.141195599999996,
+          "provenance": "MISSIONLAB_DERIVED_FROM_NASA_FLIGHT_DERIVED_OEM_AND_SPICE",
+          "precision_boundary": "Boundary is a MissionLab geometric reconstruction using linear interpolation between public OEM states and SPICE body ephemerides. It is not onboard event telemetry."
+        }
+      ],
+      "full_occultation_intervals": [
+        {
+          "classification": "EARTH_FULLY_OCCULTED_BY_MOON",
+          "start_utc": "2026-04-06T22:43:22.462Z",
+          "stop_utc": "2026-04-06T23:19:56.488Z",
+          "start_met": "05:00:08:10",
+          "stop_met": "05:00:44:44",
+          "duration_seconds": 2194.026347,
+          "duration_minutes": 36.56710578333333,
+          "provenance": "MISSIONLAB_DERIVED_FROM_NASA_FLIGHT_DERIVED_OEM_AND_SPICE",
+          "precision_boundary": "Boundary is a MissionLab geometric reconstruction using linear interpolation between public OEM states and SPICE body ephemerides. It is not onboard event telemetry."
+        }
+      ],
+      "reported_earthset_snapshot": {
+        "utc": "2026-04-06T22:41:00.000Z",
+        "target": "EARTH",
+        "status": "PARTIAL_LIMB_OVERLAP",
+        "center_separation_deg": 12.339567922268408,
+        "moon_apparent_radius_deg": 11.947857741290536,
+        "target_apparent_radius_deg": 0.883738805946385,
+        "overlap_margin_rad": 0.008587519519760944,
+        "full_occultation_margin_rad": -0.02226078426305439,
+        "moon_distance_km": 8392.367573169136,
+        "target_distance_km": 413070.4257682225
+      },
+      "reported_earthrise_snapshot": {
+        "utc": "2026-04-06T23:22:00.000Z",
+        "target": "EARTH",
+        "status": "PARTIAL_LIMB_OVERLAP",
+        "center_separation_deg": 12.142507623858748,
+        "moon_apparent_radius_deg": 11.923322456036672,
+        "target_apparent_radius_deg": 0.8836630682335501,
+        "overlap_margin_rad": 0.011597327168919203,
+        "full_occultation_margin_rad": -0.01924833286898231,
+        "moon_distance_km": 8409.386232170795,
+        "target_distance_km": 413105.82673668116
+      },
+      "reported_earthset_utc": "2026-04-06T22:41:00Z",
+      "reported_earthrise_utc": "2026-04-06T23:22:00Z",
+      "reported_times_equal_derived_contact_times": false,
+      "reason": "NASA image times are preserved as reported observations. MissionLab's geometric contact times are separately derived and are not substituted for the published image timestamps."
+    },
+    "solar_eclipse": {
+      "partial_or_total_overlap_intervals": [
+        {
+          "classification": "SOLAR_LUNAR_LIMB_OVERLAP",
+          "start_utc": "2026-04-07T00:32:44.765Z",
+          "stop_utc": "2026-04-07T01:31:01.384Z",
+          "start_met": "05:01:57:33",
+          "stop_met": "05:02:55:49",
+          "duration_seconds": 3496.619174,
+          "duration_minutes": 58.27698623333333,
+          "provenance": "MISSIONLAB_DERIVED_FROM_NASA_FLIGHT_DERIVED_OEM_AND_SPICE",
+          "precision_boundary": "Boundary is a MissionLab geometric reconstruction using linear interpolation between public OEM states and SPICE body ephemerides. It is not onboard event telemetry."
+        }
+      ],
+      "totality_intervals": [
+        {
+          "classification": "TOTAL_SOLAR_ECLIPSE",
+          "start_utc": "2026-04-07T00:34:27.220Z",
+          "stop_utc": "2026-04-07T01:28:53.125Z",
+          "start_met": "05:01:59:15",
+          "stop_met": "05:02:53:41",
+          "duration_seconds": 3265.90499,
+          "duration_minutes": 54.431749833333335,
+          "provenance": "MISSIONLAB_DERIVED_FROM_NASA_FLIGHT_DERIVED_OEM_AND_SPICE",
+          "precision_boundary": "Boundary is a MissionLab geometric reconstruction using linear interpolation between public OEM states and SPICE body ephemerides. It is not onboard event telemetry."
+        }
+      ],
+      "nasa_reported_duration": {
+        "description": "nearly 54 minutes",
+        "exact": false
+      },
+      "derived_totality_is_nasa_reported_duration": false
+    },
+    "pericynthion": {
+      "utc": "2026-04-06T23:00:46.177Z",
+      "met": "05:00:25:34",
+      "provenance": "MISSIONLAB_DERIVED_PREVIOUS_PHASE"
+    }
+  },
+  "lro_context_registry": [
+    {
+      "context_id": "LRO_CONTEXT_ORIENTALE",
+      "target": "Orientale Basin",
+      "mission": "Lunar Reconnaissance Orbiter",
+      "products": [
+        {
+          "instrument": "LROC WAC",
+          "role": "global imaging and labeled basin context used to locate Artemis II crew imagery"
+        },
+        {
+          "instrument": "LOLA",
+          "role": "topography and surface roughness context"
+        },
+        {
+          "instrument": "Diviner",
+          "role": "rock-abundance context"
+        },
+        {
+          "instrument": "LOLA",
+          "role": "surface-brightness / albedo context"
+        }
+      ],
+      "postflight_integration": "NASA's preliminary science report matches Artemis II crew imagery to precise lunar locations and compares the observations with LRO-derived maps and measurements.",
+      "source_url": "https://science.nasa.gov/feature/artemis-ii-preliminary-lunar-science-report/"
+    },
+    {
+      "context_id": "LRO_CONTEXT_HERTZSPRUNG",
+      "target": "Hertzsprung Basin",
+      "mission": "Lunar Reconnaissance Orbiter",
+      "products": [
+        {
+          "instrument": "LROC NAC",
+          "product_id": "M112421089RE",
+          "role": "high-resolution context for the Hertzsprung inner ring"
+        }
+      ],
+      "context": "NASA's LRO context identifies Hertzsprung as an ancient farside basin and documents high-resolution inner-ring observations.",
+      "source_url": "https://science.nasa.gov/photojournal/hertzsprung-constellation-site/"
+    },
+    {
+      "context_id": "TARGET_CONTEXT_VAVILOV",
+      "target": "Vavilov Crater",
+      "context_source": "USGS Gazetteer of Planetary Nomenclature",
+      "feature_id": 6336,
+      "center_latitude_deg": -0.87,
+      "center_longitude_deg": -138.77,
+      "diameter_km": 98.22,
+      "relationship": "Vavilov is superimposed on the older Hertzsprung basin and was a named Artemis II terminator target.",
+      "source_url": "https://planetarynames.wr.usgs.gov/Feature/6336"
+    }
+  ],
+  "impact_flash_reconciliation": {
+    "early_public_count": 6,
+    "early_publication_date": "2026-04-07",
+    "postflight_confirmed_count": 5,
+    "postflight_publication_date": "2026-10-07",
+    "missionlab_final_science_count": 5,
+    "status": "RESOLVED_BY_LATER_POSTFLIGHT_SCIENCE_REPORT",
+    "early_report_erased": false,
+    "reason": "The later postflight preliminary science report explicitly reports five flashes and states that other candidate causes were ruled out. MissionLab therefore uses five as the postflight science result while retaining the earlier six-flash public report as source evolution."
+  },
+  "eclipse_interpretation_reconciliation": {
+    "early_public_status": "HALO_UNDER_INVESTIGATION",
+    "postflight_status": "CORONAL_STRUCTURE_AND_ZODIACAL_LIGHT_REPORTED",
+    "status": "RESOLVED_BY_LATER_POSTFLIGHT_SCIENCE_REPORT",
+    "early_uncertainty_erased": false
+  },
+  "roadmap_assessment": {
+    "index_pds_crew_imagery_metadata": "COMPLETE_AT_COLLECTION_AND_SELECTED_SCIENCE_PRODUCT_LEVEL",
+    "index_pds_orion_imagery_metadata": "COMPLETE_AT_COLLECTION_AND_SELECTED_SCIENCE_PRODUCT_LEVEL",
+    "index_mission_audio_transcripts_annotations": "COMPLETE_AT_COLLECTION_AND_SELECTED_OBSERVATION_LEVEL",
+    "connect_time_view_image_remark_target": "COMPLETE_FOR_RECONSTRUCTED_SCIENCE_OBSERVATIONS",
+    "integrate_public_lro_context": "COMPLETE_FOR_SELECTED_TARGETS",
+    "reconstruct_impact_flash_observations": "COMPLETE",
+    "reconstruct_terminator_observations": "COMPLETE",
+    "reconstruct_eclipse_corona_observations": "COMPLETE",
+    "reconstruct_earth_imagery_analysis": "COMPLETE",
+    "phase6_overall": "COMPLETE_RELATIVE_TO_DEFENSIBLE_PUBLIC_POSTFLIGHT_EVIDENCE"
+  },
+  "critical_non_equivalences": [
+    {
+      "left": "REPORTED_IMAGE_TIME",
+      "right": "DERIVED_GEOMETRIC_CONTACT_TIME",
+      "equivalent": false
+    },
+    {
+      "left": "IMAGE_CAPTURE_TIME",
+      "right": "CREW_REMARK_TIME",
+      "equivalent": false
+    },
+    {
+      "left": "TARGETING_PLAN_OPPORTUNITY",
+      "right": "CONFIRMED_OBSERVATION",
+      "equivalent": false
+    },
+    {
+      "left": "REFERENCE_ANNOTATION_TIME",
+      "right": "INDIVIDUAL_IMPACT_FLASH_TIME",
+      "equivalent": false
+    },
+    {
+      "left": "EARLY_SIX_FLASH_REPORT",
+      "right": "POSTFLIGHT_FIVE_FLASH_RESULT",
+      "equivalent": false
+    },
+    {
+      "left": "EARLY_HALO_UNCERTAINTY",
+      "right": "POSTFLIGHT_CORONAL_INTERPRETATION",
+      "equivalent": false
+    },
+    {
+      "left": "LRO_CONTEXT_PRODUCT",
+      "right": "ARTEMIS_II_CREW_IMAGE",
+      "equivalent": false
+    },
+    {
+      "left": "MISSIONLAB_GEOMETRY",
+      "right": "ONBOARD_ORION_TELEMETRY",
+      "equivalent": false
+    }
+  ],
+  "outputs": {
+    "reference_json": "data/reference/artemis_ii_lunar_observation_reconstruction.json",
+    "processed_json": "data/processed/lunar_science/artemis_ii_lunar_observation_reconstruction.json",
+    "observation_csv": "data/processed/lunar_science/artemis_ii_lunar_observation_correlations.csv",
+    "figure": "docs/assets/lunar_science/phase6b_lunar_observation_reconstruction.svg"
+  }
+}

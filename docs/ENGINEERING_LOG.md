@@ -51725,3 +51725,1817 @@ Phase 6 roadmap validation
 ```
 
 ---
+
+---
+
+# Phase 6B — Artemis II Lunar Observation Reconstruction and Phase 6 Closure
+
+## Goal
+
+Complete Phase 6 by connecting the public Artemis II lunar-science archive to reconstructed mission geometry, selected imagery, science audio, crew annotations, lunar targets, and LRO context.
+
+Phase 6B completes:
+
+```text
+selected public science-product indexing
+
+science audio / annotation correlation
+
+observation time / view / image / remark / target linkage
+
+Earthset / Earthrise geometry reconstruction
+
+lunar terminator reconstruction
+
+solar-eclipse / corona reconstruction
+
+impact-flash source reconciliation
+
+selected LRO context integration
+
+Phase 6 roadmap closure
+```
+
+---
+
+# Analysis
+
+Created:
+
+```text
+scripts/analysis/reconstruct_lunar_science_observations.py
+```
+
+Created independent validator:
+
+```text
+scripts/validation/validate_lunar_science_observations.py
+```
+
+Generated:
+
+```text
+data/reference/artemis_ii_lunar_observation_reconstruction.json
+
+data/processed/lunar_science/artemis_ii_lunar_observation_reconstruction.json
+
+data/processed/lunar_science/artemis_ii_lunar_observation_correlations.csv
+
+docs/assets/lunar_science/phase6b_lunar_observation_reconstruction.svg
+```
+
+Dataset:
+
+```text
+phase6b_artemis_ii_lunar_observation_reconstruction
+```
+
+Status:
+
+```text
+LUNAR_SCIENCE_OBSERVATION_RECONSTRUCTION_COMPLETE
+```
+
+---
+
+# Dependencies
+
+Validated:
+
+```text
+Phase 6A lunar-science archive index
+PASS
+
+flight-derived Artemis II trajectory
+PASS
+
+SPICE geometry dependencies
+PASS
+```
+
+Trajectory states available to the reconstruction:
+
+```text
+3262
+```
+
+---
+
+# Selected Science Products
+
+Selected image products:
+
+```text
+6
+```
+
+Selected science-audio / annotation records:
+
+```text
+7
+```
+
+Reconstructed science-observation records:
+
+```text
+8
+```
+
+Validation:
+
+```text
+6 selected image products
+PASS
+
+7 audio / annotation records
+PASS
+
+8 reconstructed observation records
+PASS
+```
+
+---
+
+# Selected Image Registry
+
+Indexed selected image products include:
+
+```text
+art002e009288
+Earthset
+```
+
+```text
+art002e021278
+Earthrise
+```
+
+```text
+art002e009282
+Vavilov / Hertzsprung terminator observation
+```
+
+```text
+art002e009301
+solar eclipse
+```
+
+```text
+015A9930.NEF
+postflight terminator science image
+```
+
+```text
+019A0860.NEF
+postflight eclipse / corona science image
+```
+
+Validation:
+
+```text
+Earthset image/time linkage
+PASS
+
+Earthrise image/time linkage
+PASS
+
+Vavilov exact-time non-inference
+PASS
+
+Eclipse exact-time non-inference
+PASS
+```
+
+---
+
+# Product Timing Boundary
+
+For products where the curated public source does not provide an exact timestamp, MissionLab preserves that limitation.
+
+Therefore:
+
+```text
+DATE-ONLY PUBLIC PRODUCT
+!=
+EXACT IMAGE CAPTURE UTC
+```
+
+MissionLab does not manufacture exact timestamps for:
+
+```text
+Vavilov imagery
+
+selected eclipse imagery
+
+selected postflight science-highlight products
+```
+
+---
+
+# Science Audio and Annotation Registry
+
+Selected public science-audio / annotation records include:
+
+```text
+Observing Earthset
+
+Vavilov Crater: Color and Terrain
+
+Terminator: Craters and Elevation
+
+Ruminations on the Terminator
+
+Searching for Impact Flashes and Lofted Dust
+
+crew tablet impact-flash annotation
+
+crew tablet solar-corona annotation
+```
+
+Validation:
+
+```text
+Earthset audio linkage
+PASS
+
+Vavilov audio linkage
+PASS
+
+Impact-flash audio linkage
+PASS
+
+Impact-flash annotation linkage
+PASS
+
+Corona annotation linkage
+PASS
+```
+
+---
+
+# Audio / Image Timing Boundary
+
+A science audio timestamp or crew remark timestamp is not automatically identical to the image capture time.
+
+Therefore:
+
+```text
+IMAGE CAPTURE TIME
+!=
+CREW REMARK TIME
+```
+
+Likewise:
+
+```text
+REFERENCE ANNOTATION TIME
+!=
+INDIVIDUAL IMPACT-FLASH TIME
+```
+
+Validation:
+
+```text
+Annotation-time / flash-time boundary
+PASS
+```
+
+---
+
+# Earthset Observation
+
+NASA-reported Earthset time:
+
+```text
+2026-04-06T22:41:00Z
+```
+
+Reported image:
+
+```text
+art002e009288
+```
+
+MissionLab-derived geometry state at that reported time:
+
+```text
+PARTIAL_LIMB_OVERLAP
+```
+
+Interpretation:
+
+```text
+Earth was already intersecting the apparent lunar limb
+at the NASA-reported Earthset observation time.
+```
+
+Validation:
+
+```text
+Earthset partial-limb geometry
+PASS
+```
+
+---
+
+# Full Earth Occultation
+
+MissionLab-derived full Earth-occultation start:
+
+```text
+2026-04-06T22:43:22.462Z
+```
+
+MissionLab-derived full Earth-occultation stop:
+
+```text
+2026-04-06T23:19:56.488Z
+```
+
+Duration:
+
+```text
+36.57 minutes
+```
+
+Provenance:
+
+```text
+MISSIONLAB_DERIVED_FROM_NASA_FLIGHT_DERIVED_OEM_AND_SPICE
+```
+
+This interval is derived from:
+
+```text
+NASA flight-derived OEM geometry
+
+linear interpolation between public trajectory states
+
+SPICE body ephemerides
+
+apparent angular radii and separation
+```
+
+It is not onboard Orion event telemetry.
+
+Validation:
+
+```text
+Full Earth-occultation interval
+PASS
+
+Earth-occultation duration
+PASS
+```
+
+---
+
+# Earthrise Observation
+
+NASA-reported Earthrise time:
+
+```text
+2026-04-06T23:22:00Z
+```
+
+Reported image:
+
+```text
+art002e021278
+```
+
+MissionLab-derived geometry state:
+
+```text
+PARTIAL_LIMB_OVERLAP
+```
+
+Interpretation:
+
+```text
+Earth had begun re-emerging across the lunar limb
+at the NASA-reported Earthrise observation time.
+```
+
+Validation:
+
+```text
+Earthrise partial-limb geometry
+PASS
+```
+
+---
+
+# Reported-Time / Derived-Contact Boundary
+
+NASA image timestamps are observations.
+
+MissionLab-derived occultation contacts are geometric calculations.
+
+Therefore:
+
+```text
+REPORTED IMAGE TIME
+!=
+DERIVED GEOMETRIC CONTACT TIME
+```
+
+MissionLab does not substitute the derived contact time for NASA's published image time.
+
+Validation:
+
+```text
+Reported-time / contact-time separation
+PASS
+```
+
+---
+
+# Pericynthion Crosslink
+
+Previously derived pericynthion:
+
+```text
+2026-04-06T23:00:46.177998Z
+```
+
+Mission elapsed time:
+
+```text
+05:00:25:34
+```
+
+The lunar-science reconstruction preserves this previously derived geometric anchor.
+
+Validation:
+
+```text
+Pericynthion crosslink
+PASS
+```
+
+---
+
+# Solar Eclipse Geometry
+
+MissionLab-derived total solar-eclipse start:
+
+```text
+2026-04-07T00:34:27.220Z
+```
+
+MissionLab-derived totality stop:
+
+```text
+2026-04-07T01:28:53.125Z
+```
+
+Derived totality duration:
+
+```text
+54.43 minutes
+```
+
+NASA public description:
+
+```text
+nearly 54 minutes
+```
+
+The close agreement provides an independent geometry consistency check.
+
+Validation:
+
+```text
+Total solar-eclipse interval
+PASS
+
+54.43-minute derived totality
+PASS
+
+NASA nearly-54-minute comparison
+PASS
+```
+
+---
+
+# Eclipse Geometry Evidence Boundary
+
+The derived interval is not treated as:
+
+```text
+onboard Orion eclipse telemetry
+```
+
+Therefore:
+
+```text
+MISSIONLAB-DERIVED ECLIPSE GEOMETRY
+!=
+ONBOARD ORION TELEMETRY
+```
+
+Similarly:
+
+```text
+DERIVED 54.43-MINUTE INTERVAL
+!=
+NASA'S PUBLISHED APPROXIMATE DURATION
+```
+
+Both are retained independently.
+
+Validation:
+
+```text
+Derived-geometry / NASA-report separation
+PASS
+```
+
+---
+
+# Terminator / Vavilov Reconstruction
+
+Selected observation:
+
+```text
+A2_LUNAR_TERMINATOR_VAVILOV
+```
+
+Target:
+
+```text
+Vavilov Crater / Hertzsprung Basin
+```
+
+Public image:
+
+```text
+art002e009282
+```
+
+Science-audio context:
+
+```text
+Vavilov Crater: Color and Terrain
+```
+
+Observation interpretation:
+
+```text
+crew observations of farside terrain under
+low-angle terminator illumination
+```
+
+Relevant visual properties include:
+
+```text
+terrain relief
+
+crater morphology
+
+color
+
+albedo
+
+surface structure
+```
+
+Exact product timestamp inferred:
+
+```text
+NO
+```
+
+Validation:
+
+```text
+Terminator reconstruction
+PASS
+```
+
+---
+
+# General Terminator Observation
+
+Selected postflight image:
+
+```text
+015A9930.NEF
+```
+
+Observation class:
+
+```text
+TERMINATOR_OBSERVATION
+```
+
+Associated public science-audio records:
+
+```text
+Terminator: Craters and Elevation
+
+Ruminations on the Terminator
+```
+
+The reconstruction connects:
+
+```text
+target geometry
+
+selected imagery
+
+public crew observation summaries
+
+low-angle illumination science value
+```
+
+without manufacturing an exact image or remark timestamp.
+
+---
+
+# Vavilov Target Context
+
+Selected target:
+
+```text
+Vavilov Crater
+```
+
+Center latitude:
+
+```text
+-0.87 deg
+```
+
+Center longitude:
+
+```text
+-138.77 deg
+```
+
+Diameter:
+
+```text
+98.22 km
+```
+
+Context relationship:
+
+```text
+Vavilov is superimposed on the older
+Hertzsprung basin and was an Artemis II
+terminator observation target.
+```
+
+Validation:
+
+```text
+Vavilov target coordinates
+PASS
+```
+
+---
+
+# Hertzsprung LRO Context
+
+Selected context:
+
+```text
+Hertzsprung Basin
+```
+
+LRO product:
+
+```text
+LROC NAC M112421089RE
+```
+
+Purpose:
+
+```text
+high-resolution contextual imaging
+of the Hertzsprung inner-ring region
+```
+
+Validation:
+
+```text
+Hertzsprung LROC NAC context
+PASS
+```
+
+---
+
+# Orientale LRO Context
+
+Selected target:
+
+```text
+Orientale Basin
+```
+
+Integrated public LRO context includes:
+
+```text
+LROC WAC
+global imaging context
+
+LOLA
+topography / roughness context
+
+Diviner
+rock-abundance context
+
+LOLA-derived / LRO-derived surface brightness context
+```
+
+The postflight Artemis II science analysis compares crew imagery with orbital context products.
+
+Validation:
+
+```text
+Orientale LROC / LOLA / Diviner context
+PASS
+```
+
+---
+
+# LRO / Artemis II Product Boundary
+
+LRO context imagery and measurements describe the lunar surface from an independent orbital mission.
+
+They are not Artemis II imagery.
+
+Therefore:
+
+```text
+LRO CONTEXT PRODUCT
+!=
+ARTEMIS II CREW IMAGE
+```
+
+Validation:
+
+```text
+LRO-context / Artemis-image boundary
+PASS
+```
+
+---
+
+# Impact-Flash Source Evolution
+
+Early NASA public report:
+
+```text
+publication date
+2026-04-07
+
+reported flash count
+6
+```
+
+Later postflight science report:
+
+```text
+publication date
+2026-10-07
+
+reported flash count
+5
+```
+
+Phase 6A intentionally left this unresolved.
+
+Phase 6B now resolves the science result using the later postflight evidence.
+
+MissionLab final postflight science count:
+
+```text
+5
+```
+
+Status:
+
+```text
+RESOLVED_BY_LATER_POSTFLIGHT_SCIENCE_REPORT
+```
+
+The earlier six-flash report is retained.
+
+It is not deleted or rewritten.
+
+Validation:
+
+```text
+Early six-flash report preserved
+PASS
+
+Postflight five-flash result
+PASS
+
+Impact-flash source reconciliation
+PASS
+```
+
+---
+
+# Impact-Flash Selection Basis
+
+MissionLab uses:
+
+```text
+5
+```
+
+as the postflight science result because the later science report states that five flashes were reported and that other candidate causes were ruled out.
+
+The source history remains:
+
+```text
+early public evidence
+6
+
+later postflight science result
+5
+```
+
+Therefore:
+
+```text
+EARLY SIX-FLASH REPORT
+!=
+POSTFLIGHT FIVE-FLASH RESULT
+```
+
+This difference represents evidence evolution rather than an error that should be hidden.
+
+Validation:
+
+```text
+Six-flash / five-flash source-evolution boundary
+PASS
+```
+
+---
+
+# Individual Impact-Flash Timing Boundary
+
+Reference annotation visualization time:
+
+```text
+2026-04-07T01:04:00Z
+```
+
+That time is not interpreted as the timestamp of any individual impact flash.
+
+Therefore:
+
+```text
+REFERENCE ANNOTATION TIME
+!=
+INDIVIDUAL IMPACT-FLASH TIME
+```
+
+Individual flash timestamps fabricated:
+
+```text
+NO
+```
+
+Validation:
+
+```text
+No fabricated individual flash times
+PASS
+```
+
+---
+
+# Eclipse / Corona Source Evolution
+
+Early public evidence state:
+
+```text
+HALO UNDER INVESTIGATION
+```
+
+Possible interpretations included:
+
+```text
+solar corona
+
+zodiacal light
+
+combination of multiple faint-light sources
+```
+
+Later postflight science result:
+
+```text
+CORONAL STRUCTURE
++
+ZODIACAL LIGHT
+```
+
+MissionLab preserves both states of knowledge.
+
+---
+
+# Corona Observation
+
+Selected postflight image:
+
+```text
+019A0860.NEF
+```
+
+Selected crew annotation:
+
+```text
+ANNOTATION_CORONA_STREAMER
+```
+
+Postflight interpretation:
+
+```text
+crew observed coronal structure
+
+a changing coronal streamer was documented
+
+zodiacal light was separately reported
+```
+
+Validation:
+
+```text
+Postflight coronal interpretation
+PASS
+```
+
+---
+
+# Eclipse Interpretation Boundary
+
+The earlier uncertainty is not retroactively removed.
+
+Therefore:
+
+```text
+EARLY HALO UNCERTAINTY
+!=
+POSTFLIGHT CORONAL INTERPRETATION
+```
+
+Evidence sequence:
+
+```text
+initial observation
+↓
+uncertain physical interpretation
+↓
+postflight analysis
+↓
+coronal structure + zodiacal light reported
+```
+
+Validation:
+
+```text
+Early halo uncertainty preserved
+PASS
+
+Eclipse interpretation reconciliation
+PASS
+```
+
+---
+
+# Observation Opportunity Boundary
+
+The preflight targeting plan represents:
+
+```text
+observation opportunities
+```
+
+Postflight imagery, audio, and annotations establish:
+
+```text
+confirmed observations
+```
+
+Therefore:
+
+```text
+TARGETING PLAN OPPORTUNITY
+!=
+CONFIRMED OBSERVATION
+```
+
+Validation:
+
+```text
+Opportunity / observation boundary
+PASS
+```
+
+---
+
+# Time / View / Image / Remark / Target Integration
+
+Phase 6 now connects, where public evidence permits:
+
+```text
+observation time
+
+view direction
+
+selected image product
+
+science-audio / crew annotation
+
+science target
+
+mission geometry
+
+LRO context
+```
+
+Reconstructed records include:
+
+```text
+Earthset
+
+Earthrise
+
+Vavilov / Hertzsprung terminator observation
+
+general terminator science observation
+
+solar eclipse
+
+eclipse / corona observation
+
+impact flashes
+
+Orientale / LRO context integration
+```
+
+Validation:
+
+```text
+Time / view / image / remark / target linkage
+PASS
+```
+
+---
+
+# Observation Correlation Product
+
+Generated:
+
+```text
+data/processed/lunar_science/artemis_ii_lunar_observation_correlations.csv
+```
+
+Rows:
+
+```text
+8
+```
+
+Validation:
+
+```text
+Observation correlation CSV
+PASS
+
+Observation CSV schema
+PASS
+```
+
+---
+
+# Critical Non-Equivalences
+
+Phase 6B validates eight critical boundaries:
+
+```text
+REPORTED_IMAGE_TIME
+!=
+DERIVED_GEOMETRIC_CONTACT_TIME
+```
+
+```text
+IMAGE_CAPTURE_TIME
+!=
+CREW_REMARK_TIME
+```
+
+```text
+TARGETING_PLAN_OPPORTUNITY
+!=
+CONFIRMED_OBSERVATION
+```
+
+```text
+REFERENCE_ANNOTATION_TIME
+!=
+INDIVIDUAL_IMPACT_FLASH_TIME
+```
+
+```text
+EARLY_SIX_FLASH_REPORT
+!=
+POSTFLIGHT_FIVE_FLASH_RESULT
+```
+
+```text
+EARLY_HALO_UNCERTAINTY
+!=
+POSTFLIGHT_CORONAL_INTERPRETATION
+```
+
+```text
+LRO_CONTEXT_PRODUCT
+!=
+ARTEMIS_II_CREW_IMAGE
+```
+
+```text
+MISSIONLAB_GEOMETRY
+!=
+ONBOARD_ORION_TELEMETRY
+```
+
+Validation:
+
+```text
+8 critical non-equivalences
+PASS
+```
+
+---
+
+# Documentation Figure
+
+Created:
+
+```text
+docs/assets/lunar_science/phase6b_lunar_observation_reconstruction.svg
+```
+
+The figure correlates:
+
+```text
+derived full Earth occultation
+
+derived total solar eclipse
+
+NASA-reported Earthset
+
+NASA-reported Earthrise
+
+MissionLab-derived pericynthion
+```
+
+while explicitly preserving the difference between:
+
+```text
+NASA-reported observations
+
+and
+
+MissionLab-derived geometric contacts
+```
+
+Validation:
+
+```text
+Documentation figure
+PASS
+```
+
+---
+
+# Independent Validation
+
+Created:
+
+```text
+scripts/validation/validate_lunar_science_observations.py
+```
+
+Validation result:
+
+```text
+Analysis identity
+PASS
+
+Reference / processed manifest consistency
+PASS
+
+Phase 6A dependency
+PASS
+
+Flight-derived trajectory dependency
+PASS
+
+SPICE kernel registry
+PASS
+
+6 selected image products
+PASS
+
+Earthset image/time linkage
+PASS
+
+Earthrise image/time linkage
+PASS
+
+Vavilov exact-time non-inference
+PASS
+
+Eclipse exact-time non-inference
+PASS
+
+7 audio / annotation records
+PASS
+
+Earthset audio linkage
+PASS
+
+Vavilov audio linkage
+PASS
+
+Impact-flash audio linkage
+PASS
+
+Impact-flash annotation linkage
+PASS
+
+Corona annotation linkage
+PASS
+
+Annotation-time / flash-time boundary
+PASS
+
+Earthset partial-limb geometry
+PASS
+
+Earthrise partial-limb geometry
+PASS
+
+Full Earth-occultation interval
+PASS
+
+Earth-occultation duration
+PASS
+
+Reported-time / contact-time separation
+PASS
+
+Total solar-eclipse interval
+PASS
+
+54.43-minute derived totality
+PASS
+
+NASA nearly-54-minute comparison
+PASS
+
+Derived-geometry / NASA-report separation
+PASS
+
+Pericynthion crosslink
+PASS
+
+8 reconstructed observation records
+PASS
+
+Earth imagery reconstruction
+PASS
+
+Terminator reconstruction
+PASS
+
+Eclipse reconstruction
+PASS
+
+LRO-context observation linkage
+PASS
+
+Early six-flash report preserved
+PASS
+
+Postflight five-flash result
+PASS
+
+Impact-flash source reconciliation
+PASS
+
+No fabricated individual flash times
+PASS
+
+Early halo uncertainty preserved
+PASS
+
+Postflight coronal interpretation
+PASS
+
+Eclipse interpretation reconciliation
+PASS
+
+3 LRO / target context records
+PASS
+
+Orientale LROC / LOLA / Diviner context
+PASS
+
+Hertzsprung LROC NAC context
+PASS
+
+Vavilov target coordinates
+PASS
+
+Observation correlation CSV
+PASS
+
+Observation CSV schema
+PASS
+
+Crew imagery roadmap item
+PASS
+
+Orion imagery roadmap item
+PASS
+
+Audio / transcript / annotation roadmap item
+PASS
+
+Time / view / image / remark / target linkage
+PASS
+
+LRO context roadmap item
+PASS
+
+Impact-flash roadmap item
+PASS
+
+Terminator roadmap item
+PASS
+
+Eclipse / corona roadmap item
+PASS
+
+Earth-imagery roadmap item
+PASS
+
+Phase 6 roadmap coverage
+PASS
+
+8 critical non-equivalences
+PASS
+
+Image-time / contact-time boundary
+PASS
+
+Image-time / remark-time boundary
+PASS
+
+Opportunity / observation boundary
+PASS
+
+Annotation-time / flash-time boundary
+PASS
+
+Six-flash / five-flash source-evolution boundary
+PASS
+
+Halo-uncertainty / postflight-interpretation boundary
+PASS
+
+LRO-context / Artemis-image boundary
+PASS
+
+Derived-geometry / onboard-telemetry boundary
+PASS
+
+Documentation figure
+PASS
+```
+
+Final result:
+
+```text
+PHASE 6B VALIDATION PASSED
+
+PHASE 6 ROADMAP COVERAGE PASSED
+```
+
+---
+
+# Phase 6 Roadmap Closure
+
+Roadmap requirement:
+
+```text
+index PDS crew imagery and Orion imagery metadata
+```
+
+Status:
+
+```text
+COMPLETE
+```
+
+Crew imagery:
+
+```text
+collection-level archive index
+COMPLETE
+
+selected science-product indexing
+COMPLETE
+```
+
+Orion imagery:
+
+```text
+collection-level archive index
+COMPLETE
+
+selected science-product indexing
+COMPLETE
+```
+
+---
+
+Roadmap requirement:
+
+```text
+index mission audio / transcripts / annotations
+```
+
+Status:
+
+```text
+COMPLETE
+```
+
+Coverage:
+
+```text
+PDS collection indexing
+
+selected public science-audio records
+
+selected crew annotations
+
+observation crosslinks
+```
+
+---
+
+Roadmap requirement:
+
+```text
+connect observation time,
+view direction,
+image,
+crew remark,
+and target
+```
+
+Status:
+
+```text
+COMPLETE FOR RECONSTRUCTED SCIENCE OBSERVATIONS
+```
+
+---
+
+Roadmap requirement:
+
+```text
+integrate public LRO context products
+for selected targets
+```
+
+Status:
+
+```text
+COMPLETE
+```
+
+Selected context:
+
+```text
+Orientale Basin
+
+Hertzsprung Basin
+
+Vavilov Crater
+```
+
+---
+
+Roadmap requirement:
+
+```text
+reconstruct impact-flash observations
+```
+
+Status:
+
+```text
+COMPLETE
+```
+
+Final postflight result:
+
+```text
+5 flashes
+```
+
+Earlier report retained:
+
+```text
+6 flashes
+```
+
+---
+
+Roadmap requirement:
+
+```text
+reconstruct terminator observations
+```
+
+Status:
+
+```text
+COMPLETE
+```
+
+Includes:
+
+```text
+Vavilov / Hertzsprung
+
+general terminator terrain
+
+low-angle illumination context
+
+science audio
+
+selected imagery
+```
+
+---
+
+Roadmap requirement:
+
+```text
+reconstruct eclipse / corona observations
+```
+
+Status:
+
+```text
+COMPLETE
+```
+
+Includes:
+
+```text
+MissionLab-derived totality geometry
+
+NASA nearly-54-minute comparison
+
+postflight coronal structure
+
+zodiacal light
+
+source-evolution boundary
+```
+
+---
+
+Roadmap requirement:
+
+```text
+reconstruct Earth imagery analysis
+```
+
+Status:
+
+```text
+COMPLETE
+```
+
+Includes:
+
+```text
+Earthset
+
+full Earth occultation
+
+Earthrise
+
+reported-image / derived-contact separation
+```
+
+---
+
+# Phase 6 Final Status
+
+```text
+PHASE 6 — LUNAR SCIENCE AND CREW OBSERVATIONS
+```
+
+PDS crew-camera archive:
+
+```text
+COMPLETE
+```
+
+PDS Orion-camera archive:
+
+```text
+COMPLETE
+```
+
+PDS mission-audio archive:
+
+```text
+COMPLETE
+```
+
+Selected science-product indexing:
+
+```text
+COMPLETE
+```
+
+Science audio / annotation indexing:
+
+```text
+COMPLETE
+```
+
+Observation linkage:
+
+```text
+COMPLETE
+```
+
+Earthset reconstruction:
+
+```text
+COMPLETE
+```
+
+Earthrise reconstruction:
+
+```text
+COMPLETE
+```
+
+Full Earth-occultation geometry:
+
+```text
+COMPLETE
+```
+
+Terminator science reconstruction:
+
+```text
+COMPLETE
+```
+
+Vavilov / Hertzsprung context:
+
+```text
+COMPLETE
+```
+
+Solar-eclipse reconstruction:
+
+```text
+COMPLETE
+```
+
+Corona / zodiacal-light interpretation:
+
+```text
+COMPLETE
+```
+
+Impact-flash source reconciliation:
+
+```text
+COMPLETE
+```
+
+Final postflight flash result:
+
+```text
+5
+```
+
+Early six-flash report:
+
+```text
+PRESERVED
+```
+
+LRO context integration:
+
+```text
+COMPLETE
+```
+
+Image-time / contact-time boundary:
+
+```text
+PRESERVED
+```
+
+Image-time / crew-remark boundary:
+
+```text
+PRESERVED
+```
+
+Targeting-opportunity / confirmed-observation boundary:
+
+```text
+PRESERVED
+```
+
+MissionLab geometry / onboard telemetry boundary:
+
+```text
+PRESERVED
+```
+
+Independent validation:
+
+```text
+PASS
+```
+
+Overall:
+
+```text
+PHASE 6
+COMPLETE RELATIVE TO DEFENSIBLE PUBLIC POSTFLIGHT EVIDENCE
+```
+
+---
+
+# Phase 7 Handoff
+
+Next roadmap phase:
+
+```text
+PHASE 7 — MISSION CONTROL / ENGINEERING PERSPECTIVES
+```
+
+Phase 7 will build discipline-specific mission views around the shared evidence spine.
+
+Roadmap work:
+
+```text
+FLIGHT perspective
+
+FDO perspective
+
+FAO perspective
+
+EECOM perspective
+
+COMM perspective
+
+SCIENCE perspective
+
+engineering-support perspective
+
+shared timeline with discipline-specific prioritization
+
+decision threads:
+detection
+→ evidence
+→ constraint
+→ options
+→ decision
+→ action
+→ outcome
+
+postflight engineering timeline
+```
+
+---
