@@ -41289,3 +41289,870 @@ postflight investigation
 while explicitly preventing unsupported claims that the waste-management issues caused trajectory changes, propulsion anomalies, ECLSS-wide failures, or mission-risk outcomes not stated in the public record.
 
 ---
+
+---
+
+# Phase 3B.3 — Waste Management Mission-Impact and Cross-Domain Correlation
+
+## Goal
+
+Integrate the validated Artemis II waste-management operational reconstruction with independently validated mission-level products while preventing temporal or operational correlation from being converted into unsupported causal claims.
+
+Phase 3B.3 connects the Phase 3B waste-management evidence to:
+
+```text
+crew-ground operations
+
+spacecraft attitude operations
+
+trajectory-correction scheduling
+
+crew contingency posture
+
+downstream mission continuation
+
+postflight engineering investigation
+```
+
+The analysis preserves actual cross-domain interaction without claiming unavailable mission impact, failure propagation, or root cause.
+
+---
+
+# Dependencies
+
+Phase 3B.3 depends on:
+
+```text
+Phase 3B.1
+Artemis II Waste Management Public Evidence Reconstruction
+
+Phase 3B.2
+Waste Management Operational Decision Reconstruction
+
+Phase 2I.4
+Maneuver Operational Threads
+
+Phase 2K
+Integrated Phase 2 Mission Operations
+```
+
+Validated dependency products:
+
+```text
+data/reference/artemis_ii_waste_management_evidence.json
+
+data/processed/eclss/waste_management_operational_threads.json
+
+data/reference/artemis_ii_maneuver_operational_threads.json
+
+data/reference/artemis_ii_phase2_integrated_operations.json
+```
+
+Dependency status:
+
+```text
+PASS
+```
+
+---
+
+# Analysis
+
+Created:
+
+```text
+scripts/analysis/analyze_waste_management_mission_impact.py
+```
+
+Generated:
+
+```text
+data/processed/eclss/waste_management_cross_domain_correlations.csv
+
+data/processed/eclss/waste_management_mission_impact.json
+```
+
+Documentation figure:
+
+```text
+docs/assets/eclss/phase3b3_waste_management_cross_domain.svg
+```
+
+Total validated cross-domain correlations:
+
+```text
+6
+```
+
+---
+
+# Correlation 1 — Flight Day 1 Crew-Ground Recovery
+
+Domain:
+
+```text
+CREW SYSTEMS + MISSION OPERATIONS
+```
+
+Public sequence:
+
+```text
+toilet checkout
+↓
+blinking fault indication
+↓
+Mission Control data assessment
+↓
+crew-ground troubleshooting
+↓
+normal toilet operations restored
+```
+
+Cross-domain relationship:
+
+```text
+CREW_GROUND_TROUBLESHOOTING
+```
+
+NASA reported the crew and Mission Control worked together to restore normal operations.
+
+Therefore:
+
+```text
+crew_ground_recovery_interaction = TRUE
+```
+
+However:
+
+```text
+ROOT CAUSE PUBLIC = FALSE
+```
+
+and:
+
+```text
+MISSION-ENDING IMPACT ESTABLISHED = FALSE
+```
+
+Successful recovery does not reveal the internal troubleshooting tree or original failure mechanism.
+
+---
+
+# Correlation 2 — Flight Day 4 Spacecraft Attitude Support
+
+Domain:
+
+```text
+GNC / ATTITUDE OPERATIONS
+```
+
+NASA reported that Orion's attitude was changed so the wastewater vent faced the Sun during troubleshooting.
+
+The independent Phase 2 maneuver product also records:
+
+```text
+ATTITUDE_ADJUSTMENT_FOR_WASTEWATER_VENT_CLEARING
+```
+
+as parallel operational activity on April 4.
+
+Therefore:
+
+```text
+SPACECRAFT ATTITUDE INTERACTION = TRUE
+```
+
+This establishes a real cross-domain interaction between:
+
+```text
+waste-management troubleshooting
+
+and
+
+spacecraft attitude operations
+```
+
+It does not establish:
+
+```text
+GNC anomaly
+```
+
+Therefore:
+
+```text
+ATTITUDE RESPONSE
+!=
+GNC ANOMALY
+```
+
+---
+
+# Correlation 3 — Trajectory Scheduling Interaction
+
+The Phase 2 maneuver reconstruction records OTC2 as:
+
+```text
+date
+2026-04-04
+
+status
+CANCELLED
+
+reason
+TRAJECTORY_REMAINED_ON_TRACK
+```
+
+The same Phase 2 operational record separately identifies:
+
+```text
+parallel operational activity
+ATTITUDE_ADJUSTMENT_FOR_WASTEWATER_VENT_CLEARING
+```
+
+Therefore Phase 3B.3 establishes:
+
+```text
+trajectory scheduling interaction = TRUE
+```
+
+but explicitly preserves:
+
+```text
+waste_issue_caused_otc2_cancellation = FALSE
+```
+
+The evidence supports:
+
+```text
+OTC2 cancelled because trajectory remained on track
+```
+
+not:
+
+```text
+OTC2 cancelled because of wastewater problem
+```
+
+Therefore:
+
+```text
+PARALLEL ACTIVITY
+!=
+CANCELLATION CAUSE
+```
+
+---
+
+# OTC2 Failure Boundaries
+
+Phase 2 already established:
+
+```text
+OTC2 failed burn
+FALSE
+
+OTC2 propulsion anomaly
+FALSE
+```
+
+Phase 3B.3 preserves those boundaries.
+
+Therefore:
+
+```text
+OTC2 CANCELLATION
+!=
+FAILED BURN
+```
+
+and:
+
+```text
+OTC2 CANCELLATION
+!=
+PROPULSION ANOMALY
+```
+
+No propulsion malfunction is inferred from the April 4 scheduling interaction.
+
+---
+
+# Correlation 4 — Crew Contingency Posture
+
+Domain:
+
+```text
+CREW SYSTEMS + CONTINGENCY OPERATIONS
+```
+
+NASA reported that:
+
+```text
+backup collection devices were available if needed
+```
+
+while also reporting:
+
+```text
+toilet operational = TRUE
+
+tank full = FALSE
+```
+
+Therefore the crew possessed a contingency path without evidence of complete UWMS loss.
+
+Thus:
+
+```text
+CONTINGENCY AVAILABLE
+!=
+COMPLETE SYSTEM FAILURE
+```
+
+and:
+
+```text
+BACKUP CAPABILITY
+!=
+TOILET INOPERATIVE
+```
+
+---
+
+# Correlation 5 — Downstream Mission Continuation
+
+Following the April 4 waste-management issue, independently validated mission products preserve later mission operations including:
+
+```text
+OTC3
+
+lunar flyby / pericynthion
+
+Earth return
+
+Entry Interface
+
+splashdown
+```
+
+Validated downstream anchors:
+
+```text
+OTC3
+2026-04-06T03:03:00Z
+
+Pericynthion
+2026-04-06T23:00:46.177998Z
+
+Entry Interface
+2026-04-10T23:53:00Z
+
+Splashdown
+2026-04-11T00:07:00Z
+```
+
+Therefore the public mission record establishes:
+
+```text
+later mission operations continued
+```
+
+after the waste-management issue.
+
+However:
+
+```text
+MISSION CONTINUATION
+!=
+ZERO OPERATIONAL IMPACT
+```
+
+and:
+
+```text
+MISSION CONTINUATION
+!=
+ZERO RISK
+```
+
+Phase 3B.3 does not calculate or infer a quantitative mission-risk contribution from the waste-management issue.
+
+---
+
+# Correlation 6 — Postflight Engineering Follow-Up
+
+Domain:
+
+```text
+POSTFLIGHT ENGINEERING
+```
+
+NASA's initial postflight assessment continued:
+
+```text
+hardware assessment
+
+data gathering
+
+urine vent-line investigation
+```
+
+Therefore:
+
+```text
+POSTFLIGHT INVESTIGATION CONTINUED = TRUE
+```
+
+This establishes engineering follow-up after mission completion.
+
+It does not establish the investigation's eventual root-cause conclusion.
+
+Therefore:
+
+```text
+POSTFLIGHT INVESTIGATION
+!=
+FINAL ROOT CAUSE
+```
+
+---
+
+# Mission-Impact Assessment — Flight Day 1
+
+Validated state:
+
+```text
+fault indication reported
+TRUE
+
+crew-ground troubleshooting reported
+TRUE
+
+normal toilet operations restored
+TRUE
+
+mission-ending impact established
+FALSE
+
+root cause public
+FALSE
+```
+
+The evidence supports operational recovery.
+
+It does not support an assertion that the issue had no operational cost, no crew workload impact, or no engineering consequence.
+
+---
+
+# Mission-Impact Assessment — Flight Day 4
+
+Validated state:
+
+```text
+vent activity ended early
+TRUE
+
+spacecraft attitude response reported
+TRUE
+
+trajectory schedule interaction present
+TRUE
+
+waste issue caused OTC2 cancellation
+FALSE
+
+OTC2 cancelled for trajectory reason
+TRUE
+
+tank full
+FALSE
+
+toilet operational
+TRUE
+
+crew contingency available
+TRUE
+
+later mission operations recorded
+TRUE
+
+mission-ending impact established
+FALSE
+
+postflight investigation continued
+TRUE
+
+root cause public
+FALSE
+```
+
+---
+
+# Cross-Domain Correlation Boundary
+
+Phase 3B.3 uses correlation to connect independently supported mission facts.
+
+It does not automatically interpret temporal or operational proximity as causation.
+
+Therefore:
+
+```text
+CROSS-DOMAIN CORRELATION
+!=
+CAUSATION
+```
+
+Examples:
+
+```text
+wastewater troubleshooting near OTC2 scheduling
+!=
+wastewater issue caused OTC2 cancellation
+```
+
+```text
+attitude adjustment during troubleshooting
+!=
+GNC anomaly
+```
+
+```text
+mission continued afterward
+!=
+issue had zero effect
+```
+
+```text
+postflight investigation continued
+!=
+root cause known
+```
+
+---
+
+# Temporal Precision Boundary
+
+The exact UTC of the principal Flight Day 4 vent-line event remains unresolved in the public evidence.
+
+Therefore Phase 3B.3 does not calculate:
+
+```text
+precise FD4 issue → OTC3 interval
+```
+
+even though OTC3 itself has a validated UTC anchor.
+
+Thus:
+
+```text
+precise_interval_from_fd4_issue_to_otc3_computable
+FALSE
+```
+
+This prevents date-level waste-management evidence from being falsely promoted to exact timing.
+
+---
+
+# Failure-Propagation Boundary
+
+Phase 3B.3 does not infer that the waste-management issue propagated into:
+
+```text
+GNC
+
+propulsion
+
+trajectory-control performance
+
+navigation
+
+communications
+
+thermal systems
+
+complete ECLSS failure
+```
+
+unless public evidence explicitly establishes such a relationship.
+
+Therefore:
+
+```text
+unreported_failure_propagation_inferred
+FALSE
+```
+
+---
+
+# Risk Boundary
+
+No quantitative mission-risk calculation is derived from the public waste-management evidence.
+
+Therefore:
+
+```text
+quantitative_mission_risk_inferred
+FALSE
+```
+
+The existence of contingency equipment or continued mission operations cannot independently establish:
+
+```text
+zero risk
+
+zero operational burden
+
+zero crew impact
+
+zero engineering concern
+```
+
+---
+
+# Independent Validation
+
+Created:
+
+```text
+scripts/validation/validate_waste_management_mission_impact.py
+```
+
+Validation results:
+
+```text
+Analysis identity: PASS
+
+Dependency registry: PASS
+
+Phase 3B.1 evidence dependency: PASS
+
+Phase 3B.2 operational dependency: PASS
+```
+
+Phase 2 cross-check:
+
+```text
+Phase 2 maneuver cross-reference: PASS
+
+OTC2 cancellation reason: PASS
+
+OTC2 wastewater parallel activity: PASS
+
+OTC2 failed-burn boundary: PASS
+
+OTC2 propulsion-anomaly boundary: PASS
+
+Downstream mission anchors: PASS
+```
+
+Cross-domain products:
+
+```text
+Cross-domain correlation set: PASS
+
+Correlation thread traceability: PASS
+
+Correlation event traceability: PASS
+
+Phase 2 anchor traceability: PASS
+
+Correlation provenance: PASS
+```
+
+Mission-impact validation:
+
+```text
+Flight Day 1 mission-impact assessment: PASS
+
+Flight Day 4 mission-impact assessment: PASS
+
+Cross-domain boundary policy: PASS
+
+Evidence-boundary policy: PASS
+
+Correlation CSV / JSON consistency: PASS
+
+Documentation figure: PASS
+```
+
+Validated correlations:
+
+```text
+crew-ground recovery
+PASS
+
+spacecraft attitude interaction
+PASS
+
+trajectory scheduling interaction
+PASS
+
+crew contingency posture
+PASS
+
+downstream mission continuation
+PASS
+
+postflight engineering follow-up
+PASS
+```
+
+Final result:
+
+```text
+PHASE 3B.3 VALIDATION PASSED
+```
+
+---
+
+# Phase 3B Complete Reconstruction Chain
+
+Phase 3B now provides:
+
+```text
+NASA PUBLIC SYSTEM EVIDENCE
+        ↓
+SOURCE-TRACEABLE EVENTS
+        ↓
+TWO SEPARATE WASTE-MANAGEMENT THREADS
+        ↓
+OPERATIONAL DECISION RECONSTRUCTION
+        ↓
+16 TRACEABLE OPERATIONAL STEPS
+        ↓
+CROSS-DOMAIN MISSION CORRELATION
+        ↓
+PHASE 2 MANEUVER CROSS-CHECK
+        ↓
+MISSION-CONTINUATION CONTEXT
+        ↓
+POSTFLIGHT ENGINEERING FOLLOW-UP
+        ↓
+STRICT CAUSAL / ROOT-CAUSE BOUNDARIES
+```
+
+---
+
+# Phase 3B Status
+
+```text
+Phase 3B.1
+PUBLIC EVIDENCE RECONSTRUCTION
+COMPLETE
+
+Phase 3B.2
+OPERATIONAL DECISION RECONSTRUCTION
+COMPLETE
+
+Phase 3B.3
+MISSION-IMPACT / CROSS-DOMAIN CORRELATION
+COMPLETE
+```
+
+Validated Phase 3B totals:
+
+```text
+NASA sources
+7
+
+NASA-reported events
+7
+
+primary operational threads
+2
+
+derived operational steps
+16
+
+cross-domain correlations
+6
+```
+
+Evidence status:
+
+```text
+FLIGHT DAY 1 TOILET FAULT
+RECONSTRUCTED
+
+FLIGHT DAY 1 RECOVERY
+RECONSTRUCTED
+
+FLIGHT DAY 4 VENT-LINE ISSUE
+RECONSTRUCTED
+
+VENT-HEATER RESPONSE
+RECONSTRUCTED
+
+SUN-POINTING RESPONSE
+RECONSTRUCTED
+
+CREW CONTINGENCY POSTURE
+RECONSTRUCTED
+
+OTC2 CROSS-DOMAIN CONTEXT
+VALIDATED
+
+MISSION CONTINUATION
+CORRELATED
+
+POSTFLIGHT INVESTIGATION
+RECONSTRUCTED
+
+FD1 / FD4 SAME ISSUE
+FALSE
+
+SHARED ROOT CAUSE
+NOT ESTABLISHED
+
+OTC2 FAILURE
+FALSE
+
+PROPULSION ANOMALY FROM OTC2 CANCELLATION
+FALSE
+
+GNC ANOMALY FROM SUN-POINTING
+FALSE
+
+FINAL WASTE-MANAGEMENT ROOT CAUSE
+NOT CLAIMED
+
+EXACT UNREPORTED EVENT UTCs
+NOT INVENTED
+
+QUANTITATIVE MISSION RISK
+NOT INFERRED
+
+PHASE 3B
+COMPLETE
+```
+
+---
+
+# Next Phase 3 Work
+
+The remaining Phase 3 roadmap scope now shifts away from waste management and into Orion thermal protection and materials:
+
+```text
+Artemis I heat-shield root cause
+        ↓
+Artemis II risk mitigation
+        ↓
+Artemis II as-flown / postflight evidence
+        ↓
+thermal protection and materials engineering synthesis
+```
+
+The next implementation package will begin the heat-shield evidence chain while preserving separation between:
+
+```text
+Artemis I heritage evidence
+
+Artemis II preflight mitigation
+
+Artemis II as-flown evidence
+
+Artemis II postflight findings
+```
+
+---
