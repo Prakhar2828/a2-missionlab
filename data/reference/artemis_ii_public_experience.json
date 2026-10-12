@@ -1,0 +1,116 @@
+{
+  "dataset_id": "public_experience_v2_artemis_ii",
+  "mission": "Artemis II",
+  "version": "2.7.0",
+  "status": "PUBLIC_EXPERIENCE_V2_7_STABLE_BRIEFING",
+  "mission_clock": {
+    "launch_epoch_utc": "2026-04-01T22:35:12Z",
+    "source": "data/config/mission.json"
+  },
+  "mission_extrema": {
+    "max_earth_center_distance_km": 413144.445,
+    "utc": "2026-04-06T23:02:51.667Z",
+    "provenance": "MISSIONLAB_DERIVED_FROM_PUBLIC_TRAJECTORY"
+  },
+  "lunar_encounter": {
+    "closest_approach": {
+      "utc": "2026-04-06T23:00:46.177998Z",
+      "met": "05:00:25:34",
+      "moon_center_distance_km": 8281.938,
+      "mean_radius_altitude_km": 6544.538,
+      "moon_relative_speed_km_s": 1.381073,
+      "provenance": "MISSIONLAB_DERIVED_FROM_PUBLIC_OEM_AND_SPICE"
+    },
+    "lunar_soi": {
+      "boundary_km": 66099.0,
+      "entry_utc": "2026-04-06T04:38:07.532302Z",
+      "exit_utc": "2026-04-07T17:23:41.922211Z",
+      "duration_hours": 36.76,
+      "provenance": "MISSIONLAB_DERIVED_GEOMETRY"
+    },
+    "reported_earthset_utc": "2026-04-06T22:41:00Z",
+    "reported_earthrise_utc": "2026-04-06T23:22:00Z",
+    "full_earth_occultation": {
+      "start_utc": "2026-04-06T22:43:22.462Z",
+      "stop_utc": "2026-04-06T23:19:56.488Z",
+      "duration_minutes": 36.56710578333333,
+      "provenance": "MISSIONLAB_DERIVED_FROM_NASA_FLIGHT_DERIVED_OEM_AND_SPICE"
+    },
+    "total_solar_eclipse": {
+      "start_utc": "2026-04-07T00:34:27.220Z",
+      "stop_utc": "2026-04-07T01:28:53.125Z",
+      "duration_minutes": 54.431749833333335,
+      "nasa_reported_duration": "nearly 54 minutes",
+      "provenance": "MISSIONLAB_DERIVED_FROM_NASA_FLIGHT_DERIVED_OEM_AND_SPICE"
+    }
+  },
+  "entry": {
+    "entry_interface_utc": "2026-04-10T23:53:00Z",
+    "entry_interface_reported_altitude_ft": 400000,
+    "drogue_utc": "2026-04-11T00:03:00Z",
+    "drogue_reported_altitude_ft": 23400,
+    "main_utc": "2026-04-11T00:04:00Z",
+    "main_reported_altitude_ft": 5400,
+    "splashdown_utc": "2026-04-11T00:07:00Z",
+    "provenance": "NASA_REPORTED_MINUTE_LEVEL_EVENTS"
+  },
+  "validated_inventory": {
+    "datasets": 25,
+    "normalized_public_sources": 81,
+    "mission_events": 24,
+    "decision_threads": 10,
+    "postflight_records": 6,
+    "searchable_records": 146,
+    "deterministic_tools": 8,
+    "answer_routes": 8
+  },
+  "presentation_boundaries": {
+    "mission_map_geometry": "SCHEMATIC_SCALED_FOR_READABILITY",
+    "no_new_mission_reconstruction": true,
+    "public_evidence_only": true,
+    "unknowns_remain_unknown": true,
+    "no_paid_model_dependency": true,
+    "no_private_nasa_material": true,
+    "browser_analyst": "MULTI_DATASET_DETERMINISTIC_SYNTHESIS_WITH_CONFIDENCE_GATING",
+    "mission_imagery": "OFFICIAL_NASA_PUBLIC_IMAGERY_DISPLAY_ONLY_ANALYSIS_REMAINS_DATASET_GROUNDED"
+  },
+  "source_dependencies": [
+    "data/reference/artemis_ii_mission_control_perspectives.json",
+    "data/reference/artemis_ii_decision_threads.json",
+    "data/reference/artemis_ii_mission_analyst_index.json",
+    "data/reference/artemis_ii_mission_analyst_interface.json",
+    "data/reference/artemis_ii_lunar_observation_reconstruction.json",
+    "data/reference/artemis_ii_entry_events.json",
+    "data/reference/artemis_ii_communications_events.json",
+    "data/reference/artemis_ii_communications_event_catalog.json",
+    "data/reference/artemis_ii_communications_operational_threads.json",
+    "data/reference/artemis_ii_gnc_architecture.json",
+    "data/reference/artemis_ii_gnc_operational_threads.json",
+    "data/reference/artemis_ii_esm_propulsion_architecture.json",
+    "data/reference/artemis_ii_entry_descent_recovery_evidence.json",
+    "data/reference/artemis_ii_waste_management_evidence.json",
+    "data/reference/artemis_ii_convective_heating_model.json"
+  ],
+  "browser_analyst_v2_2": {
+    "retrieval_mode": "DETERMINISTIC_MULTI_DATASET_SYNTHESIS",
+    "conversation_context": true,
+    "confidence_gating": true,
+    "capabilities": [
+      "event_lookup_and_context",
+      "event_time",
+      "event_comparison",
+      "before_after_chronology",
+      "elapsed_time_between_resolved_events",
+      "mission_control_relevance",
+      "decision_thread_synthesis",
+      "communications_synthesis",
+      "gnc_system_synthesis",
+      "propulsion_system_synthesis",
+      "entry_and_recovery_synthesis",
+      "evidence_and_source_lookup",
+      "known_unknown_handling"
+    ],
+    "llm_required": false,
+    "paid_api_required": false
+  }
+}
