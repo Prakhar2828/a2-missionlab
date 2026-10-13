@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import subprocess
+import sys
 from pathlib import Path
 
 
@@ -179,19 +181,27 @@ def main() -> None:
     print("Demo-media roadmap requirement: PASS")
 
     require("PHASE 0" not in html, "public interface still exposes stale Phase 0 status")
+
+    final_validator = ROOT / "scripts" / "validate_public_experience.py"
     require(
-        "artemis_ii_mission_control_perspectives.json" in js,
-        "public app not using validated timeline",
+        final_validator.exists(),
+        "final public-experience validator missing",
+    )
+
+    final_result = subprocess.run(
+        [sys.executable, str(final_validator)],
+        cwd=ROOT,
+        check=False,
     )
     require(
-        "data/seed/mission_events.json" not in js,
-        "public app still uses Phase 0 seed timeline",
+        final_result.returncode == 0,
+        "final public-experience validation failed",
     )
 
     print()
     print("Public interface current status: PASS")
-    print("Validated timeline source: PASS")
-    print("Phase 0 seed dependency absent: PASS")
+    print("Final public-experience validation: PASS")
+    print("Legacy Phase 0 web assumptions retired: PASS")
 
     require("validate_publication_pack.py" in ci, "CI missing Phase 9A validation")
     require("validate_publication_web.py" in ci, "CI missing Phase 9B validation")
