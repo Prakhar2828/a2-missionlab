@@ -150,3 +150,22 @@ input[type="range"]{touch-action:pan-y}
 }
 
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.crew-filmstrip,.mission-photo-rail{scroll-behavior:auto}}
+
+
+/* ===== VISUAL AUDIT CORRECTIONS ? crew gallery + short landscape ===== */
+
+/* The image arrows already provide in-image navigation.
+   The secondary scrubber must never float over section content. */
+.crew-timeline-shell{
+  position:relative;
+  bottom:auto;
+  z-index:2;
+}
+
+/* Make the photographic layer explicit beneath viewer chrome. */
+.crew-photo-wrap>img{
+  z-index:1;
+}
+.crew-photo-wrap:after{
+  z-index:2;
+}
