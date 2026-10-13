@@ -444,3 +444,59 @@ canvas{display:block}
     min-width:44px;
   }
 }
+
+
+/* IPHONE CANVAS RENDERING HOTFIX
+   Real-device Safari pass: keep anchor navigation below the sticky header,
+   reduce phone-only section-heading pressure, and prevent visual shells from
+   exposing desktop-positioned canvas content while JS uses the mobile layout. */
+@media (max-width:760px){
+  html{
+    scroll-padding-top:calc(78px + env(safe-area-inset-top));
+  }
+
+  .x-section,
+  .x-anchor-alias,
+  #mission-explorer,
+  #crew-view,
+  #gnc-lab,
+  #mission-control,
+  #entry-lab,
+  #maneuver-lab,
+  #space-weather,
+  #psi-lab{
+    scroll-margin-top:calc(78px + env(safe-area-inset-top));
+  }
+
+  .x-section-head h2{
+    font-size:clamp(2rem,9.2vw,2.65rem);
+    line-height:.98;
+  }
+
+  .mission-stage,
+  .control-main-display,
+  .maneuver-viz,
+  .lab-card,
+  .lab-wide-grid{
+    overflow:hidden;
+  }
+}
+
+@media (max-width:430px){
+  .mission-stage{
+    min-height:430px;
+  }
+
+  .control-main-display{
+    height:470px;
+  }
+
+  .maneuver-viz{
+    min-height:430px;
+  }
+
+  .lab-wide-grid canvas,
+  .lab-card canvas{
+    height:360px;
+  }
+}
