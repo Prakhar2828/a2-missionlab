@@ -1,0 +1,56 @@
+A2 MissionLab final public experience polish overlay
+====================================================
+
+Core frontend
+- index.html
+- styles.css
+- app.js
+- library.html
+- library.js
+- technical-report.html
+- favicon.svg
+- favicon.ico
+
+Public experience assets
+- assets/public/IMAGE_SOURCES.md
+- assets/public/AUTHORITATIVE_SOURCE_AUDIT.md
+- assets/public/FIGURE_AUDIT.md
+- assets/public/fallback-mission.svg
+- assets/public/figures/navigation-state-products.svg
+- assets/public/figures/esm-propulsion-architecture.svg
+- assets/public/figures/trajectory-correction-plan-execution.svg
+- assets/public/figures/entry-recovery-sequence.svg
+- assets/public/figures/gnc-proximity-loop.svg
+
+Validation and release documentation
+- scripts/validate_public_experience.py
+- scripts/run_public_experience.ps1
+- PUBLIC_EXPERIENCE_FINAL_README.md
+- FINAL_POLISH_RELEASE_NOTES.md
+- PATCH_MANIFEST.txt
+- SHA256SUMS.txt
+- validation/public-experience-final-polish/BROWSER_VALIDATION_REPORT.md
+- validation/public-experience-final-polish/browser-validation.json
+
+Publish-readiness hotfix highlights
+- Mission Control blackout-card / canvas-label overlap removed
+- gallery provenance and 01 / 25 counter separated
+- site-wide small typography enlarged for readability
+- small canvas annotations enlarged
+
+Final-polish implementation highlights
+- 25-moment NASA Artemis II gallery with in-image arrows / keyboard navigation
+- removed distracting internal Orion-window bars
+- GNC AUTO / MANUAL modes and disturbance recovery
+- rebuilt GNC / navigation public diagrams
+- Mission Control role onboarding and nomenclature boundaries
+- trajectory-correction HUD / burn feedback
+- plain-language Space Weather outputs
+- independent PSI cant / spread controls and explanations
+
+Repository dependencies intentionally NOT duplicated
+- validated Phase 0–9 data/reference files
+- existing analysis / ingestion / processing scripts
+- existing docs/assets quantitative engineering figures
+
+The overlay is intended to be extracted over the existing repository root and does not delete unrelated files.
