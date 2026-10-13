@@ -11,7 +11,7 @@
 
   function viewportProfile(w,h){
     const aspect=w/Math.max(1,h), landscape=aspect>1.22;
-    if(w<=560) return landscape?'phone-landscape':'phone-portrait';
+    if(w<=560 || (landscape && w<=950 && h<=500)) return landscape?'phone-landscape':'phone-portrait';
     if(w<=900) return landscape?'tablet-landscape':'tablet-portrait';
     if(w<=1180) return 'compact-desktop';
     return 'desktop';
@@ -41,7 +41,22 @@
     document.documentElement.style.setProperty('--a2-vvh',`${Math.round(vv?.height||innerHeight)}px`);
     document.documentElement.style.setProperty('--a2-vvw',`${Math.round(vv?.width||innerWidth)}px`);
   }
-  syncViewportVars();window.addEventListener('resize',syncViewportVars,{passive:true});window.visualViewport?.addEventListener('resize',syncViewportVars,{passive:true});
+  function resyncResponsiveViewport(){
+    syncViewportVars();
+    invalidateCanvasLayouts();
+  }
+  function queueResponsiveViewportResync(){
+    resyncResponsiveViewport();
+    requestAnimationFrame(resyncResponsiveViewport);
+    setTimeout(resyncResponsiveViewport,120);
+    setTimeout(resyncResponsiveViewport,360);
+  }
+  syncViewportVars();
+  window.addEventListener('resize',queueResponsiveViewportResync,{passive:true});
+  window.addEventListener('orientationchange',queueResponsiveViewportResync,{passive:true});
+  window.addEventListener('pageshow',queueResponsiveViewportResync,{passive:true});
+  window.visualViewport?.addEventListener('resize',queueResponsiveViewportResync,{passive:true});
+  screen.orientation?.addEventListener?.('change',queueResponsiveViewportResync);
 
   function fitCanvas(canvas){
     const state=ensureCanvasRuntime(canvas);if(state.dirty)state.measure();
@@ -155,7 +170,7 @@
   if(missionCanvas){
     const loop=t=>{const {ctx,w,h,layout}=fitCanvas(missionCanvas);ctx.clearRect(0,0,w,h);drawStars(ctx,w,h,layout.compact?105:150,13,.72);
       const portrait=layout.profile==='phone-portrait',landPhone=layout.profile==='phone-landscape';
-      const scene=sceneRect(w,h,{top:portrait?122:landPhone?54:18,bottom:portrait?72:landPhone?42:22},portrait?10:14);
+      const scene=sceneRect(w,h,{top:portrait?16:landPhone?14:18,bottom:portrait?16:landPhone?14:22},portrait?10:14);
       const earth=portrait?{...scenePoint(scene,.19,.69),r:scene.min*.105}:landPhone?{...scenePoint(scene,.16,.61),r:scene.min*.09}:{...scenePoint(scene,.16,.56),r:scene.min*.092};
       const moon=portrait?{...scenePoint(scene,.76,.46),r:scene.min*.13}:landPhone?{...scenePoint(scene,.81,.50),r:scene.min*.11}:{...scenePoint(scene,.82,.47),r:scene.min*.115};
       drawEarth(ctx,earth.x,earth.y,earth.r);drawMoon(ctx,moon.x,moon.y,moon.r);
@@ -260,7 +275,7 @@
       }
       gnc.x+=gnc.vx*60*dt;gnc.y+=gnc.vy*60*dt;gnc.yaw+=gnc.vyaw*60*dt;gnc.pitch+=gnc.vpitch*60*dt;gnc.vx*=Math.pow(.955,dt*60);gnc.vy*=Math.pow(.955,dt*60);gnc.vyaw*=Math.pow(.94,dt*60);gnc.vpitch*=Math.pow(.94,dt*60);gnc.x=clamp(gnc.x,-150,150);gnc.y=clamp(gnc.y,-105,105);gnc.yaw=clamp(gnc.yaw,-35,35);gnc.pitch=clamp(gnc.pitch,-25,25);gnc.lastFire=Math.max(0,gnc.lastFire-dt*2.4);
       const {ctx,w,h,layout}=fitCanvas(gncCanvas);ctx.clearRect(0,0,w,h);ctx.fillStyle='#010408';ctx.fillRect(0,0,w,h);drawStars(ctx,w,h,layout.compact?105:160,41,.8);
-      const scene=sceneRect(w,h,{top:layout.phone?54:26,bottom:layout.phone?90:72},layout.phone?14:20),scale=clamp(Math.min(scene.width/340,scene.height/250),.68,1.35),tx=scene.cx,ty=scene.y+scene.height*.47,cw=clamp(124*scale,92,160),ch=clamp(92*scale,68,118);
+      const scene=sceneRect(w,h,{top:layout.phone?18:26,bottom:layout.phone?18:72},layout.phone?14:20),scale=clamp(Math.min(scene.width/340,scene.height/250),.68,1.35),tx=scene.cx,ty=scene.y+scene.height*.47,cw=clamp(124*scale,92,160),ch=clamp(92*scale,68,118);
       ctx.save();ctx.translate(tx,ty);ctx.strokeStyle='rgba(127,197,255,.3)';ctx.setLineDash([7,7]);ctx.strokeRect(-cw/2,-ch/2,cw,ch);ctx.setLineDash([]);const iw=cw*.39,ih=ch*.33;ctx.strokeStyle='rgba(255,255,255,.88)';ctx.lineWidth=2;ctx.strokeRect(-iw/2,-ih/2,iw,ih);ctx.beginPath();ctx.moveTo(-iw*.8,0);ctx.lineTo(iw*.8,0);ctx.moveTo(0,-ih);ctx.lineTo(0,ih);ctx.stroke();ctx.restore();
       drawCanvasLabel(ctx,'ICPS TARGET',tx,ty+ch/2+17,Math.max(90,cw*1.15),{size:layout.phone?10:11,minSize:10,align:'center',color:'rgba(255,255,255,.66)',maxLines:1});
       const sx=tx+gnc.x*scale,sy=ty+gnc.y*scale,craft=clamp(scale,.76,1.25);ctx.save();ctx.translate(sx,sy);ctx.rotate(gnc.yaw*Math.PI/180);ctx.scale(craft,craft);ctx.strokeStyle='#f6fbff';ctx.lineWidth=1.6/craft;ctx.beginPath();ctx.moveTo(-22,12);ctx.lineTo(0,-24);ctx.lineTo(22,12);ctx.lineTo(8,8);ctx.lineTo(0,19);ctx.lineTo(-8,8);ctx.closePath();ctx.stroke();ctx.strokeStyle='rgba(240,196,118,.75)';ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.sin(gnc.pitch*Math.PI/180)*42,-42);ctx.stroke();if(gnc.lastFire>0){ctx.fillStyle=`rgba(111,231,225,${.25+.65*gnc.lastFire})`;for(const [x,y] of [[-18,10],[18,10],[-8,-7],[8,-7]]){ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+(x<0?-16:16)*gnc.lastFire,y+8);ctx.lineTo(x,y+3);ctx.fill();}}ctx.restore();ctx.strokeStyle='rgba(125,224,173,.42)';ctx.setLineDash([4,6]);ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(tx,ty);ctx.stroke();ctx.setLineDash([]);
