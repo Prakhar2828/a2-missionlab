@@ -14,10 +14,11 @@
   <link rel="preconnect" href="https://images-assets.nasa.gov">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="responsive-hardening.css">
+  <link rel="stylesheet" href="landing.css">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="icon" href="favicon.ico" sizes="any">
 </head>
-<body class="experience-page">
+<body class="experience-page landing-page">
 <a class="skip" href="#experience-main">Skip to mission experience</a>
 <header class="x-header" id="top">
   <a class="x-brand" href="index.html" aria-label="A2 MissionLab home">
@@ -43,9 +44,9 @@
     <div class="x-hero-content">
       <p class="x-overline">Artemis II · reconstructed from public NASA data</p>
       <h1 id="hero-title">Go around the Moon.</h1>
-      <p class="x-hero-copy">Don’t start with a report. Start with the mission. Fly the trajectory, see what the crew saw, think like Mission Control, and experiment with the systems that brought Orion home.</p>
+      <p class="x-hero-copy">Follow the first crewed Artemis lunar flyby through trajectory, crew observations, GNC, atmospheric entry, and Mission Control ? all reconstructed from public evidence without pretending public data is private telemetry.</p>
       <div class="x-hero-actions">
-        <a class="x-button x-button-primary" href="mission.html">Enter the mission <span aria-hidden="true">↓</span></a>
+        <a class="x-button x-button-primary" href="mission.html">Explore the mission <span aria-hidden="true">?</span></a>
         <a class="x-button x-button-ghost" href="technical-report.html">Read the Technical Report</a>
       </div>
       <div class="x-hero-facts" aria-label="MissionLab headline results">
@@ -75,58 +76,207 @@
     <figure><img class="nasa-photo" src="https://images-assets.nasa.gov/image/art002e009301/art002e009301~orig.jpg" data-fallback="assets/public/fallback-mission.svg" alt="Solar eclipse viewed from Orion"><figcaption><span>04 · ECLIPSE</span><b>Turn geometry into science.</b></figcaption></figure>
     <figure><img class="nasa-photo" src="https://images-assets.nasa.gov/image/art002e021278/art002e021278~orig.jpg" data-fallback="assets/public/fallback-mission.svg" alt="Earthrise during Artemis II"><figcaption><span>05 · RETURN</span><b>Bring Earth back into view.</b></figcaption></figure>
   </section>
-<section class="x-section" id="experiences">
+<section class="x-section home-experiences" id="experiences">
     <div class="x-wrap">
-      <div class="x-section-head">
+
+      <div class="home-experience-heading">
         <div>
           <p class="x-kicker">Choose your experience</p>
-          <h2>Go deeper without scrolling through everything at once.</h2>
+          <h2>One mission.<br>Four ways in.</h2>
         </div>
-        <p>Each major MissionLab experience now has its own focused page. Start with the mission, move through the crew's view, fly the GNC teaching model, or think through events from Mission Control.</p>
+
+        <p>
+          MissionLab is no longer one endless technical page.
+          Enter the part of Artemis II you want to understand,
+          then go as deep as you want.
+        </p>
       </div>
 
-      <div class="capability-showcase">
-        <a href="mission.html">
-          <span>MISSION</span>
-          <b>Trajectory, correction maneuvers, atmospheric entry, recovery, and space weather</b>
+      <div class="home-experience-grid" id="experience-grid">
+
+        <a
+          class="home-experience-card home-experience-card-mission"
+          href="mission.html"
+          aria-label="Open Mission Explorer"
+        >
+          <div class="home-experience-image">
+            <img
+              class="nasa-photo"
+              src="https://www.nasa.gov/wp-content/uploads/2026/04/55182696113-0c4398702d-o-2.jpg"
+              data-fallback="assets/public/fallback-mission.svg"
+              alt=""
+              loading="lazy"
+            >
+          </div>
+
+          <div class="home-card-shade"></div>
+          <span class="home-card-number">01</span>
+
+          <div class="home-card-content">
+            <p>MISSION EXPLORER</p>
+            <h3>Fly the mission.</h3>
+            <span class="home-card-summary">
+              Trajectory ? lunar flyby ? correction burns ? entry ? space weather
+            </span>
+            <span class="home-card-action">
+              Enter Mission Explorer
+              <i aria-hidden="true">?</i>
+            </span>
+          </div>
         </a>
 
-        <a href="windows.html">
-          <span>WINDOWS</span>
-          <b>Twenty-five Artemis II mission images with geometry, provenance, and science context</b>
+        <a
+          class="home-experience-card home-experience-card-windows"
+          href="windows.html"
+          aria-label="Open Through Orion's Windows"
+        >
+          <div class="home-experience-image">
+            <img
+              class="nasa-photo"
+              src="https://images-assets.nasa.gov/image/art002e009288/art002e009288~orig.jpg"
+              data-fallback="assets/public/fallback-mission.svg"
+              alt=""
+              loading="lazy"
+            >
+          </div>
+
+          <div class="home-card-shade"></div>
+          <span class="home-card-number">02</span>
+
+          <div class="home-card-content">
+            <p>THROUGH ORION'S WINDOWS</p>
+            <h3>See what changed outside.</h3>
+            <span class="home-card-summary">
+              25 mission images ? lunar science ? geometry ? provenance
+            </span>
+            <span class="home-card-action">
+              Open the Windows experience
+              <i aria-hidden="true">?</i>
+            </span>
+          </div>
         </a>
 
-        <a href="gnc.html">
-          <span>GNC</span>
-          <b>AUTO and MANUAL control, disturbance recovery, sensors, state estimation, and effectors</b>
+        <a
+          class="home-experience-card home-experience-card-system"
+          href="gnc.html"
+          aria-label="Open Guidance Navigation and Control experience"
+        >
+          <span class="home-card-number">03</span>
+
+          <div class="home-system-visual" aria-hidden="true">
+            <span>SENSE</span>
+            <i>?</i>
+            <span>ESTIMATE</span>
+            <i>?</i>
+            <span>GUIDE</span>
+            <i>?</i>
+            <span>CONTROL</span>
+          </div>
+
+          <div class="home-system-orbit" aria-hidden="true">
+            <i></i>
+            <b></b>
+          </div>
+
+          <div class="home-card-content">
+            <p>GUIDANCE ? NAVIGATION ? CONTROL</p>
+            <h3>Fly Orion.</h3>
+            <span class="home-card-summary">
+              AUTO ? MANUAL ? disturbance recovery ? public control architecture
+            </span>
+            <span class="home-card-action">
+              Enter the GNC lab
+              <i aria-hidden="true">?</i>
+            </span>
+          </div>
         </a>
 
-        <a href="mission-control.html">
-          <span>MISSION CONTROL</span>
-          <b>Flight Director integration, discipline perspectives, scenarios, and evidence-aware decisions</b>
+        <a
+          class="home-experience-card home-experience-card-control"
+          href="mission-control.html"
+          aria-label="Open Mission Control experience"
+        >
+          <span class="home-card-number">04</span>
+
+          <div class="home-console-visual" aria-hidden="true">
+            <span>FLIGHT</span>
+            <span>FDO</span>
+            <span>FAO</span>
+            <span>COMM</span>
+            <span>EECOM</span>
+            <span>SCIENCE</span>
+          </div>
+
+          <div class="home-console-trace" aria-hidden="true">
+            <i></i>
+          </div>
+
+          <div class="home-card-content">
+            <p>MISSION CONTROL</p>
+            <h3>Think across the mission.</h3>
+            <span class="home-card-summary">
+              discipline perspectives ? scenarios ? evidence ? decision integration
+            </span>
+            <span class="home-card-action">
+              Enter Mission Control
+              <i aria-hidden="true">?</i>
+            </span>
+          </div>
         </a>
 
-        <a href="library.html">
-          <span>MISSION LIBRARY</span>
-          <b>Twenty-eight technical deep dives across systems, physics, data, and operations</b>
-        </a>
-
-        <a href="technical-report.html">
-          <span>TECHNICAL REPORT</span>
-          <b>Methods, equations, assumptions, results, evidence boundaries, and reproducibility</b>
-        </a>
       </div>
 
-      <div class="x-final-cta">
+      <div class="home-depth">
+
+        <div class="home-depth-copy">
+          <p class="x-kicker">Go deeper</p>
+          <h3>
+            The experience is the front door.
+            The engineering is underneath it.
+          </h3>
+          <p>
+            Use the Mission Library for focused technical deep dives,
+            or open the Technical Report for methods, equations,
+            assumptions, results, limitations, and reproducibility.
+          </p>
+        </div>
+
+        <div class="home-depth-links">
+
+          <a href="library.html">
+            <small>MISSION LIBRARY</small>
+            <b>28 technical deep dives</b>
+            <span>Browse the engineering domains ?</span>
+          </a>
+
+          <a href="technical-report.html">
+            <small>TECHNICAL REPORT</small>
+            <b>Methods and evidence</b>
+            <span>Read the full reconstruction ?</span>
+          </a>
+
+        </div>
+      </div>
+
+      <aside class="home-evidence-boundary">
+
         <div>
-          <p class="x-kicker">Beyond Artemis II</p>
-          <h2>Future lunar landing engineering stays separate from the Artemis II flight story.</h2>
-          <p>Artemis II did not land on the Moon. Plume-surface interaction remains available as campaign-context engineering in the Mission Library rather than being presented as part of the Artemis II mission flow.</p>
+          <span>CAMPAIGN CONTEXT</span>
+          <b>Artemis II did not land on the Moon.</b>
         </div>
-        <div>
-          <a class="x-button x-button-ghost" href="library.html#psi">Explore future-Artemis PSI</a>
-        </div>
-      </div>
+
+        <p>
+          Future lunar landing topics such as plume-surface interaction
+          remain available in the Mission Library, explicitly separated
+          from the flown Artemis II mission record.
+        </p>
+
+        <a href="library.html#psi">
+          Explore future-Artemis PSI ?
+        </a>
+
+      </aside>
+
     </div>
   </section>
 
