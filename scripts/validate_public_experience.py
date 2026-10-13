@@ -5,7 +5,8 @@ from pathlib import Path
 from urllib.parse import urlparse
 ROOT=Path(__file__).resolve().parents[1]
 PUBLIC_JS=['js/core.js','js/mission.js','js/windows.js','js/gnc.js','js/mission-control.js','js/psi.js']
-REQUIRED_FILES=['index.html','styles.css','app.js',*PUBLIC_JS,'library.html','library.js','technical-report.html','favicon.svg','favicon.ico','assets/public/IMAGE_SOURCES.md','assets/public/AUTHORITATIVE_SOURCE_AUDIT.md','assets/public/FIGURE_AUDIT.md','assets/public/fallback-mission.svg','assets/public/figures/navigation-state-products.svg','assets/public/figures/esm-propulsion-architecture.svg','assets/public/figures/trajectory-correction-plan-execution.svg','assets/public/figures/entry-recovery-sequence.svg','assets/public/figures/gnc-proximity-loop.svg','PUBLIC_EXPERIENCE_FINAL_README.md']
+PHASE10_PAGES=['mission.html','windows.html','gnc.html','mission-control.html']
+REQUIRED_FILES=['index.html','styles.css','app.js',*PUBLIC_JS,*PHASE10_PAGES,'library.html','library.js','technical-report.html','favicon.svg','favicon.ico','assets/public/IMAGE_SOURCES.md','assets/public/AUTHORITATIVE_SOURCE_AUDIT.md','assets/public/FIGURE_AUDIT.md','assets/public/fallback-mission.svg','assets/public/figures/navigation-state-products.svg','assets/public/figures/esm-propulsion-architecture.svg','assets/public/figures/trajectory-correction-plan-execution.svg','assets/public/figures/entry-recovery-sequence.svg','assets/public/figures/gnc-proximity-loop.svg','PUBLIC_EXPERIENCE_FINAL_README.md']
 REPO_DEPS=['data/reference/artemis_ii_gnc_architecture.json','data/reference/artemis_ii_manual_piloting_control_modes.json','data/reference/artemis_ii_entry_events.json','data/reference/artemis_ii_maneuver_plan_execution.json','data/reference/artemis_ii_phase2_closure_manifest.json','scripts/ingestion/parse_oem.py','scripts/processing/add_lunar_geometry.py','scripts/analysis/refine_lunar_closest_approach.py','docs/assets/entry/phase2e_sutton_graves_heat_flux.svg','docs/assets/lunar_science/phase6b_lunar_observation_reconstruction.svg']
 FORBIDDEN=[r'technical\s+paper',r'engineering\s+paper',r'\bmanuscript\b',r'flight-qualified simulation',r'mission telemetry replay',r'navigation filter reconstruction']
 REQUIRED_IDS=['mission-canvas','mission-scrubber','crew-photo','crew-scrubber','crew-geometry-canvas','crew-image-prev','crew-image-next','crew-image-count','gnc-canvas','gnc-start','gnc-mode-auto','gnc-mode-manual','gnc-disturbance','gnc-autopilot-status','mc-canvas','entry-canvas','entry-scrubber','maneuver-canvas','dv-magnitude','maneuver-hud-shift','weather-canvas','shielding-assumption','weather-action','psi-canvas','psi-cant','psi-angle','psi-hardware-risk']
@@ -30,7 +31,7 @@ def main():
  if not args.overlay_only:
   for r in REPO_DEPS:
    if not (ROOT/r).exists():fail.append('missing repository dependency: '+r)
- pages=[ROOT/'index.html',ROOT/'library.html',ROOT/'technical-report.html']; parsed={}
+ pages=[ROOT/'index.html',*(ROOT/n for n in PHASE10_PAGES),ROOT/'library.html',ROOT/'technical-report.html']; parsed={}
  for pg in pages:
   if pg.exists(): q=P();q.feed(pg.read_text(encoding='utf8'));parsed[pg.resolve()]=q
  for pg,q in parsed.items():
@@ -44,7 +45,7 @@ def main():
     if args.overlay_only and (rel.startswith('docs/') or rel.startswith('data/')):continue
     fail.append(f'{pg.name}: broken local {attr} -> {ref}');continue
    if frag and t in parsed and frag not in parsed[t].ids and t.name!='library.html':fail.append(f'{pg.name}: missing anchor {ref}')
- text='\n'.join((ROOT/n).read_text(encoding='utf8') for n in ['index.html','styles.css','app.js',*PUBLIC_JS,'library.html','library.js','technical-report.html'] if (ROOT/n).exists())
+ text='\n'.join((ROOT/n).read_text(encoding='utf8') for n in ['index.html',*PHASE10_PAGES,'styles.css','app.js',*PUBLIC_JS,'library.html','library.js','technical-report.html'] if (ROOT/n).exists())
  for pat in FORBIDDEN:
   if re.search(pat,text,re.I):fail.append('forbidden public claim/term: '+pat)
  ip=parsed.get((ROOT/'index.html').resolve())
@@ -52,6 +53,19 @@ def main():
   miss=[x for x in REQUIRED_IDS if x not in ip.ids]
   if miss:fail.append('missing interaction surfaces: '+', '.join(miss))
   notes += [f'interactive canvas surfaces: {len(ip.canvases)}',f'optional engineering drawers: {ip.details}']
+ dedicated_page_ids={
+  'mission.html':['mission-canvas','mission-scrubber','entry-canvas','entry-scrubber','maneuver-canvas','dv-magnitude','weather-canvas'],
+  'windows.html':['crew-photo','crew-scrubber','crew-geometry-canvas','crew-image-prev','crew-image-next','crew-image-count'],
+  'gnc.html':['gnc-canvas','gnc-start','gnc-mode-auto','gnc-mode-manual','gnc-disturbance','gnc-autopilot-status'],
+  'mission-control.html':['mc-canvas'],
+ }
+ for name,required_ids in dedicated_page_ids.items():
+  page_path=(ROOT/name).resolve(); page_parser=parsed.get(page_path)
+  if not page_parser:
+   fail.append('missing parsed dedicated page: '+name);continue
+  missing=[x for x in required_ids if x not in page_parser.ids]
+  if missing:fail.append(name+': missing dedicated interaction surfaces: '+', '.join(missing))
+  else:notes.append(name+' interaction contract: '+str(len(required_ids))+' required IDs')
  for phrase in ['NASA REPORTED','MISSIONLAB DERIVED','MODELED','INFERRED','UNKNOWN / NOT PUBLIC','ARTEMIS II DID NOT LAND ON THE MOON','Artemis IV','Sutton','8,281.938','6,544.538','36.76','RTC1','RTC2','RTC3']:
   if phrase.lower() not in text.lower():fail.append('missing required concept: '+phrase)
  for phrase in ['AUTO MODE','MANUAL MODE','Introduce disturbance','MissionLab shorthand','WHY CANT MATTERS','WHY SPREAD MATTERS','WHAT WOULD OPERATORS CARE ABOUT?']:

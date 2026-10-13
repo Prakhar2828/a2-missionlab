@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="Explore Artemis II Mission Control reasoning through discipline perspectives, event scenarios, evidence, and decision reconstruction.">
+  <meta name="theme-color" content="#020509">
+  <meta property="og:title" content="Mission Control ? A2 MissionLab">
+  <meta property="og:description" content="Explore Artemis II Mission Control reasoning through discipline perspectives, event scenarios, evidence, and decision reconstruction.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Mission Control ? A2 MissionLab</title>
+  <link rel="preconnect" href="https://images-assets.nasa.gov">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="responsive-hardening.css">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.ico" sizes="any">
+</head>
+<body class="experience-page">
+<a class="skip" href="#page-main">Skip to main content</a>
+
+<header class="x-header" id="top">
+  <a class="x-brand" href="index.html" aria-label="A2 MissionLab home">
+    <span class="x-brand-orbit" aria-hidden="true"><i></i></span>
+    <span><b>A2</b> MissionLab</span>
+  </a>
+  <button class="x-menu" type="button" aria-expanded="false" aria-controls="x-nav">Explore</button>
+  <nav class="x-nav" id="x-nav" aria-label="Primary">
+    <a href="mission.html">Mission</a>
+    <a href="windows.html">Windows</a>
+    <a href="gnc.html">GNC</a>
+    <a href="mission-control.html" aria-current="page">Mission Control</a>
+    <a href="library.html">Library</a>
+    <a href="technical-report.html" class="x-nav-paper">Technical Report</a>
+  </nav>
+</header>
+
+<main id="page-main">
+  <section class="x-intro">
+    <div class="x-wrap x-intro-grid">
+      <div>
+        <p class="x-kicker">Mission Control</p>
+        <h1>Think across the mission, not just one subsystem.</h1>
+      </div>
+      <p>Step through public mission scenarios from the perspective of Flight Director, flight dynamics, timeline, crew systems, communications, science, and engineering support.</p>
+    </div>
+  </section>
+
+<section class="x-section x-control-room" id="mission-control">
+    <div class="x-wrap">
+      <div class="x-section-head">
+        <div><p class="x-kicker">Mission Control simulator</p><h2>You are FLIGHT. Integrate the room.</h2></div>
+        <p>Choose a public Artemis II situation, inspect how different disciplines frame it, then follow the evidence-aware operational trace. This does not imitate private NASA screens or fabricate voice loops.</p>
+      </div>
+      <div class="mc-mission-brief"><span>YOUR ROLE</span><b>FLIGHT · Flight Director lens</b><p>You are the integrator. Start at FLIGHT, then inspect the supporting console lenses. The challenge is deciding whether the event is expected, safety-critical, trajectory-relevant, or simply something to monitor without overreacting.</p></div>
+      <details class="mc-role-guide" open>
+        <summary><span>New to Mission Control? Meet the room.</span><small>Each console watches a different slice of the same mission.</small></summary>
+        <div class="mc-role-grid">
+          <div><b>FLIGHT</b><strong>Flight Director</strong><p>Integrates the room and decides what the mission team needs to do next.</p></div>
+          <div><b>FDO</b><strong>Flight Dynamics Officer</strong><p>Owns the trajectory picture, maneuver targeting, and future geometry.</p></div>
+          <div><b>FAO</b><strong>Flight Activities Officer</strong><p>Protects the flight plan, crew timeline, procedures, and real-time replanning.</p></div>
+          <div><b>EECOM</b><strong>Emergency, Environmental &amp; Consumables Officer</strong><p>Watches life support, thermal conditions, consumables, and emergency response.</p></div>
+          <div><b>COMM</b><strong>Communications lens</strong><p>MissionLab shorthand for link, network, blackout, and reacquisition questions.</p></div>
+          <div><b>SCIENCE</b><strong>Science Officer</strong><p>Integrates lunar science and geology objectives with real-time mission execution.</p></div>
+          <div><b>ENG SUPPORT</b><strong>Engineering support lens</strong><p>MissionLab synthesis view for technical evidence and model limits, not a claimed front-room console name.</p></div>
+        </div>
+      </details>
+      <div class="control-room-shell">
+        <div class="control-wall">
+          <div class="control-wall-top"><span>ARTEMIS II · PUBLIC EVIDENCE RECONSTRUCTION</span><b id="mc-clock">MET 05:00:08:10</b></div>
+          <div class="control-main-display" id="mc-display">
+            <canvas id="mc-canvas" aria-label="Mission Control event display"></canvas>
+            <div class="mc-overlay"><small id="mc-event-class">EXPECTED GEOMETRY CONSTRAINT</small><h3 id="mc-event-title">Lunar loss of signal</h3><p id="mc-event-summary">Orion is moving behind the Moon. The radio path to Earth is about to be blocked by lunar terrain.</p></div>
+          </div>
+          <div class="control-strip" id="mc-strip"></div>
+        </div>
+        <aside class="console-detail">
+          <p class="x-label" id="mc-role-label">FLIGHT</p>
+          <h3 id="mc-role-title">What does the integrated mission need?</h3>
+          <p id="mc-role-copy">FLIGHT is looking across disciplines: is the event expected, is crew safety affected, and does the mission need a decision or simply disciplined monitoring?</p>
+          <div class="console-questions" id="mc-questions"></div>
+          <div class="decision-trace"><span>PUBLIC / EDUCATIONAL OPERATIONAL TRACE</span><div id="mc-decision-trace"></div></div>
+        </aside>
+      </div>
+      <div class="mc-events" id="mc-events" aria-label="Mission Control scenarios"></div>
+      <details class="engineering-drawer">
+        <summary><span>How decision reconstruction works without private transcripts</span><small>detection → evidence → constraints → options → action → outcome</small></summary>
+        <div class="engineering-drawer-body">
+          <div><h3>Evidence-aware operations analysis</h3><p>MissionLab reconstructs public decision threads from NASA reporting and technical context. It does not fabricate controller dialogue or ownership. A troubleshooting step is not a confirmed root cause, and one event following another does not prove causation.</p><a href="library.html#decision-reconstruction">Open the decision-reconstruction deep dive →</a></div>
+          <figure><img src="docs/assets/mission_control/phase7b_decision_thread_matrix.svg" alt="MissionLab decision thread matrix"><figcaption>Cross-domain public decision-thread reconstruction.</figcaption></figure>
+        </div>
+      </details>
+    </div>
+  </section>
+</main>
+
+<footer class="x-footer">
+  <div class="x-wrap">
+    <div>
+      <b>A2 MissionLab</b>
+      <p>Independent public-data mission reconstruction. Not an official NASA product.</p>
+    </div>
+    <div>
+      <a href="mission.html">Mission</a>
+      <a href="windows.html">Windows</a>
+      <a href="gnc.html">GNC</a>
+      <a href="mission-control.html">Mission Control</a>
+      <a href="library.html">Mission Library</a>
+      <a href="technical-report.html">Technical Report</a>
+      <a href="https://github.com/Prakhar2828/a2-missionlab" target="_blank" rel="noreferrer">GitHub ?</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/core.js"></script>
+<script src="js/mission-control.js"></script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="Explore 25 evidence-labeled Artemis II mission images with crew-view context, geometry, provenance, and NASA sources.">
+  <meta name="theme-color" content="#020509">
+  <meta property="og:title" content="Through Orion&#x27;s Windows ? A2 MissionLab">
+  <meta property="og:description" content="Explore 25 evidence-labeled Artemis II mission images with crew-view context, geometry, provenance, and NASA sources.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Through Orion&#x27;s Windows ? A2 MissionLab</title>
+  <link rel="preconnect" href="https://images-assets.nasa.gov">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="responsive-hardening.css">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.ico" sizes="any">
+</head>
+<body class="experience-page">
+<a class="skip" href="#page-main">Skip to main content</a>
+
+<header class="x-header" id="top">
+  <a class="x-brand" href="index.html" aria-label="A2 MissionLab home">
+    <span class="x-brand-orbit" aria-hidden="true"><i></i></span>
+    <span><b>A2</b> MissionLab</span>
+  </a>
+  <button class="x-menu" type="button" aria-expanded="false" aria-controls="x-nav">Explore</button>
+  <nav class="x-nav" id="x-nav" aria-label="Primary">
+    <a href="mission.html">Mission</a>
+    <a href="windows.html" aria-current="page">Windows</a>
+    <a href="gnc.html">GNC</a>
+    <a href="mission-control.html">Mission Control</a>
+    <a href="library.html">Library</a>
+    <a href="technical-report.html" class="x-nav-paper">Technical Report</a>
+  </nav>
+</header>
+
+<main id="page-main">
+  <section class="x-intro">
+    <div class="x-wrap x-intro-grid">
+      <div>
+        <p class="x-kicker">Through Orion&#x27;s windows</p>
+        <h1>See Artemis II through the changing view outside Orion.</h1>
+      </div>
+      <p>Move through 25 curated mission moments from outbound coast to lunar science, Earthset, the far side, eclipse observations, Earthrise, and the journey home.</p>
+    </div>
+  </section>
+
+<section class="x-section x-crew" id="crew-view">
+    <div class="x-wrap">
+      <div class="x-section-head">
+        <div><p class="x-kicker">Through Orion’s windows</p><h2>Experience Artemis II as the view, geometry, crew, and ground teams changed around you.</h2></div>
+        <p>Move through 25 mission moments spanning outbound coast, lunar approach, real science targets, Earthset, far-side operations, closest approach, eclipse observations, Earthrise, and the journey home. Every stop labels exactly what kind of evidence you are seeing.</p>
+      </div>
+      <div class="crew-journey" aria-label="Interactive crew-view journey">
+        <div class="crew-photo-wrap">
+          <img id="crew-photo" class="nasa-photo" src="https://images-assets.nasa.gov/image/art002e023506/art002e023506~medium.jpg" data-fallback="assets/public/fallback-mission.svg" fetchpriority="high" decoding="async" alt="Earth beginning to recede during Artemis II outbound coast">
+          <div class="crew-window-frame" aria-hidden="true"><i></i><i></i></div>
+          <button id="crew-image-prev" class="crew-image-arrow crew-image-arrow-left" type="button" aria-label="Previous mission image"><span aria-hidden="true">←</span></button>
+          <button id="crew-image-next" class="crew-image-arrow crew-image-arrow-right" type="button" aria-label="Next mission image"><span aria-hidden="true">→</span></button>
+          <div class="crew-image-count" id="crew-image-count" aria-live="polite">01 / 25</div>
+          <div class="crew-photo-badge" id="crew-badge">OUTBOUND · SAME MISSION PHASE</div>
+          <div class="crew-photo-provenance" id="crew-provenance">CREW PHOTOGRAPHY · NASA</div>
+          <div class="crew-geometry-hud"><canvas id="crew-geometry-canvas" aria-label="Simplified Earth Moon view geometry"></canvas></div>
+        </div>
+        <div class="crew-panel">
+          <p class="x-label" id="crew-index">MISSION VIEW 01 / 25</p>
+          <h3 id="crew-title">Earth becomes a world behind you.</h3>
+          <p id="crew-description">As Orion leaves Earth, the crew can watch the planet shrink against black space. This photograph is mission-phase imagery, not asserted to be the exact view at a reconstructed timestamp.</p>
+          <div class="crew-meta-grid">
+            <div><span>MISSION TIME</span><b id="crew-time">Outbound coast</b></div>
+            <div><span>GEOMETRY</span><b id="crew-geometry">Earth receding</b></div>
+            <div><span>EVIDENCE</span><b id="crew-evidence">NASA imagery</b></div>
+          </div>
+          <div class="crew-learn"><span>WHAT YOU’RE SEEING</span><p id="crew-notice">Earth is becoming a small target while Orion transitions from near-Earth operations to deep-space flight.</p></div>
+          <div class="crew-learn crew-why"><span>WHY IT MATTERED</span><p id="crew-why">The changing apparent size and line-of-sight geometry make the scale of the lunar mission intuitive.</p></div>
+          <a id="crew-source" class="x-source" href="https://www.nasa.gov/gallery/lunar-flyby/" target="_blank" rel="noreferrer">NASA imagery / context source ↗</a>
+        </div>
+      </div>
+      <div class="crew-timeline-shell">
+        <button id="crew-prev" type="button" aria-label="Previous crew view">←</button>
+        <input id="crew-scrubber" type="range" min="0" max="24" value="0" step="1" aria-label="Crew-view mission timeline">
+        <button id="crew-next" type="button" aria-label="Next crew view">→</button>
+      </div>
+      <div class="crew-filmstrip" id="crew-filmstrip" aria-label="Crew observation mission moments"></div>
+      <details class="engineering-drawer">
+        <summary><span>Show the engineering behind the window views</span><small>image provenance · mission clock · SPICE geometry · precision</small></summary>
+        <div class="engineering-drawer-body">
+          <div><h3>Photography and geometry are different evidence layers.</h3><p>MissionLab aligns NASA image metadata, crew observations, public event times, OEM trajectory states, and SPICE geometry. An image is labeled as an exact event image only where NASA metadata supports that claim. Near-event or representative imagery stays labeled that way.</p><a href="library.html#lunar-science">Open the lunar-science deep dive →</a></div>
+          <figure><img src="docs/assets/lunar_science/phase6b_lunar_observation_reconstruction.svg" alt="MissionLab lunar observation reconstruction"><figcaption>MissionLab observation evidence aligned with mission geometry.</figcaption></figure>
+        </div>
+      </details>
+    </div>
+  </section>
+</main>
+
+<footer class="x-footer">
+  <div class="x-wrap">
+    <div>
+      <b>A2 MissionLab</b>
+      <p>Independent public-data mission reconstruction. Not an official NASA product.</p>
+    </div>
+    <div>
+      <a href="mission.html">Mission</a>
+      <a href="windows.html">Windows</a>
+      <a href="gnc.html">GNC</a>
+      <a href="mission-control.html">Mission Control</a>
+      <a href="library.html">Mission Library</a>
+      <a href="technical-report.html">Technical Report</a>
+      <a href="https://github.com/Prakhar2828/a2-missionlab" target="_blank" rel="noreferrer">GitHub ?</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/core.js"></script>
+<script src="js/windows.js"></script>
+</body>
+</html>

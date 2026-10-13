@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="Explore Artemis II trajectory, correction maneuvers, entry and recovery, and space-weather mission context using A2 MissionLab public-data reconstructions.">
+  <meta name="theme-color" content="#020509">
+  <meta property="og:title" content="Mission Explorer ? A2 MissionLab">
+  <meta property="og:description" content="Explore Artemis II trajectory, correction maneuvers, entry and recovery, and space-weather mission context using A2 MissionLab public-data reconstructions.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Mission Explorer ? A2 MissionLab</title>
+  <link rel="preconnect" href="https://images-assets.nasa.gov">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="responsive-hardening.css">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.ico" sizes="any">
+</head>
+<body class="experience-page">
+<a class="skip" href="#page-main">Skip to main content</a>
+
+<header class="x-header" id="top">
+  <a class="x-brand" href="index.html" aria-label="A2 MissionLab home">
+    <span class="x-brand-orbit" aria-hidden="true"><i></i></span>
+    <span><b>A2</b> MissionLab</span>
+  </a>
+  <button class="x-menu" type="button" aria-expanded="false" aria-controls="x-nav">Explore</button>
+  <nav class="x-nav" id="x-nav" aria-label="Primary">
+    <a href="mission.html" aria-current="page">Mission</a>
+    <a href="windows.html">Windows</a>
+    <a href="gnc.html">GNC</a>
+    <a href="mission-control.html">Mission Control</a>
+    <a href="library.html">Library</a>
+    <a href="technical-report.html" class="x-nav-paper">Technical Report</a>
+  </nav>
+</header>
+
+<main id="page-main">
+  <section class="x-intro">
+    <div class="x-wrap x-intro-grid">
+      <div>
+        <p class="x-kicker">Artemis II mission explorer</p>
+        <h1>Follow Orion from Earth to the Moon and home.</h1>
+      </div>
+      <p>Move through the mission, inspect the geometry, experiment with trajectory corrections, explore atmospheric entry, and connect the flight path to the environment around Orion.</p>
+    </div>
+  </section>
+
+<section class="x-section x-mission" id="mission-explorer">
+    <div class="x-wrap">
+      <div class="x-section-head">
+        <div><p class="x-kicker">Mission explorer</p><h2>Scrub through Artemis II.</h2></div>
+        <p>Move the mission clock. Watch Orion move from Earth to the Moon and home while the operational story changes around it.</p>
+      </div>
+      <div class="mission-explorer-shell">
+        <div class="mission-stage">
+          <canvas id="mission-canvas" aria-label="Interactive Earth Moon Orion mission geometry"></canvas>
+          <div class="mission-stage-hud">
+            <div><small>MISSION ELAPSED TIME</small><strong id="mission-met">00:00:00:00</strong></div>
+            <div><small>PHASE</small><strong id="mission-phase">Launch</strong></div>
+            <div><small>COMM</small><strong id="mission-comm">Near-Earth network</strong></div>
+          </div>
+          <div class="mission-stage-caption" id="mission-stage-caption">Orion begins the first crewed Artemis lunar flyby mission.</div>
+        </div>
+        <aside class="mission-story" aria-live="polite">
+          <p class="x-label" id="mission-date">APR 01 · FLIGHT DAY 1</p>
+          <h3 id="mission-title">Launch from Kennedy Space Center</h3>
+          <p id="mission-copy">The shared mission clock begins at 22:35:12 UTC. MissionLab uses this launch epoch to align trajectory products, public events, science observations, and engineering analyses.</p>
+          <div class="mission-readout">
+            <div><span id="mission-readout-a-label">Distance context</span><b id="mission-readout-a">Earth departure</b></div>
+            <div><span id="mission-readout-b-label">Evidence</span><b id="mission-readout-b">NASA reported</b></div>
+          </div>
+          <div class="mission-controls">
+            <button id="mission-prev" type="button" aria-label="Previous mission moment">←</button>
+            <input id="mission-scrubber" type="range" min="0" max="1000" value="0" aria-label="Mission timeline">
+            <button id="mission-next" type="button" aria-label="Next mission moment">→</button>
+          </div>
+          <div id="mission-markers" class="mission-markers" aria-label="Mission milestones"></div>
+        </aside>
+      </div>
+      <details class="engineering-drawer">
+        <summary><span>Show me the engineering behind the mission map</span><small>trajectory products · SPICE geometry · uncertainty</small></summary>
+        <div class="engineering-drawer-body">
+          <div><h3>This is a reconstruction, not a telemetry feed.</h3><p>The visual uses the validated MissionLab event timeline and derived lunar geometry to teach mission progression. The underlying project parses public Orion Orbit Ephemeris Message products, uses SPICE for Earth/Moon/Sun geometry, refines closest approach, and correlates public events without claiming access to Orion's private onboard navigation state.</p><a href="library.html#flight-dynamics">Open the flight-dynamics deep dive →</a></div>
+          <figure><img src="docs/assets/phase1f_oem_with_events.svg" alt="MissionLab OEM trajectory with correlated events"><figcaption>MissionLab public OEM trajectory and event correlation.</figcaption></figure>
+        </div>
+      </details>
+    </div>
+  </section>
+
+<section class="x-section x-maneuver-lab" id="maneuver-lab">
+    <div class="x-wrap">
+      <div class="x-section-head">
+        <div><p class="x-kicker">Trajectory correction lab</p><h2>A tiny <span class="word-burn">burn</span> now can move the future path by a lot.</h2></div>
+        <p>First understand the idea. Orion is already moving fast. A correction changes velocity only slightly, but that difference accumulates over hours of coast and shifts where the trajectory arrives later.</p>
+      </div>
+      <div class="correction-story" aria-label="Trajectory correction concept"><div><small>01</small><b>ORIGINAL PATH</b><span>Predict where Orion will go.</span></div><i>→</i><div><small>02</small><b>SMALL ΔV</b><span>Change velocity for seconds.</span></div><i>→</i><div><small>03</small><b>HOURS OF COAST</b><span>The paths separate.</span></div><i>→</i><div><small>04</small><b>NEW ARRIVAL</b><span>Protect future geometry.</span></div></div>
+      <div class="maneuver-shell">
+        <div class="maneuver-viz"><canvas id="maneuver-canvas" aria-label="Trajectory correction educational visualization"></canvas><div class="maneuver-hud"><div><span>PREDICTED ARRIVAL SHIFT</span><b id="maneuver-hud-shift">0 km</b></div><div><span>COAST TIME</span><b id="maneuver-hud-coast">24 h</b></div><div><span>MISSION EFFECT</span><b id="maneuver-hud-state">NO CORRECTION</b></div></div><div class="maneuver-burn-flash" id="maneuver-burn-flash" aria-hidden="true"></div><div class="maneuver-annotation" id="maneuver-annotation"></div></div>
+        <div class="maneuver-panel">
+          <div class="term-pills"><span><b>OTC</b> Outbound Trajectory Correction</span><span><b>RTC</b> Return Trajectory Correction</span></div>
+          <div class="burn-select" id="burn-select"></div>
+          <div class="burn-readout"><div><span>STATUS / ΔV</span><b id="burn-dv">NO CORRECTION</b></div><div><span>DURATION</span><b id="burn-duration">—</b></div><div><span>PUBLIC TIME</span><b id="burn-time">—</b></div></div>
+          <label class="range-label" for="dv-magnitude"><span>Conceptual Δv magnitude</span><b id="dv-value">0.0 ft/s</b></label>
+          <input id="dv-magnitude" type="range" min="0" max="6" step="0.1" value="0">
+          <label class="range-label" for="coast-hours"><span>Coast after the correction</span><b id="coast-hours-value">24 h</b></label>
+          <input id="coast-hours" type="range" min="1" max="96" value="24">
+          <div class="delta-explain"><strong id="delta-distance">0 km</strong><p>Simple Δv × time separation for intuition only. The real trajectory is nonlinear and targeted in three dimensions.</p></div>
+          <div class="cancel-note" id="cancel-note"><b>Cancellation can be good.</b><span>NASA cancelled OTC1 and OTC2 because Orion was already on track. No burn can be the correct decision.</span></div>
+        </div>
+      </div>
+      <details class="engineering-drawer">
+        <summary><span>Show the engineering</span><small>plan vs execution · exact evidence limits · ESM propulsion architecture</small></summary>
+        <div class="engineering-drawer-body">
+          <div><h3>Plan ≠ execution. Architecture ≠ burn assignment.</h3><p>The repository preserves OTC1/OTC2 cancellation, OTC3 execution, RTC1–3 public timing and reported magnitudes, and ESM engine architecture. It does not invent OTC3 delta-v or a specific engine/thruster assignment where the public record does not establish one.</p><a href="library.html#maneuvers">Open the maneuver deep dive →</a></div>
+          <figure><img src="assets/public/figures/trajectory-correction-plan-execution.svg" alt="Dark-theme diagram showing Artemis II planned and executed trajectory corrections"><figcaption>Public-facing plan-versus-execution summary.</figcaption></figure>
+        </div>
+      </details>
+    </div>
+  </section>
+
+<section class="x-section x-entry" id="entry-lab">
+    <div class="x-wrap">
+      <div class="x-section-head">
+        <div><p class="x-kicker">Entry · descent · recovery</p><h2>Watch lunar-return energy disappear.</h2></div>
+        <p>Scrub from black space to Pacific splashdown. NASA-reported milestones anchor the sequence; the continuous visual motion between them is explicitly educational interpolation.</p>
+      </div>
+      <div class="entry-sim v5-entry-sim">
+        <div class="entry-visual">
+          <canvas id="entry-canvas" aria-label="Interactive Artemis II atmospheric entry, parachute descent, and splashdown visualization"></canvas>
+          <div class="entry-phase-title"><small id="entry-time">23:53 UTC</small><h3 id="entry-phase">Entry interface</h3><p id="entry-visual-caption">400,000 ft. Mach 35. The atmosphere is about to become the braking system.</p></div>
+          <div class="entry-signal" id="entry-signal"><i></i><span>COMM AVAILABLE</span></div>
+          <div class="entry-gauges">
+            <div><span>ALTITUDE</span><strong id="g-alt">121.9 km</strong></div>
+            <div><span>MACH</span><strong id="g-mach">35</strong></div>
+            <div><span>DYNAMIC PRESSURE · MODEL-DERIVED</span><strong id="g-q">building</strong></div>
+            <div><span>CONVECTIVE HEAT FLUX · MODEL</span><strong id="g-heat">rising</strong></div>
+            <div><span>COMM</span><strong id="g-comm">available</strong></div>
+          </div>
+        </div>
+        <div class="entry-console">
+          <input id="entry-scrubber" type="range" min="0" max="1000" value="0" aria-label="Entry timeline">
+          <div class="entry-milestones" id="entry-milestones"></div>
+          <div class="entry-lesson"><p class="x-label" id="entry-evidence">NASA REPORTED MILESTONE</p><h3 id="entry-lesson-title">The atmosphere starts doing the braking.</h3><p id="entry-lesson-copy">Orion reached the atmosphere at 400,000 feet traveling roughly Mach 35. Drag, not a retro-burn, removes most of the lunar-return kinetic energy.</p></div>
+        </div>
+      </div>
+      <div class="entry-mini-lessons">
+        <button class="active" data-entry-topic="speed"><b>Why speed matters</b><span>Heating grows extremely quickly with velocity.</span></button>
+        <button data-entry-topic="pressure"><b>What dynamic pressure means</b><span>½ρV² combines rising density with falling speed.</span></button>
+        <button data-entry-topic="blackout"><b>Why blackout occurs</b><span>Ionized gas can interfere with RF communication.</span></button>
+        <button data-entry-topic="parachutes"><b>Why not deploy chutes immediately?</b><span>Loads would be destructive at hypersonic speed.</span></button>
+        <button data-entry-topic="staging"><b>Drogues vs mains</b><span>Stabilize first, then carry the terminal descent.</span></button>
+      </div>
+      <div class="entry-topic-panel" id="entry-topic-panel"></div>
+      <details class="engineering-drawer">
+        <summary><span>Show the engineering</span><small>Mach · dynamic pressure · Sutton–Graves model · recovery evidence</small></summary>
+        <div class="engineering-drawer-body entry-figures">
+          <figure><img src="docs/assets/entry/phase2e_mach_history.svg" alt="MissionLab entry Mach history"><figcaption>Modeled Mach evolution through entry.</figcaption></figure>
+          <figure><img src="docs/assets/entry/phase2e_dynamic_pressure.svg" alt="MissionLab entry dynamic pressure"><figcaption>Modeled dynamic pressure from reconstructed speed and atmosphere.</figcaption></figure>
+          <figure><img src="docs/assets/entry/phase2e_sutton_graves_heat_flux.svg" alt="MissionLab Sutton Graves convective heat flux"><figcaption>Sutton–Graves MODEL output. Not measured heat-shield telemetry.</figcaption></figure>
+          <div><h3>q̇ = k √(ρ / Rₙ) V³</h3><p>MissionLab uses Sutton–Graves as a low-fidelity convective stagnation-point model. It does not claim measured surface temperature, detailed chemistry, ablation response, or private Orion thermal telemetry.</p><a href="library.html#convective-heating">Open the heating deep dive →</a></div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+<section class="x-section x-labs x-weather-experience" id="space-weather">
+    <div class="x-wrap">
+      <div class="x-section-head">
+        <div><p class="x-kicker">Space weather operations</p><h2>What happens when the Sun becomes part of the flight plan?</h2></div>
+        <p>Artemis II carried humans far beyond low Earth orbit. This standalone teaching model separates the mission’s actual monitoring context from hypothetical solar-particle scenarios.</p>
+      </div>
+      <article class="lab-card lab-card-wide weather-lab">
+        <div class="lab-card-head"><p class="x-label">ARTEMIS II CONTEXT + CONCEPTUAL SCENARIO MODEL</p><h3>Move Orion. Change solar activity. Watch the operational concern change.</h3><p>Use the controls to build intuition about why radiation environment, spacecraft location, and shielding assumptions matter to crewed lunar operations. Relative indicators are intentionally qualitative and are not crew dose.</p></div>
+        <div class="lab-wide-grid">
+          <canvas id="weather-canvas" aria-label="Space weather educational simulation"></canvas>
+          <div class="lab-controls">
+            <label class="range-label" for="solar-activity"><span>Solar activity scenario</span><b id="solar-value">QUIET SUN</b></label>
+            <input id="solar-activity" type="range" min="0" max="100" value="12">
+            <div class="segmented" id="location-select"><button data-location="leo">LEO</button><button class="active" data-location="deep">Deep space</button><button data-location="lunar">Lunar vicinity</button></div>
+            <label class="range-label" for="shielding-assumption"><span>Conceptual shielding assumption</span><b id="shielding-value">medium</b></label>
+            <input id="shielding-assumption" type="range" min="0" max="100" value="50">
+            <div class="weather-readouts">
+              <div id="crew-rad-card"><span>Crew-radiation concern</span><b id="crew-rad-readout">LOW · routine awareness</b><small>How strongly this conceptual environment suggests added caution for people inside Orion. It is not a crew dose.</small></div>
+              <div id="electronics-card"><span>Electronics environment</span><b id="electronics-readout">NOMINAL · routine awareness</b><small>How much charged-particle activity should raise attention to potential single-event effects in electronics.</small></div>
+              <div id="weather-posture-card"><span>Operations posture</span><b id="weather-posture">MONITOR</b><small>The kind of flight-team response this teaching scenario suggests, from routine monitoring to protective evaluation.</small></div>
+            </div>
+            <div class="weather-action-card"><span>WHAT WOULD OPERATORS CARE ABOUT?</span><b id="weather-action">Keep watching the environment and trends.</b><p id="weather-action-copy">Quiet conditions do not mean zero radiation. The operational question is whether the environment is changing enough to justify a different crew or spacecraft posture.</p></div>
+            <div class="actual-vs-model"><div><span>ARTEMIS II ACTUAL CONTEXT</span><p>NASA monitored the space environment and Orion carried radiation instrumentation. MissionLab does not claim a severe solar particle event occurred unless an authoritative source establishes it.</p></div><div><span>THIS INTERACTION</span><p>Shows why a more energetic environment could increase operational concern. It is an educational scenario, not reconstructed Artemis II dosimetry.</p></div></div>
+          </div>
+        </div>
+        <details class="lab-details"><summary>NAIRAS and the evidence boundary</summary><p>MissionLab uses NAIRAS as related radiation-environment context, not as Artemis II crew dosimetry. NASA CCMC now documents NAIRAS Version 4 as an aerospace ionizing-radiation model spanning aircraft and spacecraft applications. MissionLab uses the NAIRAS family as environmental/model context, not as direct Artemis II personal dosimetry; crew-specific interpretation still depends on trajectory, vehicle geometry, shielding, detector response, and dosimetry assumptions.</p><a href="library.html#radiation">Open radiation & space-weather analysis →</a></details>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer class="x-footer">
+  <div class="x-wrap">
+    <div>
+      <b>A2 MissionLab</b>
+      <p>Independent public-data mission reconstruction. Not an official NASA product.</p>
+    </div>
+    <div>
+      <a href="mission.html">Mission</a>
+      <a href="windows.html">Windows</a>
+      <a href="gnc.html">GNC</a>
+      <a href="mission-control.html">Mission Control</a>
+      <a href="library.html">Mission Library</a>
+      <a href="technical-report.html">Technical Report</a>
+      <a href="https://github.com/Prakhar2828/a2-missionlab" target="_blank" rel="noreferrer">GitHub ?</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/core.js"></script>
+<script src="js/mission.js"></script>
+</body>
+</html>

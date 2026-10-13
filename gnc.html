@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="Explore the public Artemis II GNC architecture through a simplified proximity-operations teaching model.">
+  <meta name="theme-color" content="#020509">
+  <meta property="og:title" content="Guidance, Navigation &amp; Control ? A2 MissionLab">
+  <meta property="og:description" content="Explore the public Artemis II GNC architecture through a simplified proximity-operations teaching model.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Guidance, Navigation &amp; Control ? A2 MissionLab</title>
+  <link rel="preconnect" href="https://images-assets.nasa.gov">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="responsive-hardening.css">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.ico" sizes="any">
+</head>
+<body class="experience-page">
+<a class="skip" href="#page-main">Skip to main content</a>
+
+<header class="x-header" id="top">
+  <a class="x-brand" href="index.html" aria-label="A2 MissionLab home">
+    <span class="x-brand-orbit" aria-hidden="true"><i></i></span>
+    <span><b>A2</b> MissionLab</span>
+  </a>
+  <button class="x-menu" type="button" aria-expanded="false" aria-controls="x-nav">Explore</button>
+  <nav class="x-nav" id="x-nav" aria-label="Primary">
+    <a href="mission.html">Mission</a>
+    <a href="windows.html">Windows</a>
+    <a href="gnc.html" aria-current="page">GNC</a>
+    <a href="mission-control.html">Mission Control</a>
+    <a href="library.html">Library</a>
+    <a href="technical-report.html" class="x-nav-paper">Technical Report</a>
+  </nav>
+</header>
+
+<main id="page-main">
+  <section class="x-intro">
+    <div class="x-wrap x-intro-grid">
+      <div>
+        <p class="x-kicker">Guidance, navigation and control</p>
+        <h1>Sense. Estimate. Guide. Control. Fire. Verify.</h1>
+      </div>
+      <p>Experiment with the control loop behind Orion proximity operations using AUTO and MANUAL modes, disturbance injection, translation and rotation controls, and explicit evidence boundaries.</p>
+    </div>
+  </section>
+
+<section class="x-section x-darklab" id="gnc-lab">
+    <div class="x-wrap">
+      <div class="x-section-head">
+        <div><p class="x-kicker">Fly Orion · GNC experience</p><h2>Bring Orion into the target box.</h2></div>
+        <p>Artemis II actually completed an approximately 70-minute proximity-operations demonstration around the detached ICPS. This simplified interaction teaches the control loop behind that task. It is not a replay of private flight data.</p>
+      </div>
+      <div class="gnc-mission-brief"><span>YOUR OBJECTIVE</span><b>Reduce translation and pointing error until Orion is stable inside the corridor.</b><p>Use <strong>THC</strong> to move Orion without changing its attitude. Use <strong>RHC</strong> to rotate Orion. The white target represents the detached ICPS reference target used during the real demonstration.</p></div>
+      <div class="gnc-mission-program" aria-label="Artemis II manual-control context">
+        <div><span>EARLY MISSION</span><b>Proximity operations</b><small>≈70 min · controlled approach and retreat around detached ICPS</small></div>
+        <div><span>FLIGHT DAY 4</span><b>Manual handling-quality test</b><small>41 min · 6-DOF and 3-DOF thruster modes</small></div>
+        <div><span>FLIGHT DAY 8</span><b>Additional test forgone</b><small>NASA reported flight controllers elected not to repeat the planned demonstration</small></div>
+      </div>
+      <div class="gnc-mode-deck" aria-label="GNC simulator mode controls">
+        <div class="gnc-mode-copy"><span>SIMULATION MODE</span><b id="gnc-mode-title">AUTO MODE · watch the closed loop work</b><p id="gnc-mode-help">Start by watching the guidance loop reduce translation and pointing error. Then switch to Manual Mode and fly the same capture yourself.</p></div>
+        <div class="gnc-mode-toggle" role="group" aria-label="Choose GNC simulator mode">
+          <button id="gnc-mode-auto" class="active" type="button" data-gnc-mode="auto"><b>AUTO MODE</b><small>Watch the capture</small></button>
+          <button id="gnc-mode-manual" type="button" data-gnc-mode="manual"><b>MANUAL MODE</b><small>Fly it yourself</small></button>
+        </div>
+        <button id="gnc-disturbance" class="gnc-disturbance" type="button"><span>⚡</span><b>Introduce disturbance</b><small>Push Orion off the commanded state</small></button>
+      </div>
+      <div class="gnc-sim">
+        <div class="gnc-viewport">
+          <canvas id="gnc-canvas" aria-label="Simplified Orion proximity-operations GNC simulator"></canvas>
+          <div class="gnc-reticle" aria-hidden="true"><span></span><i></i></div>
+          <div class="gnc-success" id="gnc-success" aria-live="polite">CORRIDOR NOT YET CAPTURED</div>
+          <div class="gnc-status-row">
+            <div><small>RELATIVE OFFSET</small><b id="gnc-offset-readout">42 m · conceptual</b></div>
+            <div><small>POINTING ERROR</small><b id="gnc-error-readout">12.0°</b></div>
+            <div><small>CONTROL</small><b id="gnc-mode-readout">AUTO GUIDANCE DEMO</b></div><div><small>LOOP STATE</small><b id="gnc-autopilot-status">READY</b></div>
+          </div>
+        </div>
+        <div class="gnc-console">
+          <div class="gnc-tutorial" id="gnc-tutorial"><p class="x-label">30-SECOND TUTORIAL</p><div><b>RHC</b><span>Rotate Orion. Think roll, pitch, yaw.</span></div><div><b>THC</b><span>Translate Orion. Move the spacecraft without intentionally changing where it points.</span></div><button id="gnc-start" class="x-button x-button-primary" type="button">Start auto demonstration</button></div>
+          <div class="gnc-controls" id="gnc-controls" hidden>
+            <div class="gnc-stick-grid">
+              <div><span>RHC · rotate</span><div class="pad" data-pad="rhc"><button data-cmd="pitchUp" aria-label="Pitch up">↑</button><button data-cmd="yawLeft" aria-label="Yaw left">←</button><button data-cmd="attCenter" aria-label="Null rotation">●</button><button data-cmd="yawRight" aria-label="Yaw right">→</button><button data-cmd="pitchDown" aria-label="Pitch down">↓</button></div></div>
+              <div><span>THC · translate</span><div class="pad" data-pad="thc"><button data-cmd="up" aria-label="Translate up">↑</button><button data-cmd="left" aria-label="Translate left">←</button><button data-cmd="transCenter" aria-label="Null translation">●</button><button data-cmd="right" aria-label="Translate right">→</button><button data-cmd="down" aria-label="Translate down">↓</button></div></div>
+            </div>
+            <button id="gnc-reset" class="x-button x-button-ghost" type="button">Reset approach</button>
+          </div>
+          <div class="gnc-sensors"><span>STATE / SENSOR CONTEXT</span><div id="sensor-chips"></div></div>
+          <p class="gnc-explain" id="gnc-explain">The simulation starts with an offset state. Sense the error, estimate the state, guide toward the target, command a correction, fire conceptual RCS, and verify what changed.</p>
+        </div>
+      </div>
+      <div class="system-loop gnc-loop" aria-label="Guidance navigation and control closed loop">
+        <button data-gnc-block="sense" class="active"><small>01</small><b>SENSE</b><span>Observe motion</span></button><i>→</i>
+        <button data-gnc-block="estimate"><small>02</small><b>ESTIMATE</b><span>Know the state</span></button><i>→</i>
+        <button data-gnc-block="guide"><small>03</small><b>GUIDE</b><span>Choose target</span></button><i>→</i>
+        <button data-gnc-block="control"><small>04</small><b>CONTROL</b><span>Form correction</span></button><i>→</i>
+        <button data-gnc-block="fire"><small>05</small><b>FIRE</b><span>RCS effectors</span></button><i>→</i>
+        <button data-gnc-block="verify"><small>06</small><b>VERIFY</b><span>Measure again</span></button>
+      </div>
+      <div class="system-loop-explainer" id="gnc-block-explainer"></div>
+      <div class="gnc-evidence-band"><div><span>NASA REPORTED</span><b>~70 min proximity operations completed</b></div><div><span>NASA REPORTED</span><b>Controlled approach + retreat</b></div><div><span>NASA REPORTED</span><b>Onboard nav sensors + RCS used</b></div><div><span>NASA REPORTED</span><b>Automated departure</b></div><div><span>NOT PUBLIC</span><b>Exact state / thruster histories</b></div></div>
+      <details class="engineering-drawer">
+        <summary><span>Show the actual GNC evidence architecture</span><small>onboard ≠ ground ≠ public state · control-law limits</small></summary>
+        <div class="engineering-drawer-body">
+          <div><h3>Public evidence establishes the architecture, not private filter internals.</h3><p>MissionLab keeps Orion’s onboard state estimate, ground orbit determination, and the public AROW/OEM state product separate. It also preserves the difference between a confirmed RCS capability/use statement and an unavailable individual-thruster firing history.</p><a href="library.html#gnc">Open the GNC deep dive →</a></div>
+          <figure><img src="assets/public/figures/navigation-state-products.svg" alt="Dark-theme diagram separating onboard navigation, ground orbit determination, and public state products"><figcaption>Public-facing navigation / state-product boundary.</figcaption></figure>
+        </div>
+      </details>
+    </div>
+  </section>
+</main>
+
+<footer class="x-footer">
+  <div class="x-wrap">
+    <div>
+      <b>A2 MissionLab</b>
+      <p>Independent public-data mission reconstruction. Not an official NASA product.</p>
+    </div>
+    <div>
+      <a href="mission.html">Mission</a>
+      <a href="windows.html">Windows</a>
+      <a href="gnc.html">GNC</a>
+      <a href="mission-control.html">Mission Control</a>
+      <a href="library.html">Mission Library</a>
+      <a href="technical-report.html">Technical Report</a>
+      <a href="https://github.com/Prakhar2828/a2-missionlab" target="_blank" rel="noreferrer">GitHub ?</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/core.js"></script>
+<script src="js/gnc.js"></script>
+</body>
+</html>
