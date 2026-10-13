@@ -48,3 +48,38 @@ Public photography in **Through Orion’s Windows** is loaded from NASA’s Imag
 - The decorative interior cross-window bars from the previous public build were removed. The subtle outer Orion-window framing remains.
 - Each moment exposes mission time/phase context, viewing geometry, evidence type, provenance, and why the observation mattered.
 - Remote NASA image delivery is intentionally kept separate from the overlay’s local MissionLab diagrams and fallback art.
+
+## Phase H celestial rendering assets
+
+The following repository-local images are used only to improve the visual
+fidelity of schematic MissionLab canvas scenes. They are not asserted to be
+timestamp-specific Artemis II observations, exact spacecraft camera geometry,
+private telemetry, or exact illumination/orientation states.
+
+### Earth ? NASA/JPL PIA18033
+
+- Local asset: `assets/public/celestial/earth_pia18033.jpg`
+- NASA identifier: PIA18033
+- Source page: https://science.nasa.gov/image-detail/amf-pia18033/
+- Direct NASA asset: https://images-assets.nasa.gov/image/PIA18033/PIA18033~large.jpg
+- Producer/credit: NASA / JPL
+- Source imagery: VIIRS aboard Suomi NPP
+- MissionLab use: visual Earth disk material inside educational canvas scenes
+
+### Moon ? NASA SVS Moon Mosaic 5001
+
+- Local asset: `assets/public/celestial/moon_lro_mosaic.jpg`
+- NASA SVS identifier: 5001
+- Source page: https://svs.gsfc.nasa.gov/5001
+- Direct NASA asset: https://svs.gsfc.nasa.gov/vis/a000000/a005000/a005001/moon_mosaic_print.jpg
+- Credit: NASA Scientific Visualization Studio
+- Source imagery: photomosaic assembled from 1,231 LRO Narrow Angle Camera images
+- MissionLab use: visual lunar disk material inside educational canvas scenes
+
+### Rendering boundary
+
+MissionLab clips these source images into canvas-rendered planetary disks and
+adds visualization-only limb shading / atmospheric glow for scene readability.
+The underlying mission trajectory, event timing, closest-approach values,
+state-product boundaries, and evidence classifications are not changed by
+these visual assets.

@@ -82,15 +82,417 @@
     for(let i=0;i<count;i++){const x=rand()*w,y=rand()*h,r=rand()*1.25+.2,a=(rand()*.65+.18)*alpha;ctx.fillStyle=`rgba(255,255,255,${a})`;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();}
     ctx.restore();
   }
-  function drawEarth(ctx,x,y,r){
+  const celestialImages={};
+  let celestialLoaded=0;
+  let celestialFailed=0;
+
+  document.documentElement.dataset.a2Celestial='loading';
+
+  function updateCelestialAssetState(){
+    const total=2;
+    const finished=celestialLoaded+celestialFailed;
+
+    if(celestialLoaded===total){
+      document.documentElement.dataset.a2Celestial='ready';
+    }else if(finished===total){
+      document.documentElement.dataset.a2Celestial=
+        celestialLoaded>0?'partial':'fallback';
+    }else{
+      document.documentElement.dataset.a2Celestial='loading';
+    }
+
+    invalidateCanvasLayouts();
+
+    requestAnimationFrame(()=>{
+      window.dispatchEvent(
+        new Event('resize')
+      );
+    });
+  }
+
+  function loadCelestialImage(name,src){
+    const img=new Image();
+
+    img.decoding='async';
+
+    img.addEventListener(
+      'load',
+      ()=>{
+        celestialLoaded++;
+        updateCelestialAssetState();
+      },
+      {once:true}
+    );
+
+    img.addEventListener(
+      'error',
+      ()=>{
+        celestialFailed++;
+        updateCelestialAssetState();
+      },
+      {once:true}
+    );
+
+    img.src=src;
+
+    celestialImages[name]=img;
+
+    return img;
+  }
+
+  loadCelestialImage(
+    'earth',
+    'assets/public/celestial/earth_pia18033.jpg'
+  );
+
+  loadCelestialImage(
+    'moon',
+    'assets/public/celestial/moon_lro_mosaic.jpg'
+  );
+
+  function celestialImageReady(img){
+    return Boolean(
+      img &&
+      img.complete &&
+      img.naturalWidth>0 &&
+      img.naturalHeight>0
+    );
+  }
+
+  function drawCelestialImageDisk(
+    ctx,
+    img,
+    x,
+    y,
+    r,
+    sourceInset,
+    body
+  ){
+    if(!celestialImageReady(img)){
+      return false;
+    }
+
+    const naturalSize=
+      Math.min(
+        img.naturalWidth,
+        img.naturalHeight
+      );
+
+    const baseX=
+      (
+        img.naturalWidth-
+        naturalSize
+      )/2;
+
+    const baseY=
+      (
+        img.naturalHeight-
+        naturalSize
+      )/2;
+
+    const inset=
+      naturalSize*
+      sourceInset;
+
+    const sourceSize=
+      naturalSize-
+      inset*2;
+
+    ctx.save();
+
+    ctx.beginPath();
+    ctx.arc(
+      x,
+      y,
+      r,
+      0,
+      Math.PI*2
+    );
+    ctx.clip();
+
+    ctx.drawImage(
+      img,
+      baseX+inset,
+      baseY+inset,
+      sourceSize,
+      sourceSize,
+      x-r,
+      y-r,
+      r*2,
+      r*2
+    );
+
+    if(body==='earth'){
+
+      const limb=
+        ctx.createRadialGradient(
+          x-r*.28,
+          y-r*.3,
+          r*.08,
+          x+r*.06,
+          y+r*.05,
+          r*1.04
+        );
+
+      limb.addColorStop(
+        0,
+        'rgba(255,255,255,.05)'
+      );
+
+      limb.addColorStop(
+        .54,
+        'rgba(0,0,0,0)'
+      );
+
+      limb.addColorStop(
+        .84,
+        'rgba(0,8,18,.2)'
+      );
+
+      limb.addColorStop(
+        1,
+        'rgba(0,4,10,.67)'
+      );
+
+      ctx.fillStyle=limb;
+
+      ctx.fillRect(
+        x-r,
+        y-r,
+        r*2,
+        r*2
+      );
+
+    }else{
+
+      const lunarShade=
+        ctx.createRadialGradient(
+          x-r*.32,
+          y-r*.34,
+          r*.04,
+          x+r*.12,
+          y+r*.09,
+          r*1.08
+        );
+
+      lunarShade.addColorStop(
+        0,
+        'rgba(255,255,255,.08)'
+      );
+
+      lunarShade.addColorStop(
+        .48,
+        'rgba(0,0,0,0)'
+      );
+
+      lunarShade.addColorStop(
+        .82,
+        'rgba(2,4,6,.16)'
+      );
+
+      lunarShade.addColorStop(
+        1,
+        'rgba(0,0,0,.58)'
+      );
+
+      ctx.fillStyle=lunarShade;
+
+      ctx.fillRect(
+        x-r,
+        y-r,
+        r*2,
+        r*2
+      );
+    }
+
+    ctx.restore();
+
+    return true;
+  }
+
+  function drawEarthProcedural(ctx,x,y,r){
     ctx.save();
     const g=ctx.createRadialGradient(x-r*.35,y-r*.35,r*.08,x,y,r);g.addColorStop(0,'#7fc8ff');g.addColorStop(.42,'#2a78ac');g.addColorStop(.72,'#15415f');g.addColorStop(1,'#06111b');ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
     ctx.globalAlpha=.42;ctx.strokeStyle='#d8f0ff';ctx.lineWidth=Math.max(1,r*.025);for(let i=0;i<4;i++){ctx.beginPath();ctx.arc(x-r*.15+i*r*.1,y-r*.1+i*r*.09,r*(.34-i*.035),.15,1.75);ctx.stroke();}
     ctx.globalAlpha=1;ctx.strokeStyle='rgba(170,220,255,.32)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(x,y,r+5,0,Math.PI*2);ctx.stroke();ctx.restore();
   }
-  function drawMoon(ctx,x,y,r){
+
+  function drawMoonProcedural(ctx,x,y,r){
     ctx.save();const g=ctx.createRadialGradient(x-r*.35,y-r*.35,r*.05,x,y,r);g.addColorStop(0,'#d5d2cc');g.addColorStop(.5,'#8d8d8b');g.addColorStop(1,'#373a3c');ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();let s=22;const rand=()=>{s=(s*1103515245+12345)&0x7fffffff;return s/0x7fffffff};for(let i=0;i<22;i++){const a=rand()*Math.PI*2,rr=Math.sqrt(rand())*r*.8,cr=rand()*r*.11+r*.02,cx=x+Math.cos(a)*rr,cy=y+Math.sin(a)*rr;ctx.fillStyle='rgba(20,22,24,.22)';ctx.beginPath();ctx.arc(cx,cy,cr,0,Math.PI*2);ctx.fill();ctx.strokeStyle='rgba(255,255,255,.11)';ctx.beginPath();ctx.arc(cx-cr*.12,cy-cr*.15,cr*.8,0,Math.PI*2);ctx.stroke();}ctx.restore();
   }
+
+  function drawEarth(ctx,x,y,r){
+    if(
+      !celestialImageReady(
+        celestialImages.earth
+      )
+    ){
+      drawEarthProcedural(
+        ctx,
+        x,
+        y,
+        r
+      );
+      return;
+    }
+
+    ctx.save();
+
+    const glow=
+      ctx.createRadialGradient(
+        x,
+        y,
+        r*.82,
+        x,
+        y,
+        r*1.2
+      );
+
+    glow.addColorStop(
+      0,
+      'rgba(69,160,222,0)'
+    );
+
+    glow.addColorStop(
+      .72,
+      'rgba(71,172,235,.09)'
+    );
+
+    glow.addColorStop(
+      1,
+      'rgba(71,172,235,0)'
+    );
+
+    ctx.fillStyle=glow;
+
+    ctx.beginPath();
+    ctx.arc(
+      x,
+      y,
+      r*1.2,
+      0,
+      Math.PI*2
+    );
+    ctx.fill();
+
+    drawCelestialImageDisk(
+      ctx,
+      celestialImages.earth,
+      x,
+      y,
+      r,
+      .048,
+      'earth'
+    );
+
+    ctx.strokeStyle=
+      'rgba(126,203,250,.35)';
+
+    ctx.lineWidth=
+      Math.max(
+        1,
+        r*.018
+      );
+
+    ctx.beginPath();
+    ctx.arc(
+      x,
+      y,
+      r+1,
+      0,
+      Math.PI*2
+    );
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  function drawMoon(ctx,x,y,r){
+    if(
+      !celestialImageReady(
+        celestialImages.moon
+      )
+    ){
+      drawMoonProcedural(
+        ctx,
+        x,
+        y,
+        r
+      );
+      return;
+    }
+
+    ctx.save();
+
+    const glow=
+      ctx.createRadialGradient(
+        x,
+        y,
+        r*.9,
+        x,
+        y,
+        r*1.16
+      );
+
+    glow.addColorStop(
+      0,
+      'rgba(214,220,224,0)'
+    );
+
+    glow.addColorStop(
+      .65,
+      'rgba(214,220,224,.055)'
+    );
+
+    glow.addColorStop(
+      1,
+      'rgba(214,220,224,0)'
+    );
+
+    ctx.fillStyle=glow;
+
+    ctx.beginPath();
+    ctx.arc(
+      x,
+      y,
+      r*1.16,
+      0,
+      Math.PI*2
+    );
+    ctx.fill();
+
+    drawCelestialImageDisk(
+      ctx,
+      celestialImages.moon,
+      x,
+      y,
+      r,
+      .012,
+      'moon'
+    );
+
+    ctx.strokeStyle=
+      'rgba(220,225,228,.18)';
+
+    ctx.lineWidth=
+      Math.max(
+        .8,
+        r*.012
+      );
+
+    ctx.beginPath();
+    ctx.arc(
+      x,
+      y,
+      r,
+      0,
+      Math.PI*2
+    );
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
   function bezier(p0,p1,p2,t){const u=1-t;return{x:u*u*p0.x+2*u*t*p1.x+t*t*p2.x,y:u*u*p0.y+2*u*t*p1.y+t*t*p2.y};}
   function drawCanvasLabel(ctx,text,x,y,maxWidth,opts={}){
     const size=opts.size??12,minSize=opts.minSize??10,weight=opts.weight??700,align=opts.align??'left',color=opts.color??'rgba(255,255,255,.68)',lineHeight=opts.lineHeight??1.18,maxLines=opts.maxLines??2;

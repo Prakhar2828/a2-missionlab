@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "purpose": "Repository-local NASA imagery used only as visual rendering material in MissionLab canvas scenes.",
+  "evidence_boundary": "These assets improve visual fidelity. They do not represent private telemetry, exact Artemis II camera geometry, exact illumination state, or timestamp-specific mission observations.",
+  "assets": {
+    "earth": {
+      "path": "assets/public/celestial/earth_pia18033.jpg",
+      "source_page": "https://science.nasa.gov/image-detail/amf-pia18033/",
+      "direct_source": "https://images-assets.nasa.gov/image/PIA18033/PIA18033~large.jpg",
+      "identifier": "PIA18033",
+      "producer": "NASA / JPL",
+      "instrument": "VIIRS aboard Suomi NPP",
+      "usage": "Visual Earth disk rendering only.",
+      "width": 1920,
+      "height": 1920,
+      "bytes": 518573,
+      "sha256": "ad615afaed5a3f91bee84381e569350f099cef246fe03a82ae3298bdc160518a"
+    },
+    "moon": {
+      "path": "assets/public/celestial/moon_lro_mosaic.jpg",
+      "source_page": "https://svs.gsfc.nasa.gov/5001",
+      "direct_source": "https://svs.gsfc.nasa.gov/vis/a000000/a005000/a005001/moon_mosaic_print.jpg",
+      "identifier": "NASA SVS 5001",
+      "producer": "NASA Scientific Visualization Studio",
+      "instrument": "LRO Narrow Angle Camera mosaic",
+      "usage": "Visual lunar disk rendering only.",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 252499,
+      "sha256": "36fbe604043f1403acbc4db6fbd36d04db1db1c8a3749aa81d1e6ffea072a5fa"
+    }
+  }
+}
