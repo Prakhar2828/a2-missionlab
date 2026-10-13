@@ -4,7 +4,8 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlparse
 ROOT=Path(__file__).resolve().parents[1]
-REQUIRED_FILES=['index.html','styles.css','app.js','library.html','library.js','technical-report.html','favicon.svg','favicon.ico','assets/public/IMAGE_SOURCES.md','assets/public/AUTHORITATIVE_SOURCE_AUDIT.md','assets/public/FIGURE_AUDIT.md','assets/public/fallback-mission.svg','assets/public/figures/navigation-state-products.svg','assets/public/figures/esm-propulsion-architecture.svg','assets/public/figures/trajectory-correction-plan-execution.svg','assets/public/figures/entry-recovery-sequence.svg','assets/public/figures/gnc-proximity-loop.svg','PUBLIC_EXPERIENCE_FINAL_README.md']
+PUBLIC_JS=['js/core.js','js/mission.js','js/windows.js','js/gnc.js','js/mission-control.js','js/psi.js']
+REQUIRED_FILES=['index.html','styles.css','app.js',*PUBLIC_JS,'library.html','library.js','technical-report.html','favicon.svg','favicon.ico','assets/public/IMAGE_SOURCES.md','assets/public/AUTHORITATIVE_SOURCE_AUDIT.md','assets/public/FIGURE_AUDIT.md','assets/public/fallback-mission.svg','assets/public/figures/navigation-state-products.svg','assets/public/figures/esm-propulsion-architecture.svg','assets/public/figures/trajectory-correction-plan-execution.svg','assets/public/figures/entry-recovery-sequence.svg','assets/public/figures/gnc-proximity-loop.svg','PUBLIC_EXPERIENCE_FINAL_README.md']
 REPO_DEPS=['data/reference/artemis_ii_gnc_architecture.json','data/reference/artemis_ii_manual_piloting_control_modes.json','data/reference/artemis_ii_entry_events.json','data/reference/artemis_ii_maneuver_plan_execution.json','data/reference/artemis_ii_phase2_closure_manifest.json','scripts/ingestion/parse_oem.py','scripts/processing/add_lunar_geometry.py','scripts/analysis/refine_lunar_closest_approach.py','docs/assets/entry/phase2e_sutton_graves_heat_flux.svg','docs/assets/lunar_science/phase6b_lunar_observation_reconstruction.svg']
 FORBIDDEN=[r'technical\s+paper',r'engineering\s+paper',r'\bmanuscript\b',r'flight-qualified simulation',r'mission telemetry replay',r'navigation filter reconstruction']
 REQUIRED_IDS=['mission-canvas','mission-scrubber','crew-photo','crew-scrubber','crew-geometry-canvas','crew-image-prev','crew-image-next','crew-image-count','gnc-canvas','gnc-start','gnc-mode-auto','gnc-mode-manual','gnc-disturbance','gnc-autopilot-status','mc-canvas','entry-canvas','entry-scrubber','maneuver-canvas','dv-magnitude','maneuver-hud-shift','weather-canvas','shielding-assumption','weather-action','psi-canvas','psi-cant','psi-angle','psi-hardware-risk']
@@ -43,7 +44,7 @@ def main():
     if args.overlay_only and (rel.startswith('docs/') or rel.startswith('data/')):continue
     fail.append(f'{pg.name}: broken local {attr} -> {ref}');continue
    if frag and t in parsed and frag not in parsed[t].ids and t.name!='library.html':fail.append(f'{pg.name}: missing anchor {ref}')
- text='\n'.join((ROOT/n).read_text(encoding='utf8') for n in ['index.html','styles.css','app.js','library.html','library.js','technical-report.html'] if (ROOT/n).exists())
+ text='\n'.join((ROOT/n).read_text(encoding='utf8') for n in ['index.html','styles.css','app.js',*PUBLIC_JS,'library.html','library.js','technical-report.html'] if (ROOT/n).exists())
  for pat in FORBIDDEN:
   if re.search(pat,text,re.I):fail.append('forbidden public claim/term: '+pat)
  ip=parsed.get((ROOT/'index.html').resolve())
@@ -55,8 +56,8 @@ def main():
   if phrase.lower() not in text.lower():fail.append('missing required concept: '+phrase)
  for phrase in ['AUTO MODE','MANUAL MODE','Introduce disturbance','MissionLab shorthand','WHY CANT MATTERS','WHY SPREAD MATTERS','WHAT WOULD OPERATORS CARE ABOUT?']:
   if phrase.lower() not in text.lower():fail.append('missing final-polish UX concept: '+phrase)
- app=(ROOT/'app.js').read_text(encoding='utf8')
- crew_count=len(re.findall(r'\"id\":\"(?:art|jsc)[^\"]+\"',app))
+ windows_js=(ROOT/'js/windows.js').read_text(encoding='utf8')
+ crew_count=len(re.findall(r'\"id\":\"(?:art|jsc)[^\"]+\"',windows_js))
  notes.append(f'Through Orion windows moments: {crew_count}')
  if crew_count!=25:fail.append(f'expected 25 Through Orion windows moments, found {crew_count}')
  if 'phase2e_sutton_graves_heat_flux.svg' not in text:fail.append('correct Sutton-Graves asset not referenced')
