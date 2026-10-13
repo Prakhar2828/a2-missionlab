@@ -13,6 +13,7 @@
   <link rel="preconnect" href="https://images-assets.nasa.gov">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="responsive-hardening.css">
+  <link rel="stylesheet" href="windows.css">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="icon" href="favicon.ico" sizes="any">
 </head>
@@ -53,16 +54,96 @@
         <p>Move through 25 mission moments spanning outbound coast, lunar approach, real science targets, Earthset, far-side operations, closest approach, eclipse observations, Earthrise, and the journey home. Every stop labels exactly what kind of evidence you are seeing.</p>
       </div>
       <div class="crew-journey" aria-label="Interactive crew-view journey">
-        <div class="crew-photo-wrap">
-          <img id="crew-photo" class="nasa-photo" src="https://images-assets.nasa.gov/image/art002e023506/art002e023506~medium.jpg" data-fallback="assets/public/fallback-mission.svg" fetchpriority="high" decoding="async" alt="Earth beginning to recede during Artemis II outbound coast">
-          <div class="crew-window-frame" aria-hidden="true"><i></i><i></i></div>
-          <button id="crew-image-prev" class="crew-image-arrow crew-image-arrow-left" type="button" aria-label="Previous mission image"><span aria-hidden="true">←</span></button>
-          <button id="crew-image-next" class="crew-image-arrow crew-image-arrow-right" type="button" aria-label="Next mission image"><span aria-hidden="true">→</span></button>
-          <div class="crew-image-count" id="crew-image-count" aria-live="polite">01 / 25</div>
-          <div class="crew-photo-badge" id="crew-badge">OUTBOUND · SAME MISSION PHASE</div>
-          <div class="crew-photo-provenance" id="crew-provenance">CREW PHOTOGRAPHY · NASA</div>
-          <div class="crew-geometry-hud"><canvas id="crew-geometry-canvas" aria-label="Simplified Earth Moon view geometry"></canvas></div>
+        <div class="crew-media-column">
+
+          <div
+            class="crew-photo-wrap"
+            id="crew-photo-stage"
+            aria-label="Current Artemis II mission image"
+          >
+            <img
+              id="crew-photo"
+              class="nasa-photo"
+              src="https://images-assets.nasa.gov/image/art002e023506/art002e023506~medium.jpg"
+              data-fallback="assets/public/fallback-mission.svg"
+              fetchpriority="high"
+              decoding="async"
+              alt="Earth beginning to recede during Artemis II outbound coast"
+              role="button"
+              tabindex="0"
+              aria-label="Open current Artemis II image fullscreen"
+            >
+
+            <button
+              id="crew-image-prev"
+              class="crew-image-arrow crew-image-arrow-left"
+              type="button"
+              aria-label="Previous mission image"
+            >
+              <span aria-hidden="true">?</span>
+            </button>
+
+            <button
+              id="crew-image-next"
+              class="crew-image-arrow crew-image-arrow-right"
+              type="button"
+              aria-label="Next mission image"
+            >
+              <span aria-hidden="true">?</span>
+            </button>
+
+            <button
+              id="crew-zoom"
+              class="crew-zoom-trigger"
+              type="button"
+              aria-haspopup="dialog"
+              aria-controls="crew-lightbox"
+            >
+              <span aria-hidden="true">?</span>
+              <b>EXPAND</b>
+            </button>
+
+            <div
+              class="crew-image-count"
+              id="crew-image-count"
+              aria-live="polite"
+            >
+              01 / 25
+            </div>
+          </div>
+
+          <div class="crew-image-meta-strip">
+
+            <div class="crew-image-meta-copy">
+              <div
+                class="crew-photo-badge"
+                id="crew-badge"
+              >
+                OUTBOUND ? SAME MISSION PHASE
+              </div>
+
+              <div
+                class="crew-photo-provenance"
+                id="crew-provenance"
+              >
+                CREW PHOTOGRAPHY ? NASA
+              </div>
+            </div>
+
+            <div
+              class="crew-geometry-hud"
+              aria-label="Simplified view geometry"
+            >
+              <canvas
+                id="crew-geometry-canvas"
+                aria-label="Simplified Earth Moon view geometry"
+              ></canvas>
+            </div>
+
+          </div>
+
         </div>
+
         <div class="crew-panel">
           <p class="x-label" id="crew-index">MISSION VIEW 01 / 25</p>
           <h3 id="crew-title">Earth becomes a world behind you.</h3>
@@ -77,6 +158,117 @@
           <a id="crew-source" class="x-source" href="https://www.nasa.gov/gallery/lunar-flyby/" target="_blank" rel="noreferrer">NASA imagery / context source ↗</a>
         </div>
       </div>
+
+      <dialog
+        class="crew-lightbox"
+        id="crew-lightbox"
+        aria-labelledby="crew-lightbox-title"
+      >
+        <div class="crew-lightbox-shell">
+
+          <header class="crew-lightbox-header">
+
+            <div class="crew-lightbox-heading">
+              <span id="crew-lightbox-count">
+                IMAGE 01 / 25
+              </span>
+
+              <b id="crew-lightbox-title">
+                Earth begins to fall away.
+              </b>
+            </div>
+
+            <div
+              class="crew-lightbox-tools"
+              role="group"
+              aria-label="Image zoom controls"
+            >
+              <button
+                id="crew-lightbox-minus"
+                type="button"
+                aria-label="Zoom out"
+              >
+                ?
+              </button>
+
+              <output
+                id="crew-lightbox-scale"
+                aria-live="polite"
+              >
+                100%
+              </output>
+
+              <button
+                id="crew-lightbox-plus"
+                type="button"
+                aria-label="Zoom in"
+              >
+                +
+              </button>
+
+              <button
+                id="crew-lightbox-reset"
+                type="button"
+              >
+                Reset
+              </button>
+
+              <button
+                id="crew-lightbox-close"
+                type="button"
+                aria-label="Close fullscreen image"
+              >
+                Close
+              </button>
+            </div>
+
+          </header>
+
+          <div
+            class="crew-lightbox-stage"
+            id="crew-lightbox-stage"
+            tabindex="0"
+            aria-label="Zoomable Artemis II image. Pinch, drag, use the mouse wheel, or double tap to zoom."
+          >
+            <img
+              id="crew-lightbox-image"
+              alt=""
+              draggable="false"
+              decoding="async"
+            >
+
+            <button
+              id="crew-lightbox-prev"
+              class="crew-lightbox-arrow crew-lightbox-arrow-left"
+              type="button"
+              aria-label="Previous mission image"
+            >
+              ?
+            </button>
+
+            <button
+              id="crew-lightbox-next"
+              class="crew-lightbox-arrow crew-lightbox-arrow-right"
+              type="button"
+              aria-label="Next mission image"
+            >
+              ?
+            </button>
+          </div>
+
+          <footer class="crew-lightbox-footer">
+            <span id="crew-lightbox-provenance">
+              CREW PHOTOGRAPHY ? NASA
+            </span>
+
+            <span>
+              Wheel or +/- to zoom ? drag to pan ? double tap to zoom ? swipe at 1? to change image
+            </span>
+          </footer>
+
+        </div>
+      </dialog>
+
       <div class="crew-timeline-shell">
         <button id="crew-prev" type="button" aria-label="Previous crew view">←</button>
         <input id="crew-scrubber" type="range" min="0" max="24" value="0" step="1" aria-label="Crew-view mission timeline">

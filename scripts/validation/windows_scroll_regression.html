@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>A2 Windows Scroll Regression</title>
+  <style>
+    html,body{
+      margin:0;
+      background:#111;
+      color:#fff;
+      font-family:monospace;
+    }
+
+    iframe{
+      display:block;
+      border:0;
+      margin:0 0 20px;
+      background:#000;
+    }
+
+    pre{
+      white-space:pre-wrap;
+      padding:12px;
+    }
+  </style>
+</head>
+
+<body data-status="RUNNING">
+  <pre id="results">RUNNING</pre>
+
+  <script>
+  (() => {
+    'use strict';
+
+    const viewports = [
+      {
+        name:'iphone-390x844',
+        width:390,
+        height:844
+      },
+      {
+        name:'iphone-430x932',
+        width:430,
+        height:932
+      },
+      {
+        name:'mobile-landscape-844x390',
+        width:844,
+        height:390
+      },
+      {
+        name:'desktop-1440x900',
+        width:1440,
+        height:900
+      }
+    ];
+
+    const pause = ms =>
+      new Promise(
+        resolve =>
+          setTimeout(
+            resolve,
+            ms
+          )
+      );
+
+    const settle = async win => {
+      /*
+       * Headless Chromium can throttle RAF inside dynamically-created
+       * iframes. Force layout, allow timers to settle, then force
+       * layout again.
+       */
+      void win.document.documentElement.offsetHeight;
+
+      await pause(120);
+
+      void win.document.documentElement.offsetHeight;
+    };
+
+    async function createFrame(spec){
+      const frame =
+        document.createElement(
+          'iframe'
+        );
+
+      frame.width =
+        String(spec.width);
+
+      frame.height =
+        String(spec.height);
+
+      frame.style.width =
+        spec.width + 'px';
+
+      frame.style.height =
+        spec.height + 'px';
+
+      frame.src =
+        '../../windows.html?phase-f-regression='
+        + encodeURIComponent(
+            spec.name
+          );
+
+      document.body.appendChild(
+        frame
+      );
+
+      await new Promise(
+        (resolve,reject) => {
+          const timer =
+            setTimeout(
+              () =>
+                reject(
+                  new Error(
+                    spec.name
+                    + ': iframe load timeout'
+                  )
+                ),
+              6000
+            );
+
+          frame.addEventListener(
+            'load',
+            () => {
+              clearTimeout(timer);
+              resolve();
+            },
+            {
+              once:true
+            }
+          );
+        }
+      );
+
+      return frame;
+    }
+
+    async function runViewport(spec){
+      const frame =
+        await createFrame(spec);
+
+      const win =
+        frame.contentWindow;
+
+      const doc =
+        frame.contentDocument;
+
+      await pause(180);
+      await settle(win);
+
+      const stage =
+        doc.querySelector(
+          '#crew-photo-stage'
+        );
+
+      const next =
+        doc.querySelector(
+          '#crew-image-next'
+        );
+
+      const prev =
+        doc.querySelector(
+          '#crew-image-prev'
+        );
+
+      const api =
+        win.A2Windows;
+
+      if(
+        !stage ||
+        !next ||
+        !prev ||
+        !api
+      ){
+        throw new Error(
+          spec.name
+          + ': gallery contract unavailable'
+        );
+      }
+
+      /*
+       * scrollIntoView() inside a nested iframe can scroll the outer
+       * browsing context instead of establishing the intended scroll
+       * position inside windows.html itself.
+       *
+       * Calculate the stage's document-space Y coordinate and scroll
+       * the iframe window directly.
+       */
+      doc.documentElement.style.scrollBehavior =
+        'auto';
+
+      const initialRect =
+        stage.getBoundingClientRect();
+
+      const stageDocumentTop =
+        win.scrollY+
+        initialRect.top;
+
+      const maxScrollY =
+        Math.max(
+          0,
+          doc.documentElement.scrollHeight-
+          win.innerHeight
+        );
+
+      const desiredTop =
+        Math.max(
+          24,
+          (
+            win.innerHeight-
+            initialRect.height
+          )/2
+        );
+
+      const targetScrollY =
+        Math.max(
+          0,
+          Math.min(
+            stageDocumentTop-
+            desiredTop,
+            maxScrollY
+          )
+        );
+
+      win.scrollTo(
+        0,
+        targetScrollY
+      );
+
+      await settle(win);
+
+      const baselineRect =
+        stage.getBoundingClientRect();
+
+      const baseline = {
+        scrollY:win.scrollY,
+        top:baselineRect.top,
+        height:baselineRect.height,
+        documentTop:
+          win.scrollY+
+          baselineRect.top,
+        targetScrollY
+      };
+
+      if(
+        Math.abs(
+          baseline.scrollY-
+          targetScrollY
+        )>2
+      ){
+        throw new Error(
+          spec.name+
+          ': failed to establish inner-document gallery baseline; target='+
+          targetScrollY+
+          ', actual='+
+          baseline.scrollY
+        );
+      }
+
+      let maxScrollDelta=0;
+      let maxTopDelta=0;
+      let maxHeightDelta=0;
+      let maxDocumentTopDelta=0;
+
+      const record = () => {
+        const rect =
+          stage.getBoundingClientRect();
+
+        maxScrollDelta =
+          Math.max(
+            maxScrollDelta,
+            Math.abs(
+              win.scrollY-
+              baseline.scrollY
+            )
+          );
+
+        maxTopDelta =
+          Math.max(
+            maxTopDelta,
+            Math.abs(
+              rect.top-
+              baseline.top
+            )
+          );
+
+        maxHeightDelta =
+          Math.max(
+            maxHeightDelta,
+            Math.abs(
+              rect.height-
+              baseline.height
+            )
+          );
+
+        maxDocumentTopDelta =
+          Math.max(
+            maxDocumentTopDelta,
+            Math.abs(
+              (
+                win.scrollY+
+                rect.top
+              )-
+              baseline.documentTop
+            )
+          );
+      };
+
+      const actions = [
+        () => next.click(),
+        () => next.click(),
+        () => prev.click(),
+        () => api.next(),
+        () => api.next(),
+        () => api.next(),
+        () => api.next(),
+        () => api.next(),
+        () => api.prev()
+      ];
+
+      for(
+        const action
+        of actions
+      ){
+        action();
+
+        await settle(win);
+
+        record();
+      }
+
+      const result = {
+        viewport:spec.name,
+        width:spec.width,
+        height:spec.height,
+        baselineScrollY:
+          baseline.scrollY,
+        targetScrollY:
+          baseline.targetScrollY,
+        maxScrollDelta,
+        maxTopDelta,
+        maxHeightDelta,
+        maxDocumentTopDelta,
+        finalIndex:
+          api.index(),
+        pass:
+          maxScrollDelta<=1 &&
+          maxTopDelta<=1 &&
+          maxHeightDelta<=1 &&
+          maxDocumentTopDelta<=1
+      };
+
+      frame.remove();
+
+      return result;
+    }
+
+    async function run(){
+      const results=[];
+
+      for(
+        const viewport
+        of viewports
+      ){
+        try{
+          results.push(
+            await runViewport(
+              viewport
+            )
+          );
+        }catch(error){
+          results.push({
+            viewport:
+              viewport.name,
+            pass:false,
+            error:
+              String(
+                error &&
+                error.message
+                  ?error.message
+                  :error
+              )
+          });
+        }
+      }
+
+      const pass =
+        results.every(
+          result =>
+            result.pass
+        );
+
+      const maxScrollDelta =
+        Math.max(
+          0,
+          ...results.map(
+            result =>
+              Number(
+                result.maxScrollDelta
+                ||0
+              )
+          )
+        );
+
+      const maxTopDelta =
+        Math.max(
+          0,
+          ...results.map(
+            result =>
+              Number(
+                result.maxTopDelta
+                ||0
+              )
+          )
+        );
+
+      document.body.dataset.status =
+        pass
+          ?'PASS'
+          :'FAIL';
+
+      document.body.dataset.maxScrollDelta =
+        String(maxScrollDelta);
+
+      document.body.dataset.maxTopDelta =
+        String(maxTopDelta);
+
+      document.querySelector(
+        '#results'
+      ).textContent =
+        JSON.stringify(
+          results,
+          null,
+          2
+        );
+    }
+
+    const regressionWatchdog =
+      setTimeout(
+        () => {
+          if(
+            document.body.dataset.status
+            ==='RUNNING'
+          ){
+            document.body.dataset.status =
+              'FAIL';
+
+            document.querySelector(
+              '#results'
+            ).textContent =
+              JSON.stringify(
+                {
+                  fatal:
+                    'Regression harness timed out before completing.'
+                },
+                null,
+                2
+              );
+          }
+        },
+        12000
+      );
+
+    run().then(
+      () => {
+        clearTimeout(
+          regressionWatchdog
+        );
+      }
+    ).catch(
+      error => {
+        clearTimeout(
+          regressionWatchdog
+        );
+        document.body.dataset.status =
+          'FAIL';
+
+        document.querySelector(
+          '#results'
+        ).textContent =
+          JSON.stringify(
+            {
+              fatal:
+                String(
+                  error &&
+                  error.message
+                    ?error.message
+                    :error
+                )
+            },
+            null,
+            2
+          );
+      }
+    );
+  })();
+  </script>
+</body>
+</html>

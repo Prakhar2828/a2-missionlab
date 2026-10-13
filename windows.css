@@ -1,0 +1,749 @@
+/* ============================================================
+   A2 MissionLab - Phase F Windows Gallery
+   Dedicated windows.html presentation and immersive viewer.
+   Loaded after responsive-hardening.css.
+   ============================================================ */
+
+
+/* ---------- Stable page geometry ---------- */
+
+#crew-view {
+  overflow-anchor: none;
+}
+
+#crew-view .crew-journey {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.52fr)
+    minmax(330px, 0.68fr);
+  align-items: stretch;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 10px;
+  background: #03070b;
+}
+
+#crew-view .crew-media-column,
+#crew-view .crew-panel,
+#crew-view .crew-timeline-shell,
+#crew-view .crew-filmstrip {
+  overflow-anchor: none;
+}
+
+#crew-view .crew-media-column {
+  min-width: 0;
+  display: grid;
+  grid-template-rows:
+    minmax(0, auto)
+    112px;
+  align-content: start;
+  background: #020406;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#crew-view .crew-photo-wrap {
+  position: relative;
+  width: 100%;
+  height: auto !important;
+  min-height: 0 !important;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(
+      circle at center,
+      #071019 0%,
+      #020406 66%
+    );
+  overflow-anchor: none;
+}
+
+#crew-view .crew-photo-wrap::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.18),
+      transparent 14%,
+      transparent 86%,
+      rgba(0, 0, 0, 0.18)
+    ),
+    linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.22),
+      transparent 20%
+    );
+}
+
+#crew-view .crew-photo-wrap > img {
+  position: absolute !important;
+  z-index: 1 !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  padding: 0 !important;
+  object-fit: contain !important;
+  object-position: 50% 50%;
+  transform: none !important;
+  background: #020406 !important;
+  cursor: zoom-in;
+  pointer-events: auto !important;
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#crew-view .crew-photo-wrap > img:focus-visible {
+  outline: 2px solid #a8d6f5;
+  outline-offset: -4px;
+}
+
+
+/* ---------- Minimal in-image controls ---------- */
+
+#crew-view .crew-image-arrow {
+  position: absolute !important;
+  z-index: 8 !important;
+  top: 50% !important;
+  width: 56px !important;
+  height: 76px !important;
+  min-width: 56px !important;
+  min-height: 76px !important;
+  transform: translateY(-50%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(2, 7, 11, 0.58);
+  backdrop-filter: blur(12px);
+  color: #fff;
+  cursor: pointer;
+  touch-action: manipulation !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+#crew-view .crew-image-arrow-left {
+  left: 14px !important;
+  border-radius: 5px 18px 18px 5px;
+}
+
+#crew-view .crew-image-arrow-right {
+  right: 14px !important;
+  border-radius: 18px 5px 5px 18px;
+}
+
+#crew-view .crew-image-arrow:hover,
+#crew-view .crew-image-arrow:focus-visible {
+  outline: none;
+  border-color: rgba(142, 205, 248, 0.76);
+  background: rgba(9, 35, 53, 0.9);
+}
+
+#crew-view .crew-image-arrow:active {
+  transform:
+    translateY(-50%)
+    scale(0.96) !important;
+}
+
+#crew-view .crew-image-count {
+  position: absolute !important;
+  z-index: 8 !important;
+  top: 16px !important;
+  right: 16px !important;
+  bottom: auto !important;
+  left: auto !important;
+  padding: 0.45rem 0.62rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(2, 7, 11, 0.68);
+  backdrop-filter: blur(10px);
+  color: #dce7ef;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  pointer-events: none !important;
+}
+
+#crew-view .crew-zoom-trigger {
+  position: absolute;
+  z-index: 9;
+  left: 16px;
+  top: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 42px;
+  padding: 0.45rem 0.68rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  background: rgba(2, 7, 11, 0.68);
+  backdrop-filter: blur(10px);
+  color: #edf5fa;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+#crew-view .crew-zoom-trigger span {
+  font-size: 1rem;
+}
+
+#crew-view .crew-zoom-trigger b {
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+}
+
+#crew-view .crew-zoom-trigger:hover,
+#crew-view .crew-zoom-trigger:focus-visible {
+  outline: none;
+  border-color: rgba(142, 205, 248, 0.76);
+  background: rgba(9, 35, 53, 0.9);
+}
+
+
+/* ---------- Metadata outside the photograph ---------- */
+
+#crew-view .crew-image-meta-strip {
+  min-height: 112px;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    190px;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  background:
+    linear-gradient(
+      180deg,
+      #071018,
+      #050b10
+    );
+}
+
+#crew-view .crew-image-meta-copy {
+  min-width: 0;
+}
+
+#crew-view .crew-photo-badge,
+#crew-view .crew-photo-provenance {
+  position: static !important;
+  inset: auto !important;
+  max-width: none !important;
+  width: auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+
+#crew-view .crew-photo-badge {
+  color: #dbe8f1;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  line-height: 1.35;
+}
+
+#crew-view .crew-photo-provenance {
+  margin-top: 7px;
+  color: #7e93a4;
+  font-size: 0.69rem;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+}
+
+#crew-view .crew-geometry-hud {
+  position: relative !important;
+  inset: auto !important;
+  width: 190px !important;
+  height: 78px !important;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  background: #020609;
+}
+
+#crew-view .crew-geometry-hud canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#crew-view .crew-panel {
+  min-width: 0;
+  min-height: 100%;
+  overflow-anchor: none;
+}
+
+#crew-view .crew-panel h3,
+#crew-view .crew-panel p,
+#crew-view .crew-learn,
+#crew-view .crew-meta-grid {
+  overflow-anchor: none;
+}
+
+
+/* ---------- Timeline / strip ---------- */
+
+#crew-view .crew-timeline-shell {
+  margin-top: 18px;
+}
+
+#crew-view .crew-filmstrip {
+  contain: layout;
+}
+
+
+/* ============================================================
+   IMMERSIVE VIEWER
+   ============================================================ */
+
+body.crew-lightbox-open {
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+
+.crew-lightbox {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  width: 100dvw;
+  max-width: none;
+  height: 100vh;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: #010204;
+  color: #f2f6f9;
+  overflow: hidden;
+}
+
+.crew-lightbox[open] {
+  display: block;
+}
+
+.crew-lightbox::backdrop {
+  background: rgba(0, 0, 0, 0.96);
+}
+
+.crew-lightbox-shell {
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  display: grid;
+  grid-template-rows:
+    auto
+    minmax(0, 1fr)
+    auto;
+  background: #010204;
+}
+
+.crew-lightbox-header {
+  position: relative;
+  z-index: 20;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto;
+  gap: 24px;
+  align-items: center;
+  min-height: 74px;
+  padding:
+    max(12px, env(safe-area-inset-top))
+    max(18px, env(safe-area-inset-right))
+    12px
+    max(18px, env(safe-area-inset-left));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(2, 5, 8, 0.96);
+}
+
+.crew-lightbox-heading {
+  min-width: 0;
+}
+
+.crew-lightbox-heading span,
+.crew-lightbox-heading b {
+  display: block;
+}
+
+.crew-lightbox-heading span {
+  color: #83afd0;
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.crew-lightbox-heading b {
+  margin-top: 2px;
+  max-width: 760px;
+  overflow: hidden;
+  color: #eef4f8;
+  font-size: 0.9rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.crew-lightbox-tools {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.crew-lightbox-tools button,
+.crew-lightbox-tools output {
+  min-width: 44px;
+  min-height: 42px;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 6px;
+  background: #08111a;
+  color: #e7f0f6;
+  font-size: 0.78rem;
+}
+
+.crew-lightbox-tools button {
+  cursor: pointer;
+}
+
+.crew-lightbox-tools button:hover,
+.crew-lightbox-tools button:focus-visible {
+  outline: none;
+  border-color: rgba(142, 205, 248, 0.72);
+  background: #102536;
+}
+
+.crew-lightbox-tools output {
+  min-width: 58px;
+  color: #94bddb;
+}
+
+.crew-lightbox-stage {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  contain: strict;
+  background:
+    radial-gradient(
+      circle at center,
+      #081019,
+      #010204 68%
+    );
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  overscroll-behavior: none;
+  cursor: zoom-in;
+  outline: none;
+}
+
+.crew-lightbox-stage.is-zoomed {
+  cursor: grab;
+}
+
+.crew-lightbox-stage.is-dragging {
+  cursor: grabbing;
+}
+
+.crew-lightbox-stage:focus-visible {
+  box-shadow:
+    inset 0 0 0 2px rgba(142, 205, 248, 0.62);
+}
+
+#crew-lightbox-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+  object-position: center;
+  transform-origin: 50% 50%;
+  will-change: transform;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+.crew-lightbox-arrow {
+  position: absolute;
+  z-index: 10;
+  top: 50%;
+  width: 60px;
+  height: 84px;
+  transform: translateY(-50%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(2, 7, 11, 0.62);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  font-size: 1.35rem;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.crew-lightbox-arrow-left {
+  left: max(14px, env(safe-area-inset-left));
+  border-radius: 5px 18px 18px 5px;
+}
+
+.crew-lightbox-arrow-right {
+  right: max(14px, env(safe-area-inset-right));
+  border-radius: 18px 5px 5px 18px;
+}
+
+.crew-lightbox-arrow:hover,
+.crew-lightbox-arrow:focus-visible {
+  outline: none;
+  border-color: rgba(142, 205, 248, 0.78);
+  background: rgba(10, 37, 56, 0.88);
+}
+
+.crew-lightbox-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 46px;
+  padding:
+    10px
+    max(18px, env(safe-area-inset-right))
+    max(10px, env(safe-area-inset-bottom))
+    max(18px, env(safe-area-inset-left));
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  background: #030609;
+  color: #7f909e;
+  font-size: 0.69rem;
+  letter-spacing: 0.03em;
+}
+
+#crew-lightbox-provenance {
+  color: #a6b9c7;
+  font-weight: 700;
+}
+
+
+/* ---------- Tablet ---------- */
+
+@media (max-width: 1050px) {
+
+  #crew-view .crew-journey {
+    grid-template-columns: 1fr;
+    overflow: visible;
+  }
+
+  #crew-view .crew-media-column {
+    border-right: 0;
+  }
+
+  #crew-view .crew-photo-wrap {
+    aspect-ratio: 16 / 10;
+  }
+
+  #crew-view .crew-panel {
+    border-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 760px) {
+
+  #crew-view .crew-photo-wrap {
+    width: 100%;
+    height: auto !important;
+    min-height: 0 !important;
+    aspect-ratio: 4 / 5;
+  }
+
+  #crew-view .crew-image-arrow {
+    width: 54px !important;
+    height: 72px !important;
+    min-width: 54px !important;
+    min-height: 72px !important;
+  }
+
+  #crew-view .crew-image-arrow-left {
+    left: 8px !important;
+  }
+
+  #crew-view .crew-image-arrow-right {
+    right: 8px !important;
+  }
+
+  #crew-view .crew-image-count {
+    top: 10px !important;
+    right: 10px !important;
+  }
+
+  #crew-view .crew-zoom-trigger {
+    top: 10px;
+    left: 10px;
+    min-height: 44px;
+  }
+
+  #crew-view .crew-image-meta-strip {
+    min-height: 0;
+    grid-template-columns:
+      minmax(0, 1fr)
+      142px;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  #crew-view .crew-geometry-hud {
+    width: 142px !important;
+    height: 72px !important;
+  }
+
+  #crew-view .crew-photo-badge {
+    font-size: 0.69rem;
+  }
+
+  #crew-view .crew-photo-provenance {
+    font-size: 0.64rem;
+  }
+
+  .crew-lightbox-header {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding-bottom: 9px;
+  }
+
+  .crew-lightbox-heading b {
+    max-width: 100%;
+    font-size: 0.82rem;
+  }
+
+  .crew-lightbox-tools {
+    width: 100%;
+    display: grid;
+    grid-template-columns:
+      44px
+      54px
+      44px
+      minmax(58px, 1fr)
+      minmax(58px, 1fr);
+    gap: 5px;
+  }
+
+  .crew-lightbox-tools button,
+  .crew-lightbox-tools output {
+    min-width: 0;
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .crew-lightbox-arrow {
+    width: 52px;
+    height: 72px;
+  }
+
+  .crew-lightbox-arrow-left {
+    left: max(7px, env(safe-area-inset-left));
+  }
+
+  .crew-lightbox-arrow-right {
+    right: max(7px, env(safe-area-inset-right));
+  }
+
+  .crew-lightbox-footer {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2px;
+    line-height: 1.35;
+  }
+}
+
+
+/* ---------- Small phones ---------- */
+
+@media (max-width: 430px) {
+
+  #crew-view .crew-image-meta-strip {
+    grid-template-columns: 1fr;
+  }
+
+  #crew-view .crew-geometry-hud {
+    width: 100% !important;
+    height: 70px !important;
+  }
+
+  #crew-view .crew-zoom-trigger b {
+    display: none;
+  }
+
+  #crew-view .crew-zoom-trigger {
+    width: 44px;
+    padding-inline: 0;
+    justify-content: center;
+  }
+
+  .crew-lightbox-heading b {
+    white-space: normal;
+    line-height: 1.25;
+  }
+}
+
+
+/* ---------- Mobile landscape ---------- */
+
+@media (
+  max-width: 950px
+) and (
+  max-height: 500px
+) and (
+  orientation: landscape
+) {
+
+  #crew-view .crew-photo-wrap {
+    aspect-ratio: 16 / 8.6;
+  }
+
+  .crew-lightbox-header {
+    min-height: 52px;
+    grid-template-columns:
+      minmax(0, 1fr)
+      auto;
+    padding-top:
+      max(6px, env(safe-area-inset-top));
+    padding-bottom: 6px;
+  }
+
+  .crew-lightbox-heading b {
+    display: none;
+  }
+
+  .crew-lightbox-tools button,
+  .crew-lightbox-tools output {
+    min-height: 38px;
+  }
+
+  .crew-lightbox-footer {
+    min-height: 34px;
+    padding-top: 5px;
+    padding-bottom:
+      max(5px, env(safe-area-inset-bottom));
+  }
+}
+
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+
+  #crew-lightbox-image,
+  #crew-view .crew-image-arrow,
+  #crew-view .crew-photo-wrap > img {
+    transition: none !important;
+  }
+}

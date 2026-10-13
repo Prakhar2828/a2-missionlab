@@ -165,9 +165,758 @@
     const thumbs=$$('#crew-filmstrip button');thumbs.forEach((b,j)=>b.classList.toggle('active',j===crewIndex));
     const active=thumbs[crewIndex],strip=$('#crew-filmstrip');if(active&&strip){const left=Math.max(0,active.offsetLeft-(strip.clientWidth-active.clientWidth)/2);strip.scrollTo({left,behavior:'smooth'});}
     drawCrewGeometry(v);
+    syncCrewLightbox(v);
   }
   const film=$('#crew-filmstrip');if(film){film.innerHTML=crewViews.map((v,i)=>`<button type="button" data-i="${i}" aria-label="${v.badge}"><img src="${v.thumbSrc}" data-fallback="assets/public/fallback-mission.svg" loading="lazy" decoding="async" alt=""><span>${String(i+1).padStart(2,'0')}</span><small>${v.badge.split(' · ')[0]}</small></button>`).join('');$$('img',film).forEach(img=>img.addEventListener('error',()=>{if(!img.dataset.didFallback){img.dataset.didFallback='1';img.src=img.dataset.fallback;}}));$$('button',film).forEach(b=>b.addEventListener('click',()=>renderCrew(Number(b.dataset.i))));}
   const crewPrev=()=>renderCrew(crewIndex-1),crewNext=()=>renderCrew(crewIndex+1);
+
+  const crewLightbox=$('#crew-lightbox');
+  const crewLightboxStage=$('#crew-lightbox-stage');
+  const crewLightboxImage=$('#crew-lightbox-image');
+  const crewLightboxScale=$('#crew-lightbox-scale');
+
+  const crewLightboxState={
+    scale:1,
+    x:0,
+    y:0,
+    pointers:new Map(),
+    panStartX:0,
+    panStartY:0,
+    pointerStartX:0,
+    pointerStartY:0,
+    pinchStartDistance:0,
+    pinchStartScale:1,
+    lastTapAt:0,
+    lastTapX:0,
+    lastTapY:0
+  };
+
+  let crewLightboxReturnFocus=null;
+
+  function crewFullImageSource(v){
+    return (
+      v.origSrc ||
+      v.src ||
+      v.mobileSrc ||
+      $('#crew-photo')?.currentSrc ||
+      $('#crew-photo')?.src ||
+      'assets/public/fallback-mission.svg'
+    );
+  }
+
+  function crewLightboxBounds(){
+    if(!crewLightboxStage)return {x:0,y:0};
+
+    return {
+      x:Math.max(
+        0,
+        crewLightboxStage.clientWidth*
+          (crewLightboxState.scale-1)/2
+      ),
+      y:Math.max(
+        0,
+        crewLightboxStage.clientHeight*
+          (crewLightboxState.scale-1)/2
+      )
+    };
+  }
+
+  function applyCrewLightboxTransform(){
+    if(!crewLightboxImage || !crewLightboxStage)return;
+
+    const bounds=crewLightboxBounds();
+
+    crewLightboxState.x=clamp(
+      crewLightboxState.x,
+      -bounds.x,
+      bounds.x
+    );
+
+    crewLightboxState.y=clamp(
+      crewLightboxState.y,
+      -bounds.y,
+      bounds.y
+    );
+
+    crewLightboxImage.style.transform=
+      `translate3d(${crewLightboxState.x}px,${crewLightboxState.y}px,0) scale(${crewLightboxState.scale})`;
+
+    crewLightboxStage.classList.toggle(
+      'is-zoomed',
+      crewLightboxState.scale>1.01
+    );
+
+    if(crewLightboxScale){
+      crewLightboxScale.value=
+        `${Math.round(crewLightboxState.scale*100)}%`;
+
+      crewLightboxScale.textContent=
+        `${Math.round(crewLightboxState.scale*100)}%`;
+    }
+  }
+
+  function setCrewLightboxScale(nextScale){
+    crewLightboxState.scale=clamp(
+      nextScale,
+      1,
+      5
+    );
+
+    if(crewLightboxState.scale<=1.001){
+      crewLightboxState.scale=1;
+      crewLightboxState.x=0;
+      crewLightboxState.y=0;
+    }
+
+    applyCrewLightboxTransform();
+  }
+
+  function resetCrewLightboxTransform(){
+    crewLightboxState.scale=1;
+    crewLightboxState.x=0;
+    crewLightboxState.y=0;
+    crewLightboxState.pointers.clear();
+
+    crewLightboxStage?.classList.remove(
+      'is-dragging'
+    );
+
+    applyCrewLightboxTransform();
+  }
+
+  function preloadCrewFullNeighbors(index){
+    [-1,1].forEach(delta=>{
+      const i=(
+        index+
+        delta+
+        crewViews.length
+      )%crewViews.length;
+
+      preloadCrewUrl(
+        crewFullImageSource(
+          crewViews[i]
+        )
+      );
+    });
+  }
+
+  function syncCrewLightbox(v){
+    if(!crewLightbox || !crewLightbox.open)return;
+
+    const source=crewFullImageSource(v);
+
+    if(crewLightboxImage){
+
+      if(
+        crewLightboxImage.dataset.source
+        !==source
+      ){
+        crewLightboxImage.dataset.source=
+          source;
+
+        crewLightboxImage.dataset.didFallback=
+          '';
+
+        crewLightboxImage.src=source;
+      }
+
+      crewLightboxImage.alt=v.title;
+    }
+
+    const title=$('#crew-lightbox-title');
+    const count=$('#crew-lightbox-count');
+    const provenance=$(
+      '#crew-lightbox-provenance'
+    );
+
+    if(title){
+      title.textContent=v.title;
+    }
+
+    if(count){
+      count.textContent=
+        `IMAGE ${String(crewIndex+1).padStart(2,'0')} / ${String(crewViews.length).padStart(2,'0')}`;
+    }
+
+    if(provenance){
+      provenance.textContent=
+        v.provenance ||
+        v.evidence ||
+        'NASA MISSION IMAGERY';
+    }
+
+    resetCrewLightboxTransform();
+    preloadCrewFullNeighbors(crewIndex);
+  }
+
+  function cleanupCrewLightbox(){
+    document.body.classList.remove(
+      'crew-lightbox-open'
+    );
+
+    resetCrewLightboxTransform();
+
+    const returnFocus=
+      crewLightboxReturnFocus;
+
+    crewLightboxReturnFocus=null;
+
+    if(
+      returnFocus &&
+      typeof returnFocus.focus==='function'
+    ){
+      try{
+        returnFocus.focus({
+          preventScroll:true
+        });
+      }catch{
+        returnFocus.focus();
+      }
+    }
+  }
+
+  function openCrewLightbox(sourceElement){
+    if(!crewLightbox)return;
+
+    crewLightboxReturnFocus=
+      sourceElement ||
+      document.activeElement;
+
+    document.body.classList.add(
+      'crew-lightbox-open'
+    );
+
+    if(
+      typeof crewLightbox.showModal
+      ==='function'
+    ){
+      if(!crewLightbox.open){
+        crewLightbox.showModal();
+      }
+    }else{
+      crewLightbox.setAttribute(
+        'open',
+        ''
+      );
+    }
+
+    syncCrewLightbox(
+      crewViews[crewIndex]
+    );
+
+    setTimeout(()=>{
+      try{
+        crewLightboxStage?.focus({
+          preventScroll:true
+        });
+      }catch{
+        crewLightboxStage?.focus();
+      }
+    },0);
+  }
+
+  function closeCrewLightbox(){
+    if(!crewLightbox)return;
+
+    if(
+      typeof crewLightbox.close
+      ==='function' &&
+      crewLightbox.open
+    ){
+      crewLightbox.close();
+      return;
+    }
+
+    crewLightbox.removeAttribute(
+      'open'
+    );
+
+    cleanupCrewLightbox();
+  }
+
+  function crewPointerDistance(){
+    const values=[
+      ...crewLightboxState.pointers.values()
+    ];
+
+    if(values.length<2)return 0;
+
+    return Math.hypot(
+      values[0].x-values[1].x,
+      values[0].y-values[1].y
+    );
+  }
+
+  function rebaseCrewPointer(){
+    const first=[
+      ...crewLightboxState.pointers.values()
+    ][0];
+
+    if(!first)return;
+
+    first.startX=first.x;
+    first.startY=first.y;
+
+    crewLightboxState.panStartX=
+      crewLightboxState.x;
+
+    crewLightboxState.panStartY=
+      crewLightboxState.y;
+
+    crewLightboxState.pointerStartX=
+      first.x;
+
+    crewLightboxState.pointerStartY=
+      first.y;
+  }
+
+  $('#crew-zoom')?.addEventListener(
+    'click',
+    e=>{
+      e.preventDefault();
+      openCrewLightbox(
+        e.currentTarget
+      );
+    }
+  );
+
+  $('#crew-photo')?.addEventListener(
+    'click',
+    e=>{
+      e.preventDefault();
+      openCrewLightbox(
+        e.currentTarget
+      );
+    }
+  );
+
+  $('#crew-photo')?.addEventListener(
+    'keydown',
+    e=>{
+      if(
+        e.key!=='Enter' &&
+        e.key!==' '
+      )return;
+
+      e.preventDefault();
+
+      openCrewLightbox(
+        e.currentTarget
+      );
+    }
+  );
+
+  $('#crew-lightbox-close')?.addEventListener(
+    'click',
+    closeCrewLightbox
+  );
+
+  $('#crew-lightbox-prev')?.addEventListener(
+    'click',
+    e=>{
+      e.preventDefault();
+      crewPrev();
+    }
+  );
+
+  $('#crew-lightbox-next')?.addEventListener(
+    'click',
+    e=>{
+      e.preventDefault();
+      crewNext();
+    }
+  );
+
+  $('#crew-lightbox-minus')?.addEventListener(
+    'click',
+    ()=>setCrewLightboxScale(
+      crewLightboxState.scale-.5
+    )
+  );
+
+  $('#crew-lightbox-plus')?.addEventListener(
+    'click',
+    ()=>setCrewLightboxScale(
+      crewLightboxState.scale+.5
+    )
+  );
+
+  $('#crew-lightbox-reset')?.addEventListener(
+    'click',
+    resetCrewLightboxTransform
+  );
+
+  crewLightboxImage?.addEventListener(
+    'error',
+    ()=>{
+      if(
+        crewLightboxImage.dataset.didFallback
+      )return;
+
+      crewLightboxImage.dataset.didFallback=
+        '1';
+
+      crewLightboxImage.src=
+        'assets/public/fallback-mission.svg';
+    }
+  );
+
+  crewLightbox?.addEventListener(
+    'close',
+    cleanupCrewLightbox
+  );
+
+  crewLightbox?.addEventListener(
+    'cancel',
+    e=>{
+      e.preventDefault();
+      closeCrewLightbox();
+    }
+  );
+
+  crewLightboxStage?.addEventListener(
+    'wheel',
+    e=>{
+      e.preventDefault();
+
+      setCrewLightboxScale(
+        crewLightboxState.scale+
+        (
+          e.deltaY<0
+            ?.35
+            :-.35
+        )
+      );
+    },
+    {
+      passive:false
+    }
+  );
+
+  crewLightboxStage?.addEventListener(
+    'dblclick',
+    e=>{
+      e.preventDefault();
+
+      setCrewLightboxScale(
+        crewLightboxState.scale>1.1
+          ?1
+          :2.5
+      );
+    }
+  );
+
+  crewLightboxStage?.addEventListener(
+    'pointerdown',
+    e=>{
+      if(
+        e.target.closest(
+          'button'
+        )
+      )return;
+
+      e.preventDefault();
+
+      try{
+        crewLightboxStage.setPointerCapture(
+          e.pointerId
+        );
+      }catch{}
+
+      crewLightboxState.pointers.set(
+        e.pointerId,
+        {
+          x:e.clientX,
+          y:e.clientY,
+          startX:e.clientX,
+          startY:e.clientY
+        }
+      );
+
+      if(
+        crewLightboxState.pointers.size
+        ===1
+      ){
+        crewLightboxState.panStartX=
+          crewLightboxState.x;
+
+        crewLightboxState.panStartY=
+          crewLightboxState.y;
+
+        crewLightboxState.pointerStartX=
+          e.clientX;
+
+        crewLightboxState.pointerStartY=
+          e.clientY;
+
+        if(
+          crewLightboxState.scale>1.01
+        ){
+          crewLightboxStage.classList.add(
+            'is-dragging'
+          );
+        }
+      }
+
+      if(
+        crewLightboxState.pointers.size
+        ===2
+      ){
+        crewLightboxState.pinchStartDistance=
+          Math.max(
+            1,
+            crewPointerDistance()
+          );
+
+        crewLightboxState.pinchStartScale=
+          crewLightboxState.scale;
+      }
+    }
+  );
+
+  crewLightboxStage?.addEventListener(
+    'pointermove',
+    e=>{
+      const pointer=
+        crewLightboxState.pointers.get(
+          e.pointerId
+        );
+
+      if(!pointer)return;
+
+      pointer.x=e.clientX;
+      pointer.y=e.clientY;
+
+      if(
+        crewLightboxState.pointers.size
+        >=2
+      ){
+        e.preventDefault();
+
+        const distance=
+          crewPointerDistance();
+
+        if(
+          crewLightboxState.pinchStartDistance
+          >0
+        ){
+          crewLightboxState.scale=
+            clamp(
+              crewLightboxState.pinchStartScale*
+              (
+                distance/
+                crewLightboxState.pinchStartDistance
+              ),
+              1,
+              5
+            );
+
+          if(
+            crewLightboxState.scale<=1.001
+          ){
+            crewLightboxState.scale=1;
+            crewLightboxState.x=0;
+            crewLightboxState.y=0;
+          }
+
+          applyCrewLightboxTransform();
+        }
+
+        return;
+      }
+
+      if(
+        crewLightboxState.scale>1.01
+      ){
+        e.preventDefault();
+
+        crewLightboxState.x=
+          crewLightboxState.panStartX+
+          (
+            e.clientX-
+            crewLightboxState.pointerStartX
+          );
+
+        crewLightboxState.y=
+          crewLightboxState.panStartY+
+          (
+            e.clientY-
+            crewLightboxState.pointerStartY
+          );
+
+        applyCrewLightboxTransform();
+      }
+    },
+    {
+      passive:false
+    }
+  );
+
+  function finishCrewPointer(e){
+    const pointer=
+      crewLightboxState.pointers.get(
+        e.pointerId
+      );
+
+    if(!pointer)return;
+
+    const pointerCount=
+      crewLightboxState.pointers.size;
+
+    const dx=
+      e.clientX-
+      pointer.startX;
+
+    const dy=
+      e.clientY-
+      pointer.startY;
+
+    const distance=
+      Math.hypot(
+        dx,
+        dy
+      );
+
+    if(
+      pointerCount===1 &&
+      crewLightboxState.scale<=1.01
+    ){
+      if(
+        Math.abs(dx)>=58 &&
+        Math.abs(dx)>
+          Math.abs(dy)*1.15
+      ){
+        if(dx<0){
+          crewNext();
+        }else{
+          crewPrev();
+        }
+      }else if(distance<16){
+
+        const now=
+          performance.now();
+
+        const tapDistance=
+          Math.hypot(
+            e.clientX-
+              crewLightboxState.lastTapX,
+            e.clientY-
+              crewLightboxState.lastTapY
+          );
+
+        if(
+          now-
+            crewLightboxState.lastTapAt
+            <320 &&
+          tapDistance<34
+        ){
+          crewLightboxState.lastTapAt=0;
+
+          setCrewLightboxScale(
+            crewLightboxState.scale>1.1
+              ?1
+              :2.5
+          );
+        }else{
+          crewLightboxState.lastTapAt=
+            now;
+
+          crewLightboxState.lastTapX=
+            e.clientX;
+
+          crewLightboxState.lastTapY=
+            e.clientY;
+        }
+      }
+    }
+
+    crewLightboxState.pointers.delete(
+      e.pointerId
+    );
+
+    if(
+      crewLightboxState.pointers.size
+      ===1
+    ){
+      rebaseCrewPointer();
+    }
+
+    if(
+      crewLightboxState.pointers.size
+      ===0
+    ){
+      crewLightboxStage?.classList.remove(
+        'is-dragging'
+      );
+    }
+  }
+
+  crewLightboxStage?.addEventListener(
+    'pointerup',
+    finishCrewPointer
+  );
+
+  crewLightboxStage?.addEventListener(
+    'pointercancel',
+    finishCrewPointer
+  );
+
+  crewLightboxStage?.addEventListener(
+    'keydown',
+    e=>{
+      if(e.key==='ArrowLeft'){
+        crewPrev();
+        e.preventDefault();
+      }
+
+      if(e.key==='ArrowRight'){
+        crewNext();
+        e.preventDefault();
+      }
+
+      if(
+        e.key==='+' ||
+        e.key==='='
+      ){
+        setCrewLightboxScale(
+          crewLightboxState.scale+.5
+        );
+
+        e.preventDefault();
+      }
+
+      if(e.key==='-'){
+        setCrewLightboxScale(
+          crewLightboxState.scale-.5
+        );
+
+        e.preventDefault();
+      }
+
+      if(
+        e.key==='0' ||
+        e.key==='Home'
+      ){
+        resetCrewLightboxTransform();
+        e.preventDefault();
+      }
+    }
+  );
+
+  window.addEventListener(
+    'resize',
+    ()=>{
+      if(
+        crewLightbox?.open
+      ){
+        applyCrewLightboxTransform();
+      }
+    },
+    {
+      passive:true
+    }
+  );
+
   $('#crew-prev')?.addEventListener('click',crewPrev);
   $('#crew-next')?.addEventListener('click',crewNext);
 
@@ -230,7 +979,16 @@
     'input',
     e=>renderCrew(Number(e.target.value))
   );
-  document.addEventListener('keydown',e=>{const section=$('#crew-view');if(!section)return;const r=section.getBoundingClientRect();const visible=r.top<innerHeight*.72&&r.bottom>innerHeight*.28;if(!visible||/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName||''))return;if(e.key==='ArrowLeft'){crewPrev();e.preventDefault();}if(e.key==='ArrowRight'){crewNext();e.preventDefault();}});
+  document.addEventListener('keydown',e=>{if($('#crew-lightbox')?.open)return;const section=$('#crew-view');if(!section)return;const r=section.getBoundingClientRect();const visible=r.top<innerHeight*.72&&r.bottom>innerHeight*.28;if(!visible||/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName||''))return;if(e.key==='ArrowLeft'){crewPrev();e.preventDefault();}if(e.key==='ArrowRight'){crewNext();e.preventDefault();}});
+  window.A2Windows=Object.freeze({
+    next:crewNext,
+    prev:crewPrev,
+    render:renderCrew,
+    index:()=>crewIndex,
+    openLightbox:()=>openCrewLightbox($('#crew-zoom')),
+    closeLightbox:closeCrewLightbox
+  });
+
   window.addEventListener('resize',()=>drawCrewGeometry(crewViews[crewIndex]));renderCrew(0);
 
   }
