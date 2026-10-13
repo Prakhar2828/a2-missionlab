@@ -9,7 +9,7 @@ PHASE10_PAGES=['mission.html','windows.html','gnc.html','mission-control.html']
 REQUIRED_FILES=['index.html','styles.css','app.js',*PUBLIC_JS,*PHASE10_PAGES,'library.html','library.js','technical-report.html','favicon.svg','favicon.ico','assets/public/IMAGE_SOURCES.md','assets/public/AUTHORITATIVE_SOURCE_AUDIT.md','assets/public/FIGURE_AUDIT.md','assets/public/fallback-mission.svg','assets/public/figures/navigation-state-products.svg','assets/public/figures/esm-propulsion-architecture.svg','assets/public/figures/trajectory-correction-plan-execution.svg','assets/public/figures/entry-recovery-sequence.svg','assets/public/figures/gnc-proximity-loop.svg','PUBLIC_EXPERIENCE_FINAL_README.md']
 REPO_DEPS=['data/reference/artemis_ii_gnc_architecture.json','data/reference/artemis_ii_manual_piloting_control_modes.json','data/reference/artemis_ii_entry_events.json','data/reference/artemis_ii_maneuver_plan_execution.json','data/reference/artemis_ii_phase2_closure_manifest.json','scripts/ingestion/parse_oem.py','scripts/processing/add_lunar_geometry.py','scripts/analysis/refine_lunar_closest_approach.py','docs/assets/entry/phase2e_sutton_graves_heat_flux.svg','docs/assets/lunar_science/phase6b_lunar_observation_reconstruction.svg']
 FORBIDDEN=[r'technical\s+paper',r'engineering\s+paper',r'\bmanuscript\b',r'flight-qualified simulation',r'mission telemetry replay',r'navigation filter reconstruction']
-REQUIRED_IDS=['mission-canvas','mission-scrubber','crew-photo','crew-scrubber','crew-geometry-canvas','crew-image-prev','crew-image-next','crew-image-count','gnc-canvas','gnc-start','gnc-mode-auto','gnc-mode-manual','gnc-disturbance','gnc-autopilot-status','mc-canvas','entry-canvas','entry-scrubber','maneuver-canvas','dv-magnitude','maneuver-hud-shift','weather-canvas','shielding-assumption','weather-action','psi-canvas','psi-cant','psi-angle','psi-hardware-risk']
+HOME_REQUIRED_IDS=['hero-stars','experiences','built']
 class P(HTMLParser):
  def __init__(self): super().__init__(); self.ids=set();self.refs=[];self.canvases=[];self.details=0
  def handle_starttag(self,tag,attrs):
@@ -50,9 +50,9 @@ def main():
   if re.search(pat,text,re.I):fail.append('forbidden public claim/term: '+pat)
  ip=parsed.get((ROOT/'index.html').resolve())
  if ip:
-  miss=[x for x in REQUIRED_IDS if x not in ip.ids]
-  if miss:fail.append('missing interaction surfaces: '+', '.join(miss))
-  notes += [f'interactive canvas surfaces: {len(ip.canvases)}',f'optional engineering drawers: {ip.details}']
+  miss=[x for x in HOME_REQUIRED_IDS if x not in ip.ids]
+  if miss:fail.append('missing homepage surfaces: '+', '.join(miss))
+  notes += [f'homepage canvas surfaces: {len(ip.canvases)}',f'homepage optional engineering drawers: {ip.details}']
  dedicated_page_ids={
   'mission.html':['mission-canvas','mission-scrubber','entry-canvas','entry-scrubber','maneuver-canvas','dv-magnitude','weather-canvas'],
   'windows.html':['crew-photo','crew-scrubber','crew-geometry-canvas','crew-image-prev','crew-image-next','crew-image-count'],
@@ -66,9 +66,24 @@ def main():
   missing=[x for x in required_ids if x not in page_parser.ids]
   if missing:fail.append(name+': missing dedicated interaction surfaces: '+', '.join(missing))
   else:notes.append(name+' interaction contract: '+str(len(required_ids))+' required IDs')
+ dedicated_forbidden_ids={
+  'mission.html':['crew-view','gnc-lab','mission-control','psi-lab-section'],
+  'windows.html':['mission-explorer','gnc-lab','mission-control','entry-lab','maneuver-lab','space-weather','psi-lab-section'],
+  'gnc.html':['mission-explorer','crew-view','mission-control','entry-lab','maneuver-lab','space-weather','psi-lab-section'],
+  'mission-control.html':['mission-explorer','crew-view','gnc-lab','entry-lab','maneuver-lab','space-weather','psi-lab-section'],
+ }
+ for name,forbidden_ids in dedicated_forbidden_ids.items():
+  page_parser=parsed.get((ROOT/name).resolve())
+  if not page_parser:continue
+  leaked=[x for x in forbidden_ids if x in page_parser.ids]
+  if leaked:fail.append(name+': contains interaction surfaces owned by another route: '+', '.join(leaked))
+ home_forbidden=['mission-explorer','crew-view','gnc-lab','mission-control','entry-lab','maneuver-lab','space-weather','psi-lab-section']
+ if ip:
+  leaked=[x for x in home_forbidden if x in ip.ids]
+  if leaked:fail.append('index.html still contains dedicated experience sections: '+', '.join(leaked))
  for phrase in ['NASA REPORTED','MISSIONLAB DERIVED','MODELED','INFERRED','UNKNOWN / NOT PUBLIC','ARTEMIS II DID NOT LAND ON THE MOON','Artemis IV','Sutton','8,281.938','6,544.538','36.76','RTC1','RTC2','RTC3']:
   if phrase.lower() not in text.lower():fail.append('missing required concept: '+phrase)
- for phrase in ['AUTO MODE','MANUAL MODE','Introduce disturbance','MissionLab shorthand','WHY CANT MATTERS','WHY SPREAD MATTERS','WHAT WOULD OPERATORS CARE ABOUT?']:
+ for phrase in ['AUTO MODE','MANUAL MODE','Introduce disturbance','MissionLab shorthand','WHAT WOULD OPERATORS CARE ABOUT?']:
   if phrase.lower() not in text.lower():fail.append('missing final-polish UX concept: '+phrase)
  windows_js=(ROOT/'js/windows.js').read_text(encoding='utf8')
  crew_count=len(re.findall(r'\"id\":\"(?:art|jsc)[^\"]+\"',windows_js))
@@ -77,6 +92,8 @@ def main():
  if 'phase2e_sutton_graves_heat_flux.svg' not in text:fail.append('correct Sutton-Graves asset not referenced')
  if 'phase2e_convective_heating.svg' in text:fail.append('obsolete Sutton-Graves filename referenced')
  l=(ROOT/'library.js').read_text(encoding='utf8'); tids=set(re.findall(r"\bid:'([^']+)'",l));notes.append(f'Mission Library deep dives: {len(tids)}')
+ if 'psi' not in tids:fail.append('Mission Library missing PSI campaign-context deep dive')
+ if 'artemis ii did not land on the moon' not in l.lower():fail.append('Mission Library PSI Artemis II boundary missing')
  if len(tids)<28:fail.append('Mission Library has fewer than 28 topics')
  figs=set(re.findall(r"\bfigure:'([^']+\.svg)'",l));notes.append(f'Mission Library figure references: {len(figs)}')
  for f in figs:
