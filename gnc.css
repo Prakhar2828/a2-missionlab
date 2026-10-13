@@ -1,0 +1,861 @@
+/* ============================================================
+   A2 MissionLab - Phase G GNC Experience
+   Dedicated gnc.html presentation only.
+   Simulation/evidence logic remains in js/gnc.js.
+   ============================================================ */
+
+.gnc-page {
+  --gnc-line: rgba(255, 255, 255, 0.11);
+  --gnc-line-strong: rgba(142, 205, 248, 0.34);
+  --gnc-panel: #061019;
+  --gnc-panel-2: #091722;
+  --gnc-blue: #8ac9f2;
+  --gnc-green: #83d2ad;
+  --gnc-copy: #aabac6;
+}
+
+
+/* ---------- Main lab ---------- */
+
+.gnc-page #gnc-lab {
+  position: relative;
+  overflow: hidden;
+  padding-block:
+    clamp(72px, 7vw, 112px)
+    clamp(92px, 9vw, 138px);
+  background:
+    radial-gradient(
+      circle at 78% 8%,
+      rgba(69, 145, 199, 0.14),
+      transparent 26%
+    ),
+    radial-gradient(
+      circle at 14% 54%,
+      rgba(53, 104, 142, 0.08),
+      transparent 30%
+    ),
+    #020609;
+}
+
+.gnc-page #gnc-lab::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.16;
+  background-image:
+    linear-gradient(
+      rgba(255,255,255,0.035) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,0.035) 1px,
+      transparent 1px
+    );
+  background-size: 42px 42px;
+}
+
+.gnc-page #gnc-lab > .x-wrap {
+  position: relative;
+  z-index: 1;
+  width:
+    min(
+      1460px,
+      calc(100% - 48px)
+    );
+}
+
+.gnc-page #gnc-lab .x-section-head {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.05fr)
+    minmax(320px, 0.55fr);
+  gap: clamp(36px, 7vw, 96px);
+  align-items: end;
+  margin-bottom: 42px;
+}
+
+.gnc-page #gnc-lab .x-section-head h2 {
+  max-width: 900px;
+  font-size:
+    clamp(
+      3.6rem,
+      7vw,
+      7rem
+    );
+  line-height: 0.88;
+  letter-spacing: -0.065em;
+}
+
+.gnc-page #gnc-lab .x-section-head > p {
+  max-width: 520px;
+  color: var(--gnc-copy);
+}
+
+
+/* ---------- Mission brief ---------- */
+
+.gnc-page .gnc-mission-brief {
+  display: grid;
+  grid-template-columns:
+    minmax(145px, 0.25fr)
+    minmax(300px, 0.75fr)
+    minmax(0, 1fr);
+  gap: 24px;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 22px 24px;
+  border: 1px solid var(--gnc-line);
+  border-left: 3px solid rgba(138, 201, 242, 0.72);
+  background:
+    linear-gradient(
+      90deg,
+      rgba(17, 43, 61, 0.72),
+      rgba(4, 11, 17, 0.82)
+    );
+}
+
+.gnc-page .gnc-mission-brief > span {
+  color: var(--gnc-blue);
+  font-size: 0.7rem;
+  font-weight: 850;
+  letter-spacing: 0.14em;
+}
+
+.gnc-page .gnc-mission-brief > b {
+  color: #eef6fb;
+  font-size: 1.08rem;
+  line-height: 1.35;
+}
+
+.gnc-page .gnc-mission-brief > p {
+  margin: 0;
+  color: #a7b7c3;
+}
+
+
+/* ---------- Mission program ---------- */
+
+.gnc-page .gnc-mission-program {
+  display: grid;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.gnc-page .gnc-mission-program > div {
+  min-width: 0;
+  min-height: 122px;
+  padding: 18px;
+  border: 1px solid var(--gnc-line);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(12, 25, 35, 0.94),
+      rgba(4, 9, 14, 0.96)
+    );
+}
+
+.gnc-page .gnc-mission-program span,
+.gnc-page .gnc-mission-program b,
+.gnc-page .gnc-mission-program small {
+  display: block;
+}
+
+.gnc-page .gnc-mission-program span {
+  color: #769fbd;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.gnc-page .gnc-mission-program b {
+  margin-top: 0.75rem;
+  color: #edf4f8;
+  font-size: 1rem;
+}
+
+.gnc-page .gnc-mission-program small {
+  margin-top: 0.45rem;
+  color: #8395a3;
+  line-height: 1.45;
+}
+
+
+/* ---------- Mode deck ---------- */
+
+.gnc-page .gnc-mode-deck {
+  display: grid;
+  grid-template-columns:
+    minmax(300px, 1fr)
+    minmax(330px, 0.72fr)
+    minmax(210px, 0.35fr);
+  gap: 8px;
+  align-items: stretch;
+  margin-bottom: 10px;
+}
+
+.gnc-page .gnc-mode-copy {
+  min-width: 0;
+  padding: 18px 20px;
+  border: 1px solid var(--gnc-line);
+  background: #07111a;
+}
+
+.gnc-page .gnc-mode-copy span,
+.gnc-page .gnc-mode-copy b,
+.gnc-page .gnc-mode-copy p {
+  display: block;
+}
+
+.gnc-page .gnc-mode-copy span {
+  color: var(--gnc-blue);
+  font-size: 0.67rem;
+  font-weight: 850;
+  letter-spacing: 0.13em;
+}
+
+.gnc-page .gnc-mode-copy b {
+  margin-top: 0.55rem;
+  color: #eef5fa;
+  font-size: 1rem;
+}
+
+.gnc-page .gnc-mode-copy p {
+  margin: 0.45rem 0 0;
+  color: #91a3b1;
+  font-size: 0.84rem;
+}
+
+.gnc-page .gnc-mode-toggle {
+  display: grid;
+  grid-template-columns:
+    1fr 1fr;
+  gap: 6px;
+  padding: 7px;
+  border: 1px solid var(--gnc-line);
+  background: #04090e;
+}
+
+.gnc-page .gnc-mode-toggle button {
+  min-width: 0;
+  min-height: 84px;
+  padding: 12px 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #93a4b1;
+  text-align: left;
+  cursor: pointer;
+}
+
+.gnc-page .gnc-mode-toggle button b,
+.gnc-page .gnc-mode-toggle button small {
+  display: block;
+}
+
+.gnc-page .gnc-mode-toggle button b {
+  color: inherit;
+  font-size: 0.78rem;
+  letter-spacing: 0.07em;
+}
+
+.gnc-page .gnc-mode-toggle button small {
+  margin-top: 0.35rem;
+  color: inherit;
+  opacity: 0.72;
+}
+
+.gnc-page .gnc-mode-toggle button.active {
+  border-color: rgba(138, 201, 242, 0.38);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(40, 95, 134, 0.4),
+      rgba(13, 35, 50, 0.72)
+    );
+  color: #e7f4fc;
+}
+
+.gnc-page .gnc-disturbance {
+  min-width: 0;
+  min-height: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "icon title"
+    "icon copy";
+  column-gap: 10px;
+  align-content: center;
+  padding: 14px 18px;
+  border: 1px solid rgba(225, 170, 87, 0.27);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(67, 42, 15, 0.45),
+      rgba(15, 12, 8, 0.9)
+    );
+  color: #e8d3a9;
+  text-align: left;
+  cursor: pointer;
+}
+
+.gnc-page .gnc-disturbance > span {
+  grid-area: icon;
+  align-self: center;
+  font-size: 1.25rem;
+}
+
+.gnc-page .gnc-disturbance > b {
+  grid-area: title;
+  min-width: 0;
+}
+
+.gnc-page .gnc-disturbance > small {
+  grid-area: copy;
+  min-width: 0;
+  margin-top: 2px;
+  color: #b39b74;
+}
+
+
+/* ---------- Simulator shell ---------- */
+
+.gnc-page .gnc-sim {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.48fr)
+    minmax(340px, 0.52fr);
+  min-height: 610px;
+  overflow: hidden;
+  border: 1px solid var(--gnc-line);
+  background: #020609;
+}
+
+.gnc-page .gnc-viewport {
+  position: relative;
+  min-width: 0;
+  min-height: 610px;
+  overflow: hidden;
+  isolation: isolate;
+  border-right: 1px solid var(--gnc-line);
+  background:
+    radial-gradient(
+      circle at center,
+      #0b1822,
+      #020508 68%
+    );
+}
+
+.gnc-page #gnc-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.gnc-page .gnc-reticle {
+  z-index: 3;
+  pointer-events: none;
+}
+
+.gnc-page .gnc-success {
+  position: absolute;
+  z-index: 5;
+  top: 16px;
+  left: 16px;
+  max-width:
+    calc(
+      100% - 32px
+    );
+  padding: 0.46rem 0.64rem;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(2, 8, 12, 0.72);
+  backdrop-filter: blur(9px);
+  color: #c9d8e3;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.gnc-page .gnc-status-row {
+  position: absolute;
+  z-index: 5;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  display: grid;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.gnc-page .gnc-status-row > div {
+  min-width: 0;
+  padding: 10px 11px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(3, 10, 15, 0.82);
+  backdrop-filter: blur(9px);
+}
+
+.gnc-page .gnc-status-row small,
+.gnc-page .gnc-status-row b {
+  display: block;
+  min-width: 0;
+}
+
+.gnc-page .gnc-status-row small {
+  color: #7592a7;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.gnc-page .gnc-status-row b {
+  margin-top: 3px;
+  overflow-wrap: anywhere;
+  color: #e2edf4;
+  font-size: 0.78rem;
+}
+
+
+/* ---------- Console ---------- */
+
+.gnc-page .gnc-console {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  background:
+    linear-gradient(
+      180deg,
+      #07121b,
+      #04090e
+    );
+}
+
+.gnc-page .gnc-tutorial {
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--gnc-line);
+}
+
+.gnc-page .gnc-tutorial > div {
+  display: grid;
+  grid-template-columns:
+    58px
+    minmax(0, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.gnc-page .gnc-tutorial > div b {
+  color: var(--gnc-blue);
+}
+
+.gnc-page .gnc-tutorial > div span {
+  color: #9dafbb;
+}
+
+.gnc-page #gnc-start {
+  width: 100%;
+  margin-top: 18px;
+}
+
+.gnc-page .gnc-controls {
+  min-width: 0;
+}
+
+.gnc-page .gnc-stick-grid {
+  display: grid;
+  grid-template-columns:
+    1fr 1fr;
+  gap: 12px;
+}
+
+.gnc-page .gnc-stick-grid > div {
+  min-width: 0;
+}
+
+.gnc-page .gnc-stick-grid > div > span {
+  display: block;
+  margin-bottom: 7px;
+  color: #89a9bf;
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.gnc-page .pad {
+  width: 100%;
+  min-width: 0;
+}
+
+.gnc-page .pad button {
+  min-width: 44px;
+  min-height: 44px;
+  touch-action: manipulation;
+}
+
+.gnc-page #gnc-reset {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.gnc-page .gnc-sensors {
+  min-width: 0;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--gnc-line);
+}
+
+.gnc-page .gnc-sensors > span {
+  display: block;
+  color: #7898ae;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+}
+
+.gnc-page #sensor-chips {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 9px;
+}
+
+.gnc-page #sensor-chips > * {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.gnc-page .gnc-explain {
+  margin: 0;
+  padding: 13px 14px;
+  border-left: 2px solid rgba(138, 201, 242, 0.45);
+  background: rgba(22, 48, 65, 0.28);
+  color: #a6b8c4;
+  font-size: 0.83rem;
+  line-height: 1.52;
+}
+
+
+/* ---------- Closed-loop architecture ---------- */
+
+.gnc-page .gnc-loop {
+  position: relative;
+  display: grid;
+  grid-template-columns:
+    repeat(6, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 24px;
+  overflow: visible;
+}
+
+.gnc-page .gnc-loop > i {
+  display: none !important;
+}
+
+.gnc-page .gnc-loop > button {
+  position: relative;
+  min-width: 0;
+  min-height: 116px;
+  padding: 15px 15px 16px;
+  border: 1px solid var(--gnc-line);
+  background:
+    linear-gradient(
+      145deg,
+      #091721,
+      #040a0f
+    );
+  color: #a8b7c2;
+  text-align: left;
+}
+
+.gnc-page .gnc-loop > button:not(:last-of-type)::after {
+  content: "?";
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  right: -18px;
+  width: 26px;
+  transform: translateY(-50%);
+  color: rgba(138, 201, 242, 0.72);
+  font-size: 1.15rem;
+  text-align: center;
+  pointer-events: none;
+}
+
+.gnc-page .gnc-loop button small,
+.gnc-page .gnc-loop button b,
+.gnc-page .gnc-loop button span {
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.gnc-page .gnc-loop button small {
+  color: #5f8097;
+  font-size: 0.63rem;
+}
+
+.gnc-page .gnc-loop button b {
+  margin-top: 1rem;
+  color: #e2edf4;
+  font-size: 0.87rem;
+  letter-spacing: 0.06em;
+}
+
+.gnc-page .gnc-loop button span {
+  margin-top: 0.35rem;
+  color: #8295a3;
+  font-size: 0.73rem;
+  line-height: 1.35;
+}
+
+.gnc-page .gnc-loop button.active {
+  border-color: rgba(138, 201, 242, 0.48);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(38, 91, 128, 0.54),
+      rgba(8, 25, 36, 0.95)
+    );
+  box-shadow:
+    inset 0 0 0 1px rgba(138,201,242,0.08),
+    0 12px 30px rgba(0,0,0,0.18);
+}
+
+.gnc-page .system-loop-explainer {
+  min-height: 92px;
+  margin-top: 8px;
+  padding: 18px 20px;
+  border: 1px solid var(--gnc-line);
+  background: rgba(5, 13, 19, 0.78);
+}
+
+.gnc-page .system-loop-explainer * {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+
+/* ---------- Evidence ---------- */
+
+.gnc-page .gnc-evidence-band {
+  display: grid;
+  grid-template-columns:
+    repeat(5, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 24px;
+}
+
+.gnc-page .gnc-evidence-band > div {
+  min-width: 0;
+  padding: 14px;
+  border-top: 2px solid rgba(115, 173, 211, 0.36);
+  background: rgba(255,255,255,0.026);
+}
+
+.gnc-page .gnc-evidence-band span,
+.gnc-page .gnc-evidence-band b {
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.gnc-page .gnc-evidence-band span {
+  color: #749bb7;
+  font-size: 0.61rem;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+}
+
+.gnc-page .gnc-evidence-band b {
+  margin-top: 0.45rem;
+  color: #afbec9;
+  font-size: 0.78rem;
+  line-height: 1.38;
+}
+
+
+/* ---------- Tablet ---------- */
+
+@media (max-width: 1100px) {
+
+  .gnc-page #gnc-lab .x-section-head {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .gnc-page .gnc-mission-brief {
+    grid-template-columns:
+      minmax(120px, 0.3fr)
+      minmax(0, 0.7fr);
+  }
+
+  .gnc-page .gnc-mission-brief > p {
+    grid-column: 1 / -1;
+  }
+
+  .gnc-page .gnc-mode-deck {
+    grid-template-columns:
+      1fr
+      1fr;
+  }
+
+  .gnc-page .gnc-mode-copy {
+    grid-column: 1 / -1;
+  }
+
+  .gnc-page .gnc-sim {
+    grid-template-columns: 1fr;
+  }
+
+  .gnc-page .gnc-viewport {
+    min-height: 590px;
+    border-right: 0;
+    border-bottom: 1px solid var(--gnc-line);
+  }
+
+  .gnc-page .gnc-loop {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+
+  .gnc-page .gnc-loop > button::after {
+    display: none;
+  }
+
+  .gnc-page .gnc-evidence-band {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+}
+
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 760px) {
+
+  .gnc-page #gnc-lab {
+    padding-block: 62px 88px;
+  }
+
+  .gnc-page #gnc-lab > .x-wrap {
+    width:
+      calc(
+        100% - 28px
+      );
+  }
+
+  .gnc-page #gnc-lab .x-section-head h2 {
+    font-size:
+      clamp(
+        3.1rem,
+        14vw,
+        4.6rem
+      );
+  }
+
+  .gnc-page .gnc-mission-brief,
+  .gnc-page .gnc-mission-program,
+  .gnc-page .gnc-mode-deck {
+    grid-template-columns: 1fr;
+  }
+
+  .gnc-page .gnc-mission-brief > p,
+  .gnc-page .gnc-mode-copy {
+    grid-column: auto;
+  }
+
+  .gnc-page .gnc-mission-program > div {
+    min-height: 0;
+  }
+
+  .gnc-page .gnc-mode-toggle {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .gnc-page .gnc-disturbance {
+    min-height: 74px;
+  }
+
+  .gnc-page .gnc-viewport {
+    min-height: 560px;
+  }
+
+  .gnc-page .gnc-status-row {
+    grid-template-columns:
+      1fr
+      1fr;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+  }
+
+  .gnc-page .gnc-status-row > div {
+    padding: 8px;
+  }
+
+  .gnc-page .gnc-console {
+    padding: 16px;
+  }
+
+  .gnc-page .gnc-stick-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gnc-page .gnc-loop {
+    grid-template-columns:
+      1fr
+      1fr;
+    gap: 7px;
+  }
+
+  .gnc-page .gnc-loop > button {
+    min-height: 104px;
+  }
+
+  .gnc-page .gnc-evidence-band {
+    grid-template-columns:
+      1fr
+      1fr;
+  }
+}
+
+
+/* ---------- Narrow phones ---------- */
+
+@media (max-width: 420px) {
+
+  .gnc-page .gnc-mode-toggle {
+    grid-template-columns: 1fr;
+  }
+
+  .gnc-page .gnc-viewport {
+    min-height: 520px;
+  }
+
+  .gnc-page .gnc-status-row b {
+    font-size: 0.72rem;
+  }
+
+  .gnc-page .gnc-evidence-band {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .gnc-page * {
+    scroll-behavior: auto !important;
+  }
+}
