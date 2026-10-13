@@ -2,176 +2,452 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta
-    name="description"
-    content="A2 MissionLab — evidence-grounded Artemis II mission operations and engineering reconstruction."
-  >
-  <meta name="theme-color" content="#05080e">
-  <title>A2 MissionLab — Artemis II Mission Reconstruction</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="A2 MissionLab is an interactive public reconstruction of Artemis II: fly the mission, explore the crew's view, experiment with GNC, entry, Mission Control, space weather, and future lunar landing engineering.">
+  <meta name="theme-color" content="#020509">
+  <meta property="og:title" content="A2 MissionLab — Experience Artemis II">
+  <meta property="og:description" content="An interactive, evidence-aware reconstruction of Artemis II built from public mission data.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://images-assets.nasa.gov/image/art002e009288/art002e009288~orig.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>A2 MissionLab — Experience Artemis II</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.ico" sizes="any">
 </head>
-<body>
-  <a class="skip-link" href="#main-content">Skip to mission content</a>
-
-  <header class="topbar">
-    <div>
-      <div class="eyebrow">ARTEMIS II · PUBLIC-EVIDENCE RECONSTRUCTION</div>
-      <h1>A2 MissionLab</h1>
-      <p class="subtitle">Mission Operations & Engineering Reconstruction</p>
-    </div>
-
-    <div class="status-card" aria-label="Project publication status">
-      <span class="status-dot" aria-hidden="true"></span>
-      <div>
-        <strong>PHASE 9</strong>
-        <small>Publication quality</small>
-      </div>
-    </div>
-  </header>
-
-  <nav class="project-nav" aria-label="Project navigation">
-    <a href="#overview">Overview</a>
-    <a href="#timeline">Mission timeline</a>
-    <a href="#provenance">Provenance</a>
-    <a href="docs/METHODOLOGY.md">Methodology</a>
-    <a href="docs/VALIDATION_REPORT.md">Validation</a>
-    <a href="docs/ANALYST_GUIDE.md">Mission Analyst</a>
+<body class="experience-page">
+<a class="skip" href="#experience-main">Skip to mission experience</a>
+<header class="x-header" id="top">
+  <a class="x-brand" href="#top" aria-label="A2 MissionLab home">
+    <span class="x-brand-orbit" aria-hidden="true"><i></i></span>
+    <span><b>A2</b> MissionLab</span>
+  </a>
+  <button class="x-menu" type="button" aria-expanded="false" aria-controls="x-nav">Explore</button>
+  <nav class="x-nav" id="x-nav" aria-label="Primary">
+    <a href="#mission-explorer">Mission</a>
+    <a href="#crew-view">Crew view</a>
+    <a href="#gnc-lab">Fly Orion</a>
+    <a href="#mission-control">Mission Control</a>
+    <a href="#entry-lab">Entry</a>
+    <a href="#space-weather">Space weather</a>
+    <a href="technical-report.html" class="x-nav-paper">Technical Report</a>
   </nav>
+</header>
 
-  <main id="main-content">
-    <section id="overview" class="hero-grid" aria-labelledby="overview-title">
-      <div class="panel hero-copy">
-        <div class="panel-label">EVIDENCE-GROUNDED MISSION RECONSTRUCTION</div>
-        <h2 id="overview-title">One mission clock. Multiple engineering disciplines. Explicit evidence boundaries.</h2>
-        <p>
-          MissionLab connects public Artemis II trajectory, spacecraft systems,
-          communications, lunar science, entry and recovery, mission-control
-          perspectives, and postflight engineering without inventing unavailable telemetry.
-        </p>
+<main id="experience-main">
+  <section class="x-hero" aria-labelledby="hero-title">
+    <img class="x-hero-photo nasa-photo" src="https://images-assets.nasa.gov/image/art002e009288/art002e009288~orig.jpg" data-fallback="assets/public/fallback-mission.svg" alt="Earth setting behind the Moon during the Artemis II lunar flyby">
+    <div class="x-hero-shade"></div>
+    <canvas id="hero-stars" class="x-hero-stars" aria-hidden="true"></canvas>
+    <div class="x-hero-content">
+      <p class="x-overline">Artemis II · reconstructed from public NASA data</p>
+      <h1 id="hero-title">Go around the Moon.</h1>
+      <p class="x-hero-copy">Don’t start with a report. Start with the mission. Fly the trajectory, see what the crew saw, think like Mission Control, and experiment with the systems that brought Orion home.</p>
+      <div class="x-hero-actions">
+        <a class="x-button x-button-primary" href="#mission-explorer">Enter the mission <span aria-hidden="true">↓</span></a>
+        <a class="x-button x-button-ghost" href="technical-report.html">Read the Technical Report</a>
       </div>
-
-      <div class="panel metrics-panel" aria-labelledby="metrics-title">
-        <div class="panel-label" id="metrics-title">VALIDATED ANALYST INVENTORY</div>
-        <div id="metric-grid" class="metric-grid" aria-live="polite">
-          <p class="loading-copy">Loading publication metrics…</p>
-        </div>
+      <div class="x-hero-facts" aria-label="MissionLab headline results">
+        <div><span>Closest lunar pass</span><strong>6,544.5 km</strong><small>mean-radius altitude · MissionLab derived</small></div>
+        <div><span>Farthest from Earth</span><strong>413,144 km</strong><small>Earth-center distance · MissionLab derived</small></div>
+        <div><span>Public data analyzed</span><strong>75,396</strong><small>normalized environment records</small></div>
       </div>
-    </section>
+      <p class="x-photo-credit">Artemis II Earthset · NASA · April 6, 2026</p>
+    </div>
+    <div class="x-scroll-cue" aria-hidden="true"><span></span>scroll to fly</div>
+  </section>
 
-    <section class="mission-clock panel" aria-labelledby="clock-label">
-      <div class="panel-label" id="clock-label">SELECTED MISSION EVENT</div>
-      <div id="clock-time" class="clock-time">—</div>
-      <div id="clock-phase" class="clock-phase">Select an event below</div>
-    </section>
-
-    <section class="controls panel" aria-labelledby="filter-title">
-      <div class="control-heading">
-        <div class="panel-label" id="filter-title">TIMELINE FILTERS</div>
-        <p>Filter the validated Phase 7 shared mission timeline.</p>
+  <section class="x-intro">
+    <div class="x-wrap x-intro-grid">
+      <div>
+        <p class="x-kicker">One mission. Many engineering problems.</p>
+        <h2>Ten days that connect orbital mechanics, human observation, spacecraft systems, atmospheric entry, and real-time operations.</h2>
       </div>
+      <p>MissionLab reconstructs what public evidence lets us know, turns that evidence into interactive models, and labels the boundary between <b>reported fact</b>, <b>derived result</b>, <b>engineering model</b>, and <b>unknown</b>. The detailed mathematics and provenance stay one click away. A model is not telemetry: every educational approximation is labeled and points back to the real MissionLab evidence.</p>
+    </div>
+  </section>
 
-      <label>
-        Primary discipline
-        <select id="discipline-filter">
-          <option value="ALL">All disciplines</option>
-        </select>
-      </label>
+  <section class="mission-photo-rail" aria-label="Artemis II mission photography">
+    <figure><img class="nasa-photo" src="https://www.nasa.gov/wp-content/uploads/2026/04/55182696113-0c4398702d-o-2.jpg" data-fallback="assets/public/fallback-mission.svg" alt="Artemis II launch"><figcaption><span>01 · LAUNCH</span><b>Leave Earth.</b></figcaption></figure>
+    <figure><img class="nasa-photo" src="https://images-assets.nasa.gov/image/art002e000192/art002e000192~orig.jpg" data-fallback="assets/public/fallback-mission.svg" alt="Earth photographed from Orion during Artemis II outbound flight"><figcaption><span>02 · OUTBOUND</span><b>Watch Earth recede.</b></figcaption></figure>
+    <figure><img class="nasa-photo" src="https://images-assets.nasa.gov/image/art002e009282/art002e009282~orig.jpg" data-fallback="assets/public/fallback-mission.svg" alt="Vavilov Crater during Artemis II"><figcaption><span>03 · FAR SIDE</span><b>Read the terrain.</b></figcaption></figure>
+    <figure><img class="nasa-photo" src="https://images-assets.nasa.gov/image/art002e009301/art002e009301~orig.jpg" data-fallback="assets/public/fallback-mission.svg" alt="Solar eclipse viewed from Orion"><figcaption><span>04 · ECLIPSE</span><b>Turn geometry into science.</b></figcaption></figure>
+    <figure><img class="nasa-photo" src="https://images-assets.nasa.gov/image/art002e021278/art002e021278~orig.jpg" data-fallback="assets/public/fallback-mission.svg" alt="Earthrise during Artemis II"><figcaption><span>05 · RETURN</span><b>Bring Earth back into view.</b></figcaption></figure>
+  </section>
 
-      <label>
-        Evidence
-        <select id="evidence-filter">
-          <option value="ALL">All evidence classes</option>
-        </select>
-      </label>
-
-      <button id="reset-btn" type="button">Reset filters</button>
-    </section>
-
-    <section id="timeline" class="workspace" aria-labelledby="timeline-title">
-      <aside class="timeline panel">
-        <div class="panel-heading">
-          <div>
-            <div class="panel-label">VALIDATED SHARED TIMELINE</div>
-            <h2 id="timeline-title">Mission events</h2>
+  <span class="x-anchor-alias" id="mission" aria-hidden="true"></span>
+  <section class="x-section x-mission" id="mission-explorer">
+    <div class="x-wrap">
+      <div class="x-section-head">
+        <div><p class="x-kicker">Mission explorer</p><h2>Scrub through Artemis II.</h2></div>
+        <p>Move the mission clock. Watch Orion move from Earth to the Moon and home while the operational story changes around it.</p>
+      </div>
+      <div class="mission-explorer-shell">
+        <div class="mission-stage">
+          <canvas id="mission-canvas" aria-label="Interactive Earth Moon Orion mission geometry"></canvas>
+          <div class="mission-stage-hud">
+            <div><small>MISSION ELAPSED TIME</small><strong id="mission-met">00:00:00:00</strong></div>
+            <div><small>PHASE</small><strong id="mission-phase">Launch</strong></div>
+            <div><small>COMM</small><strong id="mission-comm">Near-Earth network</strong></div>
           </div>
-          <span id="event-count" class="count" aria-label="Visible event count">0</span>
+          <div class="mission-stage-caption" id="mission-stage-caption">Orion begins the first crewed Artemis lunar flyby mission.</div>
         </div>
-
-        <div
-          id="event-list"
-          class="event-list"
-          aria-live="polite"
-          aria-label="Mission event list"
-        ></div>
-      </aside>
-
-      <section
-        class="detail panel"
-        id="detail-panel"
-        aria-labelledby="detail-title"
-        tabindex="-1"
-      >
-        <div class="empty-state">
-          <div class="orbital-icon" aria-hidden="true">◌</div>
-          <h2 id="detail-title">Select a mission event</h2>
-          <p>
-            Inspect validated timing, evidence class, Mission Elapsed Time,
-            classification, and discipline relevance.
-          </p>
-        </div>
-      </section>
-    </section>
-
-    <section id="provenance" class="provenance-legend panel" aria-labelledby="provenance-title">
-      <div class="panel-label" id="provenance-title">EVIDENCE BOUNDARIES</div>
-
-      <div class="boundary-grid">
-        <article>
-          <strong>NASA REPORTED</strong>
-          <p>Publicly reported mission fact or event.</p>
-        </article>
-
-        <article>
-          <strong>MISSIONLAB DERIVED</strong>
-          <p>Deterministic result calculated from public inputs, not onboard telemetry.</p>
-        </article>
-
-        <article>
-          <strong>KNOWN UNKNOWN</strong>
-          <p>Missing public evidence remains explicitly unresolved.</p>
-        </article>
-
-        <article>
-          <strong>CAUSATION</strong>
-          <p>Temporal sequence is never promoted to causation without evidence.</p>
-        </article>
+        <aside class="mission-story" aria-live="polite">
+          <p class="x-label" id="mission-date">APR 01 · FLIGHT DAY 1</p>
+          <h3 id="mission-title">Launch from Kennedy Space Center</h3>
+          <p id="mission-copy">The shared mission clock begins at 22:35:12 UTC. MissionLab uses this launch epoch to align trajectory products, public events, science observations, and engineering analyses.</p>
+          <div class="mission-readout">
+            <div><span id="mission-readout-a-label">Distance context</span><b id="mission-readout-a">Earth departure</b></div>
+            <div><span id="mission-readout-b-label">Evidence</span><b id="mission-readout-b">NASA reported</b></div>
+          </div>
+          <div class="mission-controls">
+            <button id="mission-prev" type="button" aria-label="Previous mission moment">←</button>
+            <input id="mission-scrubber" type="range" min="0" max="1000" value="0" aria-label="Mission timeline">
+            <button id="mission-next" type="button" aria-label="Next mission moment">→</button>
+          </div>
+          <div id="mission-markers" class="mission-markers" aria-label="Mission milestones"></div>
+        </aside>
       </div>
-    </section>
+      <details class="engineering-drawer">
+        <summary><span>Show me the engineering behind the mission map</span><small>trajectory products · SPICE geometry · uncertainty</small></summary>
+        <div class="engineering-drawer-body">
+          <div><h3>This is a reconstruction, not a telemetry feed.</h3><p>The visual uses the validated MissionLab event timeline and derived lunar geometry to teach mission progression. The underlying project parses public Orion Orbit Ephemeris Message products, uses SPICE for Earth/Moon/Sun geometry, refines closest approach, and correlates public events without claiming access to Orion's private onboard navigation state.</p><a href="library.html#flight-dynamics">Open the flight-dynamics deep dive →</a></div>
+          <figure><img src="docs/assets/phase1f_oem_with_events.svg" alt="MissionLab OEM trajectory with correlated events"><figcaption>MissionLab public OEM trajectory and event correlation.</figcaption></figure>
+        </div>
+      </details>
+    </div>
+  </section>
 
-    <section class="boundary-callout panel" aria-label="MissionLab evidence rules">
-      <code>MISSIONLAB DERIVED != NASA REPORTED</code>
-      <code>TEMPORAL SEQUENCE != CAUSATION</code>
-      <code>UNKNOWN PUBLIC FACT != PERMISSION TO INVENT</code>
-    </section>
+  <span class="x-anchor-alias" id="science" aria-hidden="true"></span>
+  <section class="x-section x-crew" id="crew-view">
+    <div class="x-wrap">
+      <div class="x-section-head">
+        <div><p class="x-kicker">Through Orion’s windows</p><h2>Experience Artemis II as the view, geometry, crew, and ground teams changed around you.</h2></div>
+        <p>Move through 25 mission moments spanning outbound coast, lunar approach, real science targets, Earthset, far-side operations, closest approach, eclipse observations, Earthrise, and the journey home. Every stop labels exactly what kind of evidence you are seeing.</p>
+      </div>
+      <div class="crew-journey" aria-label="Interactive crew-view journey">
+        <div class="crew-photo-wrap">
+          <img id="crew-photo" class="nasa-photo" src="https://images-assets.nasa.gov/image/art002e014225/art002e014225~orig.jpg" data-fallback="assets/public/fallback-mission.svg" alt="Crescent Earth photographed during Artemis II">
+          <div class="crew-window-frame" aria-hidden="true"><i></i><i></i></div>
+          <button id="crew-image-prev" class="crew-image-arrow crew-image-arrow-left" type="button" aria-label="Previous mission image"><span aria-hidden="true">←</span></button>
+          <button id="crew-image-next" class="crew-image-arrow crew-image-arrow-right" type="button" aria-label="Next mission image"><span aria-hidden="true">→</span></button>
+          <div class="crew-image-count" id="crew-image-count" aria-live="polite">01 / 25</div>
+          <div class="crew-photo-badge" id="crew-badge">OUTBOUND · SAME MISSION PHASE</div>
+          <div class="crew-photo-provenance" id="crew-provenance">CREW PHOTOGRAPHY · NASA</div>
+          <div class="crew-geometry-hud"><canvas id="crew-geometry-canvas" aria-label="Simplified Earth Moon view geometry"></canvas></div>
+        </div>
+        <div class="crew-panel">
+          <p class="x-label" id="crew-index">MISSION VIEW 01 / 25</p>
+          <h3 id="crew-title">Earth becomes a world behind you.</h3>
+          <p id="crew-description">As Orion leaves Earth, the crew can watch the planet shrink against black space. This photograph is mission-phase imagery, not asserted to be the exact view at a reconstructed timestamp.</p>
+          <div class="crew-meta-grid">
+            <div><span>MISSION TIME</span><b id="crew-time">Outbound coast</b></div>
+            <div><span>GEOMETRY</span><b id="crew-geometry">Earth receding</b></div>
+            <div><span>EVIDENCE</span><b id="crew-evidence">NASA imagery</b></div>
+          </div>
+          <div class="crew-learn"><span>WHAT YOU’RE SEEING</span><p id="crew-notice">Earth is becoming a small target while Orion transitions from near-Earth operations to deep-space flight.</p></div>
+          <div class="crew-learn crew-why"><span>WHY IT MATTERED</span><p id="crew-why">The changing apparent size and line-of-sight geometry make the scale of the lunar mission intuitive.</p></div>
+          <a id="crew-source" class="x-source" href="https://www.nasa.gov/gallery/lunar-flyby/" target="_blank" rel="noreferrer">NASA imagery / context source ↗</a>
+        </div>
+      </div>
+      <div class="crew-timeline-shell">
+        <button id="crew-prev" type="button" aria-label="Previous crew view">←</button>
+        <input id="crew-scrubber" type="range" min="0" max="24" value="0" step="1" aria-label="Crew-view mission timeline">
+        <button id="crew-next" type="button" aria-label="Next crew view">→</button>
+      </div>
+      <div class="crew-filmstrip" id="crew-filmstrip" aria-label="Crew observation mission moments"></div>
+      <details class="engineering-drawer">
+        <summary><span>Show the engineering behind the window views</span><small>image provenance · mission clock · SPICE geometry · precision</small></summary>
+        <div class="engineering-drawer-body">
+          <div><h3>Photography and geometry are different evidence layers.</h3><p>MissionLab aligns NASA image metadata, crew observations, public event times, OEM trajectory states, and SPICE geometry. An image is labeled as an exact event image only where NASA metadata supports that claim. Near-event or representative imagery stays labeled that way.</p><a href="library.html#lunar-science">Open the lunar-science deep dive →</a></div>
+          <figure><img src="docs/assets/lunar_science/phase6b_lunar_observation_reconstruction.svg" alt="MissionLab lunar observation reconstruction"><figcaption>MissionLab observation evidence aligned with mission geometry.</figcaption></figure>
+        </div>
+      </details>
+    </div>
+  </section>
 
-    <p id="app-status" class="sr-only" aria-live="assertive"></p>
-  </main>
+  <span class="x-anchor-alias" id="engineering" aria-hidden="true"></span>
+  <section class="x-section x-darklab" id="gnc-lab">
+    <div class="x-wrap">
+      <div class="x-section-head">
+        <div><p class="x-kicker">Fly Orion · GNC experience</p><h2>Bring Orion into the target box.</h2></div>
+        <p>Artemis II actually completed an approximately 70-minute proximity-operations demonstration around the detached ICPS. This simplified interaction teaches the control loop behind that task. It is not a replay of private flight data.</p>
+      </div>
+      <div class="gnc-mission-brief"><span>YOUR OBJECTIVE</span><b>Reduce translation and pointing error until Orion is stable inside the corridor.</b><p>Use <strong>THC</strong> to move Orion without changing its attitude. Use <strong>RHC</strong> to rotate Orion. The white target represents the detached ICPS reference target used during the real demonstration.</p></div>
+      <div class="gnc-mission-program" aria-label="Artemis II manual-control context">
+        <div><span>EARLY MISSION</span><b>Proximity operations</b><small>≈70 min · controlled approach and retreat around detached ICPS</small></div>
+        <div><span>FLIGHT DAY 4</span><b>Manual handling-quality test</b><small>41 min · 6-DOF and 3-DOF thruster modes</small></div>
+        <div><span>FLIGHT DAY 8</span><b>Additional test forgone</b><small>NASA reported flight controllers elected not to repeat the planned demonstration</small></div>
+      </div>
+      <div class="gnc-mode-deck" aria-label="GNC simulator mode controls">
+        <div class="gnc-mode-copy"><span>SIMULATION MODE</span><b id="gnc-mode-title">AUTO MODE · watch the closed loop work</b><p id="gnc-mode-help">Start by watching the guidance loop reduce translation and pointing error. Then switch to Manual Mode and fly the same capture yourself.</p></div>
+        <div class="gnc-mode-toggle" role="group" aria-label="Choose GNC simulator mode">
+          <button id="gnc-mode-auto" class="active" type="button" data-gnc-mode="auto"><b>AUTO MODE</b><small>Watch the capture</small></button>
+          <button id="gnc-mode-manual" type="button" data-gnc-mode="manual"><b>MANUAL MODE</b><small>Fly it yourself</small></button>
+        </div>
+        <button id="gnc-disturbance" class="gnc-disturbance" type="button"><span>⚡</span><b>Introduce disturbance</b><small>Push Orion off the commanded state</small></button>
+      </div>
+      <div class="gnc-sim">
+        <div class="gnc-viewport">
+          <canvas id="gnc-canvas" aria-label="Simplified Orion proximity-operations GNC simulator"></canvas>
+          <div class="gnc-reticle" aria-hidden="true"><span></span><i></i></div>
+          <div class="gnc-success" id="gnc-success" aria-live="polite">CORRIDOR NOT YET CAPTURED</div>
+          <div class="gnc-status-row">
+            <div><small>RELATIVE OFFSET</small><b id="gnc-offset-readout">42 m · conceptual</b></div>
+            <div><small>POINTING ERROR</small><b id="gnc-error-readout">12.0°</b></div>
+            <div><small>CONTROL</small><b id="gnc-mode-readout">AUTO GUIDANCE DEMO</b></div><div><small>LOOP STATE</small><b id="gnc-autopilot-status">READY</b></div>
+          </div>
+        </div>
+        <div class="gnc-console">
+          <div class="gnc-tutorial" id="gnc-tutorial"><p class="x-label">30-SECOND TUTORIAL</p><div><b>RHC</b><span>Rotate Orion. Think roll, pitch, yaw.</span></div><div><b>THC</b><span>Translate Orion. Move the spacecraft without intentionally changing where it points.</span></div><button id="gnc-start" class="x-button x-button-primary" type="button">Start auto demonstration</button></div>
+          <div class="gnc-controls" id="gnc-controls" hidden>
+            <div class="gnc-stick-grid">
+              <div><span>RHC · rotate</span><div class="pad" data-pad="rhc"><button data-cmd="pitchUp" aria-label="Pitch up">↑</button><button data-cmd="yawLeft" aria-label="Yaw left">←</button><button data-cmd="attCenter" aria-label="Null rotation">●</button><button data-cmd="yawRight" aria-label="Yaw right">→</button><button data-cmd="pitchDown" aria-label="Pitch down">↓</button></div></div>
+              <div><span>THC · translate</span><div class="pad" data-pad="thc"><button data-cmd="up" aria-label="Translate up">↑</button><button data-cmd="left" aria-label="Translate left">←</button><button data-cmd="transCenter" aria-label="Null translation">●</button><button data-cmd="right" aria-label="Translate right">→</button><button data-cmd="down" aria-label="Translate down">↓</button></div></div>
+            </div>
+            <button id="gnc-reset" class="x-button x-button-ghost" type="button">Reset approach</button>
+          </div>
+          <div class="gnc-sensors"><span>STATE / SENSOR CONTEXT</span><div id="sensor-chips"></div></div>
+          <p class="gnc-explain" id="gnc-explain">The simulation starts with an offset state. Sense the error, estimate the state, guide toward the target, command a correction, fire conceptual RCS, and verify what changed.</p>
+        </div>
+      </div>
+      <div class="system-loop gnc-loop" aria-label="Guidance navigation and control closed loop">
+        <button data-gnc-block="sense" class="active"><small>01</small><b>SENSE</b><span>Observe motion</span></button><i>→</i>
+        <button data-gnc-block="estimate"><small>02</small><b>ESTIMATE</b><span>Know the state</span></button><i>→</i>
+        <button data-gnc-block="guide"><small>03</small><b>GUIDE</b><span>Choose target</span></button><i>→</i>
+        <button data-gnc-block="control"><small>04</small><b>CONTROL</b><span>Form correction</span></button><i>→</i>
+        <button data-gnc-block="fire"><small>05</small><b>FIRE</b><span>RCS effectors</span></button><i>→</i>
+        <button data-gnc-block="verify"><small>06</small><b>VERIFY</b><span>Measure again</span></button>
+      </div>
+      <div class="system-loop-explainer" id="gnc-block-explainer"></div>
+      <div class="gnc-evidence-band"><div><span>NASA REPORTED</span><b>~70 min proximity operations completed</b></div><div><span>NASA REPORTED</span><b>Controlled approach + retreat</b></div><div><span>NASA REPORTED</span><b>Onboard nav sensors + RCS used</b></div><div><span>NASA REPORTED</span><b>Automated departure</b></div><div><span>NOT PUBLIC</span><b>Exact state / thruster histories</b></div></div>
+      <details class="engineering-drawer">
+        <summary><span>Show the actual GNC evidence architecture</span><small>onboard ≠ ground ≠ public state · control-law limits</small></summary>
+        <div class="engineering-drawer-body">
+          <div><h3>Public evidence establishes the architecture, not private filter internals.</h3><p>MissionLab keeps Orion’s onboard state estimate, ground orbit determination, and the public AROW/OEM state product separate. It also preserves the difference between a confirmed RCS capability/use statement and an unavailable individual-thruster firing history.</p><a href="library.html#gnc">Open the GNC deep dive →</a></div>
+          <figure><img src="assets/public/figures/navigation-state-products.svg" alt="Dark-theme diagram separating onboard navigation, ground orbit determination, and public state products"><figcaption>Public-facing navigation / state-product boundary.</figcaption></figure>
+        </div>
+      </details>
+    </div>
+  </section>
 
-  <footer>
-    <p>
-      Independent open-source project using publicly released NASA data.
-      Not an official NASA application and not NASA-endorsed.
-    </p>
-    <p>
-      <a href="README.md">README</a>
-      ·
-      <a href="DISCLAIMER.md">Disclaimer</a>
-      ·
-      <a href="docs/ROADMAP.md">Roadmap</a>
-    </p>
-  </footer>
+  <span class="x-anchor-alias" id="control" aria-hidden="true"></span>
+  <section class="x-section x-control-room" id="mission-control">
+    <div class="x-wrap">
+      <div class="x-section-head">
+        <div><p class="x-kicker">Mission Control simulator</p><h2>You are FLIGHT. Integrate the room.</h2></div>
+        <p>Choose a public Artemis II situation, inspect how different disciplines frame it, then follow the evidence-aware operational trace. This does not imitate private NASA screens or fabricate voice loops.</p>
+      </div>
+      <div class="mc-mission-brief"><span>YOUR ROLE</span><b>FLIGHT · Flight Director lens</b><p>You are the integrator. Start at FLIGHT, then inspect the supporting console lenses. The challenge is deciding whether the event is expected, safety-critical, trajectory-relevant, or simply something to monitor without overreacting.</p></div>
+      <details class="mc-role-guide" open>
+        <summary><span>New to Mission Control? Meet the room.</span><small>Each console watches a different slice of the same mission.</small></summary>
+        <div class="mc-role-grid">
+          <div><b>FLIGHT</b><strong>Flight Director</strong><p>Integrates the room and decides what the mission team needs to do next.</p></div>
+          <div><b>FDO</b><strong>Flight Dynamics Officer</strong><p>Owns the trajectory picture, maneuver targeting, and future geometry.</p></div>
+          <div><b>FAO</b><strong>Flight Activities Officer</strong><p>Protects the flight plan, crew timeline, procedures, and real-time replanning.</p></div>
+          <div><b>EECOM</b><strong>Emergency, Environmental &amp; Consumables Officer</strong><p>Watches life support, thermal conditions, consumables, and emergency response.</p></div>
+          <div><b>COMM</b><strong>Communications lens</strong><p>MissionLab shorthand for link, network, blackout, and reacquisition questions.</p></div>
+          <div><b>SCIENCE</b><strong>Science Officer</strong><p>Integrates lunar science and geology objectives with real-time mission execution.</p></div>
+          <div><b>ENG SUPPORT</b><strong>Engineering support lens</strong><p>MissionLab synthesis view for technical evidence and model limits, not a claimed front-room console name.</p></div>
+        </div>
+      </details>
+      <div class="control-room-shell">
+        <div class="control-wall">
+          <div class="control-wall-top"><span>ARTEMIS II · PUBLIC EVIDENCE RECONSTRUCTION</span><b id="mc-clock">MET 05:00:08:10</b></div>
+          <div class="control-main-display" id="mc-display">
+            <canvas id="mc-canvas" aria-label="Mission Control event display"></canvas>
+            <div class="mc-overlay"><small id="mc-event-class">EXPECTED GEOMETRY CONSTRAINT</small><h3 id="mc-event-title">Lunar loss of signal</h3><p id="mc-event-summary">Orion is moving behind the Moon. The radio path to Earth is about to be blocked by lunar terrain.</p></div>
+          </div>
+          <div class="control-strip" id="mc-strip"></div>
+        </div>
+        <aside class="console-detail">
+          <p class="x-label" id="mc-role-label">FLIGHT</p>
+          <h3 id="mc-role-title">What does the integrated mission need?</h3>
+          <p id="mc-role-copy">FLIGHT is looking across disciplines: is the event expected, is crew safety affected, and does the mission need a decision or simply disciplined monitoring?</p>
+          <div class="console-questions" id="mc-questions"></div>
+          <div class="decision-trace"><span>PUBLIC / EDUCATIONAL OPERATIONAL TRACE</span><div id="mc-decision-trace"></div></div>
+        </aside>
+      </div>
+      <div class="mc-events" id="mc-events" aria-label="Mission Control scenarios"></div>
+      <details class="engineering-drawer">
+        <summary><span>How decision reconstruction works without private transcripts</span><small>detection → evidence → constraints → options → action → outcome</small></summary>
+        <div class="engineering-drawer-body">
+          <div><h3>Evidence-aware operations analysis</h3><p>MissionLab reconstructs public decision threads from NASA reporting and technical context. It does not fabricate controller dialogue or ownership. A troubleshooting step is not a confirmed root cause, and one event following another does not prove causation.</p><a href="library.html#decision-reconstruction">Open the decision-reconstruction deep dive →</a></div>
+          <figure><img src="docs/assets/mission_control/phase7b_decision_thread_matrix.svg" alt="MissionLab decision thread matrix"><figcaption>Cross-domain public decision-thread reconstruction.</figcaption></figure>
+        </div>
+      </details>
+    </div>
+  </section>
 
-  <script src="app.js" defer></script>
+  <section class="x-section x-entry" id="entry-lab">
+    <div class="x-wrap">
+      <div class="x-section-head">
+        <div><p class="x-kicker">Entry · descent · recovery</p><h2>Watch lunar-return energy disappear.</h2></div>
+        <p>Scrub from black space to Pacific splashdown. NASA-reported milestones anchor the sequence; the continuous visual motion between them is explicitly educational interpolation.</p>
+      </div>
+      <div class="entry-sim v5-entry-sim">
+        <div class="entry-visual">
+          <canvas id="entry-canvas" aria-label="Interactive Artemis II atmospheric entry, parachute descent, and splashdown visualization"></canvas>
+          <div class="entry-phase-title"><small id="entry-time">23:53 UTC</small><h3 id="entry-phase">Entry interface</h3><p id="entry-visual-caption">400,000 ft. Mach 35. The atmosphere is about to become the braking system.</p></div>
+          <div class="entry-signal" id="entry-signal"><i></i><span>COMM AVAILABLE</span></div>
+          <div class="entry-gauges">
+            <div><span>ALTITUDE</span><strong id="g-alt">121.9 km</strong></div>
+            <div><span>MACH</span><strong id="g-mach">35</strong></div>
+            <div><span>DYNAMIC PRESSURE · MODEL-DERIVED</span><strong id="g-q">building</strong></div>
+            <div><span>CONVECTIVE HEAT FLUX · MODEL</span><strong id="g-heat">rising</strong></div>
+            <div><span>COMM</span><strong id="g-comm">available</strong></div>
+          </div>
+        </div>
+        <div class="entry-console">
+          <input id="entry-scrubber" type="range" min="0" max="1000" value="0" aria-label="Entry timeline">
+          <div class="entry-milestones" id="entry-milestones"></div>
+          <div class="entry-lesson"><p class="x-label" id="entry-evidence">NASA REPORTED MILESTONE</p><h3 id="entry-lesson-title">The atmosphere starts doing the braking.</h3><p id="entry-lesson-copy">Orion reached the atmosphere at 400,000 feet traveling roughly Mach 35. Drag, not a retro-burn, removes most of the lunar-return kinetic energy.</p></div>
+        </div>
+      </div>
+      <div class="entry-mini-lessons">
+        <button class="active" data-entry-topic="speed"><b>Why speed matters</b><span>Heating grows extremely quickly with velocity.</span></button>
+        <button data-entry-topic="pressure"><b>What dynamic pressure means</b><span>½ρV² combines rising density with falling speed.</span></button>
+        <button data-entry-topic="blackout"><b>Why blackout occurs</b><span>Ionized gas can interfere with RF communication.</span></button>
+        <button data-entry-topic="parachutes"><b>Why not deploy chutes immediately?</b><span>Loads would be destructive at hypersonic speed.</span></button>
+        <button data-entry-topic="staging"><b>Drogues vs mains</b><span>Stabilize first, then carry the terminal descent.</span></button>
+      </div>
+      <div class="entry-topic-panel" id="entry-topic-panel"></div>
+      <details class="engineering-drawer">
+        <summary><span>Show the engineering</span><small>Mach · dynamic pressure · Sutton–Graves model · recovery evidence</small></summary>
+        <div class="engineering-drawer-body entry-figures">
+          <figure><img src="docs/assets/entry/phase2e_mach_history.svg" alt="MissionLab entry Mach history"><figcaption>Modeled Mach evolution through entry.</figcaption></figure>
+          <figure><img src="docs/assets/entry/phase2e_dynamic_pressure.svg" alt="MissionLab entry dynamic pressure"><figcaption>Modeled dynamic pressure from reconstructed speed and atmosphere.</figcaption></figure>
+          <figure><img src="docs/assets/entry/phase2e_sutton_graves_heat_flux.svg" alt="MissionLab Sutton Graves convective heat flux"><figcaption>Sutton–Graves MODEL output. Not measured heat-shield telemetry.</figcaption></figure>
+          <div><h3>q̇ = k √(ρ / Rₙ) V³</h3><p>MissionLab uses Sutton–Graves as a low-fidelity convective stagnation-point model. It does not claim measured surface temperature, detailed chemistry, ablation response, or private Orion thermal telemetry.</p><a href="library.html#convective-heating">Open the heating deep dive →</a></div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="x-section x-maneuver-lab" id="maneuver-lab">
+    <div class="x-wrap">
+      <div class="x-section-head">
+        <div><p class="x-kicker">Trajectory correction lab</p><h2>A tiny burn now can move the future path by a lot.</h2></div>
+        <p>First understand the idea. Orion is already moving fast. A correction changes velocity only slightly, but that difference accumulates over hours of coast and shifts where the trajectory arrives later.</p>
+      </div>
+      <div class="correction-story" aria-label="Trajectory correction concept"><div><small>01</small><b>ORIGINAL PATH</b><span>Predict where Orion will go.</span></div><i>→</i><div><small>02</small><b>SMALL ΔV</b><span>Change velocity for seconds.</span></div><i>→</i><div><small>03</small><b>HOURS OF COAST</b><span>The paths separate.</span></div><i>→</i><div><small>04</small><b>NEW ARRIVAL</b><span>Protect future geometry.</span></div></div>
+      <div class="maneuver-shell">
+        <div class="maneuver-viz"><canvas id="maneuver-canvas" aria-label="Trajectory correction educational visualization"></canvas><div class="maneuver-hud"><div><span>PREDICTED ARRIVAL SHIFT</span><b id="maneuver-hud-shift">0 km</b></div><div><span>COAST TIME</span><b id="maneuver-hud-coast">24 h</b></div><div><span>MISSION EFFECT</span><b id="maneuver-hud-state">NO CORRECTION</b></div></div><div class="maneuver-burn-flash" id="maneuver-burn-flash" aria-hidden="true"></div><div class="maneuver-annotation" id="maneuver-annotation"></div></div>
+        <div class="maneuver-panel">
+          <div class="term-pills"><span><b>OTC</b> Outbound Trajectory Correction</span><span><b>RTC</b> Return Trajectory Correction</span></div>
+          <div class="burn-select" id="burn-select"></div>
+          <div class="burn-readout"><div><span>STATUS / ΔV</span><b id="burn-dv">NO CORRECTION</b></div><div><span>DURATION</span><b id="burn-duration">—</b></div><div><span>PUBLIC TIME</span><b id="burn-time">—</b></div></div>
+          <label class="range-label" for="dv-magnitude"><span>Conceptual Δv magnitude</span><b id="dv-value">0.0 ft/s</b></label>
+          <input id="dv-magnitude" type="range" min="0" max="6" step="0.1" value="0">
+          <label class="range-label" for="coast-hours"><span>Coast after the correction</span><b id="coast-hours-value">24 h</b></label>
+          <input id="coast-hours" type="range" min="1" max="96" value="24">
+          <div class="delta-explain"><strong id="delta-distance">0 km</strong><p>Simple Δv × time separation for intuition only. The real trajectory is nonlinear and targeted in three dimensions.</p></div>
+          <div class="cancel-note" id="cancel-note"><b>Cancellation can be good.</b><span>NASA cancelled OTC1 and OTC2 because Orion was already on track. No burn can be the correct decision.</span></div>
+        </div>
+      </div>
+      <details class="engineering-drawer">
+        <summary><span>Show the engineering</span><small>plan vs execution · exact evidence limits · ESM propulsion architecture</small></summary>
+        <div class="engineering-drawer-body">
+          <div><h3>Plan ≠ execution. Architecture ≠ burn assignment.</h3><p>The repository preserves OTC1/OTC2 cancellation, OTC3 execution, RTC1–3 public timing and reported magnitudes, and ESM engine architecture. It does not invent OTC3 delta-v or a specific engine/thruster assignment where the public record does not establish one.</p><a href="library.html#maneuvers">Open the maneuver deep dive →</a></div>
+          <figure><img src="assets/public/figures/trajectory-correction-plan-execution.svg" alt="Dark-theme diagram showing Artemis II planned and executed trajectory corrections"><figcaption>Public-facing plan-versus-execution summary.</figcaption></figure>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="x-section x-labs x-weather-experience" id="space-weather">
+    <div class="x-wrap">
+      <div class="x-section-head">
+        <div><p class="x-kicker">Space weather operations</p><h2>What happens when the Sun becomes part of the flight plan?</h2></div>
+        <p>Artemis II carried humans far beyond low Earth orbit. This standalone teaching model separates the mission’s actual monitoring context from hypothetical solar-particle scenarios.</p>
+      </div>
+      <article class="lab-card lab-card-wide weather-lab">
+        <div class="lab-card-head"><p class="x-label">ARTEMIS II CONTEXT + CONCEPTUAL SCENARIO MODEL</p><h3>Move Orion. Change solar activity. Watch the operational concern change.</h3><p>Use the controls to build intuition about why radiation environment, spacecraft location, and shielding assumptions matter to crewed lunar operations. Relative indicators are intentionally qualitative and are not crew dose.</p></div>
+        <div class="lab-wide-grid">
+          <canvas id="weather-canvas" aria-label="Space weather educational simulation"></canvas>
+          <div class="lab-controls">
+            <label class="range-label" for="solar-activity"><span>Solar activity scenario</span><b id="solar-value">QUIET SUN</b></label>
+            <input id="solar-activity" type="range" min="0" max="100" value="12">
+            <div class="segmented" id="location-select"><button data-location="leo">LEO</button><button class="active" data-location="deep">Deep space</button><button data-location="lunar">Lunar vicinity</button></div>
+            <label class="range-label" for="shielding-assumption"><span>Conceptual shielding assumption</span><b id="shielding-value">medium</b></label>
+            <input id="shielding-assumption" type="range" min="0" max="100" value="50">
+            <div class="weather-readouts">
+              <div id="crew-rad-card"><span>Crew-radiation concern</span><b id="crew-rad-readout">LOW · routine awareness</b><small>How strongly this conceptual environment suggests added caution for people inside Orion. It is not a crew dose.</small></div>
+              <div id="electronics-card"><span>Electronics environment</span><b id="electronics-readout">NOMINAL · routine awareness</b><small>How much charged-particle activity should raise attention to potential single-event effects in electronics.</small></div>
+              <div id="weather-posture-card"><span>Operations posture</span><b id="weather-posture">MONITOR</b><small>The kind of flight-team response this teaching scenario suggests, from routine monitoring to protective evaluation.</small></div>
+            </div>
+            <div class="weather-action-card"><span>WHAT WOULD OPERATORS CARE ABOUT?</span><b id="weather-action">Keep watching the environment and trends.</b><p id="weather-action-copy">Quiet conditions do not mean zero radiation. The operational question is whether the environment is changing enough to justify a different crew or spacecraft posture.</p></div>
+            <div class="actual-vs-model"><div><span>ARTEMIS II ACTUAL CONTEXT</span><p>NASA monitored the space environment and Orion carried radiation instrumentation. MissionLab does not claim a severe solar particle event occurred unless an authoritative source establishes it.</p></div><div><span>THIS INTERACTION</span><p>Shows why a more energetic environment could increase operational concern. It is an educational scenario, not reconstructed Artemis II dosimetry.</p></div></div>
+          </div>
+        </div>
+        <details class="lab-details"><summary>NAIRAS and the evidence boundary</summary><p>MissionLab uses NAIRAS as related radiation-environment context, not as Artemis II crew dosimetry. NASA CCMC now documents NAIRAS Version 4 as an aerospace ionizing-radiation model spanning aircraft and spacecraft applications. MissionLab uses the NAIRAS family as environmental/model context, not as direct Artemis II personal dosimetry; crew-specific interpretation still depends on trajectory, vehicle geometry, shielding, detector response, and dosimetry assumptions.</p><a href="library.html#radiation">Open radiation & space-weather analysis →</a></details>
+      </article>
+    </div>
+  </section>
+
+  <section class="x-section x-labs x-psi-experience" id="psi-lab-section">
+    <div class="x-wrap">
+      <div class="x-section-head">
+        <div><p class="x-kicker">Beyond Artemis II</p><h2>Land on regolith without pretending Artemis II did.</h2></div>
+        <p>Artemis II never landed on the Moon. This separate future-Artemis lab explores plume–surface interaction because the physics becomes critical for crewed lunar landing systems.</p>
+      </div>
+      <article class="lab-card lab-card-wide psi-lab">
+        <div class="lab-card-head"><p class="x-label">FUTURE ARTEMIS · EDUCATIONAL CONCEPTUAL MODEL</p><h3>ARTEMIS II DID NOT LAND ON THE MOON.</h3><p>NASA’s current architecture uses Artemis III as a 2027 low-Earth-orbit lander demonstration and targets Artemis IV for the first Artemis lunar landing in early 2028. Adjust the conceptual lander below to see why exhaust plumes can become a surface-operations hazard.</p></div>
+        <div class="lab-wide-grid">
+          <canvas id="psi-canvas" aria-label="Conceptual lunar plume surface interaction simulation"></canvas>
+          <div class="lab-controls psi-controls">
+            <label class="range-label" for="psi-alt"><span>Lander height</span><b id="psi-alt-value">18 m</b></label><input id="psi-alt" type="range" min="4" max="40" value="18">
+            <label class="range-label" for="psi-throttle"><span>Engine thrust setting</span><b id="psi-throttle-value">55%</b></label><input id="psi-throttle" type="range" min="15" max="100" value="55">
+            <label class="range-label" for="psi-cant"><span>Engine cant angle <i class="term-help" title="Cant is the tilt of the plume centerline away from straight down.">?</i></span><b id="psi-cant-value">4°</b></label><input id="psi-cant" type="range" min="0" max="18" value="4">
+            <p class="control-help"><b>Cant</b> = direction. Tilting an engine points the plume footprint sideways instead of directly below the lander.</p>
+            <label class="range-label" for="psi-angle"><span>Plume spread half-angle <i class="term-help" title="Spread is how widely the exhaust fans out around its centerline.">?</i></span><b id="psi-angle-value">12°</b></label><input id="psi-angle" type="range" min="2" max="30" value="12">
+            <p class="control-help"><b>Spread</b> = width. A wider exhaust cone reaches more surface area and can enlarge the ejecta footprint.</p>
+            <div class="segmented" id="engine-count"><button data-engines="1">1 engine</button><button class="active" data-engines="2">2 engines</button><button data-engines="4">4 engines</button></div>
+            <div class="segmented" id="regolith-select"><button data-regolith="cohesive">More cohesive</button><button class="active" data-regolith="baseline">Baseline</button><button data-regolith="loose">Looser</button></div>
+            <div class="psi-term-grid"><div><span>WHY CANT MATTERS</span><p>It shifts the most energetic part of the plume footprint sideways, changing what nearby hardware may be exposed.</p></div><div><span>WHY SPREAD MATTERS</span><p>It changes how broad the surface loading and particle-ejection region can become.</p></div></div><div class="psi-readout"><span id="psi-risk">Moderate conceptual ejecta footprint</span><b id="psi-hardware-risk">Nearby hardware · watch exposure</b><small>educational model · not CFD, DSMC, or a validated landing prediction</small></div>
+          </div>
+        </div>
+        <details class="lab-details"><summary>Why PSI matters and what real analysis requires</summary><p>Real PSI work needs actual engine/nozzle conditions, lander geometry, rarefied/continuum plume modeling, pressure and shear at the surface, regolith properties and particle-size distributions, erosion and entrainment physics, ejecta transport, nearby hardware geometry, and experimental or flight validation. NASA Langley is actively conducting vacuum-chamber PSI testing to reduce those risks for future lunar landers.</p><a href="library.html#psi">Open the PSI campaign-context deep dive →</a></details>
+      </article>
+    </div>
+  </section>
+
+  <section class="x-section x-photo-break">
+    <img class="nasa-photo" src="https://images-assets.nasa.gov/image/art002e009301/art002e009301~orig.jpg" data-fallback="assets/public/fallback-mission.svg" alt="Artemis II total solar eclipse viewed from Orion">
+    <div class="x-photo-break-overlay"><p class="x-kicker">A 54-minute eclipse from deep space</p><h2>The same mission can be a spacecraft test, a geometry problem, a science platform, and a human experience.</h2><a class="x-button x-button-primary" href="technical-report.html">Go deeper in the Technical Report →</a></div>
+  </section>
+
+  <span class="x-anchor-alias" id="methods" aria-hidden="true"></span>
+  <section class="x-section x-built" id="built">
+    <div class="x-wrap">
+      <div class="x-section-head">
+        <div><p class="x-kicker">Under the experience</p><h2>This is what MissionLab actually built.</h2></div>
+        <p>The simulations are the front door. Underneath them is the reproducible work: public-data ingestion, geometry, physical models, robust statistics, evidence normalization, validation, and publication.</p>
+      </div>
+      <div class="build-pipeline" aria-label="MissionLab technical pipeline">
+        <div><small>01</small><b>NASA public data</b><span>OEM · mission events · imagery · environment · documentation</span></div>
+        <i>→</i><div><small>02</small><b>Ingest & normalize</b><span>Python · structured JSON · CSV · validation</span></div>
+        <i>→</i><div><small>03</small><b>Reconstruct</b><span>SPICE · geometry · event correlation · mission clock</span></div>
+        <i>→</i><div><small>04</small><b>Model & analyze</b><span>entry physics · robust statistics · change detection</span></div>
+        <i>→</i><div><small>05</small><b>Publish with evidence</b><span>reported · derived · modeled · unknown</span></div>
+      </div>
+      <div class="capability-showcase">
+        <a href="library.html#flight-dynamics"><span>FLIGHT DYNAMICS</span><b>Ephemeris parsing, frame geometry, event refinement</b></a>
+        <a href="library.html#gnc"><span>GNC</span><b>Sensor, navigation-state, guidance, control, effector reconstruction</b></a>
+        <a href="library.html#entry-dynamics"><span>ENTRY / EDL</span><b>Atmosphere, Mach, dynamic pressure, heating, event correlation</b></a>
+        <a href="library.html#data-science"><span>DATA SCIENCE</span><b>75,396 records, robust medians/MAD, change and anomaly scoring</b></a>
+        <a href="library.html#software-architecture"><span>SOFTWARE</span><b>Modular Python pipelines, schemas, generated artifacts, validation</b></a>
+        <a href="library.html#mission-control"><span>MISSION OPERATIONS</span><b>Shared timeline, discipline lenses, evidence-aware decision threads</b></a>
+      </div>
+      <div class="x-final-cta">
+        <div><p class="x-kicker">Choose your depth</p><h2>Enjoyed the mission? Now inspect the work.</h2><p>The website teaches by interaction. The Mission Library explains each domain. The Technical Report lays out the methods, equations, assumptions, results, evidence boundaries, and reproducibility.</p></div>
+        <div><a class="x-button x-button-primary" href="technical-report.html">Read the Technical Report</a><a class="x-button x-button-ghost" href="library.html">Browse 28 technical deep dives</a></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="x-footer"><div class="x-wrap"><div><b>A2 MissionLab</b><p>Independent public-data mission reconstruction. Not an official NASA product.</p></div><div><a href="technical-report.html">Technical Report</a><a href="library.html">Mission Library</a><a href="https://github.com/Prakhar2828/a2-missionlab" target="_blank" rel="noreferrer">GitHub ↗</a></div></div></footer>
+<script src="app.js"></script>
 </body>
 </html>

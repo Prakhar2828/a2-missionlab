@@ -1,306 +1,261 @@
-const state = {
-  events: [],
-  disciplines: [],
-  selectedId: null,
-};
+(() => {
+  'use strict';
+  const $ = (s, root=document) => root.querySelector(s);
+  const $$ = (s, root=document) => [...root.querySelectorAll(s)];
+  const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
+  const lerp = (a,b,t) => a+(b-a)*t;
+  const invLerp = (a,b,v) => (v-a)/(b-a);
+  const ease = t => t<.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2;
+  const DPR = () => Math.min(window.devicePixelRatio || 1, 2);
 
-const els = {
-  eventList: document.querySelector('#event-list'),
-  eventCount: document.querySelector('#event-count'),
-  detail: document.querySelector('#detail-panel'),
-  discipline: document.querySelector('#discipline-filter'),
-  evidence: document.querySelector('#evidence-filter'),
-  reset: document.querySelector('#reset-btn'),
-  clockTime: document.querySelector('#clock-time'),
-  clockPhase: document.querySelector('#clock-phase'),
-  metricGrid: document.querySelector('#metric-grid'),
-  appStatus: document.querySelector('#app-status'),
-};
-
-function escapeHtml(value) {
-  return String(value ?? '')
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#039;');
-}
-
-function evidenceLabel(value) {
-  return String(value ?? 'UNKNOWN').replaceAll('_', ' ');
-}
-
-function eventTimeLabel(event) {
-  if (event.timestamp_utc) {
-    return `${event.timestamp_utc} UTC`;
+  function fitCanvas(canvas){
+    const r=canvas.getBoundingClientRect(), d=DPR();
+    const w=Math.max(1,Math.round(r.width*d)), h=Math.max(1,Math.round(r.height*d));
+    if(canvas.width!==w || canvas.height!==h){canvas.width=w;canvas.height=h;}
+    const ctx=canvas.getContext('2d'); ctx.setTransform(d,0,0,d,0,0); return {ctx,w:r.width,h:r.height};
   }
-
-  if (event.date_utc) {
-    return `${event.date_utc} · ${event.time_precision}`;
+  function roundRect(ctx,x,y,w,h,r){r=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+  function drawStars(ctx,w,h,count,seed=1,alpha=.7){
+    let s=seed>>>0; const rand=()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296};
+    ctx.save();
+    for(let i=0;i<count;i++){const x=rand()*w,y=rand()*h,r=rand()*1.25+.2,a=(rand()*.65+.18)*alpha;ctx.fillStyle=`rgba(255,255,255,${a})`;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();}
+    ctx.restore();
   }
+  function drawEarth(ctx,x,y,r){
+    ctx.save();
+    const g=ctx.createRadialGradient(x-r*.35,y-r*.35,r*.08,x,y,r);g.addColorStop(0,'#7fc8ff');g.addColorStop(.42,'#2a78ac');g.addColorStop(.72,'#15415f');g.addColorStop(1,'#06111b');ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
+    ctx.globalAlpha=.42;ctx.strokeStyle='#d8f0ff';ctx.lineWidth=Math.max(1,r*.025);for(let i=0;i<4;i++){ctx.beginPath();ctx.arc(x-r*.15+i*r*.1,y-r*.1+i*r*.09,r*(.34-i*.035),.15,1.75);ctx.stroke();}
+    ctx.globalAlpha=1;ctx.strokeStyle='rgba(170,220,255,.32)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(x,y,r+5,0,Math.PI*2);ctx.stroke();ctx.restore();
+  }
+  function drawMoon(ctx,x,y,r){
+    ctx.save();const g=ctx.createRadialGradient(x-r*.35,y-r*.35,r*.05,x,y,r);g.addColorStop(0,'#d5d2cc');g.addColorStop(.5,'#8d8d8b');g.addColorStop(1,'#373a3c');ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();let s=22;const rand=()=>{s=(s*1103515245+12345)&0x7fffffff;return s/0x7fffffff};for(let i=0;i<22;i++){const a=rand()*Math.PI*2,rr=Math.sqrt(rand())*r*.8,cr=rand()*r*.11+r*.02,cx=x+Math.cos(a)*rr,cy=y+Math.sin(a)*rr;ctx.fillStyle='rgba(20,22,24,.22)';ctx.beginPath();ctx.arc(cx,cy,cr,0,Math.PI*2);ctx.fill();ctx.strokeStyle='rgba(255,255,255,.11)';ctx.beginPath();ctx.arc(cx-cr*.12,cy-cr*.15,cr*.8,0,Math.PI*2);ctx.stroke();}ctx.restore();
+  }
+  function bezier(p0,p1,p2,t){const u=1-t;return{x:u*u*p0.x+2*u*t*p1.x+t*t*p2.x,y:u*u*p0.y+2*u*t*p1.y+t*t*p2.y};}
 
-  return event.time_precision || 'No exact public time';
-}
+  // Shared chrome.
+  const header=$('.x-header');
+  if(header){window.addEventListener('scroll',()=>header.classList.toggle('scrolled',scrollY>18),{passive:true});}
+  const menu=$('.x-menu'), nav=$('.x-nav');
+  if(menu&&nav){menu.addEventListener('click',()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));});$$('a',nav).forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false');}));}
+  const genericMenu=$('.menu-btn'), genericNav=$('.nav-links');
+  if(genericMenu&&genericNav){genericMenu.addEventListener('click',()=>{const open=genericNav.classList.toggle('open');genericMenu.setAttribute('aria-expanded',String(open));});$$('a',genericNav).forEach(a=>a.addEventListener('click',()=>{genericNav.classList.remove('open');genericMenu.setAttribute('aria-expanded','false');}));}
 
-function eventMetLabel(event) {
-  return event.met || 'Not assigned at this public precision';
-}
-
-function filteredEvents() {
-  return state.events.filter((event) => {
-    const disciplineMatch =
-      els.discipline.value === 'ALL'
-      || event.primary_lenses.includes(els.discipline.value);
-
-    const evidenceMatch =
-      els.evidence.value === 'ALL'
-      || event.evidence_class === els.evidence.value;
-
-    return disciplineMatch && evidenceMatch;
+  // Remote NASA imagery fails safely into repository-local technical imagery.
+  $$('.nasa-photo').forEach(img=>{
+    img.addEventListener('error',()=>{
+      const fb=img.dataset.fallback;
+      if(fb && !img.dataset.didFallback){img.dataset.didFallback='1';img.classList.add('is-fallback');img.src=fb;img.alt += ' — NASA image unavailable; MissionLab local figure substituted';}
+    });
   });
-}
 
-function renderMetrics(metrics) {
-  const values = [
-    ['Datasets', metrics.datasets],
-    ['Public sources', metrics.sources],
-    ['Mission events', metrics.events],
-    ['Decision threads', metrics.decision_threads],
-    ['Searchable records', metrics.searchable_records],
-    ['Analyst tools', metrics.tools],
-    ['Answer routes', metrics.answer_routes],
+  // Hero star shimmer.
+  const heroCanvas=$('#hero-stars');
+  if(heroCanvas){
+    const stars=Array.from({length:80},(_,i)=>({x:(i*47.31)%997/997,y:(i*83.17)%991/991,r:.35+(i%7)*.09,p:i*.63}));
+    const draw=t=>{const {ctx,w,h}=fitCanvas(heroCanvas);ctx.clearRect(0,0,w,h);stars.forEach(s=>{const a=.12+.34*(.5+.5*Math.sin(t*.001+s.p));ctx.fillStyle=`rgba(255,255,255,${a})`;ctx.beginPath();ctx.arc(s.x*w,s.y*h,s.r,0,Math.PI*2);ctx.fill();});requestAnimationFrame(draw);};requestAnimationFrame(draw);
+  }
+
+  // Mission explorer.
+  const missionCanvas=$('#mission-canvas');
+  if(!missionCanvas) return; // non-home pages only need shared navigation/fallback behavior
+  const missionMoments=[
+    {p:0,date:'APR 01 · FLIGHT DAY 1',title:'Launch from Kennedy Space Center',phase:'Launch',met:'00:00:00:00',comm:'Near-Earth network',copy:'The shared mission clock begins at 22:35:12 UTC. MissionLab uses this epoch to align public trajectory products, events, science observations, and engineering analyses.',aL:'Distance context',a:'Earth departure',bL:'Evidence',b:'NASA reported',caption:'Orion begins the first crewed Artemis lunar flyby mission.'},
+    {p:.13,date:'APR 02 · OUTBOUND',title:'Earth gets smaller. Navigation changes with distance.',phase:'Outbound coast',met:'00:18:32:00',comm:'Network transition',copy:'After Earth-orbit checkout and translunar departure, Orion coasts outward. Near Earth, GPS can contribute. Deeper in space, onboard sensors and ground tracking become more important.',aL:'Navigation idea',a:'Near-Earth → deep-space',bL:'MissionLab',b:'Public architecture reconstruction',caption:'A long coast magnifies the effect of even small velocity errors.'},
+    {p:.28,date:'APR 04 · FLIGHT DAY 4',title:'The crew manually pilots Orion.',phase:'Manual piloting',met:'02:18:00:00',comm:'Deep-space link',copy:'Artemis II included manual-control demonstrations. Rotation Hand Controller inputs command attitude motion; Translation Hand Controller inputs command translational motion. MissionLab reconstructs the public architecture without inventing private control laws.',aL:'Control modes',a:'3-DOF / 6-DOF context',bL:'Human interface',b:'RHC + THC',caption:'The GNC lab below lets you experiment with the difference between rotation and translation.'},
+    {p:.45,date:'APR 06 · LUNAR APPROACH',title:'Orion enters the Moon’s sphere of influence.',phase:'Lunar approach',met:'04:06:02:56',comm:'DSN support',copy:'MissionLab derives lunar SOI entry at 04:38:07 UTC. The spacecraft is now in the part of the flight where Moon-relative geometry becomes the natural way to reason about the path.',aL:'Inside selected SOI',a:'~36.76 hours',bL:'Evidence',b:'MissionLab derived',caption:'The Moon now dominates the local geometry used in the reconstruction.'},
+    {p:.54,date:'APR 06 · 22:41 UTC',title:'Earthset. Then the Moon blocks the radio path.',phase:'Earthset / occultation',met:'05:00:05:48',comm:'Loss of signal approaching',copy:'The crew photographs Earth sinking behind the lunar limb. Minutes later, lunar terrain blocks line of sight to Earth. That planned loss of signal is a geometry constraint, not evidence of a spacecraft failure.',aL:'Derived occultation',a:'~36.57 minutes',bL:'NASA ops window',b:'~41 minutes',caption:'Earthset and communications occultation are two views of the same changing geometry.'},
+    {p:.585,date:'APR 06 · 23:00:46 UTC',title:'Closest approach to the Moon.',phase:'Pericynthion',met:'05:00:25:34',comm:'Behind the Moon',copy:'MissionLab refines closest approach to a Moon-center distance of 8,281.938 km, corresponding to a mean-radius altitude of 6,544.538 km and Moon-relative speed of about 1.381073 km/s.',aL:'Mean-radius altitude',a:'6,544.538 km',bL:'Moon-relative speed',b:'1.381073 km/s',caption:'This closest-approach time is derived from public trajectory data, not private telemetry.'},
+    {p:.63,date:'APR 06 · 23:22 UTC',title:'Earthrise. Contact returns.',phase:'Earthrise / reacquisition',met:'05:00:46:48',comm:'Reacquiring',copy:'Earth reappears from behind the lunar limb. NASA’s public operational reference planned acquisition near 23:25 UTC; the geometry model and the operational window are related but not identical.',aL:'Why different?',a:'Earth center ≠ DSN antenna',bL:'Evidence rule',b:'Geometry ≠ link margin',caption:'Topocentric DSN geometry improves on a simple Earth-center line-of-sight test.'},
+    {p:.69,date:'APR 07 · 00:34 UTC',title:'A solar eclipse lasts almost 54 minutes.',phase:'Lunar eclipse',met:'05:01:59:15',comm:'Deep-space link',copy:'From Orion’s moving vantage point, the Moon completely covers the Sun for an unusually long interval. MissionLab derives the eclipse window from public spacecraft and body geometry.',aL:'Derived duration',a:'~54.43 minutes',bL:'Science context',b:'Crew photography',caption:'The lunar flyby became a rare human-observation platform as well as a spacecraft test.'},
+    {p:.78,date:'APR 08–10 · RETURN',title:'Small correction burns protect the path home.',phase:'Return corrections',met:'06:01:27:48',comm:'Deep-space link',copy:'RTC1, RTC2, and RTC3 make small velocity changes. Over many hours of coast, those changes protect the future entry geometry. The maneuver lab below shows the intuition without pretending a linear sketch is the real targeting solution.',aL:'Largest listed RTC',a:'RTC2 · ~5.3 ft/s',bL:'Operations',b:'Target future geometry',caption:'Targeting is about where a tiny velocity change places the spacecraft later.'},
+    {p:.91,date:'APR 10 · 23:53 UTC',title:'Entry interface. The atmosphere becomes the engine.',phase:'Atmospheric entry',met:'09:01:17:48',comm:'Entry link / blackout',copy:'Orion reaches the public Entry Interface minute. Drag begins converting lunar-return kinetic energy into heating, atmospheric motion, and deceleration. Plasma can temporarily disrupt communications.',aL:'Physics',a:'Drag + heating',bL:'Model',b:'Atmosphere + Sutton–Graves',caption:'Entry is where trajectory, atmosphere, thermal protection, communications, and recovery converge.'},
+    {p:1,date:'APR 11 · 00:07 UTC',title:'Splashdown. Then recovery begins.',phase:'Splashdown',met:'09:01:31:48',comm:'Recovered',copy:'Drogues, main parachutes, splashdown, crew extraction, and spacecraft recovery close the flight. MissionLab keeps those public events connected to the entry and environmental data rather than treating splashdown as the end of the engineering story.',aL:'Mission outcome',a:'Crew safely home',bL:'Next phase',b:'Recovery + postflight',caption:'Nearly ten days of flight end in the Pacific; engineering analysis continues.'}
   ];
+  let missionP=0;
+  function missionNearest(p){return missionMoments.reduce((best,m)=>Math.abs(m.p-p)<Math.abs(best.p-p)?m:best,missionMoments[0]);}
+  function updateMission(p, snap=false){
+    missionP=clamp(p,0,1); const m=snap?missionNearest(missionP):missionNearest(missionP);
+    const ids={date:'mission-date',title:'mission-title',copy:'mission-copy',met:'mission-met',phase:'mission-phase',comm:'mission-comm',caption:'mission-stage-caption',aL:'mission-readout-a-label',a:'mission-readout-a',bL:'mission-readout-b-label',b:'mission-readout-b'};
+    Object.entries(ids).forEach(([k,id])=>{const el=$('#'+id);if(el)el.textContent=m[k];});
+    const s=$('#mission-scrubber');if(s&&!snap)s.value=Math.round(missionP*1000);if(s&&snap){missionP=m.p;s.value=Math.round(m.p*1000);} $$('#mission-markers button').forEach(b=>b.classList.toggle('active',Math.abs(Number(b.dataset.p)-missionP)<.055));
+  }
+  function initMission(){
+    const markers=$('#mission-markers'); if(markers){markers.innerHTML=missionMoments.filter((_,i)=>[0,3,4,5,8,10].includes(i)).map(m=>`<button type="button" data-p="${m.p}">${m.phase}</button>`).join('');$$('button',markers).forEach(b=>b.addEventListener('click',()=>{updateMission(Number(b.dataset.p),true);}));}
+    const s=$('#mission-scrubber');if(s)s.addEventListener('input',e=>updateMission(Number(e.target.value)/1000));
+    $('#mission-prev')?.addEventListener('click',()=>{const prev=[...missionMoments].reverse().find(m=>m.p<missionP-.02)||missionMoments[0];updateMission(prev.p,true);});
+    $('#mission-next')?.addEventListener('click',()=>{const next=missionMoments.find(m=>m.p>missionP+.02)||missionMoments.at(-1);updateMission(next.p,true);});
+    updateMission(0,true);
+  }
+  initMission();
+  if(missionCanvas){
+    const loop=t=>{const {ctx,w,h}=fitCanvas(missionCanvas);ctx.clearRect(0,0,w,h);drawStars(ctx,w,h,150,13,.72);const earth={x:w*.16,y:h*.56,r:Math.min(w,h)*.082},moon={x:w*.82,y:h*.47,r:Math.min(w,h)*.105};drawEarth(ctx,earth.x,earth.y,earth.r);drawMoon(ctx,moon.x,moon.y,moon.r);
+      const out0={x:earth.x+earth.r*.7,y:earth.y-earth.r*.2},out1={x:w*.47,y:h*.1},out2={x:moon.x-moon.r*.68,y:moon.y};const ret0={x:moon.x-moon.r*.55,y:moon.y+moon.r*.1},ret1={x:w*.58,y:h*.88},ret2={x:earth.x+earth.r*.65,y:earth.y+earth.r*.25};
+      ctx.save();ctx.strokeStyle='rgba(127,197,255,.28)';ctx.lineWidth=1.3;ctx.setLineDash([4,7]);ctx.beginPath();ctx.moveTo(out0.x,out0.y);ctx.quadraticCurveTo(out1.x,out1.y,out2.x,out2.y);ctx.quadraticCurveTo(ret1.x,ret1.y,ret2.x,ret2.y);ctx.stroke();ctx.restore();
+      let pos;if(missionP<=.6){pos=bezier(out0,out1,out2,missionP/.6);}else{pos=bezier(ret0,ret1,ret2,(missionP-.6)/.4);}ctx.save();ctx.shadowColor='#d9f2ff';ctx.shadowBlur=12;ctx.fillStyle='#f7fbff';ctx.beginPath();ctx.arc(pos.x,pos.y,4.2,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.strokeStyle='rgba(255,255,255,.55)';ctx.beginPath();ctx.arc(pos.x,pos.y,10+Math.sin(t*.004)*2,0,Math.PI*2);ctx.stroke();ctx.restore();
+      ctx.font='600 12px system-ui';ctx.fillStyle='rgba(255,255,255,.68)';ctx.fillText('EARTH',earth.x-earth.r*.4,earth.y+earth.r+22);ctx.fillText('MOON',moon.x-moon.r*.3,moon.y+moon.r+22);
+      ctx.font='700 11px system-ui';ctx.fillStyle='rgba(127,197,255,.74)';ctx.fillText('OUTBOUND',w*.37,h*.18);ctx.fillStyle='rgba(112,198,156,.78)';ctx.fillText('RETURN',w*.48,h*.86);
+      // Lunar flyby inset: enlarged local geometry so far-side passage is legible at Earth-Moon scale.
+      const iw=Math.min(220,w*.31),ih=Math.min(150,h*.34),ix=w-iw-18,iy=18;ctx.save();ctx.fillStyle='rgba(3,8,13,.78)';ctx.strokeStyle='rgba(255,255,255,.14)';ctx.fillRect(ix,iy,iw,ih);ctx.strokeRect(ix,iy,iw,ih);const imx=ix+iw*.54,imy=iy+ih*.54,imr=Math.min(iw,ih)*.22;drawMoon(ctx,imx,imy,imr);ctx.strokeStyle='rgba(127,197,255,.58)';ctx.lineWidth=1.4;ctx.beginPath();ctx.moveTo(ix+iw*.12,iy+ih*.72);ctx.bezierCurveTo(ix+iw*.29,iy+ih*.18,ix+iw*.68,iy+ih*.14,ix+iw*.88,iy+ih*.67);ctx.stroke();ctx.fillStyle='rgba(255,255,255,.9)';const lp=clamp((missionP-.47)/.20,0,1),lpos=bezier({x:ix+iw*.12,y:iy+ih*.72},{x:ix+iw*.42,y:iy+ih*.05},{x:ix+iw*.88,y:iy+ih*.67},lp);ctx.beginPath();ctx.arc(lpos.x,lpos.y,3,0,Math.PI*2);ctx.fill();ctx.strokeStyle='rgba(255,104,93,.56)';ctx.setLineDash([3,4]);ctx.beginPath();ctx.moveTo(ix+iw*.07,imy);ctx.lineTo(imx-imr*.25,imy);ctx.stroke();ctx.setLineDash([]);ctx.font='700 11px system-ui';ctx.fillStyle='rgba(255,255,255,.7)';ctx.fillText('LUNAR FLYBY INSET',ix+10,iy+14);ctx.fillText('FAR SIDE / LOS BLOCKED',ix+10,iy+ih-10);ctx.restore();
 
-  els.metricGrid.innerHTML = values.map(([label, value]) => `
-    <div class="metric-card">
-      <strong>${escapeHtml(value)}</strong>
-      <span>${escapeHtml(label)}</span>
-    </div>
-  `).join('');
-}
-
-function renderList() {
-  const events = filteredEvents()
-    .slice()
-    .sort((a, b) => a.order - b.order);
-
-  els.eventCount.textContent = String(events.length);
-
-  if (!events.length) {
-    els.eventList.innerHTML = `
-      <p class="no-results">No validated events match these filters.</p>
-    `;
-    return;
+      if(missionP>.515&&missionP<.635){ctx.save();ctx.strokeStyle='rgba(255,104,93,.7)';ctx.setLineDash([3,5]);ctx.beginPath();ctx.moveTo(pos.x,pos.y);ctx.lineTo(earth.x,earth.y);ctx.stroke();ctx.fillStyle='rgba(255,104,93,.9)';ctx.font='700 11px system-ui';ctx.fillText('LUNAR OCCULTATION REGION',w*.46,h*.62);ctx.restore();}
+      requestAnimationFrame(loop);};requestAnimationFrame(loop);
   }
 
-  els.eventList.innerHTML = events.map((event) => {
-    const active = state.selectedId === event.event_id;
-
-    return `
-      <button
-        class="event-item${active ? ' active' : ''}"
-        type="button"
-        data-id="${escapeHtml(event.event_id)}"
-        aria-pressed="${active ? 'true' : 'false'}"
-      >
-        <div class="event-meta">
-          <span class="evidence-badge">
-            ${escapeHtml(evidenceLabel(event.evidence_class))}
-          </span>
-          <span class="order-badge">
-            #${escapeHtml(event.order)}
-          </span>
-        </div>
-
-        <strong>${escapeHtml(event.name)}</strong>
-        <time>${escapeHtml(eventTimeLabel(event))}</time>
-      </button>
-    `;
-  }).join('');
-
-  els.eventList.querySelectorAll('.event-item').forEach((button) => {
-    button.addEventListener('click', () => {
-      selectEvent(button.dataset.id);
-    });
-  });
-}
-
-function renderPriorities(event) {
-  return Object.entries(event.priority_labels)
-    .map(([discipline, priority]) => `
-      <div class="priority-row">
-        <strong>${escapeHtml(discipline)}</strong>
-        <span>${escapeHtml(priority)}</span>
-      </div>
-    `)
-    .join('');
-}
-
-function selectEvent(eventId) {
-  const event = state.events.find(
-    (item) => item.event_id === eventId
-  );
-
-  if (!event) {
-    return;
+  // Crew observation journey — photography plus geometry, with provenance labels.
+  const crewViews=[{"id":"art002e023506","badge":"OUTBOUND · EARTH VIEW","title":"Earth begins to fall away.","desc":"Artemis II crew photography from the journey to the Moon shows Earth isolated against black space after translunar injection. This is mission-phase imagery, not a claimed frame at a reconstructed state-vector timestamp.","notice":"The planet is still visually dominant, but the mission has already shifted from near-Earth operations into deep-space navigation and communications.","why":"The changing apparent size of Earth makes the scale of translunar flight intuitive and sets up why small navigation errors can matter hours later.","time":"Apr 2 · outbound coast","geometry":"Earth receding","evidence":"NASA crew imagery","provenance":"MISSION-PHASE CREW PHOTOGRAPHY","earth":0.96,"moon":0.03,"source":"https://www.nasa.gov/gallery/journey-to-the-moon/"},{"id":"art002e023710","badge":"OUTBOUND · DEEP SPACE","title":"Home becomes a thin illuminated edge.","desc":"NASA identifies this April 3 Artemis II image as a sliver of Earth brightly illuminated against deep space during the outbound journey.","notice":"The crew is no longer looking at Earth as a nearby horizon. It is becoming a compact body with a changing phase and line-of-sight geometry.","why":"This is the visual transition from Earth departure to true cislunar flight.","time":"Apr 3 · outbound coast","geometry":"Earth phase changing","evidence":"NASA exact mission image","provenance":"EXACT MISSION IMAGE · NASA IDENTIFIED","earth":0.82,"moon":0.06,"source":"https://www.nasa.gov/gallery/journey-to-the-moon/"},{"id":"art002e014225","badge":"APPROACH · CRESCENT EARTH","title":"Earth becomes a delicate crescent.","desc":"NASA describes Earth in this Artemis II image as a small waning crescent suspended in darkness during the lunar-flyby phase.","notice":"Earth is now a distant reference rather than the scene around the spacecraft.","why":"Human perception makes the Earth–Moon distance emotionally obvious in a way a single distance number cannot.","time":"Apr 6 · lunar-flyby day","geometry":"Distant crescent Earth","evidence":"NASA crew imagery","provenance":"EXACT MISSION IMAGE · NASA GALLERY","earth":0.58,"moon":0.18,"source":"https://www.nasa.gov/gallery/lunar-flyby/"},{"id":"art002e009582","badge":"APPROACH · BROAD LUNAR VIEW","title":"The Moon stops being a dot and becomes terrain.","desc":"NASA’s lunar-flyby gallery includes this broad illuminated view as the crew closes on the Moon and begins the observation period.","notice":"Large-scale albedo differences, maria, crater rays, and the day–night boundary become visible together.","why":"The crew’s science task changes from “find the Moon” to “identify, compare, and describe specific geologic targets.”","time":"Apr 6 · before closest approach","geometry":"Moon angular size increasing","evidence":"NASA exact mission image","provenance":"EXACT MISSION IMAGE · FLYBY PERIOD","earth":0.28,"moon":0.68,"source":"https://www.nasa.gov/gallery/lunar-flyby/"},{"id":"art002e009294","badge":"SCIENCE PREP · EXACT IMAGE","title":"The observation window had to be prepared before the Moon arrived.","desc":"NASA identifies this image as Victor Glover, Reid Wiseman, and Jeremy Hansen configuring camera equipment shortly before lunar-flyby observations.","notice":"Cameras, lenses, window geometry, target lists, and crew positions had to come together during a limited observation period.","why":"Science return depends on operations design: the vehicle must be in the right geometry and the crew must be ready to use it.","time":"Apr 6 · before observations","geometry":"Observation setup inside Orion","evidence":"NASA exact mission image","provenance":"EXACT MISSION IMAGE · NASA IDENTIFIED","earth":0.34,"moon":0.54,"source":"https://www.nasa.gov/news-release/nasas-artemis-ii-crew-beams-official-moon-flyby-photos-to-earth/"},{"id":"art002e009293","badge":"CREW SCIENCE · EXACT IMAGE","title":"The crew turns a fleeting view into science data.","desc":"NASA imagery shows Artemis II crew members actively gathering lunar images and observations during the seven-hour flyby science period.","notice":"The astronauts could call out color, brightness, texture, layering, and unexpected features while simultaneously capturing imagery for later analysis.","why":"NASA’s science team used those real-time observations to refine follow-up guidance, demonstrating how human perception can influence an observation plan while it is underway.","time":"Apr 6 · lunar science period","geometry":"Crew observation workflow","evidence":"NASA exact mission image","provenance":"EXACT MISSION IMAGE · CREW OBSERVATION","earth":0.22,"moon":0.76,"source":"https://www.nasa.gov/blogs/missions/2026/04/06/artemis-ii-flight-day-6-lunar-flyby-updates/"},{"id":"art002e012278","badge":"WINDOW VIEW · LUNAR APPROACH","title":"The Moon rises into Orion’s window.","desc":"NASA identifies this image as the Moon peeking above Orion’s window sill during the lunar-flyby observation period.","notice":"The spacecraft window itself becomes part of the composition, emphasizing that this is a crewed observation from inside a moving vehicle.","why":"The apparent motion of the lunar limb is the visible expression of rapidly changing Moon-relative geometry.","time":"Apr 6 · lunar approach","geometry":"Lunar limb through Orion window","evidence":"NASA exact mission image","provenance":"EXACT MISSION IMAGE · WINDOW VIEW","earth":0.18,"moon":0.84,"source":"https://www.nasa.gov/gallery/lunar-flyby/"},{"id":"art002e012273","badge":"SCIENCE TARGET · ORIENTALE","title":"Orientale’s rings become a live geology target.","desc":"NASA identifies this view as the southwest portion of Orientale Basin, highlighting one of its prominent annular rings. Orientale was one of the crew’s prioritized lunar targets.","notice":"Ring structure preserves evidence of the enormous impact that formed the basin roughly 3.8 billion years ago.","why":"The science team selected targets using expected lighting and viewing geometry so the crew could compare landforms from a unique moving vantage point.","time":"Apr 6 · science observation window","geometry":"Near/far-side boundary region","evidence":"NASA identified science target","provenance":"EXACT MISSION IMAGE · TARGET IDENTIFIED BY NASA","earth":0.12,"moon":0.92,"source":"https://www.nasa.gov/gallery/lunar-flyby/page/2/"},{"id":"art002e012702","badge":"SCIENCE TARGET · POYNTING / KEELER","title":"Two craters reveal different impact histories in one frame.","desc":"NASA identifies Poynting and Keeler craters side by side in this Artemis II lunar-flyby image.","notice":"Adjacent craters can preserve different textures, ejecta patterns, degradation states, and superposed features.","why":"Side-by-side morphology lets trained observers compare relative age and geologic processes quickly while the view is changing.","time":"Apr 6 · lunar science period","geometry":"Far-side crater field","evidence":"NASA identified features","provenance":"EXACT MISSION IMAGE · FEATURES IDENTIFIED BY NASA","earth":0.08,"moon":0.96,"source":"https://www.nasa.gov/gallery/lunar-flyby/page/2/"},{"id":"art002e010208","badge":"TERMINATOR · REAL-TIME OBSERVATION","title":"The day–night boundary turns subtle relief into dramatic structure.","desc":"NASA notes that the crew described the lunar terminator during the flyby. Low-angle sunlight exaggerates topography and makes ridges, crater walls, and textures easier to read.","notice":"During the flyby, the crew also reported color nuances; the ground science team used incoming observations to update follow-up guidance.","why":"Human eyes can notice subtle color and texture differences that become scientifically useful when tied to location, lighting, and later image analysis.","time":"Apr 6 · live science observations","geometry":"Low-Sun terminator lighting","evidence":"NASA image + reported crew observations","provenance":"EXACT MISSION IMAGE · LIVE OBSERVATION CONTEXT","earth":0.05,"moon":0.98,"source":"https://www.nasa.gov/blogs/missions/2026/04/06/artemis-ii-flight-day-6-lunar-flyby-updates/"},{"id":"art002e009283","badge":"FAR SIDE · SOUTH POLE–AITKEN EDGE","title":"The far side becomes a heavily cratered archive.","desc":"NASA identifies this image as heavily cratered terrain along the eastern edge of the South Pole–Aitken basin, with the terminator visible in the scene.","notice":"The far side preserves a different visual character from the familiar nearside maria seen from Earth.","why":"Artemis II gave trained human observers a moving, close-range look at regions that cannot be viewed directly from Earth.","time":"Apr 6 · far-side observation","geometry":"South Pole–Aitken basin edge","evidence":"NASA identified region","provenance":"EXACT MISSION IMAGE · REGION IDENTIFIED BY NASA","earth":0.02,"moon":1,"source":"https://www.nasa.gov/news-release/nasas-artemis-ii-crew-beams-official-moon-flyby-photos-to-earth/"},{"id":"art002e009282","badge":"FAR SIDE · VAVILOV / HERTZSPRUNG","title":"Long shadows turn Vavilov into a relief map.","desc":"NASA identifies Vavilov Crater on the rim of the older Hertzsprung basin in this far-side image, captured with a handheld camera at 400 mm.","notice":"Low Sun angles emphasize wall relief, ejecta, and the transition between smoother basin material and rugged terrain.","why":"Lighting geometry can expose structure that is much harder to interpret under a high Sun.","time":"Apr 6 · far-side observation","geometry":"Low-Sun far-side terrain","evidence":"NASA identified feature","provenance":"EXACT MISSION IMAGE · FEATURE IDENTIFIED BY NASA","earth":0.02,"moon":1,"source":"https://www.nasa.gov/news-release/nasas-artemis-ii-crew-beams-official-moon-flyby-photos-to-earth/"},{"id":"art002e012093","badge":"SCIENCE TARGET · HERTZSPRUNG","title":"Hertzsprung’s concentric rings come into view.","desc":"NASA identifies Hertzsprung Basin and its distinctive concentric mountain rings in this Artemis II flyby image.","notice":"A giant basin can only be understood at scale by relating local crater detail to the broad ring structure surrounding it.","why":"The crew’s moving perspective offered multiple viewing angles across a target the science team had prioritized before the flyby.","time":"Apr 6 · far-side science","geometry":"Hertzsprung basin rings","evidence":"NASA identified feature","provenance":"EXACT MISSION IMAGE · TARGET IDENTIFIED BY NASA","earth":0.02,"moon":1,"source":"https://www.nasa.gov/gallery/lunar-flyby/"},{"id":"art002e012279","badge":"EARTHSET APPROACH · ~9 MIN BEFORE","title":"Earth approaches the lunar horizon.","desc":"NASA identifies this view as being captured from Orion approximately nine minutes before Earthset.","notice":"The apparent closing distance between Earth and the lunar limb is a visual countdown to occultation.","why":"The same geometry that produces Earthset also drives a planned loss of direct radio line of sight shortly afterward.","time":"Apr 6 · ~9 min before Earthset","geometry":"Earth nearing lunar limb","evidence":"NASA near-event image","provenance":"NEAR-EVENT IMAGE · NASA TIME CONTEXT","earth":0.2,"moon":0.99,"source":"https://www.nasa.gov/gallery/lunar-flyby/"},{"id":"art002e009288","badge":"EARTHSET · 22:41 UTC","title":"Earth disappears behind the Moon.","desc":"NASA timestamps this Earthset image at 6:41 p.m. EDT on April 6, three minutes before Orion went behind the Moon and lost contact with Earth for about 40 minutes.","notice":"A crescent Earth sinks behind lunar terrain. The photograph is direct visual evidence; it is not itself a radio link-budget measurement.","why":"The moment makes occultation intuitive: the Moon physically moves between Orion and Earth.","time":"2026-04-06 · 22:41 UTC","geometry":"Earthset → occultation","evidence":"NASA exact event image","provenance":"EXACT EVENT IMAGE · NASA TIMESTAMP","earth":0.18,"moon":1,"source":"https://www.nasa.gov/news-release/nasas-artemis-ii-crew-beams-official-moon-flyby-photos-to-earth/"},{"id":"jsc2026e020490","badge":"GROUND LOOP · SCIENCE CONSOLE","title":"The view through the window has a team in Houston behind it.","desc":"NASA photographed Artemis II science officers Angela Garcia, Kelsey Young, and Trevor Graff in the White Flight Control Room about ten minutes before Earthset, monitoring mission data in real time.","notice":"Crew observations flowed into a ground team that could analyze, prioritize, ask follow-up questions, and integrate science with the flight-control structure.","why":"Exploration is distributed: astronauts observe while specialists on Earth turn those observations into decisions and durable science products.","time":"Apr 6 · ~10 min before Earthset","geometry":"Mission Control · Houston","evidence":"NASA exact ground image","provenance":"GROUND CONTEXT · EXACT NASA IMAGE","earth":0.18,"moon":0.98,"source":"https://images.nasa.gov/details/jsc2026e020490"},{"id":"art002e009289","badge":"FAR SIDE · PLANNED LOSS OF SIGNAL","title":"Behind the Moon, silence is expected.","desc":"During the planned far-side passage, lunar terrain blocked direct Earth line of sight. This image is flyby terrain context rather than a private communications measurement.","notice":"Mission Control expects the silence. Orion continues through the planned flyby while the ground waits for geometry to reopen.","why":"Operational discipline includes knowing when no signal is normal so an expected constraint is not mistaken for an anomaly.","time":"Apr 6 · planned ~40 min LOS","geometry":"Moon between Orion and Earth","evidence":"NASA mission image + reported LOS","provenance":"SAME-PHASE IMAGE · NASA REPORTED EVENT","earth":0.01,"moon":1,"source":"https://www.nasa.gov/news-release/nasas-artemis-ii-crew-beams-official-moon-flyby-photos-to-earth/"},{"id":"art002e009299","badge":"DEEPEST FLYBY · SAME PHASE","title":"Closest approach happens inside a moving landscape.","desc":"MissionLab derives pericynthion near 23:00:46 UTC. This NASA crew image is from the same lunar-flyby phase, not claimed as the exact frame at that derived instant.","notice":"MissionLab derives a Moon-center distance of 8,281.938 km and mean-radius altitude of 6,544.538 km from public trajectory data.","why":"Closest approach is a geometric result. Nearby photography can show the environment without inventing an image timestamp to the derived second.","time":"Derived · 23:00:46 UTC","geometry":"Pericynthion region","evidence":"MissionLab time + NASA same-phase image","provenance":"MISSIONLAB DERIVED EVENT · SAME-PHASE IMAGE","earth":0.01,"moon":1,"source":"https://www.nasa.gov/gallery/lunar-flyby/"},{"id":"art002e009301","badge":"TOTAL SOLAR ECLIPSE · MISSION IMAGE","title":"The Moon covers the Sun from deep space.","desc":"Artemis II crew photography captured the Moon fully eclipsing the Sun. MissionLab separately derives an approximately 54-minute eclipse interval from spacecraft and body geometry.","notice":"The photograph is direct mission evidence. The precise interval in MissionLab is a separate derived geometry product.","why":"The moving Orion–Moon–Sun alignment produced a totality duration and perspective impossible to experience from Earth.","time":"Apr 7 · eclipse interval","geometry":"Sun–Moon–Orion alignment","evidence":"NASA image + MissionLab geometry","provenance":"MISSION IMAGE + DERIVED INTERVAL","earth":0.08,"moon":0.95,"source":"https://www.nasa.gov/news-release/nasas-artemis-ii-crew-beams-official-moon-flyby-photos-to-earth/"},{"id":"art002e009298","badge":"ECLIPSE SCIENCE · IMPACT-FLASH CONTEXT","title":"Darkness turns the lunar night side into an observation field.","desc":"This NASA image is an eclipse close-up from the Artemis II flyby. During the eclipse observation period, crew members reported extremely faint meteoroid impact flashes on the dark Moon.","notice":"This photograph provides eclipse context; MissionLab does not claim that a specific flash is visible in this frame unless NASA metadata says so.","why":"The observation shows why a darkened lunar surface can reveal transient events that disappear against normal daylight.","time":"Apr 7 · eclipse observation period","geometry":"Dark Moon / deep-space viewing","evidence":"NASA eclipse image + reported observation","provenance":"MISSION IMAGE · IMPACT-FLASH CONTEXT","earth":0.06,"moon":0.92,"source":"https://science.nasa.gov/feature/artemis-ii-preliminary-lunar-science-report/"},{"id":"art002e009573","badge":"ECLIPSE · MULTI-BODY VIEW","title":"An eclipse becomes a deep-space composition.","desc":"NASA’s flyby gallery includes this backlit lunar eclipse view from Orion, part of the mission’s rare deep-space solar-eclipse sequence.","notice":"The dark lunar disk, scattered stars, and surrounding deep-space targets become visible under lighting conditions unlike a normal sunlit Moon view.","why":"The scene connects lunar observation, solar science, and celestial navigation geometry in one human-scale view.","time":"Apr 7 · eclipse period","geometry":"Backlit Moon from Orion","evidence":"NASA exact mission image","provenance":"EXACT MISSION IMAGE · ECLIPSE PERIOD","earth":0.08,"moon":0.9,"source":"https://www.nasa.gov/gallery/lunar-flyby/"},{"id":"art002e021278","badge":"EARTHRISE · 23:22 UTC","title":"Earth returns over the lunar horizon.","desc":"NASA timestamps this Earthrise at 7:22 p.m. EDT on April 6 as Earth reappears from behind the Moon.","notice":"Visual Earthrise signals reopening line-of-sight geometry, while actual communications reacquisition still depends on ground-station geometry, pointing, link margin, and network state.","why":"MissionLab can compare geometric emergence with NASA’s operational communications timeline without treating them as identical.","time":"2026-04-06 · 23:22 UTC","geometry":"Earthrise / emerging LOS","evidence":"NASA exact event image","provenance":"EXACT EVENT IMAGE · NASA TIMESTAMP","earth":0.2,"moon":1,"source":"https://www.nasa.gov/news-release/nasas-artemis-ii-crew-beams-official-moon-flyby-photos-to-earth/"},{"id":"art002e016299","badge":"EARTHRISE · EXTERNAL CAMERA","title":"The same geometry looks different from outside Orion.","desc":"NASA identifies this Earthrise as captured from a camera mounted on one of Orion’s solar array wings.","notice":"The vehicle-mounted perspective separates crew handheld photography from spacecraft exterior-imaging systems.","why":"Different cameras can document the same mission geometry for different engineering, outreach, and situational-awareness purposes.","time":"Apr 6 · Earthrise period","geometry":"Solar-array camera view","evidence":"NASA spacecraft camera image","provenance":"EXACT MISSION IMAGE · EXTERNAL CAMERA","earth":0.2,"moon":0.96,"source":"https://www.nasa.gov/gallery/lunar-flyby/page/3/"},{"id":"art002e016354","badge":"RETURN · LUNAR CRESCENT","title":"The Moon starts shrinking behind Orion.","desc":"NASA identifies this April 8 image as a thin lunar crescent captured by the Artemis II crew while traveling back toward Earth.","notice":"The flyby is over, but the Moon remains a changing reference in the rearward geometry of the return coast.","why":"Mission phase has shifted from lunar observation to protecting the future Earth-entry corridor.","time":"Apr 8 · return coast","geometry":"Moon receding","evidence":"NASA exact mission image","provenance":"EXACT MISSION IMAGE · RETURN COAST","earth":0.52,"moon":0.24,"source":"https://www.nasa.gov/gallery/lunar-flyby/"},{"id":"art002e012588","badge":"RETURN · MILKY WAY","title":"The journey home opens a window on the galaxy.","desc":"NASA highlights this Flight Day 7 image as a striking Artemis II crew photograph of the Milky Way during the return journey.","notice":"Away from bright nearby terrain, the window can frame an entirely different scale of observation: the star field of our own galaxy.","why":"The mission’s human perspective extends beyond engineering milestones; deep-space flight changes what the crew can see and document.","time":"Apr 7 · return to Earth","geometry":"Deep-space star field","evidence":"NASA exact mission image","provenance":"EXACT MISSION IMAGE · RETURN PHASE","earth":0.46,"moon":0.16,"source":"https://www.nasa.gov/general/artemis-ii-mission-milestones-an-image-and-video-recap/"}].map(v=>({...v,src:`https://images-assets.nasa.gov/image/${v.id}/${v.id}~orig.jpg`}));
+  let crewIndex=0;
+  function drawCrewGeometry(v){const c=$('#crew-geometry-canvas');if(!c)return;const {ctx,w,h}=fitCanvas(c);ctx.clearRect(0,0,w,h);ctx.fillStyle='rgba(2,5,9,.72)';ctx.fillRect(0,0,w,h);ctx.strokeStyle='rgba(255,255,255,.12)';ctx.beginPath();ctx.moveTo(12,h/2);ctx.lineTo(w-12,h/2);ctx.stroke();const er=7+v.earth*11,mr=6+v.moon*12;ctx.fillStyle='#7fc8ff';ctx.beginPath();ctx.arc(28,h/2,er,0,Math.PI*2);ctx.fill();ctx.fillStyle='#a8a6a0';ctx.beginPath();ctx.arc(w-28,h/2,mr,0,Math.PI*2);ctx.fill();const x=28+(w-56)*(v.moon/(v.moon+v.earth+.001));ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(x,h/2,3.2,0,Math.PI*2);ctx.fill();ctx.font='700 11px system-ui';ctx.fillStyle='rgba(255,255,255,.62)';ctx.fillText('EARTH',10,h-7);ctx.fillText('MOON',w-49,h-7);}
+  function renderCrew(i){
+    crewIndex=((Math.round(i)%crewViews.length)+crewViews.length)%crewViews.length;
+    const v=crewViews[crewIndex],img=$('#crew-photo'),source=$('#crew-source');
+    if(source)source.href=v.source||'https://www.nasa.gov/gallery/lunar-flyby/';
+    if(img){img.classList.remove('is-fallback');delete img.dataset.didFallback;img.src=v.src;img.alt=v.title;img.dataset.fallback='assets/public/fallback-mission.svg';}
+    const fields={badge:v.badge,index:`MISSION VIEW ${String(crewIndex+1).padStart(2,'0')} / ${String(crewViews.length).padStart(2,'0')}`,title:v.title,description:v.desc,notice:v.notice,why:v.why,time:v.time,geometry:v.geometry,evidence:v.evidence,provenance:v.provenance};
+    Object.entries(fields).forEach(([k,val])=>{const el=$('#crew-'+k);if(el)el.textContent=val;});
+    const count=$('#crew-image-count');if(count)count.textContent=`${String(crewIndex+1).padStart(2,'0')} / ${String(crewViews.length).padStart(2,'0')}`;
+    const scrub=$('#crew-scrubber');if(scrub){scrub.max=crewViews.length-1;scrub.value=crewIndex;}
+    const thumbs=$$('#crew-filmstrip button');thumbs.forEach((b,j)=>b.classList.toggle('active',j===crewIndex));
+    const active=thumbs[crewIndex],strip=$('#crew-filmstrip');if(active&&strip){const left=Math.max(0,active.offsetLeft-(strip.clientWidth-active.clientWidth)/2);strip.scrollTo({left,behavior:'smooth'});}
+    drawCrewGeometry(v);
   }
+  const film=$('#crew-filmstrip');if(film){film.innerHTML=crewViews.map((v,i)=>`<button type="button" data-i="${i}" aria-label="${v.badge}"><img src="${v.src}" data-fallback="assets/public/fallback-mission.svg" alt=""><span>${String(i+1).padStart(2,'0')}</span><small>${v.badge.split(' · ')[0]}</small></button>`).join('');$$('img',film).forEach(img=>img.addEventListener('error',()=>{if(!img.dataset.didFallback){img.dataset.didFallback='1';img.src=img.dataset.fallback;}}));$$('button',film).forEach(b=>b.addEventListener('click',()=>renderCrew(Number(b.dataset.i))));}
+  const crewPrev=()=>renderCrew(crewIndex-1),crewNext=()=>renderCrew(crewIndex+1);
+  $('#crew-prev')?.addEventListener('click',crewPrev);$('#crew-next')?.addEventListener('click',crewNext);$('#crew-image-prev')?.addEventListener('click',crewPrev);$('#crew-image-next')?.addEventListener('click',crewNext);$('#crew-scrubber')?.addEventListener('input',e=>renderCrew(Number(e.target.value)));
+  document.addEventListener('keydown',e=>{const section=$('#crew-view');if(!section)return;const r=section.getBoundingClientRect();const visible=r.top<innerHeight*.72&&r.bottom>innerHeight*.28;if(!visible||/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName||''))return;if(e.key==='ArrowLeft'){crewPrev();e.preventDefault();}if(e.key==='ArrowRight'){crewNext();e.preventDefault();}});
+  window.addEventListener('resize',()=>drawCrewGeometry(crewViews[crewIndex]));renderCrew(0);
 
-  state.selectedId = eventId;
-
-  els.clockTime.textContent = eventTimeLabel(event);
-  els.clockPhase.textContent = event.classification;
-
-  const primaryLenses = event.primary_lenses
-    .map((lens) => `<span class="lens-chip">${escapeHtml(lens)}</span>`)
-    .join('');
-
-  els.detail.innerHTML = `
-    <div class="event-meta">
-      <span class="evidence-badge">
-        ${escapeHtml(evidenceLabel(event.evidence_class))}
-      </span>
-      <span class="order-badge">
-        EVENT ${escapeHtml(event.order)}
-      </span>
-    </div>
-
-    <h2 id="detail-title">${escapeHtml(event.name)}</h2>
-
-    <p class="detail-summary">${escapeHtml(event.summary)}</p>
-
-    <div class="detail-grid">
-      <div class="metric">
-        <small>UTC / public timing</small>
-        <strong>${escapeHtml(eventTimeLabel(event))}</strong>
-      </div>
-
-      <div class="metric">
-        <small>Mission Elapsed Time</small>
-        <strong>${escapeHtml(eventMetLabel(event))}</strong>
-      </div>
-
-      <div class="metric">
-        <small>Classification</small>
-        <strong>${escapeHtml(event.classification)}</strong>
-      </div>
-
-      <div class="metric">
-        <small>Time precision</small>
-        <strong>${escapeHtml(event.time_precision)}</strong>
-      </div>
-    </div>
-
-    <div class="section-title">PRIMARY DISCIPLINE LENSES</div>
-    <div class="lens-list">${primaryLenses}</div>
-
-    <div class="section-title">DISCIPLINE PRIORITIES</div>
-    <div class="priority-grid">${renderPriorities(event)}</div>
-
-    <div class="section-title">EVIDENCE DEPENDENCY</div>
-    <div class="source-card">
-      <strong>${escapeHtml(event.source_dependency)}</strong>
-      <p>
-        Evidence class:
-        ${escapeHtml(evidenceLabel(event.evidence_class))}
-      </p>
-    </div>
-  `;
-
-  renderList();
-
-  els.appStatus.textContent =
-    `Selected ${event.name}. ${eventTimeLabel(event)}.`;
-}
-
-function populateFilters() {
-  state.disciplines.forEach((discipline) => {
-    const option = document.createElement('option');
-    option.value = discipline.discipline_id;
-    option.textContent = discipline.discipline_id;
-    els.discipline.appendChild(option);
-  });
-
-  [...new Set(state.events.map((event) => event.evidence_class))]
-    .sort()
-    .forEach((evidence) => {
-      const option = document.createElement('option');
-      option.value = evidence;
-      option.textContent = evidenceLabel(evidence);
-      els.evidence.appendChild(option);
-    });
-}
-
-function bindControls() {
-  [els.discipline, els.evidence].forEach((control) => {
-    control.addEventListener('change', renderList);
-  });
-
-  els.reset.addEventListener('click', () => {
-    els.discipline.value = 'ALL';
-    els.evidence.value = 'ALL';
-    renderList();
-  });
-}
-
-async function fetchJson(path) {
-  const response = await fetch(path);
-
-  if (!response.ok) {
-    throw new Error(
-      `Could not load ${path}: HTTP ${response.status}`
-    );
+  // GNC proximity-operations teaching model. Real context; simplified dynamics.
+  const gncCanvas=$('#gnc-canvas');
+  const gnc={x:82,y:-58,yaw:12,pitch:-7,vx:0,vy:0,vyaw:0,vpitch:0,lastFire:0,started:false,mode:'auto',disturbed:false};
+  const sensors=['IMU','Star tracker','Optical / docking camera context','Onboard navigation state','RCS effectors','DSN tracking · external'];
+  const sensorBox=$('#sensor-chips');if(sensorBox)sensorBox.innerHTML=sensors.map((x,i)=>`<span class="sensor-chip ${i===5?'external':''}">${x}</span>`).join('');
+  const gncBlocks={sense:'Sensors observe motion and references. NASA reported onboard navigation sensors during proximity operations; DSN is external ground support, not an onboard sensor.',estimate:'Navigation fuses measurements into an estimated state: where Orion is, how it is moving, and how it is pointed. MissionLab does not claim access to Orion’s private navigation-filter state.',guide:'Guidance defines the desired condition — here, a target corridor around the ICPS reference. The target box is educational, not a recovered flown gate.',control:'Control turns state error into a correction request. AUTO MODE demonstrates that closed-loop idea; the proprietary Orion control law, gains, and allocation logic are not public.',fire:'Effectors create force and torque. NASA reported reaction-control-thruster use during proximity operations, but individual thruster firing history is not public.',verify:'The vehicle moves, sensors observe the result, and the loop repeats. A disturbance matters because every correction must be verified against the new state.'};
+  function setGncBlock(k){$$('[data-gnc-block]').forEach(b=>b.classList.toggle('active',b.dataset.gncBlock===k));const e=$('#gnc-block-explainer');if(e)e.textContent=gncBlocks[k];}
+  $$('[data-gnc-block]').forEach(b=>b.addEventListener('click',()=>setGncBlock(b.dataset.gncBlock)));setGncBlock('sense');
+  function resetGnc(){Object.assign(gnc,{x:82,y:-58,yaw:12,pitch:-7,vx:0,vy:0,vyaw:0,vpitch:0,lastFire:0,disturbed:false});const st=$('#gnc-autopilot-status');if(st)st.textContent=gnc.started?(gnc.mode==='auto'?'ACQUIRING TARGET':'MANUAL CONTROL'):'READY';}
+  function setGncMode(mode){
+    gnc.mode=mode;
+    $$('[data-gnc-mode]').forEach(b=>b.classList.toggle('active',b.dataset.gncMode===mode));
+    const controls=$('#gnc-controls');if(controls)controls.classList.toggle('auto-locked',mode==='auto');
+    const read=$('#gnc-mode-readout');if(read)read.textContent=mode==='auto'?'AUTO GUIDANCE DEMO':'CREW MANUAL';
+    const title=$('#gnc-mode-title'),help=$('#gnc-mode-help'),startBtn=$('#gnc-start');
+    if(title)title.textContent=mode==='auto'?'AUTO MODE · watch the closed loop work':'MANUAL MODE · you fly the capture';
+    if(help)help.textContent=mode==='auto'?'The demo continuously senses error, estimates the state, guides toward the target, commands a correction, fires conceptual RCS, and verifies the result.':'Use THC to translate and RHC to rotate. Capture the corridor while keeping motion small. Introduce a disturbance at any time to see why closed-loop correction matters.';
+    if(startBtn&&!gnc.started)startBtn.textContent=mode==='auto'?'Start auto demonstration':'Start manual approach';
+    const st=$('#gnc-autopilot-status');if(st&&gnc.started)st.textContent=mode==='auto'?'ACQUIRING TARGET':'MANUAL CONTROL';
+    setGncBlock(mode==='auto'?'sense':'control');
   }
+  $$('[data-gnc-mode]').forEach(b=>b.addEventListener('click',()=>setGncMode(b.dataset.gncMode)));
+  function gncCommand(cmd){if(!gnc.started||gnc.mode!=='manual')return;const impulse=.34,rot=.075;if(cmd==='up')gnc.vy-=impulse;if(cmd==='down')gnc.vy+=impulse;if(cmd==='left')gnc.vx-=impulse;if(cmd==='right')gnc.vx+=impulse;if(cmd==='pitchUp')gnc.vpitch-=rot;if(cmd==='pitchDown')gnc.vpitch+=rot;if(cmd==='yawLeft')gnc.vyaw-=rot;if(cmd==='yawRight')gnc.vyaw+=rot;if(cmd==='attCenter'){gnc.vyaw=0;gnc.vpitch=0;}if(cmd==='transCenter'){gnc.vx=0;gnc.vy=0;}gnc.lastFire=1;setGncBlock('fire');setTimeout(()=>setGncBlock('verify'),180);}
+  $$('.pad button').forEach(b=>b.addEventListener('click',()=>gncCommand(b.dataset.cmd)));
+  $('#gnc-start')?.addEventListener('click',()=>{gnc.started=true;$('#gnc-tutorial').hidden=true;$('#gnc-controls').hidden=false;setGncMode(gnc.mode);});
+  $('#gnc-reset')?.addEventListener('click',()=>{resetGnc();setGncBlock('sense');});
+  $('#gnc-disturbance')?.addEventListener('click',()=>{if(!gnc.started){gnc.started=true;$('#gnc-tutorial').hidden=true;$('#gnc-controls').hidden=false;}const sx=Math.random()<.5?-1:1,sy=Math.random()<.5?-1:1;gnc.vx+=sx*(.38+Math.random()*.22);gnc.vy+=sy*(.28+Math.random()*.18);gnc.vyaw+=sx*(.10+Math.random()*.05);gnc.vpitch+=sy*(.08+Math.random()*.04);gnc.x=clamp(gnc.x+sx*(12+Math.random()*10),-150,150);gnc.y=clamp(gnc.y+sy*(8+Math.random()*9),-105,105);gnc.lastFire=1;gnc.disturbed=true;const st=$('#gnc-autopilot-status');if(st)st.textContent=gnc.mode==='auto'?'DISTURBANCE · RECOVERING':'DISTURBANCE · YOUR MOVE';setGncBlock('sense');});
+  setGncMode('auto');
+  if(gncCanvas){let last=performance.now();const loop=t=>{const dt=Math.min(.04,(t-last)/1000);last=t;
+      if(gnc.started&&gnc.mode==='auto'){
+        const targetVx=clamp(-gnc.x*.0031,-.24,.24),targetVy=clamp(-gnc.y*.0031,-.24,.24),targetYaw=clamp(-gnc.yaw*.006,-.075,.075),targetPitch=clamp(-gnc.pitch*.006,-.075,.075);
+        const blend=Math.min(1,dt*1.55);gnc.vx+= (targetVx-gnc.vx)*blend;gnc.vy+=(targetVy-gnc.vy)*blend;gnc.vyaw+=(targetYaw-gnc.vyaw)*blend;gnc.vpitch+=(targetPitch-gnc.vpitch)*blend;
+        if(Math.hypot(gnc.x,gnc.y)>18||Math.hypot(gnc.yaw,gnc.pitch)>3){gnc.lastFire=Math.max(gnc.lastFire,.38);const cycle=Math.floor(t/650)%6;setGncBlock(['sense','estimate','guide','control','fire','verify'][cycle]);}
+      }
+      gnc.x+=gnc.vx*60*dt;gnc.y+=gnc.vy*60*dt;gnc.yaw+=gnc.vyaw*60*dt;gnc.pitch+=gnc.vpitch*60*dt;gnc.vx*=Math.pow(.955,dt*60);gnc.vy*=Math.pow(.955,dt*60);gnc.vyaw*=Math.pow(.94,dt*60);gnc.vpitch*=Math.pow(.94,dt*60);gnc.x=clamp(gnc.x,-150,150);gnc.y=clamp(gnc.y,-105,105);gnc.yaw=clamp(gnc.yaw,-35,35);gnc.pitch=clamp(gnc.pitch,-25,25);gnc.lastFire=Math.max(0,gnc.lastFire-dt*2.4);
+      const {ctx,w,h}=fitCanvas(gncCanvas);ctx.clearRect(0,0,w,h);ctx.fillStyle='#010408';ctx.fillRect(0,0,w,h);drawStars(ctx,w,h,160,41,.8);const tx=w*.5,ty=h*.46;
+      ctx.save();ctx.translate(tx,ty);ctx.strokeStyle='rgba(127,197,255,.28)';ctx.setLineDash([7,7]);ctx.strokeRect(-62,-46,124,92);ctx.setLineDash([]);ctx.strokeStyle='rgba(255,255,255,.85)';ctx.lineWidth=2;ctx.strokeRect(-24,-15,48,30);ctx.beginPath();ctx.moveTo(-38,0);ctx.lineTo(38,0);ctx.moveTo(0,-30);ctx.lineTo(0,30);ctx.stroke();ctx.fillStyle='rgba(255,255,255,.6)';ctx.font='700 11px system-ui';ctx.fillText('ICPS TARGET',-29,48);ctx.restore();
+      const sx=tx+gnc.x,sy=ty+gnc.y;ctx.save();ctx.translate(sx,sy);ctx.rotate(gnc.yaw*Math.PI/180);ctx.strokeStyle='#f6fbff';ctx.lineWidth=1.6;ctx.beginPath();ctx.moveTo(-22,12);ctx.lineTo(0,-24);ctx.lineTo(22,12);ctx.lineTo(8,8);ctx.lineTo(0,19);ctx.lineTo(-8,8);ctx.closePath();ctx.stroke();ctx.strokeStyle='rgba(240,196,118,.75)';ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.sin(gnc.pitch*Math.PI/180)*42,-42);ctx.stroke();if(gnc.lastFire>0){ctx.fillStyle=`rgba(111,231,225,${.25+.65*gnc.lastFire})`;for(const [x,y] of [[-18,10],[18,10],[-8,-7],[8,-7]]){ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+(x<0?-16:16)*(gnc.lastFire),y+8);ctx.lineTo(x,y+3);ctx.fill();}}ctx.restore();
+      ctx.strokeStyle='rgba(125,224,173,.4)';ctx.setLineDash([4,6]);ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(tx,ty);ctx.stroke();ctx.setLineDash([]);
+      const offset=Math.hypot(gnc.x,gnc.y),ang=Math.hypot(gnc.yaw,gnc.pitch),success=offset<24&&ang<4&&Math.hypot(gnc.vx,gnc.vy)<.35;
+      $('#gnc-offset-readout').textContent=`${(offset*.5).toFixed(0)} m · conceptual`;$('#gnc-error-readout').textContent=`${ang.toFixed(1)}°`;const ok=$('#gnc-success');if(ok){ok.textContent=success?'TARGET CORRIDOR CAPTURED':'CORRIDOR NOT YET CAPTURED';ok.classList.toggle('ok',success);}
+      const st=$('#gnc-autopilot-status');if(st&&gnc.started&&success){st.textContent=gnc.mode==='auto'?'CAPTURE COMPLETE · STABLE':'CAPTURED · HOLD IT';gnc.disturbed=false;} else if(st&&gnc.started&&gnc.mode==='auto'&&!gnc.disturbed){st.textContent='ACQUIRING TARGET';}
+      requestAnimationFrame(loop);};requestAnimationFrame(loop);}
 
-  return response.json();
-}
+  // Mission Control simulator.
+  const roles={
+    FLIGHT:{name:'Flight Director',nav:'Flight Director',title:'What does the integrated mission need?',copy:'FLIGHT is the integrator. The flight director looks across disciplines, protects crew and mission objectives, and decides whether the team needs an action, a trade, or disciplined monitoring.',q:['Is the crew safe?','Is this expected?','Which disciplines are affected?','What decision, if any, is required?']},
+    FDO:{name:'Flight Dynamics Officer',nav:'Trajectory',title:'What does the trajectory say?',copy:'FDO monitors Orion’s trajectory, future geometry, maneuver targeting, entry conditions, and the handoff between mission phases.',q:['Where is Orion relative to the plan?','Does future geometry remain acceptable?','Is a correction opportunity needed?','What is the next trajectory constraint?']},
+    FAO:{name:'Flight Activities Officer',nav:'Timeline',title:'What happens to the flight plan?',copy:'FAO protects the timeline, procedures, crew activities, and real-time replanning needed to meet mission objectives.',q:['What activity is next?','What must move in the timeline?','What crew work competes for time?','What objective can be deferred?']},
+    EECOM:{name:'Emergency, Environmental & Consumables Officer',nav:'Crew systems',title:'What does this mean for the crew environment?',copy:'EECOM watches environmental control and life support, thermal conditions, consumables, and integrated emergency response.',q:['Is required function still available?','Is habitability affected?','What redundancy remains?','Is this closed in flight or postflight?']},
+    COMM:{name:'Communications lens',nav:'Links',title:'Is loss of signal expected or anomalous?',copy:'COMM is MissionLab shorthand for the communications problem: geometry-driven occultation, entry plasma blackout, network transitions, reacquisition, and unexpected link issues. It is not asserted to be an exact Artemis II console acronym.',q:['Is line of sight physically blocked?','Which network is in use?','When is reacquisition expected?','Is this a link anomaly or normal geometry?']},
+    SCIENCE:{name:'Science Officer',nav:'Lunar science',title:'What observation opportunity exists right now?',copy:'The Artemis SCIENCE console integrates lunar science and geology objectives into mission execution, connecting crew observations with the supporting Science Evaluation Room.',q:['What target is visible?','What lighting makes it useful?','What did the crew actually observe?','What needs postflight analysis?']},
+    ENGINEERING:{name:'Engineering support lens',nav:'Evidence',title:'What technical explanation is actually supported?',copy:'Engineering support is a MissionLab synthesis lens rather than a claimed Artemis front-room console name. It tests hypotheses against evidence and keeps “action taken” separate from “root cause confirmed.”',q:['What evidence constrains the explanation?','What is still unknown?','Which model or test is relevant?','What must be closed after flight?']}
+  };
+  const mcScenarios=[
+    {id:'occultation',tag:'EXPECTED GEOMETRY',title:'Lunar loss of signal',summary:'Orion is moving behind the Moon. Lunar terrain is about to block the radio path to Earth.',clock:'MET 05:00:08:10',trace:['detect LOS closure','confirm geometry','expect blackout','hold timeline','reacquire'],kind:'orbit'},
+    {id:'rtc2',tag:'TARGETING DECISION',title:'Return trajectory correction',summary:'A small velocity correction is being evaluated against the future entry corridor and remaining maneuver opportunities.',clock:'MET 08:04:17:48',trace:['update state','predict future path','compare constraints','target burn','execute','reassess'],kind:'burn'},
+    {id:'waste',tag:'SYSTEM TROUBLESHOOTING',title:'Orion toilet fault response',summary:'The crew reported a blinking fault light. Mission Control assessed the data and worked with the crew until normal operation was restored; the public troubleshooting sequence does not by itself establish a root cause.',clock:'MET 03:11:40:00',trace:['detect indication','gather evidence','protect function','adjust activity','monitor','defer root cause'],kind:'system'},
+    {id:'entry',tag:'EXPECTED ENTRY CONSTRAINT',title:'Plasma communications blackout',summary:'Ionized flow around Orion can interrupt radio communications during hypersonic entry. Expected silence is not the same as a communications failure.',clock:'MET 09:01:22:00',trace:['predict blackout','enter window','monitor trajectory','wait for geometry/flow change','reacquire'],kind:'entry'}
+  ];
+  let mcScenario=mcScenarios[0],mcRole='FLIGHT';
+  function renderMc(){const s=mcScenario,r=roles[mcRole];$('#mc-clock').textContent=s.clock;$('#mc-event-class').textContent=s.tag;$('#mc-event-title').textContent=s.title;$('#mc-event-summary').textContent=s.summary;$('#mc-role-label').textContent=`${mcRole==='ENGINEERING'?'ENG SUPPORT':mcRole} · ${r.name}`;$('#mc-role-title').textContent=r.title;$('#mc-role-copy').textContent=r.copy;$('#mc-questions').innerHTML=r.q.map(x=>`<div>${x}</div>`).join('');$('#mc-decision-trace').innerHTML=s.trace.map((x,i)=>`<i><b>${String(i+1).padStart(2,'0')}</b>${x}</i>`).join('');$$('#mc-strip button').forEach(b=>b.classList.toggle('active',b.dataset.role===mcRole));$$('#mc-events button').forEach(b=>b.classList.toggle('active',b.dataset.id===s.id));}
+  const strip=$('#mc-strip');if(strip){strip.innerHTML=Object.entries(roles).map(([k,r])=>`<button type="button" data-role="${k}" title="${r.name}"><b>${k==='ENGINEERING'?'ENG SUPPORT':k}</b><small>${r.nav}</small></button>`).join('');$$('button',strip).forEach(b=>b.addEventListener('click',()=>{mcRole=b.dataset.role;renderMc();}));}
+  const evBox=$('#mc-events');if(evBox){evBox.innerHTML=mcScenarios.map(s=>`<button type="button" data-id="${s.id}"><small>${s.tag}</small><b>${s.title}</b></button>`).join('');$$('button',evBox).forEach(b=>b.addEventListener('click',()=>{mcScenario=mcScenarios.find(s=>s.id===b.dataset.id);renderMc();}));}renderMc();
+  const mcCanvas=$('#mc-canvas');if(mcCanvas){const loop=t=>{const {ctx,w,h}=fitCanvas(mcCanvas);ctx.clearRect(0,0,w,h);ctx.fillStyle='#02070a';ctx.fillRect(0,0,w,h);ctx.strokeStyle='rgba(96,144,176,.08)';ctx.lineWidth=1;for(let x=0;x<w;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}for(let y=0;y<h;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+      if(mcScenario.kind==='orbit'){drawEarth(ctx,w*.18,h*.52,42);drawMoon(ctx,w*.67,h*.5,72);const ox=w*.58+Math.sin(t*.0005)*25,oy=h*.39;ctx.strokeStyle='rgba(255,100,90,.65)';ctx.setLineDash([5,5]);ctx.beginPath();ctx.moveTo(ox,oy);ctx.lineTo(w*.18,h*.52);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(ox,oy,4,0,Math.PI*2);ctx.fill();ctx.fillStyle='#ff7f76';ctx.font='700 12px system-ui';ctx.fillText('LOS BLOCKED BY LUNAR TERRAIN',w*.42,h*.75);} 
+      else if(mcScenario.kind==='burn'){drawEarth(ctx,w*.16,h*.54,38);ctx.strokeStyle='rgba(127,197,255,.35)';ctx.beginPath();ctx.moveTo(w*.22,h*.56);ctx.quadraticCurveTo(w*.52,h*.18,w*.86,h*.52);ctx.stroke();ctx.strokeStyle='rgba(125,224,173,.75)';ctx.beginPath();ctx.moveTo(w*.22,h*.56);ctx.quadraticCurveTo(w*.55,h*.14,w*.88,h*.48);ctx.stroke();ctx.fillStyle='#f5f9fc';ctx.beginPath();ctx.arc(w*.54,h*.22,4,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#f0c476';ctx.beginPath();ctx.moveTo(w*.54,h*.22);ctx.lineTo(w*.59,h*.17);ctx.stroke();ctx.fillStyle='#f0c476';ctx.font='700 12px system-ui';ctx.fillText('ΔV',w*.595,h*.165);} 
+      else if(mcScenario.kind==='system'){const cols=[.24,.36,.58,.72];cols.forEach((v,i)=>{ctx.fillStyle=i===1?'rgba(255,103,95,.65)':'rgba(111,231,225,.4)';ctx.fillRect(w*.14+i*w*.19,h*(.76-v),w*.1,h*v);ctx.fillStyle='rgba(255,255,255,.58)';ctx.font='11px system-ui';ctx.fillText(['TEMP','WASTE','CABIN','POWER'][i],w*.14+i*w*.19,h*.82)});ctx.strokeStyle='rgba(255,255,255,.15)';ctx.beginPath();ctx.moveTo(w*.1,h*.82);ctx.lineTo(w*.9,h*.82);ctx.stroke();}
+      else{const grad=ctx.createLinearGradient(0,0,w,0);grad.addColorStop(0,'#1b2230');grad.addColorStop(.5,'#a23c1e');grad.addColorStop(1,'#240703');ctx.fillStyle=grad;ctx.fillRect(0,0,w,h);ctx.strokeStyle='rgba(255,220,190,.35)';for(let i=0;i<16;i++){ctx.beginPath();ctx.moveTo(0,(i/16)*h+Math.sin(t*.002+i)*8);ctx.bezierCurveTo(w*.25,h*.2+i*11,w*.55,h*.75-i*9,w,h*.32+i*8);ctx.stroke()}ctx.fillStyle='rgba(255,255,255,.9)';ctx.font='700 13px system-ui';ctx.textAlign='right';ctx.fillText('EXPECTED REACQUISITION WINDOW AHEAD',w-24,h*.16);ctx.textAlign='start';}
+      requestAnimationFrame(loop);};requestAnimationFrame(loop);}
 
-async function init() {
-  const [perspectives, publication] = await Promise.all([
-    fetchJson('./data/reference/artemis_ii_mission_control_perspectives.json'),
-    fetchJson('./data/reference/artemis_ii_publication_manifest.json'),
-  ]);
+  // Entry / descent / recovery: NASA-reported anchors with educational interpolation.
+  const entryCanvas=$('#entry-canvas');let entryP=0;
+  const entryStates=[
+    {p:0,time:'23:53 UTC',phase:'Entry interface',cap:'400,000 ft. Mach 35. The atmosphere is about to become the braking system.',alt:'121.9 km',mach:'35',q:'building',heat:'rising',comm:'available',evidence:'NASA REPORTED MILESTONE',lesson:'The atmosphere starts doing the braking.',copy:'NASA reported Orion reaching the atmosphere at 400,000 feet at roughly Mach 35. Aerodynamic drag removes most of the lunar-return kinetic energy; this scene interpolates between public milestones.'},
+    {p:.16,time:'~23:54 UTC',phase:'Hypersonic entry',cap:'Speed is still enormous while density rises by orders of magnitude.',alt:'~90 km',mach:'>25',q:'rising fast',heat:'high',comm:'available → degrading',evidence:'EDUCATIONAL INTERPOLATION',lesson:'Heating is extremely sensitive to velocity.',copy:'In Sutton–Graves, convective stagnation heat flux scales approximately with V³ and the square root of density. The visualization is qualitative; use the engineering drawer for the actual MissionLab model curve.'},
+    {p:.32,time:'~23:55–23:57 UTC',phase:'Peak-heating / blackout neighborhood',cap:'A luminous plasma envelope forms while Orion rapidly sheds energy.',alt:'~70–55 km',mach:'hypersonic',q:'high',heat:'MODEL PEAK REGION',comm:'planned blackout',evidence:'MODEL + NASA BLACKOUT CONTEXT',lesson:'Expected radio silence is not a communications failure.',copy:'Ionized gas around the capsule can interfere with RF propagation. NASA expected an approximately six-minute blackout after entry interface; MissionLab does not infer plasma density from the communications event.'},
+    {p:.53,time:'00:00 UTC',phase:'Communications reacquisition',cap:'The plasma environment relaxes enough for contact to return.',alt:'lower atmosphere',mach:'falling rapidly',q:'falling',heat:'falling',comm:'reacquired',evidence:'NASA REPORTED MINUTE',lesson:'Reacquisition marks an operational transition.',copy:'NASA reported communications reestablished at 8:00 p.m. EDT. That public event is used as a milestone, not as a direct measurement of plasma properties.'},
+    {p:.72,time:'00:03 UTC',phase:'Drogue parachutes',cap:'At 23,400 ft, two drogues stabilize and slow Orion.',alt:'7.13 km',mach:'subsonic',q:'low',heat:'low',comm:'available',evidence:'NASA REPORTED · 23,400 FT · 479 FT/S',lesson:'Drogues make the capsule stable before the big canopies arrive.',copy:'NASA reported drogue deployment at 23,400 feet, with velocity dropping to 479 ft/s. A parachute deployed at hypersonic entry speed would see destructive loads, so terminal descent must wait until the atmosphere has already removed almost all of the energy.'},
+    {p:.83,time:'00:04 UTC',phase:'Main parachutes',cap:'At 5,400 ft, the drogues cut away and three mains deploy.',alt:'1.65 km',mach:'low',q:'very low',heat:'ambient',comm:'available',evidence:'NASA REPORTED · 5,400 FT · <200 FT/S',lesson:'The mains carry the final descent.',copy:'The drogue stage stabilizes and slows first; the three main canopies then provide the much larger drag area needed to reduce speed for ocean impact.'},
+    {p:1,time:'00:07 UTC',phase:'Splashdown',cap:'Orion reaches the Pacific off San Diego.',alt:'0 km',mach:'0',q:'0',heat:'ambient',comm:'recovery',evidence:'NASA REPORTED',lesson:'Splashdown ends the flight path, not the engineering.',copy:'NASA reported parachute-assisted splashdown at 8:07 p.m. EDT on April 10, which is 00:07 UTC on April 11. Recovery, safing, extraction, inspection, and postflight analysis continue after touchdown.'}
+  ];
+  function nearestState(p){return entryStates.reduce((b,s)=>Math.abs(s.p-p)<Math.abs(b.p-p)?s:b,entryStates[0]);}
+  function renderEntry(p,snap=false){entryP=clamp(p,0,1);const st=nearestState(entryP);if(snap)entryP=st.p;const map={time:'entry-time',phase:'entry-phase',cap:'entry-visual-caption',alt:'g-alt',mach:'g-mach',q:'g-q',heat:'g-heat',comm:'g-comm',evidence:'entry-evidence',lesson:'entry-lesson-title',copy:'entry-lesson-copy'};Object.entries(map).forEach(([k,id])=>{const el=$('#'+id);if(el)el.textContent=st[k]});const range=$('#entry-scrubber');if(range)range.value=Math.round(entryP*1000);$$('#entry-milestones button').forEach(b=>b.classList.toggle('active',Math.abs(Number(b.dataset.p)-entryP)<.065));const sig=$('#entry-signal');if(sig){const blackout=entryP>.22&&entryP<.5;sig.classList.toggle('blackout',blackout);$('span',sig).textContent=blackout?'EXPECTED BLACKOUT':entryP<.53?'COMM AVAILABLE':'COMM REACQUIRED';}}
+  const eMiles=$('#entry-milestones');if(eMiles){eMiles.innerHTML=entryStates.map(x=>`<button type="button" data-p="${x.p}">${x.phase}</button>`).join('');$$('button',eMiles).forEach(b=>b.addEventListener('click',()=>renderEntry(Number(b.dataset.p),true)));}$('#entry-scrubber')?.addEventListener('input',e=>renderEntry(Number(e.target.value)/1000));
+  const entryTopics={speed:'<strong>Why velocity matters so much.</strong> Lunar-return entry begins around Mach 35. In the Sutton–Graves approximation, convective heat flux scales roughly with velocity cubed, so modest changes in speed strongly change the heating term. That model output is not heat-shield telemetry.',pressure:'<strong>Dynamic pressure is aerodynamic loading pressure.</strong> q = ½ρV². Density climbs dramatically while velocity is falling; their competition produces a peak instead of a steady increase all the way to the ocean.',blackout:'<strong>Why radio can disappear.</strong> Hypersonic heating ionizes gas around the capsule. The resulting plasma can interfere with RF propagation. NASA treated this as a planned entry blackout, which is operationally different from an unexpected communications anomaly.',parachutes:'<strong>Why Orion cannot deploy parachutes immediately.</strong> At entry interface the kinetic energy and aerodynamic loads are far beyond what terminal-descent canopies are designed to absorb. The heat shield and atmosphere must do the high-energy braking first.',staging:'<strong>Why drogues and mains are separate.</strong> Drogues deploy first to stabilize and slow the capsule at 23,400 ft. At 5,400 ft they are cut away and three much larger main canopies deploy for the final descent.'};
+  function setEntryTopic(k){$$('[data-entry-topic]').forEach(b=>b.classList.toggle('active',b.dataset.entryTopic===k));const e=$('#entry-topic-panel');if(e)e.innerHTML=entryTopics[k];}$$('[data-entry-topic]').forEach(b=>b.addEventListener('click',()=>setEntryTopic(b.dataset.entryTopic)));setEntryTopic('speed');renderEntry(0,true);
+  if(entryCanvas){const loop=t=>{const {ctx,w,h}=fitCanvas(entryCanvas);ctx.clearRect(0,0,w,h);const p=entryP;const bg=ctx.createLinearGradient(0,0,0,h);bg.addColorStop(0,p<.55?'#010308':'#071625');bg.addColorStop(.58,p<.38?'#050811':'#183a55');bg.addColorStop(1,p<.6?'#0b1b2a':'#5a91ad');ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);if(p<.62)drawStars(ctx,w,h,120,71,1-p);
+      // Curved Earth limb and atmosphere glow.
+      const limbY=h*(.92-.26*clamp(p/.7,0,1));const er=w*1.15;const ex=w*.5,ey=limbY+er*.72;for(let k=5;k>=1;k--){ctx.strokeStyle=`rgba(85,173,226,${.025*k})`;ctx.lineWidth=k*5;ctx.beginPath();ctx.arc(ex,ey,er-k*2,Math.PI,Math.PI*2);ctx.stroke();}ctx.fillStyle=p>.7?'#15516e':'#071d2e';ctx.beginPath();ctx.arc(ex,ey,er,Math.PI,Math.PI*2);ctx.fill();
+      if(p>.84){ctx.fillStyle='rgba(37,111,143,.78)';ctx.fillRect(0,h*.82,w,h*.18);ctx.strokeStyle='rgba(216,243,255,.26)';for(let i=0;i<9;i++){ctx.beginPath();ctx.moveTo(0,h*.84+i*11+Math.sin(t*.002+i)*2);ctx.quadraticCurveTo(w*.5,h*.82+i*11,w,h*.84+i*11);ctx.stroke();}}
+      const cx=lerp(w*.74,w*.5,p),cy=lerp(h*.2,h*.74,p);const heat=Math.sin(clamp(p/.56,0,1)*Math.PI);ctx.save();ctx.translate(cx,cy);ctx.rotate(lerp(-.45,.08,p));const sc=1+clamp((p-.58)/.42,0,1)*.9;ctx.scale(sc,sc);
+      if(p>.08&&p<.58){for(let i=0;i<18;i++){ctx.strokeStyle=`rgba(255,${85+i*5},${30+i*2},${.035+heat*.035})`;ctx.lineWidth=1+i*.18;ctx.beginPath();ctx.moveTo(12,(-9+i));ctx.bezierCurveTo(55+heat*80,Math.sin(t*.004+i)*13,100+heat*125,(i-9)*4,165+heat*95,(i-9)*5);ctx.stroke();}}
+      if(p>=.68&&p<.83){for(const dx of [-20,20]){ctx.strokeStyle='rgba(245,245,242,.88)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(dx*.2,-8);ctx.lineTo(dx,-48);ctx.stroke();ctx.beginPath();ctx.arc(dx,-52,14,Math.PI,0);ctx.stroke();}}
+      if(p>=.83&&p<.98){for(const dx of [-34,0,34]){ctx.strokeStyle='rgba(247,247,244,.9)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(dx*.16,-8);ctx.lineTo(dx,-72);ctx.stroke();ctx.fillStyle='rgba(229,234,236,.92)';ctx.beginPath();ctx.arc(dx,-72,30,Math.PI,0);ctx.lineTo(dx-30,-72);ctx.closePath();ctx.fill();}}
+      ctx.fillStyle='#dce3e6';ctx.strokeStyle='#29343b';ctx.lineWidth=1.3/sc;ctx.beginPath();ctx.moveTo(-15,10);ctx.quadraticCurveTo(-20,-4,0,-19);ctx.quadraticCurveTo(20,-4,15,10);ctx.quadraticCurveTo(0,18,-15,10);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();requestAnimationFrame(loop);};requestAnimationFrame(loop);}
 
-  if (
-    perspectives.dataset_id
-    !== 'phase7a_artemis_ii_mission_control_perspectives'
-  ) {
-    throw new Error('Validated shared-timeline dataset identity mismatch');
-  }
+  // Trajectory-correction intuition lab: public maneuver facts + clearly conceptual propagation.
+  const burns=[
+    {id:'NONE',label:'No correction',status:'NO BURN',dv:0,dur:'—',time:'—',note:'Baseline future path. This is the comparison case, not a real event.'},
+    {id:'OTC1',label:'OTC1',status:'CANCELLED',dv:0,dur:'planned ~8 s',time:'Apr 03 · planned 22:49 UTC',note:'NASA cancelled OTC1 because Orion was already on the correct flight path. Cancellation was a valid targeting decision, not a failed burn.'},
+    {id:'OTC2',label:'OTC2',status:'CANCELLED',dv:0,dur:'not executed',time:'Apr 04 · date-level',note:'NASA cancelled another planned outbound correction because Orion remained on track.'},
+    {id:'OTC3',label:'OTC3',status:'EXECUTED',dv:null,dur:'17.5 s',time:'Apr 06 · 03:03 UTC',note:'NASA reported OTC3 execution and duration but the MissionLab Phase 2I.1 source does not establish a public delta-v magnitude. The slider is therefore hypothetical for this selection.'},
+    {id:'RTC1',label:'RTC1',status:'EXECUTED',dv:1.6,dur:'15 s',time:'Apr 08 · 00:03 UTC',note:'NASA reported a 1.6 ft/s velocity change over 15 seconds.'},
+    {id:'RTC2',label:'RTC2',status:'EXECUTED',dv:5.3,dur:'9 s',time:'Apr 10 · 02:53 UTC',note:'NASA reported a 5.3 ft/s velocity change over 9 seconds.'},
+    {id:'RTC3',label:'RTC3',status:'EXECUTED',dv:4.2,dur:'8 s',time:'Apr 10 · 18:53 UTC',note:'NASA reported a 4.2 ft/s velocity change over 8 seconds before entry.'}
+  ];let burn=burns[0],coast=24,conceptDv=0;
+  function pulseBurn(){const f=$('#maneuver-burn-flash');if(!f)return;f.classList.remove('pulse');void f.offsetWidth;f.classList.add('pulse');}
+  function renderBurn(pulse=false){const publicDv=burn.dv===null?'ΔV NOT PUBLIC':burn.status==='CANCELLED'?'CANCELLED':burn.id==='NONE'?'NO CORRECTION':`${burn.dv.toFixed(1)} ft/s`;$('#burn-dv').textContent=publicDv;$('#burn-duration').textContent=burn.dur;$('#burn-time').textContent=burn.time;$('#dv-value').textContent=`${conceptDv.toFixed(1)} ft/s`;$('#coast-hours-value').textContent=`${coast} h`;const km=conceptDv*.3048*coast*3600/1000,shift=km<10?`~${km.toFixed(1)} km`:`~${Math.round(km)} km`;$('#delta-distance').textContent=shift;$('#maneuver-hud-shift').textContent=shift;$('#maneuver-hud-coast').textContent=`${coast} h`;$('#maneuver-hud-state').textContent=burn.status==='CANCELLED'?'NO BURN NEEDED':conceptDv>0?'FUTURE PATH MOVED':'BASELINE PATH';$('#maneuver-annotation').textContent=burn.note+' The green future path is deliberately exaggerated on screen; Δv × time is only an intuition aid.';$$('#burn-select button').forEach(b=>b.classList.toggle('active',b.dataset.id===burn.id));const cancel=$('#cancel-note');if(cancel)cancel.classList.toggle('active',burn.status==='CANCELLED');if(pulse&&conceptDv>0)pulseBurn();}
+  const burnBox=$('#burn-select');if(burnBox){burnBox.innerHTML=burns.map(b=>`<button type="button" data-id="${b.id}">${b.label}<small>${b.status}</small></button>`).join('');$$('button',burnBox).forEach(btn=>btn.addEventListener('click',()=>{burn=burns.find(x=>x.id===btn.dataset.id);conceptDv=burn.dv===null?1.5:(burn.dv||0);const slider=$('#dv-magnitude');if(slider)slider.value=conceptDv;renderBurn(true);}));}
+  $('#dv-magnitude')?.addEventListener('input',e=>{conceptDv=Number(e.target.value);renderBurn(true);});$('#coast-hours')?.addEventListener('input',e=>{coast=Number(e.target.value);renderBurn();});renderBurn();
+  const maneuverCanvas=$('#maneuver-canvas');if(maneuverCanvas){const loop=t=>{const {ctx,w,h}=fitCanvas(maneuverCanvas);ctx.clearRect(0,0,w,h);ctx.fillStyle='#020508';ctx.fillRect(0,0,w,h);drawStars(ctx,w,h,115,19,.78);drawEarth(ctx,w*.11,h*.72,37);const start={x:w*.19,y:h*.64},baseEnd={x:w*.88,y:h*.37};const f=(conceptDv/6)*(coast/96),newEnd={x:baseEnd.x,y:h*(.37-.20*f)};
+      ctx.strokeStyle='rgba(127,197,255,.18)';ctx.lineWidth=1;for(let r=30;r<150;r+=28){ctx.beginPath();ctx.arc(baseEnd.x,baseEnd.y,r,0,Math.PI*2);ctx.stroke();}
+      ctx.strokeStyle='rgba(127,197,255,.58)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(start.x,start.y);ctx.bezierCurveTo(w*.41,h*.18,w*.67,h*.21,baseEnd.x,baseEnd.y);ctx.stroke();
+      ctx.strokeStyle='rgba(125,224,173,.96)';ctx.lineWidth=2.4;ctx.shadowColor='rgba(125,224,173,.38)';ctx.shadowBlur=10;ctx.beginPath();ctx.moveTo(start.x,start.y);ctx.bezierCurveTo(w*.41,h*(.18-.08*f),w*.67,h*(.21-.16*f),newEnd.x,newEnd.y);ctx.stroke();ctx.shadowBlur=0;
+      const bx=w*.41,by=h*.29;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(bx,by,4,0,Math.PI*2);ctx.fill();if(conceptDv>0){ctx.strokeStyle='#f0c476';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(bx,by);ctx.lineTo(bx+22+conceptDv*5,by-16-conceptDv*4);ctx.stroke();ctx.fillStyle='rgba(240,196,118,.24)';ctx.beginPath();ctx.arc(bx,by,12+conceptDv*2+Math.sin(t*.01)*2,0,Math.PI*2);ctx.fill();}
+      const travel=((t*.000055)%1),p1=bezier(start,{x:w*.45,y:h*.08},{x:baseEnd.x,y:baseEnd.y},travel),p2=bezier(start,{x:w*.45,y:h*(.08-.1*f)},{x:newEnd.x,y:newEnd.y},travel);ctx.fillStyle='rgba(127,197,255,.9)';ctx.beginPath();ctx.arc(p1.x,p1.y,3,0,Math.PI*2);ctx.fill();ctx.fillStyle='rgba(125,224,173,.95)';ctx.beginPath();ctx.arc(p2.x,p2.y,3.4,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle='rgba(240,196,118,.55)';ctx.setLineDash([4,5]);ctx.beginPath();ctx.moveTo(baseEnd.x,baseEnd.y);ctx.lineTo(newEnd.x,newEnd.y);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='rgba(240,196,118,.9)';ctx.font='700 12px system-ui';ctx.fillText(conceptDv>0?'FUTURE ARRIVAL SEPARATION':'ARRIVAL TARGET',baseEnd.x-88,Math.min(baseEnd.y,newEnd.y)-14);
+      ctx.font='700 12px system-ui';ctx.fillStyle='rgba(127,197,255,.82)';ctx.fillText('ORIGINAL PREDICTED PATH',w*.48,h*.18);ctx.fillStyle='rgba(125,224,173,.96)';ctx.fillText('CORRECTED PREDICTED PATH',w*.58,h*.09);ctx.fillStyle='rgba(240,196,118,.92)';ctx.fillText('SMALL ΔV',bx+18,by-19);ctx.fillStyle='rgba(255,255,255,.6)';ctx.fillText(`${coast} HOURS OF COAST`,w*.54,h*.87);requestAnimationFrame(loop);};requestAnimationFrame(loop);}
 
-  if (perspectives.shared_timeline.length !== 24) {
-    throw new Error('Expected 24 validated shared-timeline events');
-  }
+  // Space-weather educational lab. Scenario controls are conceptual; Artemis II evidence remains separate.
+  const weatherCanvas=$('#weather-canvas');let solar=12,spaceLoc='deep',shielding=50;
+  function renderWeatherReadout(){const activity=solar<30?'QUIET SUN':solar<65?'ELEVATED ACTIVITY':'SOLAR PARTICLE EVENT';$('#solar-value').textContent=activity;$('#shielding-value').textContent=shielding<34?'light':shielding<67?'medium':'higher';const exposure=(solar/100)*(spaceLoc==='leo'?.45:1)*(1-shielding*.0055),radLevel=exposure>.55?'high':exposure>.25?'elevated':'low',elecLevel=solar>70?'high':solar>40?'elevated':'nominal';$('#crew-rad-readout').textContent=radLevel==='high'?'HIGH · protective evaluation':radLevel==='elevated'?'ELEVATED · increase monitoring':'LOW · routine awareness';$('#electronics-readout').textContent=elecLevel==='high'?'HIGH · SEE vigilance':elecLevel==='elevated'?'ELEVATED · added awareness':'NOMINAL · routine awareness';$('#weather-posture').textContent=radLevel==='high'?'EVALUATE PROTECTIVE ACTIONS':radLevel==='elevated'?'HEIGHTENED MONITORING':'MONITOR';const rc=$('#crew-rad-card'),ec=$('#electronics-card'),pc=$('#weather-posture-card');if(rc)rc.dataset.level=radLevel;if(ec)ec.dataset.level=elecLevel;if(pc)pc.dataset.level=radLevel;const action=$('#weather-action'),copy=$('#weather-action-copy');if(action&&copy){if(radLevel==='high'){action.textContent='Ask whether crew exposure can be reduced while preserving mission safety.';copy.textContent='In a real event, teams would combine measured environment data with trajectory, vehicle shielding, dosimetry, system status, and mission constraints before choosing any protective posture.';}else if(radLevel==='elevated'){action.textContent='Increase trend monitoring and prepare options before conditions worsen.';copy.textContent='The important operational move is not panic. It is recognizing a changing environment early enough to preserve decision time and coordinate crew, vehicle, and mission constraints.';}else{action.textContent='Keep watching the environment and trends.';copy.textContent='Quiet conditions do not mean zero radiation. The operational question is whether the environment is changing enough to justify a different crew or spacecraft posture.';}}$$('#location-select button').forEach(b=>b.classList.toggle('active',b.dataset.location===spaceLoc));}
+  $('#solar-activity')?.addEventListener('input',e=>{solar=Number(e.target.value);renderWeatherReadout();});$('#shielding-assumption')?.addEventListener('input',e=>{shielding=Number(e.target.value);renderWeatherReadout();});$$('#location-select button').forEach(b=>b.addEventListener('click',()=>{spaceLoc=b.dataset.location;renderWeatherReadout();}));renderWeatherReadout();
+  if(weatherCanvas){const loop=t=>{const {ctx,w,h}=fitCanvas(weatherCanvas);ctx.clearRect(0,0,w,h);ctx.fillStyle='#020508';ctx.fillRect(0,0,w,h);drawStars(ctx,w,h,80,31,.55);const sx=w*.15,sy=h*.5,sr=45;const sg=ctx.createRadialGradient(sx-12,sy-14,3,sx,sy,sr);sg.addColorStop(0,'#fff8cf');sg.addColorStop(.42,'#ffd368');sg.addColorStop(1,'#a94316');ctx.fillStyle=sg;ctx.beginPath();ctx.arc(sx,sy,sr,0,Math.PI*2);ctx.fill();const ex=w*.62,ey=h*.58;drawEarth(ctx,ex,ey,30);for(let i=0;i<4;i++){ctx.strokeStyle=`rgba(111,231,225,${.08+(3-i)*.035})`;ctx.beginPath();ctx.ellipse(ex,ey,48+i*18,32+i*12,0,0,Math.PI*2);ctx.stroke();}let ox,oy;if(spaceLoc==='leo'){ox=ex+54;oy=ey-22}else if(spaceLoc==='lunar'){ox=w*.9;oy=h*.45}else{ox=w*.82;oy=h*.29}ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(ox,oy,4,0,Math.PI*2);ctx.fill();const n=Math.round(10+solar*.8);for(let i=0;i<n;i++){const phase=((t*(.000025+.000002*solar)+i/n)%1),x=lerp(sx+sr+6,ox-4,phase),spread=(18+solar*1.2)*Math.sin(phase*Math.PI),y=sy+Math.sin(i*2.43+t*.001)*spread;ctx.fillStyle=solar>65?'rgba(255,133,82,.75)':'rgba(244,203,118,.46)';ctx.fillRect(x,y,solar>65?3:2,1.4);}ctx.fillStyle='rgba(255,255,255,.65)';ctx.font='700 11px system-ui';ctx.fillText('SUN',sx-11,sy+66);ctx.fillText(spaceLoc==='leo'?'ORION · LEO':spaceLoc==='lunar'?'ORION · LUNAR VICINITY':'ORION · DEEP SPACE',ox-34,oy-12);ctx.fillText(`CONCEPTUAL SHIELDING ${shielding}%`,w*.55,h*.92);requestAnimationFrame(loop);};requestAnimationFrame(loop);}
 
-  state.events = perspectives.shared_timeline;
-  state.disciplines = perspectives.discipline_registry;
+  // PSI campaign-context educational model. Artemis II did not land.
+  const psiCanvas=$('#psi-canvas');let psiAlt=18,psiThrottle=55,psiAngle=12,psiCant=4,psiEngines=2,psiRegolith='baseline';const particles=Array.from({length:240},(_,i)=>({seed:i*.61803398875%1}));
+  const regMult=()=>psiRegolith==='loose'?1.35:psiRegolith==='cohesive'?.7:1;
+  function renderPsi(){const $id=id=>$('#'+id);$id('psi-alt-value').textContent=`${psiAlt} m`;$id('psi-throttle-value').textContent=`${psiThrottle}%`;$id('psi-angle-value').textContent=`${psiAngle}°`;$id('psi-cant-value').textContent=`${psiCant}°`;const score=psiThrottle*psiEngines*regMult()/(psiAlt*1.5)*(1+psiAngle/45),risk=score>10?'Broad / energetic conceptual ejecta zone':score>4.5?'Moderate conceptual ejecta footprint':'Lower conceptual ejecta footprint';$id('psi-risk').textContent=risk;$id('psi-hardware-risk').textContent=score>10?'Nearby hardware · higher conceptual exposure':score>4.5?'Nearby hardware · watch exposure':'Nearby hardware · lower conceptual exposure';$$('#engine-count button').forEach(b=>b.classList.toggle('active',Number(b.dataset.engines)===psiEngines));$$('#regolith-select button').forEach(b=>b.classList.toggle('active',b.dataset.regolith===psiRegolith));}
+  $('#psi-alt')?.addEventListener('input',e=>{psiAlt=Number(e.target.value);renderPsi();});$('#psi-throttle')?.addEventListener('input',e=>{psiThrottle=Number(e.target.value);renderPsi();});$('#psi-angle')?.addEventListener('input',e=>{psiAngle=Number(e.target.value);renderPsi();});$('#psi-cant')?.addEventListener('input',e=>{psiCant=Number(e.target.value);renderPsi();});$$('#engine-count button').forEach(b=>b.addEventListener('click',()=>{psiEngines=Number(b.dataset.engines);renderPsi();}));$$('#regolith-select button').forEach(b=>b.addEventListener('click',()=>{psiRegolith=b.dataset.regolith;renderPsi();}));renderPsi();
+  if(psiCanvas){const loop=t=>{const {ctx,w,h}=fitCanvas(psiCanvas);ctx.clearRect(0,0,w,h);ctx.fillStyle='#020406';ctx.fillRect(0,0,w,h);drawStars(ctx,w,h,65,57,.55);const ground=h*.78;ctx.fillStyle='#77756f';ctx.beginPath();ctx.moveTo(0,ground);for(let x=0;x<=w;x+=15)ctx.lineTo(x,ground+Math.sin(x*.07)*4+Math.sin(x*.018)*7);ctx.lineTo(w,h);ctx.lineTo(0,h);ctx.closePath();ctx.fill();const ly=lerp(h*.25,h*.59,(40-psiAlt)/36),lx=w*.48;ctx.save();ctx.translate(lx,ly);ctx.fillStyle='#cfd5d8';ctx.fillRect(-42,-20,84,28);ctx.fillStyle='#8fa1aa';ctx.fillRect(-23,8,46,8);ctx.strokeStyle='#9ba7ad';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-28,7);ctx.lineTo(-47,31);ctx.moveTo(28,7);ctx.lineTo(47,31);ctx.stroke();ctx.restore();const spread=(24+psiThrottle*.55+psiAngle*2.6)*regMult(),engineSpacing=16,cant=psiCant*Math.PI/180;for(let e=0;e<psiEngines;e++){const ex=lx+(e-(psiEngines-1)/2)*engineSpacing,side=e<(psiEngines/2)?-1:1,dir=side*cant;const center=ex+Math.sin(dir)*(ground-ly);ctx.fillStyle='rgba(170,214,234,.22)';ctx.beginPath();ctx.moveTo(ex-6,ly+18);ctx.lineTo(center-spread*.48,ground);ctx.lineTo(center+spread*.48,ground);ctx.lineTo(ex+6,ly+18);ctx.closePath();ctx.fill();ctx.strokeStyle='rgba(197,229,245,.55)';ctx.setLineDash([3,5]);ctx.beginPath();ctx.moveTo(ex,ly+18);ctx.lineTo(center,ground);ctx.stroke();ctx.setLineDash([]);}
+      const activity=psiThrottle/100*(25/psiAlt)*psiEngines*regMult()*(1+psiAngle/35),drift=Math.sin(cant)*(ground-ly);particles.forEach((pp,i)=>{const ph=((t*.00016*(.7+activity)+pp.seed)%1),side=i%2?1:-1,px=lx+drift*.55+side*(ph*(55+activity*250)),py=ground-4-Math.sin(ph*Math.PI)*(16+activity*80);if(px>0&&px<w){ctx.fillStyle=`rgba(202,194,174,${.18+.55*(1-ph)})`;ctx.fillRect(px,py,1.3+(i%3)*.5,1.3+(i%2)*.4);}});const hz=spread*(1.05+activity*.58),hc=lx+drift*.55;ctx.strokeStyle='rgba(255,112,82,.65)';ctx.setLineDash([5,5]);ctx.beginPath();ctx.moveTo(hc-hz,ground+8);ctx.lineTo(hc+hz,ground+8);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='rgba(255,130,96,.88)';ctx.font='700 11px system-ui';ctx.fillText('CONCEPTUAL HAZARD / EJECTA ZONE',Math.max(12,hc-hz),ground+25);ctx.strokeStyle='rgba(127,197,255,.55)';ctx.strokeRect(w*.84,ground-35,38,30);ctx.fillStyle='rgba(127,197,255,.75)';ctx.fillText('NEARBY HARDWARE',w*.79,ground-43);ctx.fillStyle='rgba(255,255,255,.55)';ctx.fillText(`CANT ${psiCant}° · SPREAD ${psiAngle}°`,14,24);requestAnimationFrame(loop);};requestAnimationFrame(loop);}
 
-  populateFilters();
-  bindControls();
-  renderMetrics(publication.publication_metrics);
-  renderList();
-
-  if (state.events.length) {
-    selectEvent(state.events[0].event_id);
-  }
-
-  els.appStatus.textContent =
-    'A2 MissionLab publication interface loaded successfully.';
-}
-
-init().catch((error) => {
-  console.error(error);
-
-  els.eventList.innerHTML = `
-    <p class="error-message">
-      ${escapeHtml(error.message)}
-    </p>
-  `;
-
-  els.metricGrid.innerHTML = `
-    <p class="error-message">
-      Publication metrics could not be loaded.
-    </p>
-  `;
-
-  els.appStatus.textContent = error.message;
-});
+})();
