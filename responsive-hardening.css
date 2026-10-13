@@ -774,3 +774,72 @@ input[type="range"]{touch-action:pan-y}
     min-height:540px!important;
   }
 }
+
+
+/* ===== IPHONE GALLERY + MOBILE TYPOGRAPHY HOTFIX ===== */
+
+.crew-image-arrow{
+  pointer-events:auto!important;
+  touch-action:manipulation!important;
+  -webkit-user-select:none!important;
+  user-select:none!important;
+  -webkit-tap-highlight-color:transparent!important;
+}
+
+@media (max-width:760px),
+       (max-width:950px) and (max-height:500px) and (orientation:landscape){
+
+  h1,
+  h2,
+  h3,
+  h4{
+    letter-spacing:-.008em!important;
+    font-kerning:normal!important;
+    font-variant-ligatures:none!important;
+    font-feature-settings:
+      "liga" 0,
+      "clig" 0,
+      "kern" 1!important;
+  }
+
+  #maneuver-lab .word-burn{
+    display:inline-block;
+    white-space:nowrap;
+    letter-spacing:.035em!important;
+    font-kerning:none!important;
+    font-variant-ligatures:none!important;
+    font-feature-settings:
+      "liga" 0,
+      "clig" 0,
+      "kern" 0!important;
+  }
+
+  .crew-photo-wrap>img{
+    pointer-events:none!important;
+  }
+
+  .crew-window-frame,
+  .crew-image-count{
+    pointer-events:none!important;
+  }
+
+  .crew-image-arrow{
+    z-index:30!important;
+    width:56px!important;
+    height:72px!important;
+    min-width:56px!important;
+    min-height:72px!important;
+  }
+
+  .crew-image-arrow-left{
+    left:8px!important;
+  }
+
+  .crew-image-arrow-right{
+    right:8px!important;
+  }
+
+  .crew-photo-wrap>img.crew-photo-loading{
+    opacity:.86;
+  }
+}

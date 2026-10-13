@@ -11,6 +11,7 @@
   <meta property="og:image" content="https://images-assets.nasa.gov/image/art002e009288/art002e009288~orig.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <title>A2 MissionLab — Experience Artemis II</title>
+  <link rel="preconnect" href="https://images-assets.nasa.gov">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="responsive-hardening.css">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -128,7 +129,7 @@
       </div>
       <div class="crew-journey" aria-label="Interactive crew-view journey">
         <div class="crew-photo-wrap">
-          <img id="crew-photo" class="nasa-photo" src="https://images-assets.nasa.gov/image/art002e014225/art002e014225~orig.jpg" data-fallback="assets/public/fallback-mission.svg" alt="Crescent Earth photographed during Artemis II">
+          <img id="crew-photo" class="nasa-photo" src="https://images-assets.nasa.gov/image/art002e023506/art002e023506~medium.jpg" data-fallback="assets/public/fallback-mission.svg" fetchpriority="high" decoding="async" alt="Earth beginning to recede during Artemis II outbound coast">
           <div class="crew-window-frame" aria-hidden="true"><i></i><i></i></div>
           <button id="crew-image-prev" class="crew-image-arrow crew-image-arrow-left" type="button" aria-label="Previous mission image"><span aria-hidden="true">←</span></button>
           <button id="crew-image-next" class="crew-image-arrow crew-image-arrow-right" type="button" aria-label="Next mission image"><span aria-hidden="true">→</span></button>
@@ -328,7 +329,7 @@
   <section class="x-section x-maneuver-lab" id="maneuver-lab">
     <div class="x-wrap">
       <div class="x-section-head">
-        <div><p class="x-kicker">Trajectory correction lab</p><h2>A tiny burn now can move the future path by a lot.</h2></div>
+        <div><p class="x-kicker">Trajectory correction lab</p><h2>A tiny <span class="word-burn">burn</span> now can move the future path by a lot.</h2></div>
         <p>First understand the idea. Orion is already moving fast. A correction changes velocity only slightly, but that difference accumulates over hours of coast and shifts where the trajectory arrives later.</p>
       </div>
       <div class="correction-story" aria-label="Trajectory correction concept"><div><small>01</small><b>ORIGINAL PATH</b><span>Predict where Orion will go.</span></div><i>→</i><div><small>02</small><b>SMALL ΔV</b><span>Change velocity for seconds.</span></div><i>→</i><div><small>03</small><b>HOURS OF COAST</b><span>The paths separate.</span></div><i>→</i><div><small>04</small><b>NEW ARRIVAL</b><span>Protect future geometry.</span></div></div>
