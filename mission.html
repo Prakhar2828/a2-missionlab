@@ -62,20 +62,46 @@
           </div>
           <div class="mission-stage-caption" id="mission-stage-caption">Orion begins the first crewed Artemis lunar flyby mission.</div>
         </div>
-        <aside class="mission-story" aria-live="polite">
-          <p class="x-label" id="mission-date">APR 01 · FLIGHT DAY 1</p>
-          <h3 id="mission-title">Launch from Kennedy Space Center</h3>
-          <p id="mission-copy">The shared mission clock begins at 22:35:12 UTC. MissionLab uses this launch epoch to align trajectory products, public events, science observations, and engineering analyses.</p>
-          <div class="mission-readout">
-            <div><span id="mission-readout-a-label">Distance context</span><b id="mission-readout-a">Earth departure</b></div>
-            <div><span id="mission-readout-b-label">Evidence</span><b id="mission-readout-b">NASA reported</b></div>
+        <aside class="mission-story" aria-live="polite" aria-atomic="false">
+          <div class="mission-story-copy" id="mission-story-copy" role="region" aria-label="Current mission moment details" tabindex="0">
+            <p class="x-label" id="mission-date">APR 01 · FLIGHT DAY 1</p>
+            <h3 id="mission-title">Launch from Kennedy Space Center</h3>
+            <p id="mission-copy">The shared mission clock begins at 22:35:12 UTC. MissionLab uses this launch epoch to align trajectory products, public events, science observations, and engineering analyses.</p>
+
+            <div class="mission-readout">
+              <div>
+                <span id="mission-readout-a-label">Distance context</span>
+                <b id="mission-readout-a">Earth departure</b>
+              </div>
+              <div>
+                <span id="mission-readout-b-label">Evidence</span>
+                <b id="mission-readout-b">NASA reported</b>
+              </div>
+            </div>
           </div>
-          <div class="mission-controls">
-            <button id="mission-prev" type="button" aria-label="Previous mission moment">←</button>
-            <input id="mission-scrubber" type="range" min="0" max="1000" value="0" aria-label="Mission timeline">
-            <button id="mission-next" type="button" aria-label="Next mission moment">→</button>
+
+          <div class="mission-navigation" aria-label="Mission moment navigation">
+            <div class="mission-controls">
+              <button id="mission-prev" type="button" aria-label="Previous mission moment">←</button>
+
+              <input
+                id="mission-scrubber"
+                type="range"
+                min="0"
+                max="1000"
+                value="0"
+                aria-label="Mission timeline"
+              >
+
+              <button id="mission-next" type="button" aria-label="Next mission moment">→</button>
+            </div>
+
+            <div
+              id="mission-markers"
+              class="mission-markers"
+              aria-label="Mission milestones"
+            ></div>
           </div>
-          <div id="mission-markers" class="mission-markers" aria-label="Mission milestones"></div>
         </aside>
       </div>
       <details class="engineering-drawer">

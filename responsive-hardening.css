@@ -843,3 +843,290 @@ input[type="range"]{touch-action:pan-y}
     opacity:.86;
   }
 }
+
+/* Phase B R4: Mission Explorer deterministic contained geometry */
+
+/*
+ * Mission Explorer outer geometry must never depend on the
+ * current scrollbar width or changing story-copy length.
+ */
+
+.mission-explorer-shell{
+  align-items:stretch;
+  overflow-anchor:none;
+}
+
+.mission-explorer-shell>*{
+  min-width:0;
+  max-width:100%;
+}
+
+.mission-stage{
+  height:650px;
+  min-height:650px;
+  max-height:650px;
+  min-width:0;
+  max-width:100%;
+}
+
+.mission-story{
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  height:650px;
+  min-height:650px;
+  max-height:650px;
+  display:grid;
+  grid-template-rows:minmax(0,1fr) auto;
+  overflow:hidden;
+  overflow-anchor:none;
+}
+
+.mission-story-copy{
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  min-height:0;
+  overflow-x:hidden;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  scrollbar-gutter:stable;
+  padding-right:6px;
+}
+
+.mission-story-copy>*{
+  min-width:0;
+  max-width:100%;
+}
+
+.mission-story-copy:focus-visible{
+  outline:2px solid var(--x-blue);
+  outline-offset:4px;
+}
+
+.mission-readout{
+  min-width:0;
+  max-width:100%;
+}
+
+.mission-readout>*{
+  min-width:0;
+}
+
+.mission-navigation{
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  overflow:hidden;
+  overflow-anchor:none;
+  margin-top:18px;
+  padding-top:14px;
+  border-top:1px solid rgba(255,255,255,.09);
+}
+
+.mission-controls{
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  display:grid;
+  grid-template-columns:
+    44px
+    minmax(0,1fr)
+    44px;
+  align-items:center;
+  gap:8px;
+  margin-top:0;
+}
+
+.mission-controls>*{
+  min-width:0;
+  max-width:100%;
+}
+
+#mission-scrubber{
+  display:block;
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  margin:0;
+}
+
+.mission-controls button{
+  box-sizing:border-box;
+  width:44px;
+  min-width:44px;
+  max-width:44px;
+  height:44px;
+  min-height:44px;
+  max-height:44px;
+  padding:0;
+  place-self:center;
+  transition:
+    border-color .16s ease,
+    background .16s ease,
+    opacity .16s ease;
+}
+
+.mission-controls button:hover:not(:disabled),
+.mission-controls button:focus-visible{
+  border-color:rgba(127,197,255,.72);
+  background:#102435;
+}
+
+.mission-controls button:disabled{
+  opacity:.34;
+  cursor:not-allowed;
+}
+
+/*
+ * Do not make the milestone row a horizontal flex rail.
+ *
+ * That design creates a large min-content width which can
+ * propagate through CSS Grid and enlarge the entire navigation
+ * region even when document overflow itself is clipped.
+ *
+ * A contained wrapping grid is deliberate here.
+ */
+
+.mission-markers{
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  display:grid;
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
+  gap:6px;
+  margin-top:10px;
+  padding:0;
+  overflow:visible;
+}
+
+.mission-markers button{
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  min-height:44px;
+  padding:.42rem .45rem;
+  line-height:1.2;
+  overflow-wrap:anywhere;
+  white-space:normal;
+  text-align:left;
+}
+
+.mission-markers button[aria-current="step"]{
+  color:#fff;
+  border-color:var(--x-blue);
+}
+
+@media(max-width:1050px){
+
+  .mission-stage{
+    height:560px;
+    min-height:560px;
+    max-height:560px;
+  }
+
+  .mission-story{
+    height:600px;
+    min-height:600px;
+    max-height:600px;
+  }
+
+  /*
+   * At tablet/small-laptop widths the Mission Explorer has
+   * already collapsed to one column, so three milestone
+   * columns fit without becoming narrow.
+   */
+
+  .mission-markers{
+    grid-template-columns:
+      repeat(3,minmax(0,1fr));
+  }
+}
+
+@media(max-width:760px){
+
+  /*
+   * Fixed height is intentional.
+   *
+   * Do not use vw/svw/dvw here. Classic scrollbar appearance
+   * can alter layout viewport width and feed back into a
+   * viewport-width-derived height.
+   */
+
+  .mission-stage{
+    height:500px;
+    min-height:500px;
+    max-height:500px;
+    overflow:hidden;
+  }
+
+  .mission-story{
+    height:620px;
+    min-height:620px;
+    max-height:620px;
+    padding:26px 18px;
+  }
+
+  .mission-story-copy{
+    padding-right:3px;
+  }
+
+  .mission-navigation{
+    margin-top:14px;
+    padding-top:12px;
+  }
+
+  .mission-controls{
+    grid-template-columns:
+      48px
+      minmax(0,1fr)
+      48px;
+    gap:8px;
+  }
+
+  .mission-controls button{
+    width:48px;
+    min-width:48px;
+    max-width:48px;
+    height:48px;
+    min-height:48px;
+    max-height:48px;
+  }
+
+  .mission-markers{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+    gap:6px;
+    margin-top:9px;
+  }
+
+  .mission-markers button{
+    min-height:48px;
+  }
+}
+
+@media(max-width:380px){
+
+  /*
+   * Keep two columns even at 360 px, but reduce only the
+   * internal label padding. Touch height remains >= 48 px.
+   */
+
+  .mission-markers button{
+    padding:.38rem .32rem;
+    font-size:.7rem;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+
+  .mission-controls button{
+    transition:none;
+  }
+}

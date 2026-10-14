@@ -1,0 +1,1407 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>A2 Mission Explorer Geometry + Containment Regression</title>
+
+<style>
+html,body{
+  margin:0;
+  background:#111;
+  color:#fff;
+  font-family:monospace;
+}
+
+iframe{
+  display:block;
+  border:0;
+  margin:0 0 18px;
+  background:#000;
+}
+
+pre{
+  white-space:pre-wrap;
+  padding:12px;
+}
+</style>
+</head>
+
+<body
+  data-status="RUNNING"
+  data-case-count="0"
+  data-max-scroll-delta="0"
+  data-max-shell-height-delta="0"
+  data-max-stage-height-delta="0"
+  data-max-controls-top-delta="0"
+  data-max-client-width-delta="0"
+  data-max-control-overflow="0"
+>
+
+<pre id="results">RUNNING</pre>
+
+<script>
+(() => {
+'use strict';
+
+
+const viewports=[
+  {
+    name:'small-phone-360x800',
+    width:360,
+    height:800
+  },
+  {
+    name:'phone-390x844',
+    width:390,
+    height:844
+  },
+  {
+    name:'phone-430x932',
+    width:430,
+    height:932
+  },
+  {
+    name:'tablet-768x1024',
+    width:768,
+    height:1024
+  },
+  {
+    name:'phone-landscape-844x390',
+    width:844,
+    height:390
+  },
+  {
+    name:'wide-1180x820',
+    width:1180,
+    height:820
+  },
+  {
+    name:'laptop-1366x768',
+    width:1366,
+    height:768
+  },
+  {
+    name:'desktop-1440x900',
+    width:1440,
+    height:900
+  }
+];
+
+
+const sleep=
+  ms=>
+    new Promise(
+      resolve=>
+        setTimeout(
+          resolve,
+          ms
+        )
+    );
+
+
+async function settle(
+  win
+){
+
+  void win.document
+    .documentElement
+    .offsetHeight;
+
+  await sleep(
+    100
+  );
+
+  void win.document
+    .documentElement
+    .offsetHeight;
+}
+
+
+function geometry(
+  element,
+  win
+){
+
+  const rect=
+    element
+      .getBoundingClientRect();
+
+  return {
+    top:rect.top,
+    left:rect.left,
+    right:rect.right,
+    bottom:rect.bottom,
+    width:rect.width,
+    height:rect.height,
+    documentTop:
+      win.scrollY+
+      rect.top
+  };
+}
+
+
+async function createFrame(
+  spec
+){
+
+  const frame=
+    document.createElement(
+      'iframe'
+    );
+
+  frame.width=
+    String(
+      spec.width
+    );
+
+  frame.height=
+    String(
+      spec.height
+    );
+
+  frame.style.width=
+    spec.width+
+    'px';
+
+  frame.style.height=
+    spec.height+
+    'px';
+
+  frame.src=
+    '../../mission.html'
+    +'?mission-phase-b-r4='
+    +encodeURIComponent(
+      spec.name
+    );
+
+  document.body.appendChild(
+    frame
+  );
+
+  const started=
+    Date.now();
+
+  while(
+    Date.now()-
+    started<
+    10000
+  ){
+
+    try{
+
+      const win=
+        frame.contentWindow;
+
+      const doc=
+        frame.contentDocument;
+
+      if(
+        win &&
+        doc &&
+        doc.body &&
+        (
+          doc.readyState===
+            'interactive'
+          ||
+          doc.readyState===
+            'complete'
+        ) &&
+        win.A2MissionExplorer
+      ){
+
+        return frame;
+      }
+
+    }catch(error){
+      // iframe navigation transition
+    }
+
+    await sleep(
+      60
+    );
+  }
+
+  frame.remove();
+
+  throw new Error(
+    spec.name+
+    ': Mission Explorer readiness timeout'
+  );
+}
+
+
+function controlOverflow(
+  control,
+  story,
+  win
+){
+
+  const controlRect=
+    control
+      .getBoundingClientRect();
+
+  const storyRect=
+    story
+      .getBoundingClientRect();
+
+  const leftOverflow=
+    Math.max(
+      0,
+      storyRect.left-
+      controlRect.left
+    );
+
+  const rightOverflow=
+    Math.max(
+      0,
+      controlRect.right-
+      storyRect.right
+    );
+
+  const viewportLeft=
+    Math.max(
+      0,
+      -controlRect.left
+    );
+
+  const viewportRight=
+    Math.max(
+      0,
+      controlRect.right-
+      win.innerWidth
+    );
+
+  return Math.max(
+    leftOverflow,
+    rightOverflow,
+    viewportLeft,
+    viewportRight
+  );
+}
+
+
+async function runViewport(
+  spec
+){
+
+  const frame=
+    await createFrame(
+      spec
+    );
+
+  const win=
+    frame.contentWindow;
+
+  const doc=
+    frame.contentDocument;
+
+  const api=
+    win.A2MissionExplorer;
+
+  const shell=
+    doc.querySelector(
+      '.mission-explorer-shell'
+    );
+
+  const stage=
+    doc.querySelector(
+      '.mission-stage'
+    );
+
+  const story=
+    doc.querySelector(
+      '.mission-story'
+    );
+
+  const storyCopy=
+    doc.querySelector(
+      '#mission-story-copy'
+    );
+
+  const navigation=
+    doc.querySelector(
+      '.mission-navigation'
+    );
+
+  const controls=
+    doc.querySelector(
+      '.mission-controls'
+    );
+
+  const previous=
+    doc.querySelector(
+      '#mission-prev'
+    );
+
+  const next=
+    doc.querySelector(
+      '#mission-next'
+    );
+
+  const scrubber=
+    doc.querySelector(
+      '#mission-scrubber'
+    );
+
+  const markers=
+    doc.querySelector(
+      '#mission-markers'
+    );
+
+  const required=[
+    shell,
+    stage,
+    story,
+    storyCopy,
+    navigation,
+    controls,
+    previous,
+    next,
+    scrubber,
+    markers
+  ];
+
+  if(
+    required.some(
+      element=>!element
+    )
+  ){
+
+    throw new Error(
+      spec.name+
+      ': Mission Explorer DOM contract missing'
+    );
+  }
+
+  await settle(
+    win
+  );
+
+  api.set(
+    0
+  );
+
+  await settle(
+    win
+  );
+
+  const markerButtons=[
+    ...markers.querySelectorAll(
+      'button'
+    )
+  ];
+
+  if(
+    markerButtons.length!==
+    6
+  ){
+
+    throw new Error(
+      spec.name+
+      ': expected six milestone buttons'
+    );
+  }
+
+  doc.documentElement
+    .style
+    .scrollBehavior=
+      'auto';
+
+  const controlsDocumentTop=
+    win.scrollY+
+    controls
+      .getBoundingClientRect()
+      .top;
+
+  const maxScrollY=
+    Math.max(
+      0,
+      doc.documentElement
+        .scrollHeight-
+      win.innerHeight
+    );
+
+  const desiredTop=
+    Math.max(
+      38,
+      win.innerHeight*
+      .46
+    );
+
+  const targetScroll=
+    Math.max(
+      0,
+      Math.min(
+        controlsDocumentTop-
+        desiredTop,
+        maxScrollY
+      )
+    );
+
+  win.scrollTo(
+    0,
+    targetScroll
+  );
+
+  await settle(
+    win
+  );
+
+  const baseline={
+    scrollY:
+      win.scrollY,
+
+    clientWidth:
+      doc.documentElement
+        .clientWidth,
+
+    scrollHeight:
+      doc.documentElement
+        .scrollHeight,
+
+    shell:
+      geometry(
+        shell,
+        win
+      ),
+
+    stage:
+      geometry(
+        stage,
+        win
+      ),
+
+    story:
+      geometry(
+        story,
+        win
+      ),
+
+    navigation:
+      geometry(
+        navigation,
+        win
+      ),
+
+    controls:
+      geometry(
+        controls,
+        win
+      ),
+
+    previous:
+      geometry(
+        previous,
+        win
+      ),
+
+    next:
+      geometry(
+        next,
+        win
+      )
+  };
+
+
+  const previousRect=
+    previous
+      .getBoundingClientRect();
+
+  const nextRect=
+    next
+      .getBoundingClientRect();
+
+  if(
+    previousRect.width<
+      44
+    ||
+    previousRect.height<
+      44
+    ||
+    nextRect.width<
+      44
+    ||
+    nextRect.height<
+      44
+  ){
+
+    throw new Error(
+      spec.name+
+      ': previous/next target below 44 px'
+    );
+  }
+
+
+  for(
+    const button
+    of markerButtons
+  ){
+
+    const rect=
+      button
+        .getBoundingClientRect();
+
+    if(
+      rect.height<
+      44
+    ){
+
+      throw new Error(
+        spec.name+
+        ': milestone target below 44 px'
+      );
+    }
+  }
+
+
+  let maxScrollDelta=0;
+  let maxShellTopDelta=0;
+  let maxShellHeightDelta=0;
+  let maxStageTopDelta=0;
+  let maxStageHeightDelta=0;
+  let maxStoryHeightDelta=0;
+  let maxNavigationTopDelta=0;
+  let maxNavigationHeightDelta=0;
+  let maxControlsTopDelta=0;
+  let maxControlsHeightDelta=0;
+  let maxPreviousTopDelta=0;
+  let maxNextTopDelta=0;
+  let maxDocumentTopDelta=0;
+  let maxHorizontalOverflow=0;
+  let maxClientWidthDelta=0;
+  let maxScrollHeightDelta=0;
+  let maxControlOverflow=0;
+
+
+  function sample(
+    label
+  ){
+
+    const current={
+      shell:
+        geometry(
+          shell,
+          win
+        ),
+
+      stage:
+        geometry(
+          stage,
+          win
+        ),
+
+      story:
+        geometry(
+          story,
+          win
+        ),
+
+      navigation:
+        geometry(
+          navigation,
+          win
+        ),
+
+      controls:
+        geometry(
+          controls,
+          win
+        ),
+
+      previous:
+        geometry(
+          previous,
+          win
+        ),
+
+      next:
+        geometry(
+          next,
+          win
+        )
+    };
+
+
+    maxScrollDelta=
+      Math.max(
+        maxScrollDelta,
+        Math.abs(
+          win.scrollY-
+          baseline.scrollY
+        )
+      );
+
+
+    maxShellTopDelta=
+      Math.max(
+        maxShellTopDelta,
+        Math.abs(
+          current.shell.top-
+          baseline.shell.top
+        )
+      );
+
+
+    maxShellHeightDelta=
+      Math.max(
+        maxShellHeightDelta,
+        Math.abs(
+          current.shell.height-
+          baseline.shell.height
+        )
+      );
+
+
+    maxStageTopDelta=
+      Math.max(
+        maxStageTopDelta,
+        Math.abs(
+          current.stage.top-
+          baseline.stage.top
+        )
+      );
+
+
+    maxStageHeightDelta=
+      Math.max(
+        maxStageHeightDelta,
+        Math.abs(
+          current.stage.height-
+          baseline.stage.height
+        )
+      );
+
+
+    maxStoryHeightDelta=
+      Math.max(
+        maxStoryHeightDelta,
+        Math.abs(
+          current.story.height-
+          baseline.story.height
+        )
+      );
+
+
+    maxNavigationTopDelta=
+      Math.max(
+        maxNavigationTopDelta,
+        Math.abs(
+          current.navigation.top-
+          baseline.navigation.top
+        )
+      );
+
+
+    maxNavigationHeightDelta=
+      Math.max(
+        maxNavigationHeightDelta,
+        Math.abs(
+          current.navigation.height-
+          baseline.navigation.height
+        )
+      );
+
+
+    maxControlsTopDelta=
+      Math.max(
+        maxControlsTopDelta,
+        Math.abs(
+          current.controls.top-
+          baseline.controls.top
+        )
+      );
+
+
+    maxControlsHeightDelta=
+      Math.max(
+        maxControlsHeightDelta,
+        Math.abs(
+          current.controls.height-
+          baseline.controls.height
+        )
+      );
+
+
+    maxPreviousTopDelta=
+      Math.max(
+        maxPreviousTopDelta,
+        Math.abs(
+          current.previous.top-
+          baseline.previous.top
+        )
+      );
+
+
+    maxNextTopDelta=
+      Math.max(
+        maxNextTopDelta,
+        Math.abs(
+          current.next.top-
+          baseline.next.top
+        )
+      );
+
+
+    maxDocumentTopDelta=
+      Math.max(
+        maxDocumentTopDelta,
+        Math.abs(
+          current.controls
+            .documentTop-
+          baseline.controls
+            .documentTop
+        )
+      );
+
+
+    maxHorizontalOverflow=
+      Math.max(
+        maxHorizontalOverflow,
+        Math.max(
+          0,
+          doc.documentElement
+            .scrollWidth-
+          doc.documentElement
+            .clientWidth
+        )
+      );
+
+
+    maxClientWidthDelta=
+      Math.max(
+        maxClientWidthDelta,
+        Math.abs(
+          doc.documentElement
+            .clientWidth-
+          baseline.clientWidth
+        )
+      );
+
+
+    maxScrollHeightDelta=
+      Math.max(
+        maxScrollHeightDelta,
+        Math.abs(
+          doc.documentElement
+            .scrollHeight-
+          baseline.scrollHeight
+        )
+      );
+
+
+    const interactive=[
+      previous,
+      scrubber,
+      next,
+      ...markerButtons
+    ];
+
+
+    for(
+      const control
+      of interactive
+    ){
+
+      maxControlOverflow=
+        Math.max(
+          maxControlOverflow,
+          controlOverflow(
+            control,
+            story,
+            win
+          )
+        );
+    }
+
+
+    const storyRect=
+      story
+        .getBoundingClientRect();
+
+    const navigationRect=
+      navigation
+        .getBoundingClientRect();
+
+
+    if(
+      navigationRect.left<
+        storyRect.left-1
+      ||
+      navigationRect.right>
+        storyRect.right+1
+      ||
+      navigationRect.top<
+        storyRect.top-1
+      ||
+      navigationRect.bottom>
+        storyRect.bottom+1
+    ){
+
+      throw new Error(
+        spec.name+
+        ': navigation escaped story panel at '
+        +label
+      );
+    }
+  }
+
+
+  /*
+   * Baseline itself must already be contained.
+   */
+
+  sample(
+    'baseline'
+  );
+
+
+  /*
+   * Every mission moment through public test API.
+   */
+
+  for(
+    let index=0;
+    index<
+      api.count();
+    index+=1
+  ){
+
+    api.set(
+      index
+    );
+
+    await settle(
+      win
+    );
+
+    sample(
+      'api-set-'
+      +index
+    );
+  }
+
+
+  /*
+   * Real next / previous button activations.
+   */
+
+  api.set(
+    0
+  );
+
+  await settle(
+    win
+  );
+
+  next.click();
+
+  await settle(
+    win
+  );
+
+  sample(
+    'next-click-1'
+  );
+
+  next.click();
+
+  await settle(
+    win
+  );
+
+  sample(
+    'next-click-2'
+  );
+
+  previous.click();
+
+  await settle(
+    win
+  );
+
+  sample(
+    'previous-click'
+  );
+
+
+  /*
+   * Every milestone control.
+   */
+
+  for(
+    let index=0;
+    index<
+      markerButtons.length;
+    index+=1
+  ){
+
+    markerButtons[
+      index
+    ].click();
+
+    await settle(
+      win
+    );
+
+    sample(
+      'marker-'
+      +index
+    );
+  }
+
+
+  /*
+   * Representative free timeline positions.
+   */
+
+  for(
+    const timelineValue
+    of [
+      130,
+      280,
+      540,
+      585,
+      690,
+      910
+    ]
+  ){
+
+    scrubber.value=
+      String(
+        timelineValue
+      );
+
+    scrubber.dispatchEvent(
+      new win.Event(
+        'input',
+        {
+          bubbles:true
+        }
+      )
+    );
+
+    await settle(
+      win
+    );
+
+    sample(
+      'scrubber-'
+      +timelineValue
+    );
+  }
+
+
+  api.set(
+    0
+  );
+
+  await settle(
+    win
+  );
+
+  const prevDisabledAtStart=
+    previous.disabled===
+    true;
+
+  const startIndex=
+    api.index();
+
+
+  api.set(
+    api.count()-1
+  );
+
+  await settle(
+    win
+  );
+
+  const nextDisabledAtEnd=
+    next.disabled===
+    true;
+
+  const endIndex=
+    api.index();
+
+
+  const ariaValueText=
+    String(
+      scrubber.getAttribute(
+        'aria-valuetext'
+      )
+      ||''
+    );
+
+
+  const storyStyle=
+    win.getComputedStyle(
+      storyCopy
+    );
+
+
+  const storyScrollable=
+    storyCopy.scrollHeight>
+    storyCopy.clientHeight+1;
+
+
+  const storyOverflowSafe=
+    !storyScrollable
+    ||
+    storyStyle.overflowY===
+      'auto'
+    ||
+    storyStyle.overflowY===
+      'scroll';
+
+
+  const pass=(
+    maxScrollDelta<=1
+    &&
+    maxShellTopDelta<=1
+    &&
+    maxShellHeightDelta<=1
+    &&
+    maxStageTopDelta<=1
+    &&
+    maxStageHeightDelta<=1
+    &&
+    maxStoryHeightDelta<=1
+    &&
+    maxNavigationTopDelta<=1
+    &&
+    maxNavigationHeightDelta<=1
+    &&
+    maxControlsTopDelta<=1
+    &&
+    maxControlsHeightDelta<=1
+    &&
+    maxPreviousTopDelta<=1
+    &&
+    maxNextTopDelta<=1
+    &&
+    maxDocumentTopDelta<=1
+    &&
+    maxHorizontalOverflow<=1
+    &&
+    maxClientWidthDelta<=1
+    &&
+    maxScrollHeightDelta<=1
+    &&
+    maxControlOverflow<=1
+    &&
+    prevDisabledAtStart
+    &&
+    nextDisabledAtEnd
+    &&
+    startIndex===0
+    &&
+    endIndex===
+      api.count()-1
+    &&
+    ariaValueText.length>0
+    &&
+    storyOverflowSafe
+  );
+
+
+  const result={
+    viewport:
+      spec.name,
+
+    width:
+      spec.width,
+
+    height:
+      spec.height,
+
+    missionMoments:
+      api.count(),
+
+    milestoneButtons:
+      markerButtons.length,
+
+    maxScrollDelta,
+
+    maxShellTopDelta,
+
+    maxShellHeightDelta,
+
+    maxStageTopDelta,
+
+    maxStageHeightDelta,
+
+    maxStoryHeightDelta,
+
+    maxNavigationTopDelta,
+
+    maxNavigationHeightDelta,
+
+    maxControlsTopDelta,
+
+    maxControlsHeightDelta,
+
+    maxPreviousTopDelta,
+
+    maxNextTopDelta,
+
+    maxDocumentTopDelta,
+
+    maxHorizontalOverflow,
+
+    maxClientWidthDelta,
+
+    maxScrollHeightDelta,
+
+    maxControlOverflow,
+
+    baselineClientWidth:
+      baseline.clientWidth,
+
+    baselineStageHeight:
+      baseline.stage.height,
+
+    baselineStoryHeight:
+      baseline.story.height,
+
+    prevDisabledAtStart,
+
+    nextDisabledAtEnd,
+
+    ariaValueText,
+
+    storyScrollable,
+
+    storyOverflowY:
+      storyStyle.overflowY,
+
+    pass
+  };
+
+
+  frame.remove();
+
+  return result;
+}
+
+
+async function runAll(){
+
+  const results=[];
+
+  for(
+    const viewport
+    of viewports
+  ){
+
+    try{
+
+      results.push(
+        await runViewport(
+          viewport
+        )
+      );
+
+    }catch(error){
+
+      results.push(
+        {
+          viewport:
+            viewport.name,
+
+          pass:false,
+
+          error:
+            String(
+              error &&
+              error.message
+                ?error.message
+                :error
+            )
+        }
+      );
+    }
+  }
+
+
+  const pass=
+    results.every(
+      result=>
+        result.pass
+    );
+
+
+  const maxOf=
+    key=>
+      Math.max(
+        0,
+        ...results.map(
+          result=>
+            Number(
+              result[key]
+              ||0
+            )
+        )
+      );
+
+
+  document.body
+    .dataset
+    .status=
+      pass
+        ?'PASS'
+        :'FAIL';
+
+
+  document.body
+    .dataset
+    .caseCount=
+      String(
+        results.length
+      );
+
+
+  document.body
+    .dataset
+    .maxScrollDelta=
+      String(
+        maxOf(
+          'maxScrollDelta'
+        )
+      );
+
+
+  document.body
+    .dataset
+    .maxShellHeightDelta=
+      String(
+        maxOf(
+          'maxShellHeightDelta'
+        )
+      );
+
+
+  document.body
+    .dataset
+    .maxStageHeightDelta=
+      String(
+        maxOf(
+          'maxStageHeightDelta'
+        )
+      );
+
+
+  document.body
+    .dataset
+    .maxControlsTopDelta=
+      String(
+        maxOf(
+          'maxControlsTopDelta'
+        )
+      );
+
+
+  document.body
+    .dataset
+    .maxClientWidthDelta=
+      String(
+        maxOf(
+          'maxClientWidthDelta'
+        )
+      );
+
+
+  document.body
+    .dataset
+    .maxControlOverflow=
+      String(
+        maxOf(
+          'maxControlOverflow'
+        )
+      );
+
+
+  document.querySelector(
+    '#results'
+  ).textContent=
+    JSON.stringify(
+      results,
+      null,
+      2
+    );
+}
+
+
+const watchdog=
+  setTimeout(
+    ()=>{
+      if(
+        document.body
+          .dataset
+          .status===
+        'RUNNING'
+      ){
+
+        document.body
+          .dataset
+          .status=
+            'FAIL';
+
+        document.querySelector(
+          '#results'
+        ).textContent=
+          JSON.stringify(
+            {
+              fatal:
+                'Mission Explorer regression timed out.'
+            },
+            null,
+            2
+          );
+      }
+    },
+    45000
+  );
+
+
+runAll()
+  .then(
+    ()=>{
+      clearTimeout(
+        watchdog
+      );
+    }
+  )
+  .catch(
+    error=>{
+      clearTimeout(
+        watchdog
+      );
+
+      document.body
+        .dataset
+        .status=
+          'FAIL';
+
+      document.querySelector(
+        '#results'
+      ).textContent=
+        JSON.stringify(
+          {
+            fatal:
+              String(
+                error &&
+                error.message
+                  ?error.message
+                  :error
+              )
+          },
+          null,
+          2
+        );
+    }
+  );
+
+})();
+</script>
+
+</body>
+</html>

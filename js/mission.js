@@ -47,20 +47,316 @@
     {p:1,date:'APR 11 · 00:07 UTC',title:'Splashdown. Then recovery begins.',phase:'Splashdown',met:'09:01:31:48',comm:'Recovered',copy:'Drogues, main parachutes, splashdown, crew extraction, and spacecraft recovery close the flight. MissionLab keeps those public events connected to the entry and environmental data rather than treating splashdown as the end of the engineering story.',aL:'Mission outcome',a:'Crew safely home',bL:'Next phase',b:'Recovery + postflight',caption:'Nearly ten days of flight end in the Pacific; engineering analysis continues.'}
   ];
   let missionP=0;
-  function missionNearest(p){return missionMoments.reduce((best,m)=>Math.abs(m.p-p)<Math.abs(best.p-p)?m:best,missionMoments[0]);}
-  function updateMission(p, snap=false){
-    missionP=clamp(p,0,1); const m=snap?missionNearest(missionP):missionNearest(missionP);
-    const ids={date:'mission-date',title:'mission-title',copy:'mission-copy',met:'mission-met',phase:'mission-phase',comm:'mission-comm',caption:'mission-stage-caption',aL:'mission-readout-a-label',a:'mission-readout-a',bL:'mission-readout-b-label',b:'mission-readout-b'};
-    Object.entries(ids).forEach(([k,id])=>{const el=$('#'+id);if(el)el.textContent=m[k];});
-    const s=$('#mission-scrubber');if(s&&!snap)s.value=Math.round(missionP*1000);if(s&&snap){missionP=m.p;s.value=Math.round(m.p*1000);} $$('#mission-markers button').forEach(b=>b.classList.toggle('active',Math.abs(Number(b.dataset.p)-missionP)<.055));
+  let missionMoment=null;
+  const missionMarkerIndexes=[0,3,4,5,8,10];
+
+  function missionNearest(p){
+    return missionMoments.reduce(
+      (best,m)=>
+        Math.abs(m.p-p)<
+        Math.abs(best.p-p)
+          ?m
+          :best,
+      missionMoments[0]
+    );
   }
+
+  function missionIndex(){
+    return missionMoments.indexOf(
+      missionNearest(
+        missionP
+      )
+    );
+  }
+
+  function updateMission(
+    p,
+    snap=false
+  ){
+    missionP=clamp(
+      p,
+      0,
+      1
+    );
+
+    const m=
+      missionNearest(
+        missionP
+      );
+
+    const momentChanged=
+      missionMoment!==m;
+
+    missionMoment=m;
+
+    if(snap){
+      missionP=m.p;
+    }
+
+    const ids={
+      date:'mission-date',
+      title:'mission-title',
+      copy:'mission-copy',
+      met:'mission-met',
+      phase:'mission-phase',
+      comm:'mission-comm',
+      caption:'mission-stage-caption',
+      aL:'mission-readout-a-label',
+      a:'mission-readout-a',
+      bL:'mission-readout-b-label',
+      b:'mission-readout-b'
+    };
+
+    Object.entries(
+      ids
+    ).forEach(
+      ([key,id])=>{
+        const element=
+          $('#'+id);
+
+        if(element){
+          element.textContent=
+            m[key];
+        }
+      }
+    );
+
+    const scrubber=
+      $('#mission-scrubber');
+
+    if(scrubber){
+      scrubber.value=
+        String(
+          Math.round(
+            missionP*1000
+          )
+        );
+
+      scrubber.setAttribute(
+        'aria-valuetext',
+        `${m.date}: ${m.phase}`
+      );
+    }
+
+    $$('#mission-markers button')
+      .forEach(
+        button=>{
+          const active=
+            Math.abs(
+              Number(
+                button.dataset.p
+              )-
+              missionP
+            )<.055;
+
+          button.classList.toggle(
+            'active',
+            active
+          );
+
+          if(active){
+            button.setAttribute(
+              'aria-current',
+              'step'
+            );
+          }else{
+            button.removeAttribute(
+              'aria-current'
+            );
+          }
+        }
+      );
+
+    const previous=
+      $('#mission-prev');
+
+    const next=
+      $('#mission-next');
+
+    if(previous){
+      previous.disabled=
+        missionP<=
+        missionMoments[0].p+
+        1e-6;
+    }
+
+    if(next){
+      next.disabled=
+        missionP>=
+        missionMoments[
+          missionMoments.length-1
+        ].p-
+        1e-6;
+    }
+
+    if(momentChanged){
+      const story=
+        $('#mission-story-copy');
+
+      if(story){
+        requestAnimationFrame(
+          ()=>{
+            story.scrollTop=0;
+          }
+        );
+      }
+    }
+  }
+
+  function goMissionPrevious(){
+    const previous=
+      [...missionMoments]
+        .reverse()
+        .find(
+          moment=>
+            moment.p<
+            missionP-.02
+        )
+      ||
+      missionMoments[0];
+
+    updateMission(
+      previous.p,
+      true
+    );
+  }
+
+  function goMissionNext(){
+    const next=
+      missionMoments
+        .find(
+          moment=>
+            moment.p>
+            missionP+.02
+        )
+      ||
+      missionMoments[
+        missionMoments.length-1
+      ];
+
+    updateMission(
+      next.p,
+      true
+    );
+  }
+
+  function setMissionIndex(
+    index
+  ){
+    const safeIndex=
+      clamp(
+        Math.round(
+          Number(index)||0
+        ),
+        0,
+        missionMoments.length-1
+      );
+
+    updateMission(
+      missionMoments[
+        safeIndex
+      ].p,
+      true
+    );
+  }
+
   function initMission(){
-    const markers=$('#mission-markers'); if(markers){markers.innerHTML=missionMoments.filter((_,i)=>[0,3,4,5,8,10].includes(i)).map(m=>`<button type="button" data-p="${m.p}">${m.phase}</button>`).join('');$$('button',markers).forEach(b=>b.addEventListener('click',()=>{updateMission(Number(b.dataset.p),true);}));}
-    const s=$('#mission-scrubber');if(s)s.addEventListener('input',e=>updateMission(Number(e.target.value)/1000));
-    $('#mission-prev')?.addEventListener('click',()=>{const prev=[...missionMoments].reverse().find(m=>m.p<missionP-.02)||missionMoments[0];updateMission(prev.p,true);});
-    $('#mission-next')?.addEventListener('click',()=>{const next=missionMoments.find(m=>m.p>missionP+.02)||missionMoments.at(-1);updateMission(next.p,true);});
-    updateMission(0,true);
+    const markers=
+      $('#mission-markers');
+
+    if(markers){
+      markers.innerHTML=
+        missionMarkerIndexes
+          .map(
+            index=>{
+              const moment=
+                missionMoments[
+                  index
+                ];
+
+              return (
+                `<button type="button" `
+                +`data-p="${moment.p}" `
+                +`aria-label="Jump to ${moment.phase}">`
+                +`${moment.phase}</button>`
+              );
+            }
+          )
+          .join('');
+
+      $$(
+        'button',
+        markers
+      ).forEach(
+        button=>
+          button.addEventListener(
+            'click',
+            ()=>{
+              updateMission(
+                Number(
+                  button.dataset.p
+                ),
+                true
+              );
+            }
+          )
+      );
+    }
+
+    const scrubber=
+      $('#mission-scrubber');
+
+    if(scrubber){
+      scrubber.addEventListener(
+        'input',
+        event=>
+          updateMission(
+            Number(
+              event.target.value
+            )/1000
+          )
+      );
+    }
+
+    $('#mission-prev')
+      ?.addEventListener(
+        'click',
+        goMissionPrevious
+      );
+
+    $('#mission-next')
+      ?.addEventListener(
+        'click',
+        goMissionNext
+      );
+
+    updateMission(
+      0,
+      true
+    );
   }
+
+  window.A2MissionExplorer=
+    Object.freeze({
+      count:()=>
+        missionMoments.length,
+
+      index:()=>
+        missionIndex(),
+
+      position:()=>
+        missionP,
+
+      set:
+        setMissionIndex,
+
+      next:
+        goMissionNext,
+
+      prev:
+        goMissionPrevious
+    });
+
   initMission();
   if(missionCanvas){
     const loop=t=>{const {ctx,w,h,layout}=fitCanvas(missionCanvas);ctx.clearRect(0,0,w,h);drawStars(ctx,w,h,layout.compact?105:150,13,.72);
