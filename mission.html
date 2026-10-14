@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="responsive-hardening.css">
   <link rel="stylesheet" href="trajectory.css">
   <link rel="stylesheet" href="space-weather.css">
+  <link rel="stylesheet" href="entry.css">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="icon" href="favicon.ico" sizes="any">
 </head>
@@ -285,50 +286,96 @@
 </section>
 
 
-<section class="x-section x-entry" id="entry-lab">
-    <div class="x-wrap">
-      <div class="x-section-head">
-        <div><p class="x-kicker">Entry · descent · recovery</p><h2>Watch lunar-return energy disappear.</h2></div>
-        <p>Scrub from black space to Pacific splashdown. NASA-reported milestones anchor the sequence; the continuous visual motion between them is explicitly educational interpolation.</p>
-      </div>
-      <div class="entry-sim v5-entry-sim">
-        <div class="entry-visual">
-          <canvas id="entry-canvas" aria-label="Interactive Artemis II atmospheric entry, parachute descent, and splashdown visualization"></canvas>
-          <div class="entry-phase-title"><small id="entry-time">23:53 UTC</small><h3 id="entry-phase">Entry interface</h3><p id="entry-visual-caption">400,000 ft. Mach 35. The atmosphere is about to become the braking system.</p></div>
-          <div class="entry-signal" id="entry-signal"><i></i><span>COMM AVAILABLE</span></div>
-          <div class="entry-gauges">
-            <div><span>ALTITUDE</span><strong id="g-alt">121.9 km</strong></div>
-            <div><span>MACH</span><strong id="g-mach">35</strong></div>
-            <div><span>DYNAMIC PRESSURE · MODEL-DERIVED</span><strong id="g-q">building</strong></div>
-            <div><span>CONVECTIVE HEAT FLUX · MODEL</span><strong id="g-heat">rising</strong></div>
-            <div><span>COMM</span><strong id="g-comm">available</strong></div>
-          </div>
-        </div>
-        <div class="entry-console">
-          <input id="entry-scrubber" type="range" min="0" max="1000" value="0" aria-label="Entry timeline">
-          <div class="entry-milestones" id="entry-milestones"></div>
-          <div class="entry-lesson"><p class="x-label" id="entry-evidence">NASA REPORTED MILESTONE</p><h3 id="entry-lesson-title">The atmosphere starts doing the braking.</h3><p id="entry-lesson-copy">Orion reached the atmosphere at 400,000 feet traveling roughly Mach 35. Drag, not a retro-burn, removes most of the lunar-return kinetic energy.</p></div>
-        </div>
-      </div>
-      <div class="entry-mini-lessons">
-        <button type="button" class="active" data-entry-topic="speed"><b>Why speed matters</b><span>Heating grows extremely quickly with velocity.</span></button>
-        <button type="button" data-entry-topic="pressure"><b>What dynamic pressure means</b><span>½ρV² combines rising density with falling speed.</span></button>
-        <button type="button" data-entry-topic="blackout"><b>Why blackout occurs</b><span>Ionized gas can interfere with RF communication.</span></button>
-        <button type="button" data-entry-topic="parachutes"><b>Why not deploy chutes immediately?</b><span>Loads would be destructive at hypersonic speed.</span></button>
-        <button type="button" data-entry-topic="staging"><b>Drogues vs mains</b><span>Stabilize first, then carry the terminal descent.</span></button>
-      </div>
-      <div class="entry-topic-panel" id="entry-topic-panel"></div>
-      <details class="engineering-drawer">
-        <summary><span>Show the engineering</span><small>Mach · dynamic pressure · Sutton–Graves model · recovery evidence</small></summary>
-        <div class="engineering-drawer-body entry-figures">
-          <figure><img src="docs/assets/entry/phase2e_mach_history.svg" alt="MissionLab entry Mach history"><figcaption>Modeled Mach evolution through entry.</figcaption></figure>
-          <figure><img src="docs/assets/entry/phase2e_dynamic_pressure.svg" alt="MissionLab entry dynamic pressure"><figcaption>Modeled dynamic pressure from reconstructed speed and atmosphere.</figcaption></figure>
-          <figure><img src="docs/assets/entry/phase2e_sutton_graves_heat_flux.svg" alt="MissionLab Sutton Graves convective heat flux"><figcaption>Sutton–Graves MODEL output. Not measured heat-shield telemetry.</figcaption></figure>
-          <div><h3>q̇ = k √(ρ / Rₙ) V³</h3><p>MissionLab uses Sutton–Graves as a low-fidelity convective stagnation-point model. It does not claim measured surface temperature, detailed chemistry, ablation response, or private Orion thermal telemetry.</p><a href="library.html#convective-heating">Open the heating deep dive →</a></div>
-        </div>
-      </details>
+<section class="x-section x-entry entry-phase-i" id="entry-lab" data-entry-phase-i data-phase="rarefied" data-loft="false" data-finite="true">
+  <div class="x-wrap">
+    <div class="x-section-head entry-phase-i-head">
+      <div><p class="x-kicker">Entry · descent · recovery</p><h2>Watch lunar-return energy disappear.</h2></div>
+      <p>Follow the flight-derived entry reconstruction continuously, then hand off to NASA-reported parachute, splashdown, and recovery milestones. The scrubber is a reconstruction visualization, not a telemetry replay.</p>
     </div>
-  </section>
+
+    <div class="entry-phase-i-shell">
+      <div class="entry-flight-stage">
+        <canvas id="entry-flight-canvas" aria-label="Artemis II reconstructed altitude profile from the first high-rate entry state through derived surface crossing, including the loft rebound and parachute descent"></canvas>
+        <div class="entry-stage-topline">
+          <div><span>RECONSTRUCTED ENTRY PROFILE</span><b id="entry-analysis-time">23:53:30.866 UTC</b><small id="entry-analysis-offset">analysis +0.0 s</small></div>
+          <div class="entry-stage-evidence"><span>HIGH-RATE SOURCE</span><b>819 flight-derived states</b><small>M50 → validated analysis transform → WGS 84 geometry · browser view interpolates curated Phase 2 checkpoints</small></div>
+        </div>
+        <div class="entry-stage-note"><b>ARTEMIS II LOFT / REBOUND</b><span>The brief climb in the reconstructed profile is real geometry. It is <strong>not a skip entry</strong> and does not reveal private guidance commands.</span></div>
+      </div>
+
+      <aside class="entry-state-board" aria-live="polite">
+        <div class="entry-state-heading">
+          <p class="x-label" id="entry-evidence">MISSIONLAB DERIVED</p>
+          <h3 id="entry-phase">Rarefied upper entry</h3>
+          <p id="entry-visual-caption">The vehicle is already fast, but body-scale continuum assumptions are not yet fully satisfied.</p>
+        </div>
+        <div class="entry-current-event"><span>NEAREST CHECKPOINT</span><b id="entry-current-event">High-rate source begins</b></div>
+        <div class="entry-metric-grid">
+          <div><span>ALTITUDE</span><strong id="g-alt">121.9 km</strong><small id="g-alt-detail">WGS 84 reconstruction</small></div>
+          <div><span>EARTH-RELATIVE SPEED</span><strong id="g-speed">10.63 km/s</strong><small id="g-speed-detail">flight-derived reconstruction</small></div>
+          <div><span>MACH · MODEL</span><strong id="g-mach">24.4</strong><small id="g-mach-detail">modeled free-stream Mach</small></div>
+          <div><span>DYNAMIC PRESSURE · MODEL</span><strong id="g-q">0.001 kPa</strong><small id="g-q-detail">modeled atmosphere + reconstructed speed</small></div>
+          <div><span>CONVECTIVE HEAT FLUX · MODEL</span><strong id="g-heat">1.03 W/cm²</strong><small id="g-heat-detail">formal diagnostic in rarefied flow</small></div>
+          <div><span>SPEED² ENERGY PROXY REMOVED</span><strong id="entry-energy-removed">0%</strong><small>kinetic-energy-per-mass proxy only</small></div>
+        </div>
+        <div class="entry-signal-phase">
+          <div><span>COMMUNICATIONS CONTEXT</span><b id="entry-comm" data-tone="watch">BLACKOUT EXPECTED SHORTLY</b><small id="entry-comm-detail">NASA reported a planned blackout shortly after Entry Interface; exact start second is not public.</small></div>
+          <div><span>HEATING INTERPRETATION</span><b id="entry-heat-domain">FORMAL · RAREFIED</b><small>Not measured TPS telemetry. Sutton–Graves is a low-fidelity external convective-heating model.</small></div>
+        </div>
+        <div class="entry-causal-bars" aria-label="Relative entry quantities">
+          <div><span>MODELED HEAT FLUX</span><i><b id="entry-heat-fill"></b></i><small>peaks first because the model scales approximately with √ρV³</small></div>
+          <div><span>MODELED DYNAMIC PRESSURE</span><i><b id="entry-q-fill"></b></i><small>q = ½ρV² · two dominant peaks are nearly equal</small></div>
+          <div><span>SPEED² ENERGY PROXY REMOVED</span><i><b id="entry-energy-fill"></b></i><small>shows how quickly speed loss dominates the return-energy story</small></div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="entry-controller">
+      <div class="entry-controller-row">
+        <div><span>SCRUB THE RECONSTRUCTED ENTRY</span><small>Analysis elapsed time is referenced to the first high-rate state at 23:53:30.866 UTC, not an asserted private Entry Interface telemetry second. Browser state interpolates curated Phase 2 checkpoints for continuity rather than replaying all 819 source states.</small></div>
+        <div class="entry-play-controls"><button type="button" id="entry-play" aria-pressed="false">Play</button><button type="button" id="entry-reset">Reset</button></div>
+      </div>
+      <input id="entry-scrubber" type="range" min="0" max="817.975" step="0.1" value="0" aria-label="Scrub Artemis II reconstructed entry from the first high-rate state to derived surface crossing">
+      <div class="entry-event-rail" id="entry-event-rail" aria-label="Entry analysis and public event checkpoints"></div>
+      <p class="entry-time-boundary"><strong>Two clocks are intentionally visible.</strong> Analysis checkpoints can have sub-second precision because they are derived from the high-rate source. NASA live-update events such as reacquisition, drogues, mains, and splashdown remain public-minute anchors and are not promoted to exact telemetry epochs.</p>
+    </div>
+
+    <div class="entry-teach-grid">
+      <article class="entry-teach-card entry-teach-wide">
+        <p class="x-label">THE RELATIONSHIP THAT MATTERS</p>
+        <h3>Nearly equal dynamic-pressure peaks. More than an order of magnitude difference in modeled heating.</h3>
+        <div class="entry-compare">
+          <div><span>EARLY LOAD PEAK · ANALYSIS +95 s</span><b>12.798779 kPa</b><small>Modeled heat flux · 104.975953 W/cm²</small></div>
+          <i>vs</i>
+          <div><span>LATE / GLOBAL LOAD PEAK · ANALYSIS +431 s</span><b>12.808389 kPa</b><small>Modeled heat flux · 7.596440 W/cm²</small></div>
+        </div>
+        <p>The modeled pressure peaks differ by only about 0.075%, but heating is dramatically lower at the later peak because velocity has fallen. Dynamic pressure scales with ρV² while Sutton–Graves heating scales approximately with √ρV³.</p>
+      </article>
+      <article class="entry-teach-card"><p class="x-label">LOFT / REBOUND</p><h3>The capsule briefly climbs while it keeps losing speed.</h3><p>From analysis +112.294 s to +239.647 s, altitude recovers 3.861680 km while Earth-relative speed falls 2.514577 km/s. About 37.978839% of the stronger-continuum modeled convective heat load accumulates during this interval.</p><small>MISSIONLAB DERIVED + MODELED · ARTEMIS II LOFT / REBOUND ≠ ARTEMIS I SKIP ENTRY</small></article>
+      <article class="entry-teach-card"><p class="x-label">BLACKOUT</p><h3>Expected radio silence is not an anomaly.</h3><p>NASA reported a planned plasma communications blackout shortly after Entry Interface, expected to last about six minutes. MissionLab keeps the exact start/end seconds unknown because the public evidence does.</p><small>NASA REPORTED · PLASMA EVENT ≠ MEASURED PLASMA DENSITY</small></article>
+      <article class="entry-teach-card"><p class="x-label">PARACHUTE SYSTEM</p><h3>Eleven parachutes, staged for different jobs.</h3><p>System architecture: three forward-bay-cover parachutes, two drogues, three pilots, and three mains. NASA reported the as-flown drogue and main deployment minutes; the architecture is not an individual-canopy performance log.</p><small>NASA REPORTED SYSTEM ARCHITECTURE</small></article>
+    </div>
+
+    <section class="entry-recovery-story" aria-labelledby="entry-recovery-title">
+      <div class="entry-recovery-head"><div><p class="x-kicker">Recovery is part of EDL</p><h3 id="entry-recovery-title">Splashdown is not the end of the engineering timeline.</h3></div><p>NASA’s public minute sequence separates crew recovery from spacecraft recovery. MissionLab preserves that distinction instead of ending the story at water impact.</p></div>
+      <div class="entry-recovery-rail" id="entry-recovery-rail"></div>
+      <div class="entry-splash-boundary"><span>DERIVED SURFACE CROSSING</span><b>00:07:08.824 UTC · 32.340599°, −117.763095°</b><p>This flight-derived WGS 84 surface crossing falls inside NASA’s reported 00:07 UTC splashdown minute. The 8.824 s offset is a consistency diagnostic, <strong>not</strong> an exact timing error, and the coordinate is neither an official NASA actual splashdown coordinate nor an official target coordinate. Official target-to-actual miss distance is <strong>not publicly quantifiable</strong>.</p></div>
+    </section>
+
+    <details class="engineering-drawer entry-engineering-drawer">
+      <summary><span>Show the engineering</span><small>trajectory · atmosphere · Mach · heating · loft · recovery · evidence boundaries</small></summary>
+      <div class="engineering-drawer-body entry-figures entry-phase-i-figures">
+        <figure><img src="docs/assets/entry/phase2c_entry_altitude.svg" alt="MissionLab reconstructed Artemis II entry altitude history"><figcaption>Flight-derived altitude reconstruction. The non-monotonic loft / rebound is visible in the trajectory history.</figcaption></figure>
+        <figure><img src="docs/assets/entry/phase2e_dynamic_pressure.svg" alt="MissionLab modeled Artemis II entry dynamic pressure"><figcaption>Modeled dynamic pressure from NRLMSIS density and reconstructed Earth-relative speed.</figcaption></figure>
+        <figure><img src="docs/assets/entry/phase2e_sutton_graves_heat_flux.svg" alt="MissionLab modeled Sutton Graves convective heat flux"><figcaption>Sutton–Graves MODELED external convective heat flux. Not measured heat-shield telemetry.</figcaption></figure>
+        <figure><img src="docs/assets/entry/phase2f_artemis_ii_rebound_profile.svg" alt="MissionLab Artemis II loft rebound profile"><figcaption>Artemis II derived loft / rebound geometry. This is not Artemis I-style skip-entry classification.</figcaption></figure>
+        <figure><img src="docs/assets/entry/phase2f_loft_heating_flux.svg" alt="MissionLab modeled heating through the Artemis II loft rebound"><figcaption>Modeled external heat flux through the loft / rebound. External heat-flux decline does not prove TPS internal cooling.</figcaption></figure>
+        <figure><img src="docs/assets/recovery/phase4a2_entry_to_recovery_timeline.svg" alt="MissionLab Artemis II entry to recovery timeline"><figcaption>Public-minute operational sequence from entry through crew and spacecraft recovery.</figcaption></figure>
+        <div class="entry-equation-note"><h3>q̇ = k √(ρ / Rₙ) V³</h3><p>MissionLab’s low-fidelity Sutton–Graves implementation uses modeled NRLMSIS 2.0 density, Earth-relative reconstructed speed, and a 6.035 m Orion EFT-1 heritage/reference nose radius. Primary public interpretation is limited to <strong>Kn &lt; 0.01 and Mach ≥ 5</strong>. The primary integrated modeled convective heat load is <strong>162.686370921 MJ/m²</strong>; the stronger-continuum sensitivity is <strong>159.150073328 MJ/m²</strong>.</p><p><strong>Permanent boundary:</strong> modeled heating ≠ measured TPS heat flux, measured temperature, ablation/recession, material damage, or crew thermal exposure. Kinematic deceleration / g₀-equivalent ≠ crew sensed g-load.</p><div class="entry-source-links"><a href="library.html#entry-dynamics">Entry dynamics deep dive →</a><a href="library.html#convective-heating">Convective heating deep dive →</a><a href="https://www.nasa.gov/blogs/missions/2026/04/10/artemis-ii-flight-day-10-re-entry-live-updates/" target="_blank" rel="noreferrer noopener">NASA Flight Day 10 live updates ↗</a></div></div>
+      </div>
+    </details>
+  </div>
+</section>
 
 <section class="x-section x-labs x-weather-experience" id="space-weather" data-pfu="1" data-scale="BELOW S1" data-scale-rank="0" data-location="deep" data-dose-known="false" data-finite="true">
     <div class="x-wrap">
@@ -419,6 +466,8 @@
 
 <script src="js/core.js"></script>
 <script src="js/mission.js"></script>
+<script src="js/entry-model.js"></script>
+<script src="js/entry.js"></script>
 <script src="js/space-weather-model.js"></script>
 <script src="js/space-weather.js"></script>
 <script src="js/trajectory-model.js"></script>

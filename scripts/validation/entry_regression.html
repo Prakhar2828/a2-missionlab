@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>A2 MissionLab Phase I entry regression</title>
+<style>html,body{margin:0;background:#101216;color:#fff;font:13px/1.45 Consolas,monospace}iframe{display:block;width:390px;height:844px;border:0;background:#000}pre{white-space:pre-wrap;padding:12px}</style>
+</head>
+<body data-status="RUNNING" data-continuity-pass="false" data-loft-pass="false" data-heating-pressure-pass="false" data-blackout-pass="false" data-recovery-pass="false" data-evidence-pass="false" data-canvas-pass="false" data-overflow-pass="false" data-finite-pass="false">
+<iframe id="app" src="../../mission.html?entry-qa=1#entry-lab" title="Entry descent recovery regression surface"></iframe>
+<pre id="results">RUNNING</pre>
+<script>
+(() => {
+'use strict';
+const out=document.querySelector('#results');
+const frame=document.querySelector('#app');
+const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+const assert=(cond,msg)=>{if(!cond)throw new Error(msg)};
+const n=text=>Number(String(text).replace(/[^0-9.+-]/g,''));
+async function resizeFrame(w,h){frame.style.width=`${w}px`;frame.style.height=`${h}px`;frame.contentWindow.dispatchEvent(new frame.contentWindow.Event('resize'));await wait(180);}
+async function main(){
+  await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Mission iframe load timeout')),10000);frame.addEventListener('load',()=>{clearTimeout(timer);setTimeout(resolve,350)},{once:true});});
+  const w=frame.contentWindow,doc=frame.contentDocument,root=doc.querySelector('#entry-lab[data-entry-phase-i]');
+  assert(root,'Phase I Entry root missing');
+  const scrubber=doc.querySelector('#entry-scrubber');
+  const setTime=async value=>{scrubber.value=String(value);scrubber.dispatchEvent(new w.Event('input',{bubbles:true}));await wait(45);return {phase:root.dataset.phase,loft:root.dataset.loft,alt:n(doc.querySelector('#g-alt').textContent),speed:n(doc.querySelector('#g-speed').textContent),mach:n(doc.querySelector('#g-mach').textContent),heat:n(doc.querySelector('#g-heat').textContent),q:n(doc.querySelector('#g-q').textContent),comm:doc.querySelector('#entry-comm').textContent,event:doc.querySelector('#entry-current-event').textContent};};
+
+  const start=await setTime(0),preHeat=await setTime(45.249112),heatPeak=await setTime(85),loftStart=await setTime(112.294128),loftMid=await setTime(180),loftTop=await setTime(239.647374),reacq=await setTime(389.2),qPeak=await setTime(431),mach5=await setTime(464.815771),afterModel=await setTime(500);
+  const continuityPass=start.alt>120&&start.speed>10&&preHeat.heat>30&&heatPeak.heat>109&&mach5.mach>=4.99&&mach5.mach<=5.01&&doc.querySelector('#g-heat').textContent==='—';
+  document.body.dataset.continuityPass=String(continuityPass);assert(continuityPass,'Continuous reconstruction/checkpoint progression failed');
+
+  const exactLoftStart=w.A2EntryModel.stateAt(w.A2EntryModel.constants.loftStart);
+  const exactLoftTop=w.A2EntryModel.stateAt(w.A2EntryModel.constants.loftEnd);
+  const loftPass=loftStart.loft==='true'&&loftMid.loft==='true'&&loftTop.loft==='true'&&exactLoftStart.inLoft&&exactLoftTop.inLoft&&(exactLoftTop.altitudeKm-exactLoftStart.altitudeKm)>3.85&&(exactLoftStart.speedKmS-exactLoftTop.speedKmS)>2.5&&root.textContent.includes('not a skip entry');
+  document.body.dataset.loftPass=String(loftPass);assert(loftPass,'Artemis II loft/rebound response or terminology boundary failed');
+
+  const relationshipText=doc.querySelector('.entry-teach-wide')?.textContent||'';
+  const heatingPressurePass=Math.abs(heatPeak.heat-109.6)<.2&&Math.abs(qPeak.q-12.81)<.02&&relationshipText.includes('12.798779 kPa')&&relationshipText.includes('12.808389 kPa')&&relationshipText.includes('104.975953 W/cm²')&&relationshipText.includes('7.596440 W/cm²');
+  document.body.dataset.heatingPressurePass=String(heatingPressurePass);assert(heatingPressurePass,'Heating-vs-dynamic-pressure teaching relationship failed');
+
+  const blackoutText=root.textContent||'';
+  const blackoutPass=start.comm.includes('EXPECTED SHORTLY')&&loftMid.comm.includes('PLANNED BLACKOUT')&&reacq.comm.includes('PUBLIC MINUTE')&&blackoutText.includes('exact start/end seconds unknown')&&blackoutText.includes('Expected radio silence is not an anomaly');
+  document.body.dataset.blackoutPass=String(blackoutPass);assert(blackoutPass,'Blackout evidence/operations boundary failed');
+
+  const recoveryCards=[...doc.querySelectorAll('#entry-recovery-rail article')];
+  const splash=doc.querySelector('.entry-splash-boundary')?.textContent||'';
+  const recoveryPass=recoveryCards.length===4&&recoveryCards.some(x=>x.textContent.includes('01:58 UTC')&&x.textContent.includes('+111 min'))&&recoveryCards.some(x=>x.textContent.includes('08:27 UTC')&&x.textContent.includes('+500 min'))&&splash.includes('32.340599°')&&splash.includes('not publicly quantifiable');
+  document.body.dataset.recoveryPass=String(recoveryPass);assert(recoveryPass,'Recovery closure or splashdown evidence boundary failed');
+
+  const evidencePass=root.dataset.qaEvidence==='true'&&root.textContent.includes('Two clocks are intentionally visible')&&root.textContent.includes('NASA REPORTED SYSTEM ARCHITECTURE')&&root.textContent.includes('Kinematic deceleration / g₀-equivalent ≠ crew sensed g-load')&&root.textContent.includes('not an exact timing error');
+  document.body.dataset.evidencePass=String(evidencePass);assert(evidencePass,'Phase I public evidence boundaries missing');
+
+  const heatButton=[...doc.querySelectorAll('#entry-event-rail button')].find(x=>x.textContent.includes('Modeled heat-flux peak'));assert(heatButton,'Heat-peak event button missing');heatButton.click();await wait(45);assert(Math.abs(Number(scrubber.value)-85)<.01,'Event rail did not drive scrubber state');
+
+  const canvas=doc.querySelector('#entry-flight-canvas');await wait(100);const ctx=canvas?.getContext('2d');let nonzero=false;if(ctx&&canvas.width&&canvas.height){const img=ctx.getImageData(0,0,Math.min(canvas.width,240),Math.min(canvas.height,240)).data;for(let i=3;i<img.length;i+=4){if(img[i]>0){nonzero=true;break;}}}
+  const canvasPass=nonzero&&root.dataset.canvasPass==='true';document.body.dataset.canvasPass=String(canvasPass);assert(canvasPass,'Phase I Entry canvas did not render');
+
+  const viewportResults=[];
+  for(const [vw,vh] of [[390,844],[430,932],[844,390],[1440,900]]){await resizeFrame(vw,vh);const pageOverflow=Math.max(0,doc.documentElement.scrollWidth-doc.documentElement.clientWidth),sectionOverflow=Math.max(0,root.scrollWidth-root.clientWidth);viewportResults.push({vw,vh,pageOverflow,sectionOverflow,canvasW:canvas.getBoundingClientRect().width,canvasH:canvas.getBoundingClientRect().height});assert(pageOverflow<=1&&sectionOverflow<=1,`Entry overflow at ${vw}x${vh}: page ${pageOverflow}, section ${sectionOverflow}`);}
+  const overflowPass=viewportResults.every(x=>x.pageOverflow<=1&&x.sectionOverflow<=1&&x.canvasW>0&&x.canvasH>0);document.body.dataset.overflowPass=String(overflowPass);
+
+  const finitePass=root.dataset.qaFinite==='true'&&root.dataset.qaLoft==='true'&&root.dataset.qaHeating==='true'&&root.dataset.qaPressure==='true'&&[start,preHeat,heatPeak,loftStart,loftMid,loftTop,reacq,qPeak,mach5].every(s=>[s.alt,s.speed,s.mach].every(Number.isFinite));
+  document.body.dataset.finitePass=String(finitePass);assert(finitePass,'Non-finite or protected QA checkpoint failed');
+
+  document.body.dataset.status='PASS';out.textContent=JSON.stringify({start,preHeat,heatPeak,loftStart,loftMid,loftTop,reacq,qPeak,mach5,afterModel,viewportResults},null,2);
+}
+const watchdog=setTimeout(()=>{if(document.body.dataset.status==='RUNNING'){document.body.dataset.status='FAIL';out.textContent=JSON.stringify({fatal:'Entry regression watchdog timed out'},null,2);}},18000);
+main().then(()=>clearTimeout(watchdog)).catch(error=>{clearTimeout(watchdog);document.body.dataset.status='FAIL';out.textContent=JSON.stringify({error:error.message,stack:error.stack},null,2);});
+})();
+</script>
+</body>
+</html>

@@ -5,7 +5,7 @@
     throw new Error('A2 MissionLab core runtime must load before experience runtimes.');
   }
 
-  const staticMissionQa = /(?:^|[?&])(?:trajectory-qa|space-weather-qa)=1(?:&|$)/.test(window.location.search);
+  const staticMissionQa = /(?:^|[?&])(?:trajectory-qa|space-weather-qa|entry-qa)=1(?:&|$)/.test(window.location.search);
 
   const {
     $,
@@ -392,7 +392,7 @@
 
 
   // Entry / descent / recovery: NASA-reported anchors with educational interpolation.
-  if ($('#entry-lab')) {
+  if ($('#entry-lab') && !$('#entry-lab').hasAttribute('data-entry-phase-i')) {
   const entryCanvas=$('#entry-canvas');let entryP=0;
   const entryStates=[
     {p:0,time:'23:53 UTC',phase:'Entry interface',cap:'400,000 ft. Mach 35. The atmosphere is about to become the braking system.',alt:'121.9 km',mach:'35',q:'building',heat:'rising',comm:'available',evidence:'NASA REPORTED MILESTONE',lesson:'The atmosphere starts doing the braking.',copy:'NASA reported Orion reaching the atmosphere at 400,000 feet at roughly Mach 35. Aerodynamic drag removes most of the lunar-return kinetic energy; this scene interpolates between public milestones.'},

@@ -1,0 +1,293 @@
+{
+  "dataset_id": "phase_i_artemis_ii_entry_public_experience_reference",
+  "mission": "Artemis II",
+  "phase": "I",
+  "status": "PUBLIC_EXPERIENCE_REFERENCE_ASSEMBLED",
+  "purpose": "Provide a bounded, machine-readable set of already-established Phase 2 and Phase 4 entry/descent/recovery quantities for the Phase I public experience without converting public minute reports into private telemetry or relabeling models as measurements.",
+  "high_rate_source": {
+    "format": "PROP_MAN 11.0",
+    "frame_label": "M50",
+    "analysis_frame_mapping": "M50 represented with the validated Phase 2 B1950-to-J2000 analysis proxy before Earth-fixed/geodetic reconstruction",
+    "position_units": "FT",
+    "velocity_units": "FPS",
+    "time_units": "SEC",
+    "records": 819,
+    "source_start_utc": "2026-04-10T23:53:30.866000Z",
+    "source_stop_utc": "2026-04-11T00:07:08.841000Z",
+    "source_duration_seconds": 817.975,
+    "source_start_is_exact_private_entry_interface_telemetry_epoch": false,
+    "eighth_numeric_field_physical_meaning": "UNRESOLVED"
+  },
+  "public_event_precision": {
+    "entry_interface_public_minute": "2026-04-10T23:53:00Z",
+    "communications_reacquisition_public_minute": "2026-04-11T00:00:00Z",
+    "drogue_public_minute": "2026-04-11T00:03:00Z",
+    "main_public_minute": "2026-04-11T00:04:00Z",
+    "splashdown_public_minute": "2026-04-11T00:07:00Z",
+    "rule": "NASA live-update event times are minute-resolution public reports. MissionLab does not infer exact event seconds from these minute labels.",
+    "blackout_rule": "NASA reported a planned blackout shortly after Entry Interface expected to last about six minutes. Exact blackout-start and blackout-end seconds are not public in the curated evidence."
+  },
+  "analysis_landmarks": [
+    {
+      "id": "high_rate_start",
+      "analysis_elapsed_seconds": 0.0,
+      "utc": "2026-04-10T23:53:30.866000Z",
+      "altitude_km": 121.919907,
+      "earth_relative_speed_km_s": 10.632214,
+      "flight_path_angle_deg": -6.077956,
+      "mach": 24.38467,
+      "body_scale_kn": 0.980024332,
+      "dynamic_pressure_kpa": 0.000821652,
+      "sutton_graves_heat_flux_w_cm2": 1.027304,
+      "heat_flux_interpretation": "FORMAL_DIAGNOSTIC_ONLY_RAREFIED",
+      "provenance": "MISSIONLAB_DERIVED_AND_MODELED"
+    },
+    {
+      "id": "max_formal_mach",
+      "analysis_elapsed_seconds": 20.0,
+      "utc": "2026-04-10T23:53:50.866000Z",
+      "altitude_km": 101.215372,
+      "earth_relative_speed_km_s": 10.650226,
+      "mach": 38.589162,
+      "body_scale_kn": 0.031839473,
+      "sutton_graves_heat_flux_w_cm2": 5.951922,
+      "heat_flux_interpretation": "FORMAL_DIAGNOSTIC_ONLY_SLIP",
+      "provenance": "MODELED"
+    },
+    {
+      "id": "primary_heating_domain_start",
+      "analysis_elapsed_seconds": 27.918054,
+      "utc": "2026-04-10T23:53:58.784054Z",
+      "altitude_km": 94.025448,
+      "mach": 37.793429,
+      "body_scale_kn": 0.01,
+      "sutton_graves_heat_flux_w_cm2": 10.74091,
+      "heat_flux_interpretation": "PRIMARY_DOMAIN_BEGINS_KN_LT_0_01_AND_MACH_GTE_5",
+      "provenance": "MODELED"
+    },
+    {
+      "id": "stronger_continuum_start",
+      "analysis_elapsed_seconds": 45.249112,
+      "utc": "2026-04-10T23:54:16.115112Z",
+      "altitude_km": 80.330899,
+      "mach": 38.262468,
+      "body_scale_kn": 0.001,
+      "sutton_graves_heat_flux_w_cm2": 34.071681,
+      "heat_flux_interpretation": "STRONGER_CONTINUUM_SENSITIVITY_BEGINS",
+      "provenance": "MODELED"
+    },
+    {
+      "id": "sutton_graves_peak",
+      "analysis_elapsed_seconds": 85.0,
+      "utc": "2026-04-10T23:54:55.866000Z",
+      "altitude_km": 61.878469,
+      "earth_relative_speed_km_s": 9.984103,
+      "mach": 32.285653,
+      "body_scale_kn": 6.547686230258e-05,
+      "dynamic_pressure_kpa_reconstructed_from_same_phase2_model_inputs": 12.036568,
+      "sutton_graves_heat_flux_w_cm2": 109.641953,
+      "provenance": "MODELED"
+    },
+    {
+      "id": "early_dynamic_pressure_peak",
+      "analysis_elapsed_seconds": 95.0,
+      "utc": "2026-04-10T23:55:05.866000Z",
+      "altitude_km": 60.807901,
+      "earth_relative_speed_km_s": 9.6205,
+      "mach": 30.911621,
+      "dynamic_pressure_kpa": 12.798779,
+      "sutton_graves_heat_flux_w_cm2": 104.975953,
+      "provenance": "MODELED"
+    },
+    {
+      "id": "peak_kinematic_deceleration",
+      "analysis_elapsed_seconds": 96.0,
+      "utc": "2026-04-10T23:55:06.866000Z",
+      "altitude_km": 60.748759,
+      "earth_relative_speed_km_s": 9.583217,
+      "kinematic_deceleration_m_s2": 37.127215,
+      "g0_equivalent_scale": 3.785922,
+      "crew_sensed_g_load_claimed": false,
+      "provenance": "MISSIONLAB_DERIVED"
+    },
+    {
+      "id": "loft_rebound_start",
+      "analysis_elapsed_seconds": 112.294128,
+      "utc": "2026-04-10T23:55:23.160128Z",
+      "altitude_km": 60.350128,
+      "earth_relative_speed_km_s": 8.993741,
+      "mach": 28.826346,
+      "body_scale_kn": 5.403559655275e-05,
+      "sutton_graves_heat_flux_w_cm2": 88.222385,
+      "dynamic_pressure_kpa_reconstructed_from_same_phase2_model_inputs": 11.835359,
+      "provenance": "MISSIONLAB_DERIVED_AND_MODELED"
+    },
+    {
+      "id": "loft_rebound_top",
+      "analysis_elapsed_seconds": 239.647374,
+      "utc": "2026-04-10T23:57:30.513374Z",
+      "altitude_km": 64.211808,
+      "earth_relative_speed_km_s": 6.479165,
+      "mach": 21.291566,
+      "body_scale_kn": 8.98847917738e-05,
+      "sutton_graves_heat_flux_w_cm2": 25.574568,
+      "dynamic_pressure_kpa_reconstructed_from_same_phase2_model_inputs": 3.692545,
+      "provenance": "MISSIONLAB_DERIVED_AND_MODELED"
+    },
+    {
+      "id": "global_dynamic_pressure_peak",
+      "analysis_elapsed_seconds": 431.0,
+      "utc": "2026-04-11T00:00:41.866000Z",
+      "altitude_km": 40.042026,
+      "earth_relative_speed_km_s": 2.587485,
+      "mach": 8.102942,
+      "dynamic_pressure_kpa": 12.808389,
+      "sutton_graves_heat_flux_w_cm2": 7.59644,
+      "provenance": "MODELED"
+    },
+    {
+      "id": "final_mach_5",
+      "analysis_elapsed_seconds": 464.815771,
+      "utc": "2026-04-11T00:01:15.681771Z",
+      "altitude_km": 33.505721,
+      "earth_relative_speed_km_s": 1.535716,
+      "mach": 5.0,
+      "sutton_graves_heat_flux_w_cm2": 2.595809202,
+      "dynamic_pressure_kpa_reconstructed_from_same_phase2_model_inputs": 12.052781,
+      "provenance": "MISSIONLAB_DERIVED_AND_MODELED"
+    },
+    {
+      "id": "derived_surface_crossing",
+      "analysis_elapsed_seconds": 817.957676,
+      "utc": "2026-04-11T00:07:08.823676Z",
+      "altitude_km": 0.0,
+      "latitude_deg": 32.340599,
+      "longitude_deg": -117.763095,
+      "official_actual_splashdown_coordinate_claimed": false,
+      "official_target_coordinate_claimed": false,
+      "provenance": "MISSIONLAB_DERIVED_FROM_NASA_FLIGHT_DERIVED_EPHEMERIS"
+    }
+  ],
+  "continuous_ui_support": {
+    "altitude_speed_milestones_source": "Phase 2C interpolated first-descending altitude and speed milestones",
+    "mach_threshold_source": "Phase 2E.2 modeled free-stream Mach threshold history",
+    "interpolation_rule": "The public scrubber interpolates between curated Phase 2 checkpoints for continuity. It is a visualization of the reconstruction, not a telemetry replay.",
+    "artemis_ii_loft_rebound": {
+      "start_seconds": 112.294128,
+      "end_seconds": 239.647374,
+      "duration_seconds": 127.353246,
+      "altitude_recovery_km": 3.86168,
+      "speed_loss_km_s": 2.514577,
+      "strong_domain_heat_load_fraction_percent": 37.978839,
+      "terminology_guardrail": "ARTEMIS II LOFT / REBOUND != ARTEMIS I SKIP ENTRY"
+    },
+    "heating": {
+      "correlation": "Sutton-Graves low-fidelity stagnation-point convective heating",
+      "equation": "q_dot = k * sqrt(rho / Rn) * V^3",
+      "reference_nose_radius_m": 6.035,
+      "primary_domain": "Kn < 0.01 AND Mach >= 5",
+      "primary_integrated_heat_load_mj_m2": 162.686370921,
+      "stronger_continuum_integrated_heat_load_mj_m2": 159.150073328,
+      "measured_tps_telemetry": false
+    },
+    "dynamic_pressure_heating_lesson": {
+      "early_dynamic_pressure_peak_kpa": 12.798779,
+      "late_dynamic_pressure_peak_kpa": 12.808389,
+      "peak_difference_percent": 0.075024,
+      "early_peak_heat_flux_w_cm2": 104.975953,
+      "late_peak_heat_flux_w_cm2": 7.59644,
+      "relationship": "q scales with rho*V^2 while Sutton-Graves heating scales approximately with sqrt(rho)*V^3"
+    },
+    "dynamic_pressure_support_checkpoint_derivation": {
+      "purpose": "Provide internally consistent UI support values at selected heating/loft checkpoints where the handoff did not retain a separately printed dynamic-pressure value.",
+      "method": "Recover rho algebraically from the existing Sutton-Graves q_dot, velocity, k=1.74153e-4, and Rn=6.035 m, then evaluate dynamic pressure q=0.5*rho*V^2.",
+      "interpretation": "This is a deterministic re-expression of the same Phase 2 modeled atmosphere/heating inputs for visualization continuity, not independent evidence, measured aerodynamic-load telemetry, or a new atmospheric model."
+    }
+  },
+  "parachute_architecture": {
+    "evidence_class": "NASA_REPORTED_SYSTEM_ARCHITECTURE",
+    "total_parachutes": 11,
+    "forward_bay_cover": {
+      "count": 3,
+      "nominal_diameter_ft_each": 7
+    },
+    "drogues": {
+      "count": 2,
+      "nominal_diameter_ft_each": 23
+    },
+    "pilots": {
+      "count": 3,
+      "nominal_diameter_ft_each": 11
+    },
+    "mains": {
+      "count": 3,
+      "nominal_diameter_ft_each": 116
+    },
+    "architecture_is_exact_as_flown_individual_canopy_log": false
+  },
+  "recovery_public_minutes": [
+    {
+      "event": "RECOVERY_TEAM_APPROACH",
+      "utc": "2026-04-11T00:12:00Z",
+      "minutes_after_public_splashdown": 5,
+      "evidence_class": "NASA_REPORTED"
+    },
+    {
+      "event": "CREW_EXTRACTED",
+      "utc": "2026-04-11T01:34:00Z",
+      "minutes_after_public_splashdown": 87,
+      "evidence_class": "NASA_REPORTED"
+    },
+    {
+      "event": "CREW_ABOARD_RECOVERY_SHIP",
+      "utc": "2026-04-11T01:58:00Z",
+      "minutes_after_public_splashdown": 111,
+      "evidence_class": "NASA_REPORTED"
+    },
+    {
+      "event": "ORION_SECURED_IN_WELL_DECK",
+      "utc": "2026-04-11T08:27:00Z",
+      "minutes_after_public_splashdown": 500,
+      "evidence_class": "NASA_REPORTED"
+    }
+  ],
+  "splashdown_boundary": {
+    "derived_surface_crossing_utc": "2026-04-11T00:07:08.823676Z",
+    "public_splashdown_minute_utc": "2026-04-11T00:07:00Z",
+    "offset_from_start_of_public_minute_seconds": 8.823676,
+    "classification": "PUBLIC_MINUTE_CONSISTENT",
+    "offset_is_exact_timing_error": false,
+    "official_target_to_actual_miss_distance": "NOT_PUBLICLY_QUANTIFIABLE"
+  },
+  "critical_non_equivalences": [
+    "NASA_REPORTED_PUBLIC_MINUTE != EXACT_SECOND_LEVEL_TELEMETRY",
+    "EDUCATIONAL_INTERPOLATION != MEASURED_TRAJECTORY_STATE",
+    "FLIGHT_DERIVED_TRAJECTORY_RECONSTRUCTION != PRIVATE_ONBOARD_NAVIGATION_STATE",
+    "M50_SOURCE_DATA != EME2000_J2000_UNTIL_VALIDATED_TRANSFORMATION",
+    "UNRESOLVED_PROP_MAN_EIGHTH_FIELD != INVENTED_PHYSICAL_QUANTITY",
+    "MODELED_ATMOSPHERE != MEASURED_LOCAL_ATMOSPHERIC_TELEMETRY",
+    "MODELED_DYNAMIC_PRESSURE != MEASURED_AERODYNAMIC_LOAD_TELEMETRY",
+    "MODELED_SUTTON_GRAVES_HEATING != MEASURED_TPS_TELEMETRY",
+    "MODELED_HEATING != TPS_MATERIAL_DAMAGE",
+    "MODELED_HEATING != CREW_THERMAL_EXPOSURE",
+    "KINEMATIC_DECELERATION_G0_EQUIVALENT != CREW_SENSED_G_LOAD",
+    "PLASMA_BLACKOUT_PUBLIC_EVENT != MEASURED_PLASMA_DENSITY",
+    "EXPECTED_ENTRY_BLACKOUT != COMMUNICATIONS_ANOMALY",
+    "ARTEMIS_II_LOFT_REBOUND != ARTEMIS_I_SKIP_ENTRY",
+    "PARACHUTE_ARCHITECTURE != EXACT_AS_FLOWN_INDIVIDUAL_CANOPY_PERFORMANCE_LOG",
+    "DERIVED_SURFACE_CROSSING != OFFICIAL_NASA_ACTUAL_SPLASHDOWN_COORDINATE",
+    "DERIVED_SURFACE_CROSSING != OFFICIAL_NASA_TARGET_COORDINATE",
+    "PUBLIC_MINUTE_CONSISTENCY != EXACT_TIMING_ERROR",
+    "DERIVED_TERMINAL_STATE != OFFICIAL_LANDING_TARGETING_ACCURACY",
+    "CREW_RECOVERY != SPACECRAFT_RECOVERY != POSTFLIGHT_ENGINEERING_CLOSURE"
+  ],
+  "sources": [
+    "data/reference/artemis_ii_convective_heating_model.json",
+    "data/reference/artemis_ii_entry_descent_recovery_evidence.json",
+    "data/reference/artemis_entry_profile_heritage.json",
+    "data/reference/artemis_ii_rarefaction_model.json",
+    "docs/ENGINEERING_LOG.md",
+    "https://www.nasa.gov/blogs/missions/2026/04/10/artemis-ii-flight-day-10-re-entry-live-updates/",
+    "https://www.nasa.gov/reference/orion-fun-facts/"
+  ]
+}

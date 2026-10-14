@@ -4,7 +4,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlparse
 ROOT=Path(__file__).resolve().parents[1]
-PUBLIC_JS=['js/core.js','js/mission.js','js/windows.js','js/gnc.js','js/mission-control.js','js/psi-model.js','js/psi.js','js/trajectory-model.js','js/trajectory.js']
+PUBLIC_JS=['js/core.js','js/mission.js','js/windows.js','js/gnc.js','js/mission-control.js','js/psi-model.js','js/psi.js','js/trajectory-model.js','js/trajectory.js','js/entry-model.js','js/entry.js']
 PHASE10_PAGES=['mission.html','windows.html','gnc.html','mission-control.html','psi.html']
 REQUIRED_FILES=['index.html','styles.css','landing.css','windows.css','gnc.css','mission-control.css','psi.css','trajectory.css','app.js',*PUBLIC_JS,*PHASE10_PAGES,'library.html','library.js','technical-report.html','favicon.svg','favicon.ico','assets/public/IMAGE_SOURCES.md','assets/public/AUTHORITATIVE_SOURCE_AUDIT.md','assets/public/FIGURE_AUDIT.md','assets/public/fallback-mission.svg','assets/public/figures/navigation-state-products.svg','assets/public/figures/esm-propulsion-architecture.svg','assets/public/figures/trajectory-correction-plan-execution.svg','assets/public/figures/entry-recovery-sequence.svg','assets/public/figures/gnc-proximity-loop.svg','PUBLIC_EXPERIENCE_FINAL_README.md','scripts/validation/windows_scroll_regression.html','scripts/validation/validate_windows_scroll_regression.py','assets/public/celestial/earth_pia18033.jpg','assets/public/celestial/moon_lro_mosaic.jpg','assets/public/celestial/manifest.json','scripts/validation/validate_celestial_assets.py','scripts/validation/responsive_browser_qa.html','scripts/validation/validate_responsive_browser_qa.py','docs/RESPONSIVE_BROWSER_QA.md']
 REQUIRED_FILES += ['scripts/validation/validate_text_integrity.py','docs/PHASE10_QUALITY_STANDARD.md']
@@ -12,6 +12,7 @@ REQUIRED_FILES += ['.gitattributes','scripts/validation/mission_scroll_regressio
 REQUIRED_FILES += ['scripts/validation/gnc_auto_regression.html','scripts/validation/validate_gnc_auto_regression.py','docs/GNC_INTERACTION_QA.md']
 REQUIRED_FILES += ['scripts/validation/psi_regression.html','scripts/validation/validate_psi_regression.py','scripts/validation/validate_psi_model.js','docs/PSI_INTERACTION_QA.md']
 REQUIRED_FILES += ['scripts/validation/trajectory_regression.html','scripts/validation/validate_trajectory_regression.py','scripts/validation/validate_trajectory_model.js','docs/TRAJECTORY_CORRECTION_QA.md']
+REQUIRED_FILES += ['entry.css','data/reference/artemis_ii_entry_phase_i.json','scripts/validation/entry_regression.html','scripts/validation/validate_entry_regression.py','scripts/validation/validate_entry_model.js','docs/ENTRY_RECOVERY_QA.md']
 REPO_DEPS=['data/reference/artemis_ii_gnc_architecture.json','data/reference/artemis_ii_manual_piloting_control_modes.json','data/reference/artemis_ii_entry_events.json','data/reference/artemis_ii_maneuver_plan_execution.json','data/reference/artemis_ii_phase2_closure_manifest.json','scripts/ingestion/parse_oem.py','scripts/processing/add_lunar_geometry.py','scripts/analysis/refine_lunar_closest_approach.py','docs/assets/entry/phase2e_sutton_graves_heat_flux.svg','docs/assets/lunar_science/phase6b_lunar_observation_reconstruction.svg']
 FORBIDDEN=[r'engineering\s+paper',r'\bmanuscript\b',r'flight-qualified simulation',r'mission telemetry replay',r'navigation filter reconstruction']
 HOME_REQUIRED_IDS=['hero-stars','experiences','experience-grid','built']
@@ -61,7 +62,7 @@ def main():
   if miss:fail.append('missing homepage surfaces: '+', '.join(miss))
   notes += [f'homepage canvas surfaces: {len(ip.canvases)}',f'homepage optional engineering drawers: {ip.details}']
  dedicated_page_ids={
-  'mission.html':['mission-canvas','mission-scrubber','entry-canvas','entry-scrubber','trajectory-lab','trajectory-canvas','trajectory-dv','trajectory-coast','trajectory-presets','trajectory-reset','weather-canvas','sep-flux-log','weather-presets','weather-scale','weather-dose'],
+  'mission.html':['mission-canvas','mission-scrubber','entry-flight-canvas','entry-scrubber','entry-play','entry-reset','entry-event-rail','entry-recovery-rail','trajectory-lab','trajectory-canvas','trajectory-dv','trajectory-coast','trajectory-presets','trajectory-reset','weather-canvas','sep-flux-log','weather-presets','weather-scale','weather-dose'],
   'windows.html':['crew-photo','crew-scrubber','crew-geometry-canvas','crew-image-prev','crew-image-next','crew-image-count','crew-zoom','crew-lightbox','crew-lightbox-image','crew-lightbox-prev','crew-lightbox-next','crew-lightbox-close'],
   'gnc.html':['gnc-canvas','gnc-start','gnc-mode-auto','gnc-mode-manual','gnc-disturbance','gnc-autopilot-status'],
   'mission-control.html':['mc-canvas'],
@@ -96,6 +97,11 @@ def main():
  mission_js=(ROOT/'js/trajectory-model.js').read_text(encoding='utf8') if (ROOT/'js/trajectory-model.js').exists() else ''
  for phrase in ['SMALL ΔV NOW','two-body','local RTN','public record ≠ targeting solution','NASA REPORTED','MISSIONLAB DERIVED','UNKNOWN / NOT PUBLIC']:
   if phrase.lower() not in mission_text.lower():fail.append('mission trajectory lab missing evidence/model concept: '+phrase)
+ entry_model=(ROOT/'js/entry-model.js').read_text(encoding='utf8') if (ROOT/'js/entry-model.js').exists() else ''
+ for phrase in ['not a telemetry replay','not a skip entry','Two clocks are intentionally visible','Nearly equal dynamic-pressure peaks','exact start/end seconds unknown','not publicly quantifiable']:
+  if phrase.lower() not in mission_text.lower():fail.append('mission Entry lab missing evidence/product concept: '+phrase)
+ for phrase in ['stateAt','kineticEnergyRemovedFraction','loftStart','publicReacqOffset','derivedSurfaceCrossing']:
+  if phrase not in entry_model:fail.append('entry model missing implementation contract: '+phrase)
  for phrase in ['MU_EARTH','rtnBasis','rk4Step','periapsisShiftKm','arrivalShiftSeconds']:
   if phrase not in mission_js:fail.append('trajectory model missing implementation contract: '+phrase)
  for phrase in ['AUTO MODE','MANUAL MODE','Introduce disturbance','MissionLab shorthand','WHAT WOULD OPERATORS CARE ABOUT?']:
