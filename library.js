@@ -1,5 +1,81 @@
 (() => {
 'use strict';
+
+const libraryMenu =
+  document.querySelector('.menu-btn');
+
+const libraryNav =
+  document.querySelector('.nav-links');
+
+if (libraryMenu && libraryNav) {
+
+  const setLibraryNavOpen =
+    open => {
+
+      libraryNav.classList.toggle(
+        'open',
+        open
+      );
+
+      libraryMenu.setAttribute(
+        'aria-expanded',
+        String(open)
+      );
+    };
+
+  libraryMenu.addEventListener(
+    'click',
+    () => {
+
+      setLibraryNavOpen(
+        !libraryNav.classList.contains(
+          'open'
+        )
+      );
+    }
+  );
+
+  libraryNav
+    .querySelectorAll('a')
+    .forEach(
+      link => {
+
+        link.addEventListener(
+          'click',
+          () => {
+            setLibraryNavOpen(false);
+          }
+        );
+      }
+    );
+
+  document.addEventListener(
+    'keydown',
+    event => {
+
+      if (
+        event.key === 'Escape' &&
+        libraryNav.classList.contains(
+          'open'
+        )
+      ) {
+
+        setLibraryNavOpen(false);
+
+        try {
+          libraryMenu.focus({
+            preventScroll: true
+          });
+        }
+        catch {
+          libraryMenu.focus();
+        }
+      }
+    }
+  );
+}
+
+
 const topics = [
 {
  id:'mission-overview', title:'Mission overview', domain:'Mission architecture',
