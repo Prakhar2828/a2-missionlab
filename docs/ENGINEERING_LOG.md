@@ -61783,3 +61783,442 @@ The final implementation:
 - finishes in the exact intended local commit
 - leaves the recovery branch unpublished
 - performs no push
+
+## Phase I — Entry / Descent / Recovery Upgrade
+
+**Status:** COMPLETE — APPENDED ONLY AFTER REAL WINDOWS CHROME + EDGE RELEASE GATES PASS
+
+### Objective
+
+Upgrade the existing Entry / Descent / Recovery experience without rebuilding it from scratch or restoring the historical monolithic application.
+
+The protected narrative remains:
+
+`deep space → Earth approach → Entry Interface → atmospheric interaction → plasma/heating → guidance context → descent → parachutes → splashdown → recovery`
+
+Phase I adds synchronized technical depth from the existing Phase 2 and Phase 4 reconstruction while keeping the story understandable before exposing engineering detail.
+
+### Immutable starting state
+
+- Repository: `C:\Users\prakh\Documents\a2-missionlab`
+- Branch: `phase-10-quality-recovery`
+- Starting HEAD: `7adc22831845095dc35f40c88832f73a55319d20`
+- Starting parent: `85bce6ae711cc60bebd714a0a02f9734626ef665`
+- Starting tree: `0c45d9c059159c0d07f58ea140e2398b49f04fbe`
+- Starting subject: `Document completed Phase H`
+- Protected Phase H implementation parent: `85bce6ae711cc60bebd714a0a02f9734626ef665`
+- Protected `origin/main` baseline: `d74a88d20f6ff1bd8be2ff0dbe3fb2b44cc13187`
+- The real recovery branch remains intentionally local-only unless the user explicitly publishes it.
+
+### Repository archaeology / historical findings
+
+- The public Entry experience remained on `mission.html#entry-lab` with its legacy runtime embedded inside `js/mission.js`.
+- The existing public story was fundamentally correct but relied heavily on seven discrete states and educational visual interpolation.
+- The strongest historical pre-split build around `718abc5e18403ba26eff3a68cfd208690ce6dbaf` did not contain a materially stronger Entry implementation worth restoring.
+- The real technical opportunity was already present in the repository rather than in the historical UI:
+  - high-rate flight-derived entry trajectory processing
+  - M50-to-analysis-frame transformation work
+  - WGS 84 geometry reconstruction
+  - kinematic dynamics
+  - NRLMSIS atmosphere
+  - modeled Mach and rarefaction history
+  - Sutton–Graves modeled convective heating
+  - loft/rebound analysis
+  - Artemis I / Artemis II heritage comparison
+  - Phase 4 entry/descent/recovery evidence and recovery closure
+- Phase I therefore reuses existing validated engineering products instead of inventing a new simplified entry model disconnected from the analysis.
+
+### Exact implementation changed-file allowlist
+
+The validated Phase I implementation commit changes exactly these 11 repository-relative paths:
+
+1. `data/reference/artemis_ii_entry_phase_i.json` — added
+2. `docs/ENTRY_RECOVERY_QA.md` — added
+3. `entry.css` — added
+4. `js/entry-model.js` — added
+5. `js/entry.js` — added
+6. `js/mission.js` — minimally modified
+7. `mission.html` — upgraded Entry host
+8. `scripts/validate_public_experience.py` — updated Phase I public contract
+9. `scripts/validation/entry_regression.html` — added
+10. `scripts/validation/validate_entry_model.js` — added
+11. `scripts/validation/validate_entry_regression.py` — added
+
+The later documentation-only commit changes only:
+
+- `docs/ENGINEERING_LOG.md`
+
+### Restored / redesigned capability
+
+The Entry route now presents one synchronized continuous mission progression instead of snapping between a handful of public states.
+
+The browser experience exposes:
+
+- reconstructed WGS 84 altitude
+- reconstructed Earth-relative speed
+- modeled free-stream Mach
+- modeled dynamic pressure within the protected Phase 2 window
+- modeled Sutton–Graves external convective heat flux within the protected Phase 2 window
+- a clearly labeled speed-squared energy-removal proxy
+- the Artemis II loft/rebound geometry
+- planned blackout context without invented exact blackout seconds
+- NASA-reported public-minute communications reacquisition
+- NASA-reported drogue/main public-minute milestones
+- derived surface crossing bounded against the NASA public splashdown minute
+- crew-recovery and spacecraft-recovery closure after splashdown
+
+### Two-clock evidence architecture
+
+Phase I makes two different time systems visible on purpose.
+
+**Analysis time** is referenced to the first state in the 819-record high-rate source:
+
+- source start: `2026-04-10T23:53:30.866000Z`
+- source stop: `2026-04-11T00:07:08.841000Z`
+- source duration: `817.975 s`
+
+**NASA public event time** remains at the precision supported by the live-update evidence:
+
+- Entry Interface: `23:53 UTC`
+- communications reacquisition: `00:00 UTC`
+- drogues: `00:03 UTC`
+- mains: `00:04 UTC`
+- splashdown: `00:07 UTC`
+
+Public minute labels are not promoted to private second-level telemetry epochs.
+
+The browser visual interpolates curated Phase 2 checkpoints for continuity. It does not pretend to replay every one of the 819 source records and is not an Orion onboard-navigation replay.
+
+### High-rate source boundary
+
+The protected source identity remains:
+
+- format: `PROP_MAN 11.0`
+- frame label: `M50`
+- position units: `FT`
+- velocity units: `FPS`
+- time units: `SEC`
+- records: `819`
+
+The eighth raw numeric field remains unresolved and is not assigned a fabricated physical meaning.
+
+### Aerothermal model integration
+
+Phase I reuses the existing low-fidelity Sutton–Graves stagnation-point convective-heating correlation:
+
+`q_dot = k * sqrt(rho / Rn) * V^3`
+
+with the existing Phase 2 assumptions:
+
+- modeled NRLMSIS 2.0 density
+- reconstructed Earth-relative speed as free-stream velocity approximation
+- Orion EFT-1 heritage/reference nose radius `6.035 m`
+- cold-wall engineering correlation
+
+Primary public interpretation remains limited to:
+
+`Kn < 0.01 AND Mach >= 5`
+
+Protected modeled peak:
+
+- analysis `+85 s`
+- altitude `61.878469 km`
+- Earth-relative speed `9.984103 km/s`
+- Mach `32.285653`
+- modeled Sutton–Graves heat flux `109.641953 W/cm²`
+
+Protected modeled integrated convective heat load:
+
+- primary domain: `162.686370921 MJ/m²`
+- stronger-continuum sensitivity: `159.150073328 MJ/m²`
+
+No heat-flux or dynamic-pressure value is extrapolated in the public UI beyond the protected Phase 2 hypersonic interpretation window ending at the final Mach 5 crossing.
+
+### Dynamic pressure versus heating lesson
+
+Phase I explicitly surfaces a high-value Phase 2 relationship:
+
+Early dominant modeled dynamic-pressure peak:
+
+- analysis `+95 s`
+- `12.798779 kPa`
+- modeled Sutton–Graves heat flux `104.975953 W/cm²`
+
+Later/global modeled dynamic-pressure peak:
+
+- analysis `+431 s`
+- `12.808389 kPa`
+- modeled Sutton–Graves heat flux `7.596440 W/cm²`
+
+The modeled pressure peaks differ by only about `0.075%`, while modeled heating differs by more than an order of magnitude because:
+
+- dynamic pressure scales as `rho*V^2`
+- Sutton–Graves heating scales approximately as `sqrt(rho)*V^3`
+
+Selected intermediate dynamic-pressure support checkpoints used by the browser are deterministic algebraic re-expressions of the same existing Phase 2 Sutton–Graves inputs. They are not independent evidence or measured load telemetry.
+
+### Artemis II loft / rebound
+
+The public experience now makes the non-monotonic trajectory understandable instead of hiding it inside an engineering plot.
+
+Protected landmarks:
+
+- descent-to-climb: analysis `+112.294128 s`
+  - altitude `60.350128 km`
+  - speed `8.993741 km/s`
+- rebound top / climb-to-descent: analysis `+239.647374 s`
+  - altitude `64.211808 km`
+  - speed `6.479165 km/s`
+- duration: `127.353246 s`
+- altitude recovery: `3.861680 km`
+- speed loss during rebound: approximately `2.514577 km/s`
+- stronger-continuum modeled heat-load fraction accumulated during this interval: `37.978839%`
+
+Permanent terminology boundary:
+
+`ARTEMIS II LOFT / REBOUND != ARTEMIS I SKIP ENTRY`
+
+### Communications / blackout boundary
+
+NASA publicly described a planned plasma communications blackout shortly after Entry Interface, expected to last about six minutes, and reported communications reacquisition at `00:00 UTC`.
+
+Phase I deliberately does not invent exact blackout-start or blackout-end seconds.
+
+The public product preserves:
+
+- expected entry blackout != communications anomaly
+- blackout event != measured plasma density
+- public reacquisition minute != exact telemetry second
+
+### Parachute architecture
+
+The public experience surfaces the NASA-reported Orion parachute system architecture:
+
+- 3 forward-bay-cover parachutes, approximately `7 ft` each
+- 2 drogues, approximately `23 ft` each
+- 3 pilot parachutes, approximately `11 ft` each
+- 3 mains, approximately `116 ft` each
+
+This is a system-architecture reference, not an exact individual as-flown canopy performance log.
+
+### Splashdown / recovery closure
+
+MissionLab's derived WGS 84 surface crossing remains:
+
+- `2026-04-11T00:07:08.823676Z`
+- latitude `32.340599 deg`
+- longitude `-117.763095 deg`
+
+It falls within NASA's public `00:07 UTC` splashdown minute.
+
+The `8.824 s` offset from the beginning of that public minute remains a consistency diagnostic only. It is not an exact splashdown timing error.
+
+No official numerical target-coordinate + official actual-coordinate pair is established in the curated evidence, therefore:
+
+`OFFICIAL TARGET-TO-ACTUAL MISS DISTANCE = NOT PUBLICLY QUANTIFIABLE`
+
+Recovery closure now remains visible beyond splashdown:
+
+- recovery-team approach: `00:12 UTC`
+- crew extracted: `01:34 UTC`
+- crew aboard recovery ship: `01:58 UTC`
+- Orion secured in well deck: `08:27 UTC`
+
+Public-minute relationships:
+
+- splashdown → crew aboard recovery ship: `111 min`
+- splashdown → Orion secured in well deck: `500 min`
+
+Crew recovery, spacecraft recovery, and postflight engineering closure remain separate concepts.
+
+### Canonical evidence boundaries
+
+Phase I preserves and exposes at minimum:
+
+- NASA-reported public minute != exact second-level telemetry
+- educational interpolation != measured trajectory state
+- flight-derived trajectory reconstruction != private onboard navigation state
+- M50 source data != EME2000/J2000 until validated transformation is applied
+- unresolved PROP_MAN eighth field != invented physical quantity
+- modeled atmosphere != measured local atmospheric telemetry
+- modeled dynamic pressure != measured aerodynamic-load telemetry
+- modeled Sutton–Graves heating != measured TPS telemetry
+- modeled heating != TPS material damage
+- modeled heating != crew thermal exposure
+- kinematic deceleration / g0-equivalent != crew sensed g-load
+- plasma blackout public event != measured plasma density
+- expected entry blackout != communications anomaly
+- Artemis II loft/rebound != Artemis I skip entry
+- parachute architecture != exact as-flown individual-canopy performance log
+- derived surface crossing != official NASA actual splashdown coordinate
+- derived surface crossing != official NASA target coordinate
+- public-minute consistency != exact timing error
+- derived terminal state != official landing-targeting accuracy
+- crew recovery != spacecraft recovery != postflight engineering closure
+
+### Product architecture / protected-system integration
+
+Phase I retains the correct Phase 10 multi-page architecture.
+
+Entry remains on the Mission route, but the new code is isolated into:
+
+- `js/entry-model.js` — deterministic continuous state / evidence model
+- `js/entry.js` — interaction and canvas runtime
+- `entry.css` — dedicated responsive visual system
+- `data/reference/artemis_ii_entry_phase_i.json` — explicit Phase I evidence/model manifest
+- `docs/ENTRY_RECOVERY_QA.md` — Phase I model/evidence/test contract
+
+The legacy Entry runtime inside `js/mission.js` is preserved but bypassed only when the Phase I root marker is present. This avoids an uncontrolled rewrite of the shared Mission runtime.
+
+No PSI, Trajectory Correction, Space Weather, GNC, Windows, Mission Control, or Mission Explorer production model was rewritten.
+
+### Performance notes
+
+- Phase I does not add a perpetual Entry animation loop.
+- Continuous animation runs only after the visitor explicitly presses Play.
+- A paused Entry view redraws on state changes and responsive geometry changes.
+- `entry-qa=1` joins the existing static Mission QA guard so unrelated Mission animation does not consume dedicated regression resources.
+- The project remains static HTML/CSS/JavaScript with zero required ongoing operating cost.
+
+### Validation — static / evidence / analytical
+
+The release installer requires all of the following before commit:
+
+- `git diff --check`
+- JavaScript syntax validation
+- Python compile validation
+- strict JSON parse validation
+- final public-experience validation
+- public text / markup integrity validation
+- Phase I pure model/evidence regression
+- protected Trajectory Correction pure-model regression
+- protected PSI pure-model regression
+- celestial asset/provenance validation
+- existing release validation
+- existing Artemis entry-profile heritage validation
+- existing Phase 4 entry/descent/recovery evidence validation
+- existing high-rate entry trajectory validation
+- entry frame-transform validation
+- entry geometry validation
+- entry dynamics validation
+- entry event-correlation validation
+- entry atmosphere validation
+- entry Mach validation
+- entry rarefaction validation
+- entry heating validation
+- Artemis I / Artemis II entry-profile comparison validation
+- loft/rebound heating-history validation
+- entry-to-recovery operational-timeline validation
+- splashdown-accuracy / recovery-closure validation
+
+The exact staged Phase I candidate reruns the critical public/evidence/model checks plus the dedicated Entry browser gate before the deterministic implementation commit is created.
+
+### Real Windows browser / responsive release gate
+
+This section is appended only after the installer has required and passed both Chrome and Edge on the user's real Windows repository.
+
+Dedicated Phase I Entry regression:
+
+- Chrome: PASS
+- Edge: PASS
+- continuous reconstruction checkpoints: PASS
+- loft/rebound behavior and terminology: PASS
+- exact loft/rebound geometry validated from protected model landmarks; rounded gauge text is tested only as UI presentation: PASS
+- heating-versus-dynamic-pressure relationship: PASS
+- blackout evidence boundary: PASS
+- recovery closure: PASS
+- event-rail interaction: PASS
+- canvas rendering: PASS
+- finite outputs: PASS
+- phone portrait `390×844`: PASS
+- phone portrait `430×932`: PASS
+- mobile landscape `844×390`: PASS
+- desktop `1440×900`: PASS
+- horizontal overflow: `0 px` within the tested Phase I viewports
+
+Protected release gates are also required to pass in Chrome and Edge before commit:
+
+- Trajectory Correction
+- PSI
+- Mission Explorer
+- Through Orion's Windows
+- deterministic GNC AUTO / MANUAL
+- Mission Control
+- Space Weather
+- global responsive browser QA
+
+The full protected browser matrix runs once before staging. After the exact staged tree is verified, only the Phase I-critical Entry browser regression is repeated, preserving the Phase G/H browser-resource safeguard rather than needlessly duplicating the full matrix.
+
+### Git safety / rollback
+
+The Phase I release installer:
+
+- requires the exact repository path
+- requires branch `phase-10-quality-recovery`
+- requires starting HEAD `7adc22831845095dc35f40c88832f73a55319d20`
+- requires starting parent `85bce6ae711cc60bebd714a0a02f9734626ef665`
+- requires starting tree `0c45d9c059159c0d07f58ea140e2398b49f04fbe`
+- fetches and verifies `origin/main = d74a88d20f6ff1bd8be2ff0dbe3fb2b44cc13187`
+- accepts the recovery remote-tracking ref as absent because the branch is intentionally local-only
+- creates a timestamped `safety/phase-i-entry-*` branch before mutation
+- validates the patch ZIP SHA-256
+- validates the exact patch path set
+- validates SHA-256 for every payload file
+- rejects unexpected changed or staged paths
+- stages only the 11 approved implementation paths
+- verifies the exact staged implementation tree
+- creates a deterministic local implementation commit only after all release gates pass
+- appends this complete Phase I record to `docs/ENGINEERING_LOG.md` without rewriting prior log content
+- creates a separate documentation-only local commit with the validated implementation commit as its parent
+- verifies final HEAD / parent / tree and a clean worktree
+- rolls back to the immutable completed Phase H documentation start on failure after mutation begins
+- never runs `git push`
+
+### Final Phase I implementation Git state
+
+- Implementation commit: `31f37ee0c6ea27775d8621de29b6f0d31d618564`
+- Commit subject: `Upgrade entry descent and recovery`
+- Parent: `7adc22831845095dc35f40c88832f73a55319d20`
+- Implementation tree: `be114211d78e458e9f6779db13a310041e09eea0`
+- Documentation commit: separate local commit created only after the successful release gates and log append
+- Final worktree after documentation commit: clean
+- Remote recovery branch: still unpublished
+- Push performed: **NO**
+
+### Current limitations / unknowns preserved
+
+- The 819-state source is flight-derived public/repository evidence, not private Orion onboard-navigation telemetry.
+- The exact operational meaning of `PROP_MAN 11.0` is not asserted beyond what authoritative evidence establishes.
+- The eighth raw numeric field remains unresolved.
+- Exact blackout-start and blackout-end seconds are not public in the curated evidence.
+- The atmosphere, Mach, dynamic pressure, and Sutton–Graves heating products remain models/reconstructions rather than direct vehicle telemetry.
+- Sutton–Graves omits radiative heating, finite wall temperature, Avcoat ablation/pyrolysis, blowing, recession, catalytic-wall effects, and detailed shock-layer nonequilibrium.
+- The public reconstruction does not provide private guidance commands, lift-vector history, navigation covariance, or NASA entry-targeting products.
+- The parachute architecture is not an individual canopy performance log.
+- The derived surface crossing is not an official NASA actual coordinate or target coordinate.
+- Official target-to-actual landing miss distance remains not publicly quantifiable.
+- Recovery public times remain minute-resolution reports rather than exact operational telemetry epochs.
+
+### Phase closure
+
+Phase I — Entry / Descent / Recovery Upgrade is complete once the release installer reaches the deterministic local implementation commit and documentation-only commit.
+
+The completed phase:
+
+- preserves the correct existing Entry narrative
+- replaces discrete-state snapping with a technically bounded continuous reconstruction view
+- surfaces the real Phase 2 loft/rebound and aerothermal relationships
+- makes dynamic pressure versus heating understandable visually
+- preserves public-minute precision for operational events
+- extends the story through crew and spacecraft recovery
+- keeps modeled heating explicitly separate from measured TPS telemetry
+- keeps Artemis II loft/rebound explicitly separate from Artemis I skip entry
+- preserves all completed Phase F/G/H protected systems
+- remains zero-cost and static
+- ends in local commits only
+- leaves the recovery branch unpublished
+- performs no push
+
+### Next phase
+
+Proceed to **Phase J — Mission Explorer / Through Orion's Windows / GNC / Mission Control protected subjective polish + QA contract cleanup** only after the successful Phase I installer output is retained.
