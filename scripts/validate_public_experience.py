@@ -4,15 +4,16 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlparse
 ROOT=Path(__file__).resolve().parents[1]
-PUBLIC_JS=['js/core.js','js/mission.js','js/windows.js','js/gnc.js','js/mission-control.js','js/psi-model.js','js/psi.js']
+PUBLIC_JS=['js/core.js','js/mission.js','js/windows.js','js/gnc.js','js/mission-control.js','js/psi-model.js','js/psi.js','js/trajectory-model.js','js/trajectory.js']
 PHASE10_PAGES=['mission.html','windows.html','gnc.html','mission-control.html','psi.html']
-REQUIRED_FILES=['index.html','styles.css','landing.css','windows.css','gnc.css','mission-control.css','psi.css','app.js',*PUBLIC_JS,*PHASE10_PAGES,'library.html','library.js','technical-report.html','favicon.svg','favicon.ico','assets/public/IMAGE_SOURCES.md','assets/public/AUTHORITATIVE_SOURCE_AUDIT.md','assets/public/FIGURE_AUDIT.md','assets/public/fallback-mission.svg','assets/public/figures/navigation-state-products.svg','assets/public/figures/esm-propulsion-architecture.svg','assets/public/figures/trajectory-correction-plan-execution.svg','assets/public/figures/entry-recovery-sequence.svg','assets/public/figures/gnc-proximity-loop.svg','PUBLIC_EXPERIENCE_FINAL_README.md','scripts/validation/windows_scroll_regression.html','scripts/validation/validate_windows_scroll_regression.py','assets/public/celestial/earth_pia18033.jpg','assets/public/celestial/moon_lro_mosaic.jpg','assets/public/celestial/manifest.json','scripts/validation/validate_celestial_assets.py','scripts/validation/responsive_browser_qa.html','scripts/validation/validate_responsive_browser_qa.py','docs/RESPONSIVE_BROWSER_QA.md']
+REQUIRED_FILES=['index.html','styles.css','landing.css','windows.css','gnc.css','mission-control.css','psi.css','trajectory.css','app.js',*PUBLIC_JS,*PHASE10_PAGES,'library.html','library.js','technical-report.html','favicon.svg','favicon.ico','assets/public/IMAGE_SOURCES.md','assets/public/AUTHORITATIVE_SOURCE_AUDIT.md','assets/public/FIGURE_AUDIT.md','assets/public/fallback-mission.svg','assets/public/figures/navigation-state-products.svg','assets/public/figures/esm-propulsion-architecture.svg','assets/public/figures/trajectory-correction-plan-execution.svg','assets/public/figures/entry-recovery-sequence.svg','assets/public/figures/gnc-proximity-loop.svg','PUBLIC_EXPERIENCE_FINAL_README.md','scripts/validation/windows_scroll_regression.html','scripts/validation/validate_windows_scroll_regression.py','assets/public/celestial/earth_pia18033.jpg','assets/public/celestial/moon_lro_mosaic.jpg','assets/public/celestial/manifest.json','scripts/validation/validate_celestial_assets.py','scripts/validation/responsive_browser_qa.html','scripts/validation/validate_responsive_browser_qa.py','docs/RESPONSIVE_BROWSER_QA.md']
 REQUIRED_FILES += ['scripts/validation/validate_text_integrity.py','docs/PHASE10_QUALITY_STANDARD.md']
 REQUIRED_FILES += ['.gitattributes','scripts/validation/mission_scroll_regression.html','scripts/validation/validate_mission_scroll_regression.py','docs/MISSION_EXPLORER_QA.md']
 REQUIRED_FILES += ['scripts/validation/gnc_auto_regression.html','scripts/validation/validate_gnc_auto_regression.py','docs/GNC_INTERACTION_QA.md']
 REQUIRED_FILES += ['scripts/validation/psi_regression.html','scripts/validation/validate_psi_regression.py','scripts/validation/validate_psi_model.js','docs/PSI_INTERACTION_QA.md']
+REQUIRED_FILES += ['scripts/validation/trajectory_regression.html','scripts/validation/validate_trajectory_regression.py','scripts/validation/validate_trajectory_model.js','docs/TRAJECTORY_CORRECTION_QA.md']
 REPO_DEPS=['data/reference/artemis_ii_gnc_architecture.json','data/reference/artemis_ii_manual_piloting_control_modes.json','data/reference/artemis_ii_entry_events.json','data/reference/artemis_ii_maneuver_plan_execution.json','data/reference/artemis_ii_phase2_closure_manifest.json','scripts/ingestion/parse_oem.py','scripts/processing/add_lunar_geometry.py','scripts/analysis/refine_lunar_closest_approach.py','docs/assets/entry/phase2e_sutton_graves_heat_flux.svg','docs/assets/lunar_science/phase6b_lunar_observation_reconstruction.svg']
-FORBIDDEN=[r'technical\s+paper',r'engineering\s+paper',r'\bmanuscript\b',r'flight-qualified simulation',r'mission telemetry replay',r'navigation filter reconstruction']
+FORBIDDEN=[r'engineering\s+paper',r'\bmanuscript\b',r'flight-qualified simulation',r'mission telemetry replay',r'navigation filter reconstruction']
 HOME_REQUIRED_IDS=['hero-stars','experiences','experience-grid','built']
 class P(HTMLParser):
  def __init__(self): super().__init__(); self.ids=set();self.refs=[];self.canvases=[];self.details=0
@@ -50,6 +51,8 @@ def main():
     fail.append(f'{pg.name}: broken local {attr} -> {ref}');continue
    if frag and t in parsed and frag not in parsed[t].ids and t.name!='library.html':fail.append(f'{pg.name}: missing anchor {ref}')
  text='\n'.join((ROOT/n).read_text(encoding='utf8') for n in ['index.html',*PHASE10_PAGES,'styles.css','app.js',*PUBLIC_JS,'library.html','library.js','technical-report.html'] if (ROOT/n).exists())
+ technical_paper_claim_text=re.sub(r'\bPublic\s+NASA\s+technical\s+papers\b','',text,flags=re.I)
+ if re.search(r'technical\s+paper',technical_paper_claim_text,re.I):fail.append('forbidden public claim/term outside NASA source context: technical paper')
  for pat in FORBIDDEN:
   if re.search(pat,text,re.I):fail.append('forbidden public claim/term: '+pat)
  ip=parsed.get((ROOT/'index.html').resolve())
@@ -58,7 +61,7 @@ def main():
   if miss:fail.append('missing homepage surfaces: '+', '.join(miss))
   notes += [f'homepage canvas surfaces: {len(ip.canvases)}',f'homepage optional engineering drawers: {ip.details}']
  dedicated_page_ids={
-  'mission.html':['mission-canvas','mission-scrubber','entry-canvas','entry-scrubber','maneuver-canvas','dv-magnitude','weather-canvas'],
+  'mission.html':['mission-canvas','mission-scrubber','entry-canvas','entry-scrubber','trajectory-lab','trajectory-canvas','trajectory-dv','trajectory-coast','trajectory-presets','trajectory-reset','weather-canvas'],
   'windows.html':['crew-photo','crew-scrubber','crew-geometry-canvas','crew-image-prev','crew-image-next','crew-image-count','crew-zoom','crew-lightbox','crew-lightbox-image','crew-lightbox-prev','crew-lightbox-next','crew-lightbox-close'],
   'gnc.html':['gnc-canvas','gnc-start','gnc-mode-auto','gnc-mode-manual','gnc-disturbance','gnc-autopilot-status'],
   'mission-control.html':['mc-canvas'],
@@ -73,22 +76,28 @@ def main():
   else:notes.append(name+' interaction contract: '+str(len(required_ids))+' required IDs')
  dedicated_forbidden_ids={
   'mission.html':['crew-view','gnc-lab','mission-control','psi-lab-section'],
-  'windows.html':['mission-explorer','gnc-lab','mission-control','entry-lab','maneuver-lab','space-weather','psi-lab-section'],
-  'gnc.html':['mission-explorer','crew-view','mission-control','entry-lab','maneuver-lab','space-weather','psi-lab-section'],
-  'mission-control.html':['mission-explorer','crew-view','gnc-lab','entry-lab','maneuver-lab','space-weather','psi-lab-section'],
-  'psi.html':['mission-explorer','crew-view','gnc-lab','mission-control','entry-lab','maneuver-lab','space-weather'],
+  'windows.html':['mission-explorer','gnc-lab','mission-control','entry-lab','maneuver-lab','trajectory-lab','space-weather','psi-lab-section'],
+  'gnc.html':['mission-explorer','crew-view','mission-control','entry-lab','maneuver-lab','trajectory-lab','space-weather','psi-lab-section'],
+  'mission-control.html':['mission-explorer','crew-view','gnc-lab','entry-lab','maneuver-lab','trajectory-lab','space-weather','psi-lab-section'],
+  'psi.html':['mission-explorer','crew-view','gnc-lab','mission-control','entry-lab','maneuver-lab','trajectory-lab','space-weather'],
  }
  for name,forbidden_ids in dedicated_forbidden_ids.items():
   page_parser=parsed.get((ROOT/name).resolve())
   if not page_parser:continue
   leaked=[x for x in forbidden_ids if x in page_parser.ids]
   if leaked:fail.append(name+': contains interaction surfaces owned by another route: '+', '.join(leaked))
- home_forbidden=['mission-explorer','crew-view','gnc-lab','mission-control','entry-lab','maneuver-lab','space-weather','psi-lab-section']
+ home_forbidden=['mission-explorer','crew-view','gnc-lab','mission-control','entry-lab','maneuver-lab','trajectory-lab','space-weather','psi-lab-section']
  if ip:
   leaked=[x for x in home_forbidden if x in ip.ids]
   if leaked:fail.append('index.html still contains dedicated experience sections: '+', '.join(leaked))
  for phrase in ['NASA REPORTED','MISSIONLAB DERIVED','MODELED','INFERRED','UNKNOWN / NOT PUBLIC','ARTEMIS II DID NOT LAND ON THE MOON','Artemis IV','Sutton','8,281.938','6,544.538','36.76','RTC1','RTC2','RTC3']:
   if phrase.lower() not in text.lower():fail.append('missing required concept: '+phrase)
+ mission_text=(ROOT/'mission.html').read_text(encoding='utf8')
+ mission_js=(ROOT/'js/trajectory-model.js').read_text(encoding='utf8') if (ROOT/'js/trajectory-model.js').exists() else ''
+ for phrase in ['SMALL ΔV NOW','two-body','local RTN','public record ≠ targeting solution','NASA REPORTED','MISSIONLAB DERIVED','UNKNOWN / NOT PUBLIC']:
+  if phrase.lower() not in mission_text.lower():fail.append('mission trajectory lab missing evidence/model concept: '+phrase)
+ for phrase in ['MU_EARTH','rtnBasis','rk4Step','periapsisShiftKm','arrivalShiftSeconds']:
+  if phrase not in mission_js:fail.append('trajectory model missing implementation contract: '+phrase)
  for phrase in ['AUTO MODE','MANUAL MODE','Introduce disturbance','MissionLab shorthand','WHAT WOULD OPERATORS CARE ABOUT?']:
   if phrase.lower() not in text.lower():fail.append('missing final-polish UX concept: '+phrase)
  windows_js=(ROOT/'js/windows.js').read_text(encoding='utf8')

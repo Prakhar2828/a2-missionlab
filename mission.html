@@ -13,6 +13,7 @@
   <link rel="preconnect" href="https://images-assets.nasa.gov">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="responsive-hardening.css">
+  <link rel="stylesheet" href="trajectory.css">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="icon" href="favicon.ico" sizes="any">
 </head>
@@ -115,36 +116,173 @@
     </div>
   </section>
 
-<section class="x-section x-maneuver-lab" id="maneuver-lab">
-    <div class="x-wrap">
-      <div class="x-section-head">
-        <div><p class="x-kicker">Trajectory correction lab</p><h2>A tiny <span class="word-burn">burn</span> now can move the future path by a lot.</h2></div>
-        <p>First understand the idea. Orion is already moving fast. A correction changes velocity only slightly, but that difference accumulates over hours of coast and shifts where the trajectory arrives later.</p>
+<section class="x-section trajectory-lab" id="trajectory-lab" aria-labelledby="trajectory-title">
+  <div class="x-wrap">
+    <div class="x-section-head trajectory-head">
+      <div>
+        <p class="x-kicker">Trajectory correction · flight dynamics</p>
+        <h2 id="trajectory-title">Small Δv now. Different Earth arrival later.</h2>
       </div>
-      <div class="correction-story" aria-label="Trajectory correction concept"><div><small>01</small><b>ORIGINAL PATH</b><span>Predict where Orion will go.</span></div><i>→</i><div><small>02</small><b>SMALL ΔV</b><span>Change velocity for seconds.</span></div><i>→</i><div><small>03</small><b>HOURS OF COAST</b><span>The paths separate.</span></div><i>→</i><div><small>04</small><b>NEW ARRIVAL</b><span>Protect future geometry.</span></div></div>
-      <div class="maneuver-shell">
-        <div class="maneuver-viz"><canvas id="maneuver-canvas" aria-label="Trajectory correction educational visualization"></canvas><div class="maneuver-hud"><div><span>PREDICTED ARRIVAL SHIFT</span><b id="maneuver-hud-shift">0 km</b></div><div><span>COAST TIME</span><b id="maneuver-hud-coast">24 h</b></div><div><span>MISSION EFFECT</span><b id="maneuver-hud-state">NO CORRECTION</b></div></div><div class="maneuver-burn-flash" id="maneuver-burn-flash" aria-hidden="true"></div><div class="maneuver-annotation" id="maneuver-annotation"></div></div>
-        <div class="maneuver-panel">
-          <div class="term-pills"><span><b>OTC</b> Outbound Trajectory Correction</span><span><b>RTC</b> Return Trajectory Correction</span></div>
-          <div class="burn-select" id="burn-select"></div>
-          <div class="burn-readout"><div><span>STATUS / ΔV</span><b id="burn-dv">NO CORRECTION</b></div><div><span>DURATION</span><b id="burn-duration">—</b></div><div><span>PUBLIC TIME</span><b id="burn-time">—</b></div></div>
-          <label class="range-label" for="dv-magnitude"><span>Conceptual Δv magnitude</span><b id="dv-value">0.0 ft/s</b></label>
-          <input id="dv-magnitude" type="range" min="0" max="6" step="0.1" value="0">
-          <label class="range-label" for="coast-hours"><span>Coast after the correction</span><b id="coast-hours-value">24 h</b></label>
-          <input id="coast-hours" type="range" min="1" max="96" value="24">
-          <div class="delta-explain"><strong id="delta-distance">0 km</strong><p>Simple Δv × time separation for intuition only. The real trajectory is nonlinear and targeted in three dimensions.</p></div>
-          <div class="cancel-note" id="cancel-note"><b>Cancellation can be good.</b><span>NASA cancelled OTC1 and OTC2 because Orion was already on track. No burn can be the correct decision.</span></div>
-        </div>
-      </div>
-      <details class="engineering-drawer">
-        <summary><span>Show the engineering</span><small>plan vs execution · exact evidence limits · ESM propulsion architecture</small></summary>
-        <div class="engineering-drawer-body">
-          <div><h3>Plan ≠ execution. Architecture ≠ burn assignment.</h3><p>The repository preserves OTC1/OTC2 cancellation, OTC3 execution, RTC1–3 public timing and reported magnitudes, and ESM engine architecture. It does not invent OTC3 delta-v or a specific engine/thruster assignment where the public record does not establish one.</p><a href="library.html#maneuvers">Open the maneuver deep dive →</a></div>
-          <figure><img src="assets/public/figures/trajectory-correction-plan-execution.svg" alt="Dark-theme diagram showing Artemis II planned and executed trajectory corrections"><figcaption>Public-facing plan-versus-execution summary.</figcaption></figure>
-        </div>
-      </details>
+      <p>A correction does not teleport Orion onto a new line. It changes the state vector. Gravity then carries that slightly different state forward, turning a tiny velocity change into a different future position, arrival time, orbital plane, or modeled vacuum periapsis.</p>
     </div>
-  </section>
+
+    <div class="trajectory-causal" aria-label="Trajectory correction cause and effect">
+      <span><b>01</b>ESTIMATE STATE</span><i aria-hidden="true">→</i>
+      <span><b>02</b>CHOOSE ΔV VECTOR</span><i aria-hidden="true">→</i>
+      <span><b>03</b>EXECUTE BURN</span><i aria-hidden="true">→</i>
+      <span><b>04</b>COAST UNDER GRAVITY</span><i aria-hidden="true">→</i>
+      <span><b>05</b>REASSESS FUTURE GEOMETRY</span>
+    </div>
+
+    <section class="trajectory-record" aria-labelledby="trajectory-record-title">
+      <div class="trajectory-record-copy">
+        <span>NASA REPORTED · MISSION RECORD</span>
+        <h3 id="trajectory-record-title">Six opportunities. Two outbound burns were correctly cancelled.</h3>
+        <p>The public record separates <strong>plan</strong> from <strong>execution</strong>. OTC1 and OTC2 were cancelled because Orion was already on track. OTC3 executed, but the MissionLab source set does not establish its flown Δv magnitude. RTC1–3 have NASA-reported durations and velocity-change magnitudes.</p>
+      </div>
+      <div class="trajectory-record-grid" id="trajectory-record-grid" aria-label="Artemis II correction maneuver record"></div>
+    </section>
+
+    <div class="trajectory-workbench">
+      <div class="trajectory-visual-shell">
+        <canvas id="trajectory-canvas" aria-label="Two-body Earth-return trajectory correction response model"></canvas>
+        <div class="trajectory-scale-note">EARTH-RADIUS SCALE IS PHYSICAL · ARRIVAL INSET IS MAGNIFIED</div>
+        <div class="trajectory-legend" aria-hidden="true">
+          <span><i class="nominal"></i> reference return</span>
+          <span><i class="corrected"></i> corrected return</span>
+          <span><i class="burn"></i> modeled Δv vector</span>
+        </div>
+      </div>
+
+      <aside class="trajectory-console" aria-label="Trajectory correction model controls">
+        <div class="trajectory-console-header">
+          <span>MODELED · EARTH TWO-BODY RESPONSE</span>
+          <h3>Change the impulse. Propagate the consequence.</h3>
+          <p>The mission record supplies timing and, where public, Δv magnitude. <strong>Burn direction is not inferred from public magnitude alone.</strong> Direction choices below are educational what-if vectors in the local RTN frame.</p>
+        </div>
+
+        <div class="trajectory-preset-group">
+          <span>Return correction opportunity</span>
+          <div class="trajectory-presets" id="trajectory-presets" role="group" aria-label="Return correction preset"></div>
+          <small>Selecting a preset restores NASA-reported timing and magnitude. Changing a control turns the case into a modeled what-if.</small>
+        </div>
+
+        <div class="trajectory-public-readout" aria-live="polite">
+          <div><span>SELECTED RECORD</span><b id="trajectory-record-name">RTC2 · EXECUTED</b></div>
+          <div><span>PUBLIC TIME</span><b id="trajectory-record-time">Apr 10 · 02:53 UTC</b></div>
+          <div><span>DURATION</span><b id="trajectory-record-duration">9 s</b></div>
+          <div><span>REPORTED |ΔV|</span><b id="trajectory-record-dv">5.3 ft/s</b></div>
+        </div>
+
+        <div class="trajectory-control-group">
+          <label for="trajectory-dv"><span>Modeled |Δv|</span><b id="trajectory-dv-value">5.3 ft/s</b></label>
+          <input id="trajectory-dv" type="range" min="0" max="8" step="0.1" value="5.3">
+          <small id="trajectory-dv-note">Matches the reported RTC2 magnitude. The vector direction remains modeled.</small>
+        </div>
+
+        <div class="trajectory-control-group">
+          <label for="trajectory-coast"><span>Coast to reference EI epoch</span><b id="trajectory-coast-value">21.0 h</b></label>
+          <input id="trajectory-coast" type="range" min="1" max="96" step="any" value="21">
+          <small id="trajectory-coast-note">RTC2 occurred 21 hours before the public Entry Interface minute.</small>
+        </div>
+
+        <div class="trajectory-direction-group">
+          <span>Modeled burn direction · local RTN frame</span>
+          <div class="trajectory-directions" id="trajectory-directions" role="group" aria-label="Modeled burn direction">
+            <button type="button" class="active" data-direction="tangential"><b>+T</b><small>along track</small></button>
+            <button type="button" data-direction="retrograde"><b>−T</b><small>reverse</small></button>
+            <button type="button" data-direction="radial"><b>+R</b><small>outward</small></button>
+            <button type="button" data-direction="inward"><b>−R</b><small>inward</small></button>
+            <button type="button" data-direction="normal"><b>+N</b><small>out of plane</small></button>
+          </div>
+          <small><strong>R</strong> points away from Earth, <strong>T</strong> follows instantaneous motion, and <strong>N</strong> is normal to the reference orbital plane.</small>
+        </div>
+
+        <button id="trajectory-reset" class="x-button x-button-ghost trajectory-reset" type="button">Reset to selected mission record</button>
+        <div class="trajectory-model-state"><span id="trajectory-case-label">MISSION-ANCHORED MODEL</span><p id="trajectory-case-note">Magnitude and timing match public RTC2 reporting. Direction and all propagated consequences are MissionLab modeled.</p></div>
+      </aside>
+    </div>
+
+    <section class="trajectory-results" aria-label="Trajectory correction model outputs">
+      <article>
+        <span>MODELED · NOMINAL EI EPOCH</span>
+        <b id="trajectory-separation">290 km</b>
+        <p>3D position separation between the reference and corrected two-body states.</p>
+      </article>
+      <article>
+        <span>MODELED · VACUUM PERIAPSIS</span>
+        <b id="trajectory-periapsis">+56 km</b>
+        <p>Change in the corrected osculating orbit's vacuum periapsis altitude. This is not an atmospheric entry target.</p>
+      </article>
+      <article>
+        <span>MODELED · ARRIVAL TIMING</span>
+        <b id="trajectory-arrival">+25 s</b>
+        <p>Change in two-body time to vacuum periapsis relative to the reference orbit.</p>
+      </article>
+      <article>
+        <span>MODELED · RTN SEPARATION</span>
+        <b id="trajectory-rtn">R +53 · T −285 · N 0 km</b>
+        <p>Downstream separation resolved in the reference radial, along-track, and cross-track axes.</p>
+      </article>
+      <article class="trajectory-result-wide">
+        <span>INTUITION CHECK</span>
+        <b id="trajectory-linear-compare">Linear drift: 122 km · two-body: 290 km</b>
+        <p>Δv × time is useful intuition, but gravity continuously rotates and reshapes the response. Mission design propagates the state; it does not stop at the linear sketch.</p>
+      </article>
+    </section>
+
+    <div class="trajectory-lessons">
+      <article>
+        <span>TIMING</span>
+        <h3>The same burn matters differently depending on when you make it.</h3>
+        <p>An earlier impulse has more time to change the future state. Burn placement is therefore part of the guidance, navigation, crew-schedule, tracking, thermal, communications, and propulsion trade space—not merely a convenient clock time.</p>
+      </article>
+      <article>
+        <span>VECTOR</span>
+        <h3>Magnitude alone does not define a correction.</h3>
+        <p>Along-track, radial, and out-of-plane impulses produce different downstream effects. Public reporting of a scalar velocity change does not disclose the complete flown targeting vector.</p>
+      </article>
+      <article>
+        <span>DECISION</span>
+        <h3>Sometimes the best correction is no correction.</h3>
+        <p>OTC1 and OTC2 were cancelled because Orion remained on the desired path. A planned opportunity is not evidence that a burn must occur; navigation quality can make propellant expenditure unnecessary.</p>
+      </article>
+    </div>
+
+    <details class="trajectory-engineering engineering-drawer">
+      <summary><span>Go deeper: propagation model, equations, assumptions and evidence</span><small>two-body gravity · impulsive Δv · RTN frame · public record ≠ targeting solution</small></summary>
+      <div class="trajectory-engineering-body">
+        <div>
+          <p class="x-label">MODEL CORE</p>
+          <h3>Propagate the state, not a decorative curve.</h3>
+          <p>MissionLab applies an instantaneous velocity increment to an educational Earth-return reference orbit, then numerically integrates both the uncorrected and corrected states under central Earth gravity:</p>
+          <div class="trajectory-equation" aria-label="Two body equation of motion">r̈ = − μ<sub>E</sub> r / |r|³</div>
+          <p>The impulse is assembled in the local radial-transverse-normal basis:</p>
+          <div class="trajectory-equation" aria-label="RTN delta-v decomposition">Δv = Δv<sub>R</sub> R̂ + Δv<sub>T</sub> T̂ + Δv<sub>N</sub> N̂</div>
+          <p>The reference orbit is an educational ellipse sized between the public 121.9 km Entry Interface altitude and MissionLab's derived maximum Earth-center distance. It is <strong>not</strong> a fit to Orion's private navigation solution and it deliberately omits lunar/solar gravity, Earth oblateness, finite-burn dynamics, navigation covariance, maneuver execution error, atmosphere, lift, and real targeting constraints.</p>
+        </div>
+        <div>
+          <p class="x-label">WHY BURN PLACEMENT IS HARDER IN FLIGHT</p>
+          <h3>NASA's published Artemis II design work treats correction placement as an integrated GN&amp;C problem.</h3>
+          <p>Public NASA technical papers describe trajectory-correction placement in terms of entry-interface requirements, navigation uncertainty, maneuver execution errors, disturbances, ground-tracking geometry, crew schedule, thermal and communications constraints, venting, and propulsion configuration. MissionLab uses that public engineering context to explain the trade space without recreating NASA's flight targeting system.</p>
+          <div class="trajectory-source-links">
+            <a href="https://ntrs.nasa.gov/citations/20230000223" target="_blank" rel="noreferrer noopener">NASA NTRS · optimized Artemis II correction-burn placement ↗</a>
+            <a href="https://ntrs.nasa.gov/citations/20250000050" target="_blank" rel="noreferrer noopener">NASA NTRS · correction-burn placement performance impacts ↗</a>
+            <a href="https://www.nasa.gov/blogs/missions/2026/04/10/artemis-ii-flight-day-9-second-return-correction-burn-complete/" target="_blank" rel="noreferrer noopener">NASA · RTC2 mission update ↗</a>
+            <a href="library.html#maneuvers">Mission Library · maneuver evidence deep dive →</a>
+          </div>
+        </div>
+      </div>
+      <div class="trajectory-boundaries">
+        <div><span>NASA REPORTED</span><b>OTC cancellation/execution status, RTC timing, duration and reported scalar Δv magnitudes</b></div>
+        <div><span>MISSIONLAB DERIVED</span><b>Burn-to-EI time intervals from public event anchors where precision permits</b></div>
+        <div><span>MODELED</span><b>RTN direction, reference orbit, two-body propagation, separation, periapsis and timing response</b></div>
+        <div><span>UNKNOWN / NOT PUBLIC</span><b>Complete flown targeting vectors, covariance, private state estimate, targeting solution and detailed thruster history</b></div>
+      </div>
+    </details>
+  </div>
+</section>
+
 
 <section class="x-section x-entry" id="entry-lab">
     <div class="x-wrap">
@@ -242,5 +380,7 @@
 
 <script src="js/core.js"></script>
 <script src="js/mission.js"></script>
+<script src="js/trajectory-model.js"></script>
+<script src="js/trajectory.js"></script>
 </body>
 </html>

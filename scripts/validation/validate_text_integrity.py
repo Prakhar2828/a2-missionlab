@@ -33,6 +33,7 @@ PUBLIC_TEXT = [
     "gnc.css",
     "mission-control.css",
     "psi.css",
+    "trajectory.css",
     "app.js",
     "library.js",
     "js/core.js",
@@ -42,6 +43,8 @@ PUBLIC_TEXT = [
     "js/mission-control.js",
     "js/psi-model.js",
     "js/psi.js",
+    "js/trajectory-model.js",
+    "js/trajectory.js",
 ]
 
 

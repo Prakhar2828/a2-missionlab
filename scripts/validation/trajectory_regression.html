@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>A2 MissionLab trajectory correction regression</title>
+<style>html,body{margin:0;background:#111;color:#fff;font:13px/1.45 Consolas,monospace}iframe{display:block;width:390px;height:844px;border:0;background:#000}pre{white-space:pre-wrap;padding:12px}</style>
+</head>
+<body data-status="RUNNING" data-baseline-pass="false" data-timing-pass="false" data-direction-pass="false" data-preset-pass="false" data-evidence-pass="false" data-canvas-pass="false" data-overflow-pass="false" data-finite-pass="false">
+<iframe id="app" src="../../mission.html?trajectory-qa=1#trajectory-lab" title="Trajectory correction regression surface"></iframe>
+<pre id="results">RUNNING</pre>
+<script>
+(() => {
+'use strict';
+const out=document.querySelector('#results');
+const frame=document.querySelector('#app');
+const assert=(cond,msg)=>{if(!cond)throw new Error(msg)};
+const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+const num=(root,key)=>Number(root.dataset[key]);
+async function main(){
+  await new Promise((resolve,reject)=>{const t=setTimeout(()=>reject(new Error('Mission iframe load timeout')),9000);frame.addEventListener('load',()=>{clearTimeout(t);setTimeout(resolve,260)},{once:true});});
+  const w=frame.contentWindow,doc=frame.contentDocument,root=doc.querySelector('#trajectory-lab');
+  assert(root,'Trajectory lab missing');
+  const dv=doc.querySelector('#trajectory-dv'),coast=doc.querySelector('#trajectory-coast');
+  const setRange=async(el,value)=>{el.value=String(value);el.dispatchEvent(new w.Event('input',{bubbles:true}));await wait(35);};
+  const clickDirection=async(name)=>{const button=doc.querySelector(`#trajectory-directions [data-direction="${name}"]`);assert(button,`Missing direction ${name}`);button.click();await wait(35);};
+  const clickPreset=async(name)=>{const button=doc.querySelector(`#trajectory-presets [data-preset="${name}"]`);assert(button,`Missing preset ${name}`);button.click();await wait(35);};
+  const snap=()=>({selected:root.dataset.selected,direction:root.dataset.direction,anchored:root.dataset.anchored,finite:root.dataset.finite,separation:num(root,'separationKm'),r:num(root,'sepR'),t:num(root,'sepT'),n:num(root,'sepN'),periapsis:num(root,'periapsisShiftKm'),arrival:num(root,'arrivalShiftSeconds'),linear:num(root,'linearKm')});
+
+  const base=snap();
+  const baselinePass=base.selected==='rtc2'&&base.direction==='tangential'&&base.anchored==='true'&&base.finite==='true'&&base.separation>100&&Math.abs(Number(dv.value)-5.3)<.01&&Math.abs(Number(coast.value)-21)<.01;
+  document.body.dataset.baselinePass=String(baselinePass);
+  assert(baselinePass,'Default RTC2 mission-anchored model is invalid');
+
+  await setRange(dv,4.2);await setRange(coast,5);await clickDirection('tangential');const t5=snap();
+  await setRange(coast,21);const t21=snap();
+  await setRange(coast,72);const t72=snap();
+  const timingPass=t5.separation<t21.separation&&t21.separation<t72.separation&&Math.abs(t21.separation-t21.linear)>20;
+  document.body.dataset.timingPass=String(timingPass);
+  assert(timingPass,'Correction timing sensitivity or two-body distinction failed');
+
+  await setRange(coast,21);await clickDirection('radial');const radial=snap();
+  await clickDirection('normal');const normal=snap();
+  await clickDirection('tangential');const prograde=snap();
+  await clickDirection('retrograde');const retrograde=snap();
+  const directionPass=Math.abs(radial.separation-prograde.separation)>20&&Math.abs(normal.n)>Math.abs(normal.r)*10&&Math.sign(prograde.periapsis)===-Math.sign(retrograde.periapsis);
+  document.body.dataset.directionPass=String(directionPass);
+  assert(directionPass,'RTN direction responses collapsed or have incorrect sign behavior');
+
+  await clickPreset('rtc3');const rtc3=snap();
+  const rtc3Pass=rtc3.selected==='rtc3'&&rtc3.anchored==='true'&&Math.abs(Number(dv.value)-4.2)<.01&&Math.abs(Number(coast.value)-5)<.01;
+  await clickPreset('rtc1');const rtc1=snap();
+  const rtc1Control={dv:Number(dv.value),coast:Number(coast.value)};
+  const rtc1Pass=rtc1.selected==='rtc1'&&rtc1.anchored==='true'&&Math.abs(rtc1Control.dv-1.6)<.01&&Math.abs(rtc1Control.coast-71.8333)<.02;
+  await setRange(dv,3.7);const whatIf=snap();
+  const presetPass=rtc3Pass&&rtc1Pass&&whatIf.anchored==='false';
+  document.body.dataset.presetPass=String(presetPass);
+  assert(presetPass,`Mission record presets or modeled-what-if state failed · RTC3=${rtc3Pass} · RTC1=${rtc1Pass} · RTC1 control=${rtc1Control.dv.toFixed(4)} ft/s, ${rtc1Control.coast.toFixed(4)} h · what-if anchored=${whatIf.anchored}`);
+
+  const engineering=(doc.querySelector('.trajectory-engineering')?.textContent||'').toLowerCase();
+  const sourceLinks=[...doc.querySelectorAll('.trajectory-source-links a')];
+  const evidencePass=engineering.includes('not a fit to orion')&&engineering.includes('flight targeting system')&&engineering.includes('two-body')&&sourceLinks.length>=3;
+  document.body.dataset.evidencePass=String(evidencePass);
+  assert(evidencePass,'Trajectory assumptions/evidence boundary missing');
+
+  const canvas=doc.querySelector('#trajectory-canvas');await wait(80);
+  const canvasPass=Boolean(canvas&&canvas.width>0&&canvas.height>0);document.body.dataset.canvasPass=String(canvasPass);assert(canvasPass,'Trajectory canvas has zero dimensions');
+  const overflowPass=doc.documentElement.scrollWidth<=w.innerWidth+2;document.body.dataset.overflowPass=String(overflowPass);assert(overflowPass,'Horizontal overflow detected at phone viewport');
+  const cases=[base,t5,t21,t72,radial,normal,prograde,retrograde,rtc3,rtc1,whatIf];
+  const finitePass=cases.every(x=>x.finite==='true'&&['separation','r','t','n','periapsis','arrival','linear'].every(k=>Number.isFinite(x[k])));document.body.dataset.finitePass=String(finitePass);assert(finitePass,'Trajectory UI emitted non-finite model output');
+
+  const result={base,t5,t21,t72,radial,normal,prograde,retrograde,rtc3,rtc1,whatIf,baselinePass,timingPass,directionPass,presetPass,evidencePass,canvasPass,overflowPass,finitePass,pass:true};
+  Object.assign(document.body.dataset,{status:'PASS',baselinePass:String(baselinePass),timingPass:String(timingPass),directionPass:String(directionPass),presetPass:String(presetPass),evidencePass:String(evidencePass),canvasPass:String(canvasPass),overflowPass:String(overflowPass),finitePass:String(finitePass)});
+  out.textContent=JSON.stringify(result,null,2);
+}
+const watchdog=setTimeout(()=>{if(document.body.dataset.status==='RUNNING'){document.body.dataset.status='FAIL';out.textContent=JSON.stringify({fatal:'Trajectory regression watchdog timed out'},null,2);}},14000);
+main().then(()=>clearTimeout(watchdog)).catch(error=>{clearTimeout(watchdog);document.body.dataset.status='FAIL';out.textContent=JSON.stringify({fatal:String(error?.message||error)},null,2);});
+})();
+</script>
+</body>
+</html>
