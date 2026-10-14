@@ -32,6 +32,9 @@ jobs:
       - name: Validate Mission Explorer interaction stability
         run: python scripts/validation/validate_mission_scroll_regression.py
 
+      - name: Validate deterministic GNC interaction
+        run: python scripts/validation/validate_gnc_auto_regression.py
+
       - name: Validate Phase 9A publication pack
         run: python scripts/validation/validate_publication_pack.py
 

@@ -67,6 +67,16 @@
         </div>
         <button id="gnc-disturbance" class="gnc-disturbance" type="button"><span>⚡</span><b>Introduce disturbance</b><small>Push Orion off the commanded state</small></button>
       </div>
+      <ol class="gnc-progress" id="gnc-progress" aria-label="Automatic guidance loop progress">
+        <li class="active" data-gnc-phase="initial" aria-current="step"><span>00</span><b>INITIAL ERROR</b></li>
+        <li data-gnc-phase="sense"><span>01</span><b>SENSE</b></li>
+        <li data-gnc-phase="estimate"><span>02</span><b>ESTIMATE</b></li>
+        <li data-gnc-phase="guide"><span>03</span><b>GUIDE</b></li>
+        <li data-gnc-phase="control"><span>04</span><b>CONTROL</b></li>
+        <li data-gnc-phase="fire"><span>05</span><b>FIRE</b></li>
+        <li data-gnc-phase="verify"><span>06</span><b>VERIFY</b></li>
+        <li data-gnc-phase="convergence"><span>07</span><b>CONVERGENCE</b></li>
+      </ol>
       <div class="gnc-sim">
         <div class="gnc-viewport">
           <canvas id="gnc-canvas" aria-label="Simplified Orion proximity-operations GNC simulator"></canvas>
@@ -75,7 +85,7 @@
           <div class="gnc-status-row">
             <div><small>RELATIVE OFFSET</small><b id="gnc-offset-readout">42 m · conceptual</b></div>
             <div><small>POINTING ERROR</small><b id="gnc-error-readout">12.0°</b></div>
-            <div><small>CONTROL</small><b id="gnc-mode-readout">AUTO GUIDANCE DEMO</b></div><div><small>LOOP STATE</small><b id="gnc-autopilot-status">READY</b></div>
+            <div><small>CONTROL</small><b id="gnc-mode-readout">AUTO GUIDANCE DEMO</b></div><div><small>LOOP STATE</small><b id="gnc-autopilot-status" aria-live="polite">INITIAL ERROR · READY</b></div>
           </div>
         </div>
         <div class="gnc-console">

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>A2 MissionLab GNC regression</title>
+<style>html,body{margin:0;background:#111;color:#fff;font:13px/1.45 Consolas,monospace}iframe{display:block;width:390px;height:844px;border:0;background:#000}pre{white-space:pre-wrap;padding:12px}</style>
+</head>
+<body data-status="RUNNING" data-browser-capture-seconds="0" data-cadence-min="0" data-cadence-max="0" data-cadence-spread="0" data-max-recovery-seconds="0" data-phase-count="0" data-manual-command-pass="false" data-manual-disturbance-pass="false" data-auto-disturbance-pass="false" data-canvas-pass="false">
+<iframe id="app" src="../../gnc.html?gnc-qa=1" title="GNC regression surface"></iframe>
+<pre id="results">RUNNING</pre>
+<script>
+(() => {
+'use strict';
+const phases=['INITIAL ERROR','SENSE','ESTIMATE','GUIDE','CONTROL','FIRE','VERIFY','CONVERGENCE'];
+const cadences=[1/60,1/30,1/15,1/5,1/2,1];
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const assert=(condition,message)=>{if(!condition)throw new Error(message);};
+async function waitFor(predicate,timeout,label){
+  const start=performance.now();
+  while(performance.now()-start<timeout){if(predicate())return;await sleep(25);}
+  throw new Error(label+' timed out');
+}
+function sequence(actual,expected){
+  let i=0;for(const item of actual){if(item===expected[i]){i++;if(i===expected.length)return true;}}return false;
+}
+async function main(){
+  const frame=document.querySelector('#app');
+  await waitFor(()=>{try{return Boolean(frame.contentWindow?.A2GNC&&frame.contentDocument?.body);}catch(_){return false;}},8000,'GNC API');
+  const doc=frame.contentDocument,api=frame.contentWindow.A2GNC;
+  const cadenceResults=cadences.map(c=>({cadence:c,result:api.testAutoCadence(c)}));
+  for(const item of cadenceResults){
+    assert(item.result.pass,'AUTO cadence failed '+item.cadence);
+    assert(item.result.captureSeconds>=15&&item.result.captureSeconds<=20,'AUTO capture outside 15-20 s: '+JSON.stringify(item));
+  }
+  const times=cadenceResults.map(x=>x.result.captureSeconds),cadenceMin=Math.min(...times),cadenceMax=Math.max(...times),cadenceSpread=cadenceMax-cadenceMin;
+  assert(cadenceSpread<=.5,'Cadence spread > 0.5 s: '+cadenceSpread);
+  const recoveryResults=cadences.map(c=>({cadence:c,result:api.testDisturbanceRecovery(c)}));
+  for(const item of recoveryResults){
+    assert(item.result.pass,'Recovery failed '+item.cadence);
+    assert(item.result.recoverySeconds<=12,'Recovery > 12 s: '+JSON.stringify(item));
+  }
+  const maxRecoverySeconds=Math.max(...recoveryResults.map(x=>x.result.recoverySeconds));
+
+  api.reset();
+  assert(api.snapshot().phase==='INITIAL ERROR','Initial phase incorrect');
+  doc.querySelector('#gnc-start').click();
+  let guard=0;
+  while(!api.snapshot().captureLatched&&guard<100){api.advanceTestTime(.25);guard++;}
+  const captured=api.snapshot();
+  assert(captured.captureLatched,'Browser AUTO did not capture');
+  assert(captured.captureSeconds>=15&&captured.captureSeconds<=20.5,'Browser capture outside 15-20.5 s: '+captured.captureSeconds);
+  assert(sequence(captured.phaseHistory,phases),'Phase sequence incomplete: '+JSON.stringify(captured.phaseHistory));
+  assert(captured.phase==='CONVERGENCE','Final phase not CONVERGENCE');
+  assert(doc.querySelector('#gnc-success').textContent.trim()==='TARGET CORRIDOR CAPTURED','Success state not visible');
+  assert(doc.querySelector('#gnc-autopilot-status').textContent.trim()==='CAPTURE COMPLETE · STABLE','Completion status incorrect');
+  assert(doc.querySelector('#gnc-progress li.active')?.dataset.gncPhase==='convergence','Visible convergence state missing');
+  const canvas=doc.querySelector('#gnc-canvas'),canvasPass=Boolean(canvas&&canvas.width>0&&canvas.height>0);
+  assert(canvasPass,'Canvas has zero dimensions');
+
+  api.reset();doc.querySelector('#gnc-mode-manual').click();doc.querySelector('#gnc-start').click();
+  const before=api.snapshot();doc.querySelector('[data-cmd="right"]').click();doc.querySelector('[data-cmd="yawLeft"]').click();api.advanceTestTime(.25);
+  const after=api.snapshot();
+  const manualCommandPass=after.mode==='manual'&&after.started&&(Math.abs(after.x-before.x)>.01||Math.abs(after.vx-before.vx)>.01)&&(Math.abs(after.yaw-before.yaw)>.005||Math.abs(after.vyaw-before.vyaw)>.005);
+  assert(manualCommandPass,'Manual THC/RHC failed');
+
+  doc.querySelector('#gnc-disturbance').click();
+  const manualDisturbed=api.snapshot(),manualStatus=doc.querySelector('#gnc-autopilot-status').textContent.trim();
+  const manualDisturbancePass=manualDisturbed.mode==='manual'&&manualDisturbed.disturbed&&manualStatus.includes('YOUR MOVE');
+  assert(manualDisturbancePass,'Manual disturbance failed: '+manualStatus);
+
+  api.setMode('auto');api.injectTestDisturbance();
+  const autoDisturbed=api.snapshot(),autoStatus=doc.querySelector('#gnc-autopilot-status').textContent.trim();
+  const autoDisturbancePass=autoDisturbed.mode==='auto'&&autoDisturbed.disturbed&&autoStatus.includes('RECOVERING');
+  assert(autoDisturbancePass,'Auto disturbance failed: '+autoStatus);
+
+  const result={cadenceResults,cadenceMin,cadenceMax,cadenceSpread,recoveryResults,maxRecoverySeconds,browserCaptureSeconds:captured.captureSeconds,phaseHistory:captured.phaseHistory,manualCommandPass,manualDisturbancePass,autoDisturbancePass,canvasPass,pass:true};
+  Object.assign(document.body.dataset,{
+    status:'PASS',browserCaptureSeconds:String(captured.captureSeconds),cadenceMin:String(cadenceMin),cadenceMax:String(cadenceMax),cadenceSpread:String(cadenceSpread),
+    maxRecoverySeconds:String(maxRecoverySeconds),phaseCount:String(captured.phaseHistory.length),manualCommandPass:String(manualCommandPass),
+    manualDisturbancePass:String(manualDisturbancePass),autoDisturbancePass:String(autoDisturbancePass),canvasPass:String(canvasPass)
+  });
+  document.querySelector('#results').textContent=JSON.stringify(result,null,2);
+}
+const watchdog=setTimeout(()=>{if(document.body.dataset.status==='RUNNING'){document.body.dataset.status='FAIL';document.querySelector('#results').textContent=JSON.stringify({fatal:'GNC regression watchdog timed out'},null,2);}},10000);
+main().then(()=>clearTimeout(watchdog)).catch(error=>{clearTimeout(watchdog);document.body.dataset.status='FAIL';document.querySelector('#results').textContent=JSON.stringify({fatal:String(error?.message||error)},null,2);});
+})();
+</script>
+</body>
+</html>

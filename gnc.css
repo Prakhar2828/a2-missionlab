@@ -859,3 +859,22 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Phase C R4: deterministic GNC progress */
+.gnc-page .gnc-progress{box-sizing:border-box;width:100%;min-width:0;max-width:100%;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:1px;margin:0 0 10px;padding:0;list-style:none;overflow:hidden;border:1px solid var(--gnc-line);background:rgba(255,255,255,.075)}
+.gnc-page .gnc-progress li{position:relative;min-width:0;min-height:62px;display:flex;flex-direction:column;justify-content:center;gap:3px;padding:9px 8px;overflow:hidden;background:#050c12;color:#607787;transition:background .18s ease,color .18s ease,box-shadow .18s ease}
+.gnc-page .gnc-progress li::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:transparent}
+.gnc-page .gnc-progress span,.gnc-page .gnc-progress b{display:block;min-width:0}
+.gnc-page .gnc-progress span{color:#557186;font-size:.58rem;font-weight:800;letter-spacing:.12em}
+.gnc-page .gnc-progress b{font-size:.67rem;line-height:1.2;letter-spacing:.055em;overflow-wrap:anywhere}
+.gnc-page .gnc-progress li.complete{color:#91a8b8;background:#07121a}
+.gnc-page .gnc-progress li.complete::after{background:rgba(125,224,173,.42)}
+.gnc-page .gnc-progress li.active{color:#eef8ff;background:linear-gradient(145deg,rgba(39,95,134,.54),rgba(8,27,40,.88));box-shadow:inset 0 0 0 1px rgba(138,201,242,.3)}
+.gnc-page .gnc-progress li.active span{color:#9bd5fa}
+.gnc-page .gnc-progress li.active::after{background:var(--gnc-blue)}
+.gnc-page .gnc-success.ok{border-color:rgba(125,224,173,.45);color:#dffff0;background:rgba(8,37,27,.82)}
+.gnc-page .gnc-controls.auto-locked .pad{opacity:.42}
+.gnc-page .gnc-controls.auto-locked .pad button{pointer-events:none;cursor:not-allowed}
+@media(max-width:1050px){.gnc-page .gnc-progress{grid-template-columns:repeat(4,minmax(0,1fr))}.gnc-page .gnc-progress li{min-height:58px}}
+@media(max-width:560px){.gnc-page .gnc-progress li{min-height:56px;padding:8px 6px}.gnc-page .gnc-progress b{font-size:.62rem}}
+@media(prefers-reduced-motion:reduce){.gnc-page .gnc-progress li{transition:none}}
