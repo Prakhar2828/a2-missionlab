@@ -23,6 +23,12 @@ jobs:
       - name: Compile Python sources
         run: python -m compileall -q scripts
 
+      - name: Validate public text and markup integrity
+        run: python scripts/validation/validate_text_integrity.py
+
+      - name: Validate Phase 10 public experience
+        run: python scripts/validate_public_experience.py
+
       - name: Validate Phase 9A publication pack
         run: python scripts/validation/validate_publication_pack.py
 

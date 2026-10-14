@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="description" content="Explore Artemis II trajectory, correction maneuvers, entry and recovery, and space-weather mission context using A2 MissionLab public-data reconstructions.">
   <meta name="theme-color" content="#020509">
-  <meta property="og:title" content="Mission Explorer ? A2 MissionLab">
+  <meta property="og:title" content="Mission Explorer &mdash; A2 MissionLab">
   <meta property="og:description" content="Explore Artemis II trajectory, correction maneuvers, entry and recovery, and space-weather mission context using A2 MissionLab public-data reconstructions.">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <title>Mission Explorer ? A2 MissionLab</title>
+  <title>Mission Explorer &mdash; A2 MissionLab</title>
   <link rel="preconnect" href="https://images-assets.nasa.gov">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="responsive-hardening.css">
@@ -145,11 +145,11 @@
         </div>
       </div>
       <div class="entry-mini-lessons">
-        <button class="active" data-entry-topic="speed"><b>Why speed matters</b><span>Heating grows extremely quickly with velocity.</span></button>
-        <button data-entry-topic="pressure"><b>What dynamic pressure means</b><span>½ρV² combines rising density with falling speed.</span></button>
-        <button data-entry-topic="blackout"><b>Why blackout occurs</b><span>Ionized gas can interfere with RF communication.</span></button>
-        <button data-entry-topic="parachutes"><b>Why not deploy chutes immediately?</b><span>Loads would be destructive at hypersonic speed.</span></button>
-        <button data-entry-topic="staging"><b>Drogues vs mains</b><span>Stabilize first, then carry the terminal descent.</span></button>
+        <button type="button" class="active" data-entry-topic="speed"><b>Why speed matters</b><span>Heating grows extremely quickly with velocity.</span></button>
+        <button type="button" data-entry-topic="pressure"><b>What dynamic pressure means</b><span>½ρV² combines rising density with falling speed.</span></button>
+        <button type="button" data-entry-topic="blackout"><b>Why blackout occurs</b><span>Ionized gas can interfere with RF communication.</span></button>
+        <button type="button" data-entry-topic="parachutes"><b>Why not deploy chutes immediately?</b><span>Loads would be destructive at hypersonic speed.</span></button>
+        <button type="button" data-entry-topic="staging"><b>Drogues vs mains</b><span>Stabilize first, then carry the terminal descent.</span></button>
       </div>
       <div class="entry-topic-panel" id="entry-topic-panel"></div>
       <details class="engineering-drawer">
@@ -177,7 +177,7 @@
           <div class="lab-controls">
             <label class="range-label" for="solar-activity"><span>Solar activity scenario</span><b id="solar-value">QUIET SUN</b></label>
             <input id="solar-activity" type="range" min="0" max="100" value="12">
-            <div class="segmented" id="location-select"><button data-location="leo">LEO</button><button class="active" data-location="deep">Deep space</button><button data-location="lunar">Lunar vicinity</button></div>
+            <div class="segmented" id="location-select"><button type="button" data-location="leo">LEO</button><button type="button" class="active" data-location="deep">Deep space</button><button type="button" data-location="lunar">Lunar vicinity</button></div>
             <label class="range-label" for="shielding-assumption"><span>Conceptual shielding assumption</span><b id="shielding-value">medium</b></label>
             <input id="shielding-assumption" type="range" min="0" max="100" value="50">
             <div class="weather-readouts">
@@ -208,7 +208,7 @@
       <a href="mission-control.html">Mission Control</a>
       <a href="library.html">Mission Library</a>
       <a href="technical-report.html">Technical Report</a>
-      <a href="https://github.com/Prakhar2828/a2-missionlab" target="_blank" rel="noreferrer">GitHub ?</a>
+      <a href="https://github.com/Prakhar2828/a2-missionlab" target="_blank" rel="noreferrer noopener">GitHub &#8599;</a>
     </div>
   </div>
 </footer>
