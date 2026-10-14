@@ -61373,3 +61373,413 @@ merge phase-9-publication-quality into main
 ```
 
 ---
+
+## Phase H — Space Weather Redesign
+
+**Status:** COMPLETE — VALIDATED ON REAL WINDOWS CHROME + EDGE
+
+### Objective
+
+Replace the shallow normalized Space Weather heuristic with a defensible public-data-grounded educational experience that answers why a crewed lunar mission cares by teaching:
+
+`space phenomenon → measurement → physical consequence → mission/crew implication`
+
+The redesign preserves all completed Phase F/G work, the Mission multi-page architecture, the canonical evidence taxonomy, zero-cost static deployment, and all protected Mission Explorer, Through Orion's Windows, GNC, Mission Control, PSI, and Trajectory Correction behavior.
+
+### Immutable starting state
+
+- Repository: `C:\Users\prakh\Documents\a2-missionlab`
+- Branch: `phase-10-quality-recovery`
+- Starting HEAD: `c283e104d92e9d587d50d0879d3965243a1dcd20`
+- Starting parent: `ccf6ad0db89f9c68c551776e6a55556b23e334d1`
+- Starting tree: `83bdbea2b99daeafc43ecfaf8a4a26273e1ccb71`
+- Starting subject: `Redesign trajectory correction lab`
+- `origin/main` protected baseline: `d74a88d20f6ff1bd8be2ff0dbe3fb2b44cc13187`
+- The real `phase-10-quality-recovery` branch remains intentionally local-only/unpublished unless the user explicitly publishes it.
+
+### Repository archaeology and historical findings
+
+- The Phase H starting Space Weather experience lived at `mission.html#space-weather` with its runtime embedded in `js/mission.js`.
+- Its primary scenario inputs were generic normalized `solar activity 0–100` and `conceptual shielding 0–100` controls feeding a deliberately conceptual qualitative heuristic.
+- The strongest historical pre-split build around `718abc5e18403ba26eff3a68cfd208690ce6dbaf` did not contain a materially stronger Space Weather model worth restoring unchanged.
+- Existing Phase 5A/5B analytical work was retained and reused rather than replaced:
+  - `scripts/analysis/analyze_space_weather_context.py`
+  - `scripts/analysis/prepare_nairas_radiation_interface.py`
+  - `scripts/validation/validate_space_weather_context.py`
+  - `scripts/validation/validate_nairas_radiation_interface.py`
+  - `data/reference/artemis_ii_nairas_interface.json`
+  - existing Space Weather / radiation figures, Library material, and Technical Report material
+- Phase 5A had already aligned 13,053 one-minute NASA OMNI rows to the Artemis II mission clock.
+- The historical Phase 5B NAIRAS artifact prepared 3,262 public-trajectory rows for a NAIRAS 3.0 interface but explicitly recorded no submitted MissionLab run, no run output, no established Orion shielding depth, and no NAIRAS-derived Artemis II dose.
+
+### NAIRAS version-resolution finding
+
+Phase H resolved the repository's cross-layer version inconsistency instead of silently changing either side.
+
+- Current NASA CCMC documentation identifies the model family as **NAIRAS Version 4**.
+- The current CCMC change log records **Version 4.15 released for production use on June 8, 2026**.
+- The CCMC page was rechecked during Phase H and was marked **Last Updated October 13, 2026**.
+- MissionLab's older Phase 5B artifact remains correctly identified as a **NAIRAS 3.0 interface preparation**.
+- No historical artifact was relabeled as a Version 4 run.
+- No MissionLab Version 4 run is claimed.
+
+Authoritative public references used for the resolution:
+
+- NASA CCMC NAIRAS Version 4: `https://ccmc.gsfc.nasa.gov/models/NAIRAS~4/`
+- NOAA Solar Radiation Storm S-scale: `https://www.spaceweather.gov/noaa-scales-explanation`
+- NOAA GOES proton-flux product: `https://www.spaceweather.gov/products/goes-proton-flux`
+- NASA Artemis II radiation sensors: `https://www.nasa.gov/general/artemis-ii-crew-both-subjects-and-scientists-in-nasa-deep-space-research/`
+
+### Exact changed-file allowlist
+
+Phase H changed exactly these 15 repository-relative paths:
+
+1. `data/reference/artemis_ii_space_weather_phase_h.json` — added
+2. `data/sources/source_catalog.json` — modified
+3. `docs/SPACE_WEATHER_QA.md` — added
+4. `js/mission.js` — modified
+5. `js/space-weather-model.js` — added
+6. `js/space-weather.js` — added
+7. `library.js` — modified
+8. `mission.html` — modified
+9. `scripts/validate_public_experience.py` — modified
+10. `scripts/validation/space_weather_regression.html` — added
+11. `scripts/validation/validate_space_weather_model.js` — added
+12. `scripts/validation/validate_space_weather_regression.py` — added
+13. `scripts/validation/validate_text_integrity.py` — modified
+14. `space-weather.css` — added
+15. `technical-report.html` — modified
+
+No Phase F/G production paths outside this allowlist were rewritten.
+
+### Restored / redesigned capability
+
+The generic normalized primary controls were removed from the public experience.
+
+The new primary scenario quantity is:
+
+- integral proton flux for energies `≥10 MeV`
+- unit: `pfu`
+- `1 pfu = 1 proton / (cm² · s · sr)`
+- logarithmic scenario axis
+- public NOAA S-scale reference presets:
+  - Below S1: `1 pfu`
+  - S1: `10 pfu`
+  - S2: `100 pfu`
+  - S3: `1,000 pfu`
+  - S4: `10,000 pfu`
+  - S5: `100,000 pfu`
+
+Location context remains selectable for:
+
+- LEO
+- Deep space
+- Lunar vicinity
+
+Location deliberately changes explanatory mission context only. It does **not** numerically alter the measured proton flux, NOAA classification, or manufacture a shielding/dose result.
+
+### Public educational architecture
+
+Dedicated Phase H modules now separate the feature from the large Mission runtime:
+
+- `js/space-weather-model.js` — pure classification/evidence-boundary model
+- `js/space-weather.js` — interaction and event-driven visualization runtime
+- `space-weather.css` — dedicated responsive styling
+- `mission.html#space-weather` — existing Mission-route host retained
+- `data/reference/artemis_ii_space_weather_phase_h.json` — explicit evidence/version manifest
+- `scripts/validation/validate_space_weather_model.js` — pure model/evidence regression
+- `scripts/validation/space_weather_regression.html` — browser harness
+- `scripts/validation/validate_space_weather_regression.py` — Chrome/Edge browser driver
+- `docs/SPACE_WEATHER_QA.md` — Phase H model/evidence/test contract
+
+The public hierarchy teaches:
+
+1. **PHENOMENON** — solar eruption / energetic-particle event
+2. **MEASUREMENT** — energetic proton flux and onboard radiation sensors
+3. **PHYSICAL CONSEQUENCE** — ionization, energy deposition, electronics effects
+4. **MISSION / CREW IMPLICATION** — awareness, assessment, and protective decision-making
+
+### Mission-window public context
+
+Phase H surfaces selected validated Phase 5A NASA OMNI mission-window extrema as **MISSIONLAB DERIVED FROM NASA OMNI**, not as Orion-local radiation measurements:
+
+- maximum solar-wind speed: `789.7 km/s` at `2026-04-03 15:52 UTC`, MET `01:17:16:48`
+- minimum BZ GSM: `−14.46 nT` at `2026-04-02 07:09 UTC`, MET `00:08:33:48`
+- maximum flow pressure: `11.75 nPa` at `2026-04-10 07:16 UTC`, MET `08:08:40:48`
+- minimum SYM/H: `−104 nT` at `2026-04-02 08:41 UTC`, MET `00:10:05:48`
+
+The public copy explicitly states that NASA OMNI's near-Earth/bow-shock context is not proof of an Orion-local radiation event, spacecraft anomaly, or crew dose.
+
+### Artemis II radiation-monitoring context
+
+Public NASA documentation supports the following mission context used by Phase H:
+
+- six active Hybrid Electronic Radiation Assessor sensors inside Orion
+- a Crew Active Dosimeter assigned to each crewmember
+- radiation measurements can support mission-control protective decisions
+
+MissionLab does not claim access to private/as-flown individual crew dosimetry or internal NASA action thresholds.
+
+### Canonical evidence boundaries
+
+Phase H preserves and makes explicit:
+
+- proton flux ≠ absorbed dose
+- proton flux ≠ crew effective dose
+- NOAA S-scale ≠ Artemis II flight rule
+- location selection ≠ Orion shielding model
+- NASA OMNI near-Earth context ≠ Orion-local radiation field
+- external environment ≠ crew exposure
+- model output ≠ dosimeter measurement
+- Phase 5B NAIRAS 3.0 interface ≠ NAIRAS Version 4 run
+- prepared trajectory fields ≠ radiation dose
+- no Orion shielding depth is invented
+- no NAIRAS run is claimed without actual run output
+- no crew dosimetry is fabricated
+- public OEM coverage is not extended beyond public states
+
+### Protected-system integration
+
+- The Space Weather host remains on the existing Mission route rather than creating a needless new top-level route.
+- The old Space Weather heuristic was removed from `js/mission.js`; the new model/runtime is modular.
+- A QA-only static-canvas guard recognizes `trajectory-qa=1` and `space-weather-qa=1` so unrelated continuously animated Mission/Entry canvases do not consume browser-regression resources during those dedicated harnesses.
+- Production animation behavior remains unchanged when those QA query parameters are absent.
+- No Trajectory Correction model/runtime logic was changed.
+- No PSI model/runtime logic was changed.
+
+### Performance notes
+
+- Space Weather no longer owns a continuous requestAnimationFrame simulation loop.
+- The new visualization renders on initialization, scenario/location changes, and queued resize events.
+- This reduces unnecessary Mission-route animation work without weakening the visual explanation.
+- The project remains static HTML/CSS/JavaScript with repository-local assets and zero required ongoing operating cost.
+
+### Dedicated Phase H regression contract
+
+The pure model/evidence regression verifies:
+
+- physically meaningful `≥10 MeV` proton-flux axis
+- NOAA S1–S5 threshold behavior
+- exact threshold boundary behavior
+- location-context independence from measured flux/classification
+- `pfu` can never become crew dose
+- Phase 5A NASA OMNI mission-window anchors remain intact
+- Artemis II HERA monitoring context remains intact
+- historical NAIRAS 3.0 interface is separated from current Version 4 documentation
+- no MissionLab NAIRAS run or crew dosimetry is fabricated
+- retired generic `solar activity 0–100` / `shielding 0–100` public controls do not return
+
+The dedicated browser harness verifies:
+
+- baseline render/state
+- Below-S1 and S1–S5 presets
+- threshold behavior
+- location invariance
+- dose boundary
+- evidence anchors
+- finite state
+- canvas rendering
+- phone horizontal-overflow containment
+
+### Real Windows validation — FINAL PASS
+
+The final Phase H installer completed successfully on the user's real Windows repository.
+
+Pre-stage/static/model gates passed:
+
+- JavaScript syntax validation
+- Python compile validation
+- public-experience validation
+- strict UTF-8/public-text integrity
+- HTML structural/accessibility hygiene
+- Phase H pure-model/evidence regression
+- protected Trajectory pure-model regression
+- protected PSI pure-model regression
+- celestial asset/provenance validation
+- existing release validation
+
+Phase H Space Weather browser regression:
+
+- Chrome: PASS
+- Edge: PASS
+- physical baseline: PASS
+- NOAA S1-S5 thresholds: PASS
+- location invariance: PASS
+- dose boundary: PASS
+- evidence boundary: PASS
+- canvas rendering: PASS
+- mobile overflow: PASS
+- finite outputs: PASS
+
+Protected Trajectory Correction browser regression:
+
+- Chrome: PASS
+- Edge: PASS
+- RTC2 baseline: PASS
+- timing sensitivity: PASS
+- RTN direction response: PASS
+- RTC1/RTC2/RTC3 preset fidelity: PASS
+- evidence boundaries: PASS
+- canvas rendering: PASS
+- mobile overflow: PASS
+- finite outputs: PASS
+
+Protected PSI browser regression:
+
+- Chrome: PASS
+- Edge: PASS
+- cant direction: PASS
+- spread divergence: PASS
+- altitude response: PASS
+- thrust proxy: PASS
+- surface sensitivity: PASS
+- hardware screening: PASS
+- canvas rendering: PASS
+- mobile overflow: PASS
+- finite outputs: PASS
+
+Protected Mission Explorer regression:
+
+- Chrome: PASS
+- Edge: PASS
+- 8 viewport cases per browser
+- max page-scroll delta: `0 px`
+- max shell-height delta: `0 px`
+- max stage-height delta: `0 px`
+- max controls-top delta: `0 px`
+- max client-width delta: `0 px`
+- max control overflow: `0 px`
+
+Protected Through Orion's Windows regression:
+
+- Edge: PASS
+- iPhone `390×844`: PASS
+- iPhone `430×932`: PASS
+- mobile landscape `844×390`: PASS
+- desktop `1440×900`: PASS
+- max scroll delta: `0 px`
+- max viewer-top delta: `0 px`
+
+Protected GNC deterministic AUTO/MANUAL regression:
+
+- Chrome: PASS
+- Edge: PASS
+- browser-driven AUTO capture: `17 simulation seconds`
+- cadence range: `16.7833 to 17 seconds`
+- cadence spread: `0.21669999999999945 s`
+- maximum deterministic disturbance recovery: `10 s`
+- manual THC/RHC: PASS
+- manual disturbance: PASS
+- AUTO disturbance: PASS
+- canvas render path: PASS
+
+Protected Mission Control regression:
+
+- Edge: PASS
+- Chrome: PASS
+- 6 viewport cases per browser
+- 28 scenario/lens combinations per viewport
+- 168 interactions per browser
+- 336 total scenario/lens interactions
+- 7 decision-model stages
+- failures: `0`
+- max horizontal overflow: `0 px`
+- max layout delta: `0 px`
+- max page-scroll delta: `0 px`
+- max fixed-context content overflow: `0 px`
+- minimum scenario/role touch target: `64 px`
+
+Global responsive browser matrix:
+
+- Edge: PASS
+- Chrome: PASS
+- 8 routes
+- 6 viewports per browser
+- 48 cases per browser
+- 96 total cases
+- failures: `0`
+- max horizontal overflow: `0 px`
+
+Exact staged-candidate rerun passed:
+
+- public experience validation
+- text integrity validation
+- Phase H pure-model regression
+- Phase H Chrome browser regression
+- Phase H Edge browser regression
+- exact deterministic tree verification before and after the focused rerun
+
+The full protected browser matrix was intentionally not duplicated after staging, preserving the Phase G browser-resource-exhaustion safeguard.
+
+### Git safety / rollback
+
+The successful Windows installer:
+
+- requires the exact repository path
+- requires branch `phase-10-quality-recovery`
+- requires starting HEAD `c283e104d92e9d587d50d0879d3965243a1dcd20`
+- requires starting parent `ccf6ad0db89f9c68c551776e6a55556b23e334d1`
+- requires starting tree `83bdbea2b99daeafc43ecfaf8a4a26273e1ccb71`
+- fetches and verifies `origin/main = d74a88d20f6ff1bd8be2ff0dbe3fb2b44cc13187`
+- treats the recovery remote-tracking ref as optional because the branch is intentionally local-only
+- creates a timestamped `safety/phase-h-space-weather-*` branch before mutation
+- validates the patch ZIP SHA-256
+- validates the exact ZIP path set
+- validates SHA-256 for every payload file
+- refuses unexpected changed/staged paths
+- stages only the 15 approved paths
+- verifies the exact staged tree before commit
+- creates a deterministic local commit only after validation
+- verifies final HEAD/parent/tree and a clean worktree
+- rolls back to the completed Phase G start on failure after mutation begins
+- never runs `git push`
+
+### Final Phase H Git state
+
+- Final local commit: `85bce6ae711cc60bebd714a0a02f9734626ef665`
+- Commit subject: `Redesign space weather lab`
+- Parent: `c283e104d92e9d587d50d0879d3965243a1dcd20`
+- Tree: `62bcb0f96d7b835d74d64165ece8d7a779c76f9f`
+- Safety branch: `safety/phase-h-space-weather-20261014-111401219`
+- Final worktree: clean
+- Remote recovery branch: still unpublished
+- Push performed: **NO**
+
+### Delivery artifacts
+
+- `A2_PhaseH_SpaceWeather_Patch_FINAL_v1.zip`
+  - SHA-256: `34033eff9eef338b6ab0cde010290ac13669cdc83b946545fcd5d11572f80737`
+- `Install_A2_PhaseH_SpaceWeather_v1.ps1`
+  - SHA-256: `961fc41e985c9c333d5a8f7ffb850cab5892281a730b4f45a1a3d9fc702f7149`
+- `A2_PhaseH_SpaceWeather_Delivery_20261014_v1.zip`
+- `PHASE_H_LOCAL_VALIDATION_OUTPUT_FINAL.txt`
+- `PHASE_H_PROJECT_LOG_APPEND.md`
+
+### Current limitations / unknowns preserved
+
+- No private Artemis II radiation telemetry is available here.
+- No private/as-flown individual crew dosimetry is claimed.
+- No Orion-specific effective shielding depth is established by the retained Phase 5B artifact.
+- No MissionLab NAIRAS Version 3.0 or Version 4 run output is claimed.
+- The NOAA S-scale is an external public reference, not an Artemis II flight-rule model.
+- The scenario visualization is qualitative and does not perform particle transport or dose calculation.
+- Exact NASA internal operational thresholds and protective-action criteria remain unknown/not public unless separately established by public evidence.
+
+### Phase closure
+
+Phase H — Space Weather Redesign is complete.
+
+The final implementation:
+
+- replaces generic normalized controls with physically meaningful public quantities
+- resolves the NAIRAS 3.0 versus current Version 4 evidence distinction
+- preserves the no-fabricated-dose boundary
+- strengthens mission relevance for crew and electronics
+- reduces unnecessary animation work
+- preserves all Phase F/G protected systems
+- passes dedicated Chrome and Edge regression
+- passes the full protected browser matrix
+- passes the global responsive matrix
+- finishes in the exact intended local commit
+- leaves the recovery branch unpublished
+- performs no push
