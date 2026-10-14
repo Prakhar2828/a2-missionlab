@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="Explore plume-surface interaction for future lunar landings with an evidence-bounded educational geometry and hazard model.">
+  <meta name="theme-color" content="#080706">
+  <meta property="og:title" content="Plume-Surface Interaction — A2 MissionLab">
+  <meta property="og:description" content="A technically honest future-Artemis plume-surface interaction teaching model: geometry, regolith response, ejecta consequences, and evidence boundaries.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Plume-Surface Interaction — A2 MissionLab</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="responsive-hardening.css">
+  <link rel="stylesheet" href="psi.css">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.ico" sizes="any">
+</head>
+<body class="experience-page psi-page">
+<a class="skip" href="#page-main">Skip to main content</a>
+
+<header class="x-header" id="top">
+  <a class="x-brand" href="index.html" aria-label="A2 MissionLab home">
+    <span class="x-brand-orbit" aria-hidden="true"><i></i></span>
+    <span><b>A2</b> MissionLab</span>
+  </a>
+  <button class="x-menu" type="button" aria-expanded="false" aria-controls="x-nav">Explore</button>
+  <nav class="x-nav" id="x-nav" aria-label="Primary">
+    <a href="mission.html">Mission</a>
+    <a href="windows.html">Windows</a>
+    <a href="gnc.html">GNC</a>
+    <a href="mission-control.html">Mission Control</a>
+    <a href="psi.html" aria-current="page">PSI</a>
+    <a href="library.html">Library</a>
+    <a href="technical-report.html" class="x-nav-paper">Technical Report</a>
+  </nav>
+</header>
+
+<main id="page-main">
+  <section class="psi-hero">
+    <div class="x-wrap psi-hero-grid">
+      <div>
+        <p class="x-kicker">Future lunar landing engineering</p>
+        <h1>When exhaust meets regolith.</h1>
+        <p class="psi-hero-copy">Follow the causal chain from engine exhaust to plume geometry, surface interaction, erosion and ejecta, then to the operational consequences for a lunar landing site.</p>
+      </div>
+      <aside class="psi-boundary" aria-label="Mission scope boundary">
+        <span>MISSION SCOPE</span>
+        <b>Artemis II did not land on the Moon.</b>
+        <p>This route is future-Artemis campaign context. It is not an Artemis II event, telemetry replay, landing reconstruction, or flight-qualified prediction.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="psi-stage-section" aria-labelledby="psi-sim-title">
+    <div class="x-wrap">
+      <div class="x-section-head psi-section-head">
+        <div>
+          <p class="x-kicker">SEE IT · INTERACT WITH IT</p>
+          <h2 id="psi-sim-title">Shape the plume. Watch the consequence chain change.</h2>
+        </div>
+        <p>The geometry is calculated from an ideal cone intersecting a flat surface. Relative loading, erosion, obscuration, and exposure are screening proxies only. They are deliberately not labeled as pressure, shear stress, eroded mass, or particle trajectory predictions.</p>
+      </div>
+
+      <div class="psi-chain" aria-label="Plume-surface interaction cause and effect chain">
+        <span><b>01</b>ENGINE EXHAUST</span><i aria-hidden="true">→</i>
+        <span><b>02</b>PLUME GEOMETRY</span><i aria-hidden="true">→</i>
+        <span><b>03</b>REGOLITH INTERACTION</span><i aria-hidden="true">→</i>
+        <span><b>04</b>EROSION / EJECTA</span><i aria-hidden="true">→</i>
+        <span><b>05</b>OPERATIONS</span>
+      </div>
+
+      <div class="psi-workbench" id="psi-lab-section">
+        <div class="psi-viewport-shell">
+          <canvas id="psi-canvas" aria-label="Educational lunar plume-surface interaction side-view model"></canvas>
+          <div class="psi-canvas-legend" aria-hidden="true">
+            <span><i class="axis"></i> plume axis</span>
+            <span><i class="edge"></i> ideal cone edge</span>
+            <span><i class="surface"></i> idealized footprint</span>
+          </div>
+          <div class="psi-canvas-note">GEOMETRY IS MODELED · PARTICLE PATHS ARE CONCEPTUAL</div>
+        </div>
+
+        <aside class="psi-console" aria-label="PSI model controls">
+          <div class="psi-console-intro">
+            <span>EDUCATIONAL MODEL</span>
+            <b>Change one variable at a time.</b>
+            <p>Cant changes plume <strong>direction</strong>. Spread changes plume <strong>divergence</strong>. They are intentionally independent.</p>
+          </div>
+
+          <div class="psi-control-group">
+            <label for="psi-alt"><span>Vehicle altitude</span><b id="psi-alt-value">18 m</b></label>
+            <input id="psi-alt" type="range" min="5" max="40" step="1" value="18">
+            <small>Sets engine-to-surface separation. Lower altitude shrinks the ideal footprint and raises the relative loading proxy.</small>
+          </div>
+
+          <div class="psi-control-group">
+            <label for="psi-throttle"><span>Thrust setting</span><b id="psi-throttle-value">55%</b></label>
+            <input id="psi-throttle" type="range" min="20" max="100" step="1" value="55">
+            <small>Scales source strength in the relative loading proxy. It does not change ideal plume geometry.</small>
+          </div>
+
+          <div class="psi-control-group psi-control-accent">
+            <label for="psi-cant"><span>Plume cant</span><b id="psi-cant-value">6°</b></label>
+            <input id="psi-cant" type="range" min="0" max="18" step="1" value="6">
+            <small><strong>Direction:</strong> tilts the plume centerline and moves the impingement region sideways.</small>
+          </div>
+
+          <div class="psi-control-group psi-control-accent">
+            <label for="psi-spread"><span>Plume spread half-angle</span><b id="psi-spread-value">14°</b></label>
+            <input id="psi-spread" type="range" min="5" max="26" step="1" value="14">
+            <small><strong>Width:</strong> changes angular divergence around the centerline and therefore the footprint size.</small>
+          </div>
+
+          <div class="psi-choice-group">
+            <span>Engine count</span>
+            <div class="psi-segmented" id="engine-count" role="group" aria-label="Engine count">
+              <button type="button" data-engines="1">1</button>
+              <button type="button" class="active" data-engines="2">2</button>
+              <button type="button" data-engines="4">4</button>
+            </div>
+            <small>Scales the aggregate source-strength proxy only. Individual plume-plume interaction is not modeled.</small>
+          </div>
+
+          <div class="psi-choice-group">
+            <span>Surface response class</span>
+            <div class="psi-segmented" id="regolith-select" role="group" aria-label="Regolith response class">
+              <button type="button" data-regolith="resistant">More resistant</button>
+              <button type="button" class="active" data-regolith="reference">Reference</button>
+              <button type="button" data-regolith="erodible">More erodible</button>
+            </div>
+            <small>A sensitivity multiplier for the relative erosion tendency. It is not a measured lunar soil property set.</small>
+          </div>
+
+          <div class="psi-control-group">
+            <label for="psi-hardware"><span>Nearby hardware distance</span><b id="psi-hardware-value">35 m</b></label>
+            <input id="psi-hardware" type="range" min="8" max="80" step="1" value="35">
+            <small>Measured horizontally from the lander centerline in this teaching geometry.</small>
+          </div>
+
+          <button id="psi-reset" class="x-button x-button-ghost psi-reset" type="button">Reset reference case</button>
+        </aside>
+      </div>
+
+      <section class="psi-results" aria-label="PSI model outputs">
+        <div class="psi-result-card">
+          <span>MODELED · GEOMETRY</span>
+          <b id="psi-footprint-area">64 m²</b>
+          <p>Ideal cone/surface footprint area</p>
+        </div>
+        <div class="psi-result-card">
+          <span>MODELED · GEOMETRY</span>
+          <b id="psi-offset">2.0 m</b>
+          <p>Footprint centroid offset downrange</p>
+        </div>
+        <div class="psi-result-card">
+          <span>MODELED · RELATIVE PROXY</span>
+          <b id="psi-loading">1.00×</b>
+          <p>Average loading proxy vs. reference case</p>
+        </div>
+        <div class="psi-result-card">
+          <span>MODELED · RELATIVE PROXY</span>
+          <b id="psi-erosion">Reference</b>
+          <p>Relative erosion tendency</p>
+        </div>
+        <div class="psi-result-card psi-result-wide">
+          <span>MODELED · SCREENING</span>
+          <b id="psi-hardware-risk">Outside ideal plume footprint</b>
+          <p id="psi-hardware-detail">Hardware clearance is 28.4 m beyond the modeled footprint edge.</p>
+        </div>
+        <div class="psi-result-card psi-result-wide">
+          <span>MODELED · OPERATIONAL INTERPRETATION</span>
+          <b id="psi-visibility">Moderate obscuration tendency</b>
+          <p id="psi-ops-detail">Surface disturbance can create particle clouds that complicate optical visibility and expose nearby assets. This model communicates sensitivity, not a validated hazard radius.</p>
+        </div>
+      </section>
+
+      <div class="psi-lesson-grid">
+        <article>
+          <span>CANT ≠ SPREAD</span>
+          <h3>Pointing the plume is not the same as widening it.</h3>
+          <p>Cant rotates the plume axis. Spread opens or closes the ideal cone around that axis. A canted narrow plume can move a compact footprint far downrange; a vertical wide plume can disturb a broad region centered under the vehicle.</p>
+        </article>
+        <article>
+          <span>GEOMETRY ≠ PSI PREDICTION</span>
+          <h3>The cone is a teaching surface, not a gas-dynamics solution.</h3>
+          <p>Real lunar PSI depends on nozzle flow, rarefaction, shocks, surface shear, particle size and shape, packing, entrainment, granular response, vehicle motion, and validation data.</p>
+        </article>
+        <article>
+          <span>OPERATIONS</span>
+          <h3>Nearby assets turn surface physics into mission design.</h3>
+          <p>Landing-site spacing, sensor visibility, surface contamination, abrasion, ejecta impact, and site reuse all become operational questions once exhaust can mobilize regolith.</p>
+        </article>
+      </div>
+
+      <details class="engineering-drawer psi-engineering">
+        <summary><span>Open the model, assumptions, and evidence</span><small>equations · boundaries · NASA sources</small></summary>
+        <div class="psi-engineering-body">
+          <section>
+            <p class="x-label">MODEL DEFINITION</p>
+            <h3>What MissionLab actually computes</h3>
+            <p>The plume is represented as an ideal right circular cone with half-angle <em>α</em>, canted by <em>θ</em> from vertical at height <em>h</em>. MissionLab samples rays around that cone and intersects them with a flat surface to calculate the footprint polygon, area, centroid, and downrange edge.</p>
+            <div class="psi-equations" aria-label="PSI educational model equations">
+              <code>ray(φ) = cos(α)·axis + sin(α)·[cos(φ)·b + sin(φ)·c]</code>
+              <code>surface intersection: t = h / −ray<sub>z</sub></code>
+              <code>relative loading proxy ∝ engine count × thrust setting / footprint area</code>
+              <code>relative erosion tendency = loading proxy × surface-response sensitivity</code>
+            </div>
+          </section>
+          <section>
+            <p class="x-label">EVIDENCE BOUNDARIES</p>
+            <div class="psi-boundary-list">
+              <div><span>NASA REPORTED</span><p>PSI can erode the surface, eject particles, obscure sensing/visibility, damage or contaminate hardware, and threaten nearby assets.</p></div>
+              <div><span>MODELED</span><p>Ideal cone geometry, footprint area, centroid offset, a normalized loading proxy, and sensitivity-based screening outputs.</p></div>
+              <div><span>INFERRED</span><p>Operational interpretation that larger disturbance and smaller hardware clearance generally increase concern.</p></div>
+              <div><span>UNKNOWN / NOT PUBLIC</span><p>Any specific future lander's private nozzle conditions, exact plume field, regolith state, flight erosion rate, ejecta distribution, or certified keep-out distance.</p></div>
+            </div>
+          </section>
+          <section>
+            <p class="x-label">LIMITATIONS</p>
+            <h3>What this intentionally does not do</h3>
+            <ul>
+              <li>No CFD, DSMC, Boltzmann, DEM, or gas-granular solver.</li>
+              <li>No shock structure, rarefied-flow transition, plume chemistry, or nozzle expansion solution.</li>
+              <li>No crater-growth, eroded-mass, particle-speed, ballistic-range, or sensor obscuration prediction.</li>
+              <li>No plume-plume coupling between multiple engines.</li>
+              <li>No claim of NASA proprietary analysis, mission telemetry, or flight qualification.</li>
+            </ul>
+          </section>
+          <section>
+            <p class="x-label">PUBLIC TECHNICAL SOURCES</p>
+            <div class="psi-source-list">
+              <a href="https://www.nasa.gov/missions/artemis/nasa-begins-moon-mission-plume-surface-interaction-tests/" target="_blank" rel="noreferrer noopener"><b>NASA Langley · 2026 PSI testing</b><span>Human-scale vacuum-chamber testing, hardware exposure, model validation, crew-safety motivation. ↗</span></a>
+              <a href="https://www.nasa.gov/directorates/stmd/plume-surface-interaction-psi/" target="_blank" rel="noreferrer noopener"><b>NASA · Plume Surface Interaction project</b><span>Surface erosion, ejected particles, visibility/sensor concerns, predictive-model validation. ↗</span></a>
+              <a href="https://nas.nasa.gov/SC22/research/project12.html" target="_blank" rel="noreferrer noopener"><b>NASA Advanced Supercomputing · PSI simulations</b><span>Continuum/rarefied flow, gas-granular modeling, erosion and crater prediction context. ↗</span></a>
+              <a href="https://ntrs.nasa.gov/citations/20260004959" target="_blank" rel="noreferrer noopener"><b>NASA NTRS · PSI testing to reduce propulsive-landing risk</b><span>2026 public presentation on test objectives and data for human-scale landing systems. ↗</span></a>
+            </div>
+          </section>
+        </div>
+      </details>
+    </div>
+  </section>
+</main>
+
+<footer class="x-footer">
+  <div class="x-wrap">
+    <div>
+      <b>A2 MissionLab</b>
+      <p>Independent public-data mission reconstruction and engineering education. Not an official NASA product.</p>
+    </div>
+    <div>
+      <a href="mission.html">Mission</a>
+      <a href="windows.html">Windows</a>
+      <a href="gnc.html">GNC</a>
+      <a href="mission-control.html">Mission Control</a>
+      <a href="library.html#psi">PSI deep dive</a>
+      <a href="technical-report.html">Technical Report</a>
+      <a href="https://github.com/Prakhar2828/a2-missionlab" target="_blank" rel="noreferrer noopener">GitHub &#8599;</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/psi-model.js"></script>
+<script src="js/psi.js"></script>
+</body>
+</html>

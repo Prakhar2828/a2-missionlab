@@ -274,10 +274,10 @@ def run_browser(
 
             return False
 
-        if cases != "42":
+        if cases != "48":
 
             print(
-                "FAIL: expected 42 cases"
+                "FAIL: expected 48 cases"
             )
 
             return False
@@ -414,7 +414,7 @@ def main():
     )
 
     print(
-        "Routes: 7"
+        "Routes: 8"
     )
 
     print(
@@ -422,11 +422,11 @@ def main():
     )
 
     print(
-        "Cases per browser: 42"
+        "Cases per browser: 48"
     )
 
     print(
-        "Total cases: 84"
+        "Total cases: 96"
     )
 
     print(

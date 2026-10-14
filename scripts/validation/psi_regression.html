@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>A2 MissionLab PSI regression</title>
+<style>html,body{margin:0;background:#111;color:#fff;font:13px/1.45 Consolas,monospace}iframe{display:block;width:390px;height:844px;border:0;background:#000}pre{white-space:pre-wrap;padding:12px}</style>
+</head>
+<body data-status="RUNNING" data-cant-pass="false" data-spread-pass="false" data-altitude-pass="false" data-throttle-pass="false" data-regolith-pass="false" data-hardware-pass="false" data-canvas-pass="false" data-overflow-pass="false" data-finite-pass="false">
+<iframe id="app" src="../../psi.html?psi-qa=1" title="PSI regression surface"></iframe>
+<pre id="results">RUNNING</pre>
+<script>
+(() => {
+'use strict';
+const out=document.querySelector('#results');
+const frame=document.querySelector('#app');
+const assert=(cond,msg)=>{if(!cond)throw new Error(msg)};
+const approx=(a,b,tol)=>Math.abs(a-b)<=tol;
+const finite=o=>Object.values(o).filter(v=>typeof v==='number').every(Number.isFinite);
+async function main(){
+  await new Promise((resolve,reject)=>{const t=setTimeout(()=>reject(new Error('PSI iframe load timeout')),7000);frame.addEventListener('load',()=>{clearTimeout(t);setTimeout(resolve,120)},{once:true});});
+  const w=frame.contentWindow,doc=frame.contentDocument,api=w.__A2_PSI_TEST__;assert(api,'PSI QA API missing');
+  const base=api.reset();assert(base.area>0,'Baseline footprint area invalid');
+
+  const cant0=api.compute({cant:0,spread:14}),cant14=api.compute({cant:14,spread:14});
+  const cantPass=Math.abs(cant0.centroidX)<.08&&cant14.centroidX>cant0.centroidX+3&&cant14.area>0;
+  assert(cantPass,'Cant must shift footprint direction');
+
+  const spread8=api.compute({cant:6,spread:8}),spread22=api.compute({cant:6,spread:22});
+  const spreadPass=spread22.area>spread8.area*5&&spread22.crossWidth>spread8.crossWidth*2;
+  assert(spreadPass,'Spread must materially widen footprint');
+
+  const low=api.compute({altitude:8}),high=api.compute({altitude:32});
+  const altitudePass=high.area>low.area*10&&low.loadingRatio>high.loadingRatio*10;
+  assert(altitudePass,'Altitude geometry/loading sensitivity incorrect');
+
+  const throttleLow=api.compute({throttle:25}),throttleHigh=api.compute({throttle:100});
+  const throttlePass=approx(throttleLow.area,throttleHigh.area,.01)&&throttleHigh.loadingRatio>throttleLow.loadingRatio*3.9;
+  assert(throttlePass,'Throttle should change proxy, not footprint geometry');
+
+  const resistant=api.compute({regolith:'resistant'}),erodible=api.compute({regolith:'erodible'});
+  const regolithPass=approx(resistant.area,erodible.area,.01)&&erodible.erosionRatio>resistant.erosionRatio*2;
+  assert(regolithPass,'Surface class should change erosion sensitivity, not geometry');
+
+  const hwNear=api.compute({hardwareDistance:8,cant:12,spread:20,altitude:12}),hwFar=api.compute({hardwareDistance:80,cant:12,spread:20,altitude:12});
+  const hardwarePass=hwNear.hardwareLevel!==hwFar.hardwareLevel&&hwFar.clearance>hwNear.clearance;
+  assert(hardwarePass,'Hardware-distance screening is not responsive');
+
+  const snap=api.reset();
+  const canvas=doc.querySelector('#psi-canvas');const canvasPass=Boolean(canvas&&canvas.width>0&&canvas.height>0);assert(canvasPass,'Canvas has zero dimensions');
+  const overflowPass=doc.documentElement.scrollWidth<=w.innerWidth+2;assert(overflowPass,'Horizontal overflow detected');
+  const cases=[base,cant0,cant14,spread8,spread22,low,high,throttleLow,throttleHigh,resistant,erodible,hwNear,hwFar,snap];
+  const finitePass=cases.every(finite);assert(finitePass,'Model emitted non-finite numeric output');
+  const distinctionText=doc.querySelector('.psi-console-intro')?.textContent||'';assert(/Cant changes plume\s+direction/i.test(distinctionText)&&/Spread changes plume\s+divergence/i.test(distinctionText),'Cant/spread distinction text missing');
+  const boundary=(doc.querySelector('.psi-boundary')?.textContent||'').toLowerCase();assert(boundary.includes('artemis ii did not land on the moon'),'Artemis II landing boundary missing');
+  const limitations=(doc.querySelector('.psi-engineering')?.textContent||'').toLowerCase();for(const term of ['no cfd','no shock structure','no crater-growth','no plume-plume coupling'])assert(limitations.includes(term),`Missing limitation: ${term}`);
+  const result={base,cant0,cant14,spread8,spread22,low,high,throttleLow,throttleHigh,resistant,erodible,hwNear,hwFar,cantPass,spreadPass,altitudePass,throttlePass,regolithPass,hardwarePass,canvasPass,overflowPass,finitePass,pass:true};
+  Object.assign(document.body.dataset,{status:'PASS',cantPass:String(cantPass),spreadPass:String(spreadPass),altitudePass:String(altitudePass),throttlePass:String(throttlePass),regolithPass:String(regolithPass),hardwarePass:String(hardwarePass),canvasPass:String(canvasPass),overflowPass:String(overflowPass),finitePass:String(finitePass)});
+  out.textContent=JSON.stringify(result,null,2);
+}
+const watchdog=setTimeout(()=>{if(document.body.dataset.status==='RUNNING'){document.body.dataset.status='FAIL';out.textContent=JSON.stringify({fatal:'PSI regression watchdog timed out'},null,2);}},10000);
+main().then(()=>clearTimeout(watchdog)).catch(error=>{clearTimeout(watchdog);document.body.dataset.status='FAIL';out.textContent=JSON.stringify({fatal:String(error?.message||error)},null,2);});
+})();
+</script>
+</body>
+</html>

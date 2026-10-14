@@ -18,6 +18,7 @@ PUBLIC_HTML = [
     "windows.html",
     "gnc.html",
     "mission-control.html",
+    "psi.html",
     "library.html",
     "technical-report.html",
 ]
@@ -31,6 +32,7 @@ PUBLIC_TEXT = [
     "windows.css",
     "gnc.css",
     "mission-control.css",
+    "psi.css",
     "app.js",
     "library.js",
     "js/core.js",
@@ -38,6 +40,7 @@ PUBLIC_TEXT = [
     "js/windows.js",
     "js/gnc.js",
     "js/mission-control.js",
+    "js/psi-model.js",
     "js/psi.js",
 ]
 
