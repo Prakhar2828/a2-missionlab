@@ -1,0 +1,2070 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+
+  <title>
+    A2 Mission Control Phase D Regression
+  </title>
+
+  <style>
+
+    html,
+    body {
+      margin: 0;
+      background: #111;
+      color: #fff;
+      font:
+        13px/1.45
+        Consolas,
+        monospace;
+    }
+
+    iframe {
+      display: block;
+      border: 0;
+      margin: 0 0 16px;
+      background: #000;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      padding: 14px;
+    }
+
+  </style>
+
+</head>
+
+<body
+  data-status="RUNNING"
+  data-case-count="0"
+  data-failure-count="0"
+  data-max-overflow="0"
+  data-max-layout-delta="0"
+  data-max-scroll-delta="0"
+  data-min-touch-target="0"
+  data-max-context-overflow="0"
+>
+
+<pre id="results">RUNNING</pre>
+
+<script>
+(() => {
+  'use strict';
+
+
+  const viewports = [
+
+    {
+      name: 'phone-390x844',
+      width: 390,
+      height: 844
+    },
+
+    {
+      name: 'phone-430x932',
+      width: 430,
+      height: 932
+    },
+
+    {
+      name: 'tablet-768x1024',
+      width: 768,
+      height: 1024
+    },
+
+    {
+      name: 'phone-landscape-844x390',
+      width: 844,
+      height: 390
+    },
+
+    {
+      name: 'laptop-1280x800',
+      width: 1280,
+      height: 800
+    },
+
+    {
+      name: 'desktop-1440x900',
+      width: 1440,
+      height: 900
+    }
+
+  ];
+
+
+  const expectedStages = [
+    'DETECT',
+    'EVIDENCE',
+    'CONSTRAINTS',
+    'OPTIONS',
+    'DECISION',
+    'ACTION',
+    'OUTCOME'
+  ];
+
+
+  const expectedWasteLabels = [
+    'TEMP',
+    'WASTE',
+    'CABIN',
+    'POWER'
+  ];
+
+
+  const pause =
+    ms =>
+      new Promise(
+        resolve =>
+          setTimeout(
+            resolve,
+            ms
+          )
+      );
+
+
+  const settle =
+    async win => {
+
+      void (
+        win.document
+          .documentElement
+          .offsetHeight
+      );
+
+      await pause(
+        70
+      );
+
+      void (
+        win.document
+          .documentElement
+          .offsetHeight
+      );
+    };
+
+
+  function rect(
+    element
+  ) {
+
+    const value =
+      element.getBoundingClientRect();
+
+
+    return {
+
+      left:
+        value.left,
+
+      right:
+        value.right,
+
+      top:
+        value.top,
+
+      bottom:
+        value.bottom,
+
+      width:
+        value.width,
+
+      height:
+        value.height
+
+    };
+  }
+
+
+  function documentTop(
+    win,
+    element
+  ) {
+
+    return (
+      win.scrollY +
+      element
+        .getBoundingClientRect()
+        .top
+    );
+  }
+
+
+  function intersects(
+    a,
+    b
+  ) {
+
+    return !(
+      a.right <= b.left ||
+      a.left >= b.right ||
+      a.bottom <= b.top ||
+      a.top >= b.bottom
+    );
+  }
+
+
+  function horizontalOverflow(
+    doc
+  ) {
+
+    return Math.max(
+      0,
+      Math.max(
+        doc.documentElement.scrollWidth,
+        doc.body
+          ? doc.body.scrollWidth
+          : 0
+      ) -
+      doc.documentElement.clientWidth
+    );
+  }
+
+
+  function contextOverflow(
+    element
+  ) {
+
+    return Math.max(
+      0,
+      element.scrollHeight -
+      element.clientHeight
+    );
+  }
+
+
+  function minimumTouchTarget(
+    buttons
+  ) {
+
+    let minimum =
+      Infinity;
+
+
+    for (
+      const button
+      of buttons
+    ) {
+
+      const r =
+        rect(
+          button
+        );
+
+
+      minimum =
+        Math.min(
+          minimum,
+          r.width,
+          r.height
+        );
+    }
+
+
+    return minimum;
+  }
+
+
+  function onePressed(
+    buttons
+  ) {
+
+    return buttons.filter(
+      button =>
+        button.getAttribute(
+          'aria-pressed'
+        ) === 'true'
+    );
+  }
+
+
+  async function createFrame(
+    spec
+  ) {
+
+    const frame =
+      document.createElement(
+        'iframe'
+      );
+
+
+    frame.width =
+      String(
+        spec.width
+      );
+
+
+    frame.height =
+      String(
+        spec.height
+      );
+
+
+    frame.style.width =
+      spec.width +
+      'px';
+
+
+    frame.style.height =
+      spec.height +
+      'px';
+
+
+    frame.src =
+      (
+        '../../mission-control.html' +
+        '?phase-d-regression=' +
+        encodeURIComponent(
+          spec.name
+        )
+      );
+
+
+    document.body.appendChild(
+      frame
+    );
+
+
+    const started =
+      Date.now();
+
+
+    while (
+      Date.now() -
+      started <
+      8000
+    ) {
+
+      try {
+
+        const win =
+          frame.contentWindow;
+
+
+        const doc =
+          frame.contentDocument;
+
+
+        const pathname =
+          (
+            win &&
+            win.location
+              ? win.location.pathname
+              : ''
+          );
+
+
+        const ready =
+          (
+            doc &&
+            doc.body &&
+            (
+              doc.readyState ===
+                'interactive' ||
+              doc.readyState ===
+                'complete'
+            )
+          );
+
+
+        if (
+          ready &&
+          pathname.endsWith(
+            '/mission-control.html'
+          )
+        ) {
+
+          return frame;
+        }
+      }
+      catch (error) {
+        // Navigation still in progress.
+      }
+
+
+      await pause(
+        50
+      );
+    }
+
+
+    frame.remove();
+
+
+    throw new Error(
+      (
+        spec.name +
+        ': mission-control.html DOM readiness timeout'
+      )
+    );
+  }
+
+
+  function renderedStateErrors(
+    doc,
+    api,
+    viewportName
+  ) {
+
+    const errors =
+      [];
+
+
+    const state =
+      api.getState();
+
+
+    const title =
+      doc.querySelector(
+        '#mc-event-title'
+      );
+
+
+    const eventClass =
+      doc.querySelector(
+        '#mc-event-class'
+      );
+
+
+    const summary =
+      doc.querySelector(
+        '#mc-event-summary'
+      );
+
+
+    const evidenceLabel =
+      doc.querySelector(
+        '#mc-evidence-label'
+      );
+
+
+    const evidenceCopy =
+      doc.querySelector(
+        '#mc-evidence-copy'
+      );
+
+
+    const roleLabel =
+      doc.querySelector(
+        '#mc-role-label'
+      );
+
+
+    const roleTitle =
+      doc.querySelector(
+        '#mc-role-title'
+      );
+
+
+    const roleCopy =
+      doc.querySelector(
+        '#mc-role-copy'
+      );
+
+
+    const questions = [
+      ...doc.querySelectorAll(
+        '#mc-questions > div'
+      )
+    ];
+
+
+    const traceItems = [
+      ...doc.querySelectorAll(
+        '#mc-decision-trace > article'
+      )
+    ];
+
+
+    if (
+      title.textContent.trim() !==
+      state.eventTitle
+    ) {
+
+      errors.push(
+        (
+          viewportName +
+          ': event title did not match active state'
+        )
+      );
+    }
+
+
+    if (
+      eventClass.textContent.trim() !==
+      state.eventClass
+    ) {
+
+      errors.push(
+        (
+          viewportName +
+          ': event class did not match active state'
+        )
+      );
+    }
+
+
+    if (
+      summary.textContent.trim() !==
+      state.eventSummary
+    ) {
+
+      errors.push(
+        (
+          viewportName +
+          ': event summary did not match active state'
+        )
+      );
+    }
+
+
+    if (
+      evidenceLabel.textContent.trim() !==
+      state.evidenceLabel
+    ) {
+
+      errors.push(
+        (
+          viewportName +
+          ': evidence label did not match active state'
+        )
+      );
+    }
+
+
+    if (
+      evidenceCopy.textContent.trim() !==
+      state.evidenceCopy
+    ) {
+
+      errors.push(
+        (
+          viewportName +
+          ': evidence copy did not match active state'
+        )
+      );
+    }
+
+
+    if (
+      roleLabel.textContent.trim() !==
+      (
+        state.roleDisplay +
+        ' / ' +
+        state.roleName
+      )
+    ) {
+
+      errors.push(
+        (
+          viewportName +
+          ': role label did not match active state'
+        )
+      );
+    }
+
+
+    if (
+      roleTitle.textContent.trim() !==
+      state.roleTitle
+    ) {
+
+      errors.push(
+        (
+          viewportName +
+          ': role title did not match active state'
+        )
+      );
+    }
+
+
+    if (
+      roleCopy.textContent.trim() !==
+      state.roleCopy
+    ) {
+
+      errors.push(
+        (
+          viewportName +
+          ': role explanation did not match active state'
+        )
+      );
+    }
+
+
+    if (
+      questions.length !==
+      state.questions.length
+    ) {
+
+      errors.push(
+        (
+          viewportName +
+          ': role question count mismatch'
+        )
+      );
+    }
+    else {
+
+      state.questions.forEach(
+        (
+          question,
+          index
+        ) => {
+
+          if (
+            questions[index]
+              .textContent
+              .trim() !==
+            question
+          ) {
+
+            errors.push(
+              (
+                viewportName +
+                ': role question mismatch at index ' +
+                index
+              )
+            );
+          }
+        }
+      );
+    }
+
+
+    if (
+      traceItems.length !==
+      7
+    ) {
+
+      errors.push(
+        (
+          viewportName +
+          ': expected seven decision-thread stages'
+        )
+      );
+    }
+
+
+    if (
+      state.decisionTrace
+        .map(
+          step =>
+            step.stage
+        )
+        .join('|') !==
+      expectedStages.join('|')
+    ) {
+
+      errors.push(
+        (
+          viewportName +
+          ': decision stages differ from seven-stage evidence model'
+        )
+      );
+    }
+
+
+    state.decisionTrace.forEach(
+      (
+        step,
+        index
+      ) => {
+
+        const item =
+          traceItems[index];
+
+
+        if (!item) {
+          return;
+        }
+
+
+        if (
+          item.dataset.stage !==
+          step.stage
+        ) {
+
+          errors.push(
+            (
+              viewportName +
+              ': decision stage mismatch at index ' +
+              index
+            )
+          );
+        }
+
+
+        if (
+          !item.textContent.includes(
+            step.text
+          )
+        ) {
+
+          errors.push(
+            (
+              viewportName +
+              ': decision text mismatch for ' +
+              step.stage
+            )
+          );
+        }
+      }
+    );
+
+
+    return {
+      state,
+      errors
+    };
+  }
+
+
+  async function runViewport(
+    spec
+  ) {
+
+    const frame =
+      await createFrame(
+        spec
+      );
+
+
+    const win =
+      frame.contentWindow;
+
+
+    const doc =
+      frame.contentDocument;
+
+
+    await settle(
+      win
+    );
+
+
+    const errors =
+      [];
+
+
+    const api =
+      win.A2MissionControl;
+
+
+    const shell =
+      doc.querySelector(
+        '#mc-room-shell'
+      );
+
+
+    const display =
+      doc.querySelector(
+        '#mc-display'
+      );
+
+
+    const canvas =
+      doc.querySelector(
+        '#mc-canvas'
+      );
+
+
+    const eventContext =
+      doc.querySelector(
+        '#mc-event-context'
+      );
+
+
+    const roleContext =
+      doc.querySelector(
+        '#mc-role-context'
+      );
+
+
+    const strip =
+      doc.querySelector(
+        '#mc-strip'
+      );
+
+
+    const events =
+      doc.querySelector(
+        '#mc-events'
+      );
+
+
+    const trace =
+      doc.querySelector(
+        '#mc-decision-trace'
+      );
+
+
+    const drawer =
+      doc.querySelector(
+        '.engineering-drawer'
+      );
+
+
+    const roleButtons = [
+      ...doc.querySelectorAll(
+        '#mc-strip button'
+      )
+    ];
+
+
+    const scenarioButtons = [
+      ...doc.querySelectorAll(
+        '#mc-events button'
+      )
+    ];
+
+
+    if (!api) {
+
+      throw new Error(
+        (
+          spec.name +
+          ': A2MissionControl QA API missing'
+        )
+      );
+    }
+
+
+    if (
+      api.version !==
+      'phase-d-r3.2'
+    ) {
+
+      throw new Error(
+        (
+          spec.name +
+          ': incorrect Mission Control QA API version'
+        )
+      );
+    }
+
+
+    const requiredElements = [
+
+      ['shell', shell],
+      ['display', display],
+      ['canvas', canvas],
+      ['event context', eventContext],
+      ['role context', roleContext],
+      ['role strip', strip],
+      ['events', events],
+      ['decision trace', trace],
+      ['engineering drawer', drawer]
+
+    ];
+
+
+    for (
+      const [
+        label,
+        element
+      ]
+      of requiredElements
+    ) {
+
+      if (!element) {
+
+        throw new Error(
+          (
+            spec.name +
+            ': missing required ' +
+            label
+          )
+        );
+      }
+    }
+
+
+    if (
+      api.scenarioIds().length !==
+      4
+    ) {
+
+      errors.push(
+        (
+          spec.name +
+          ': expected four scenarios'
+        )
+      );
+    }
+
+
+    if (
+      api.roleIds().length !==
+      7
+    ) {
+
+      errors.push(
+        (
+          spec.name +
+          ': expected seven discipline lenses'
+        )
+      );
+    }
+
+
+    if (
+      scenarioButtons.length !==
+      4
+    ) {
+
+      errors.push(
+        (
+          spec.name +
+          ': expected four scenario buttons'
+        )
+      );
+    }
+
+
+    if (
+      roleButtons.length !==
+      7
+    ) {
+
+      errors.push(
+        (
+          spec.name +
+          ': expected seven role buttons'
+        )
+      );
+    }
+
+
+    if (
+      display.contains(
+        eventContext
+      )
+    ) {
+
+      errors.push(
+        (
+          spec.name +
+          ': event narrative structurally inside visualization'
+        )
+      );
+    }
+
+
+    if (
+      display.contains(
+        roleContext
+      )
+    ) {
+
+      errors.push(
+        (
+          spec.name +
+          ': role narrative structurally inside visualization'
+        )
+      );
+    }
+
+
+    const initialCanvas =
+      rect(
+        canvas
+      );
+
+
+    if (
+      initialCanvas.width <= 100 ||
+      initialCanvas.height <= 100
+    ) {
+
+      errors.push(
+        (
+          spec.name +
+          ': canvas has non-usable dimensions'
+        )
+      );
+    }
+
+
+    const minimumTouch =
+      Math.min(
+        minimumTouchTarget(
+          scenarioButtons
+        ),
+        minimumTouchTarget(
+          roleButtons
+        )
+      );
+
+
+    if (
+      minimumTouch < 44
+    ) {
+
+      errors.push(
+        (
+          spec.name +
+          ': scenario/role touch target below 44px: ' +
+          minimumTouch.toFixed(2)
+        )
+      );
+    }
+
+
+    doc.documentElement.style.scrollBehavior =
+      'auto';
+
+
+    const shellTop =
+      documentTop(
+        win,
+        shell
+      );
+
+
+    const maxScrollY =
+      Math.max(
+        0,
+        doc.documentElement.scrollHeight -
+        win.innerHeight
+      );
+
+
+    const targetScroll =
+      Math.max(
+        0,
+        Math.min(
+          shellTop - 36,
+          maxScrollY
+        )
+      );
+
+
+    win.scrollTo(
+      0,
+      targetScroll
+    );
+
+
+    await settle(
+      win
+    );
+
+
+    const baseline = {
+
+      scrollY:
+        win.scrollY,
+
+      shellTop:
+        documentTop(
+          win,
+          shell
+        ),
+
+      shellHeight:
+        rect(
+          shell
+        ).height,
+
+      canvasTop:
+        documentTop(
+          win,
+          canvas
+        ),
+
+      canvasHeight:
+        rect(
+          canvas
+        ).height,
+
+      stripTop:
+        documentTop(
+          win,
+          strip
+        ),
+
+      eventsTop:
+        documentTop(
+          win,
+          events
+        ),
+
+      eventHeight:
+        rect(
+          eventContext
+        ).height,
+
+      roleHeight:
+        rect(
+          roleContext
+        ).height
+
+    };
+
+
+    let maxLayoutDelta =
+      0;
+
+
+    let maxScrollDelta =
+      0;
+
+
+    let maxOverflow =
+      0;
+
+
+    let maxContextOverflow =
+      0;
+
+
+    let combinations =
+      0;
+
+
+    const observedTitles =
+      new Set();
+
+
+    const observedRoleTitles =
+      new Set();
+
+
+    for (
+      const scenarioId
+      of api.scenarioIds()
+    ) {
+
+      const scenarioButton =
+        scenarioButtons.find(
+          button =>
+            button.dataset.id ===
+            scenarioId
+        );
+
+
+      if (!scenarioButton) {
+
+        errors.push(
+          (
+            spec.name +
+            ': scenario button missing for ' +
+            scenarioId
+          )
+        );
+
+
+        continue;
+      }
+
+
+      scenarioButton.click();
+
+
+      await settle(
+        win
+      );
+
+
+      for (
+        const roleId
+        of api.roleIds()
+      ) {
+
+        const roleButton =
+          roleButtons.find(
+            button =>
+              button.dataset.role ===
+              roleId
+          );
+
+
+        if (!roleButton) {
+
+          errors.push(
+            (
+              spec.name +
+              ': role button missing for ' +
+              roleId
+            )
+          );
+
+
+          continue;
+        }
+
+
+        roleButton.click();
+
+
+        await settle(
+          win
+        );
+
+
+        const rendered =
+          renderedStateErrors(
+            doc,
+            api,
+            spec.name
+          );
+
+
+        errors.push(
+          ...rendered.errors
+        );
+
+
+        const state =
+          rendered.state;
+
+
+        if (
+          state.scenarioId !==
+          scenarioId
+        ) {
+
+          errors.push(
+            (
+              spec.name +
+              ': scenario state failed to update to ' +
+              scenarioId
+            )
+          );
+        }
+
+
+        if (
+          state.role !==
+          roleId
+        ) {
+
+          errors.push(
+            (
+              spec.name +
+              ': role state failed to update to ' +
+              roleId
+            )
+          );
+        }
+
+
+        observedTitles.add(
+          state.eventTitle
+        );
+
+
+        observedRoleTitles.add(
+          state.roleTitle
+        );
+
+
+        const current = {
+
+          scrollY:
+            win.scrollY,
+
+          shellTop:
+            documentTop(
+              win,
+              shell
+            ),
+
+          shellHeight:
+            rect(
+              shell
+            ).height,
+
+          canvasTop:
+            documentTop(
+              win,
+              canvas
+            ),
+
+          canvasHeight:
+            rect(
+              canvas
+            ).height,
+
+          stripTop:
+            documentTop(
+              win,
+              strip
+            ),
+
+          eventsTop:
+            documentTop(
+              win,
+              events
+            ),
+
+          eventHeight:
+            rect(
+              eventContext
+            ).height,
+
+          roleHeight:
+            rect(
+              roleContext
+            ).height
+
+        };
+
+
+        const layoutDelta =
+          Math.max(
+
+            Math.abs(
+              current.shellTop -
+              baseline.shellTop
+            ),
+
+            Math.abs(
+              current.shellHeight -
+              baseline.shellHeight
+            ),
+
+            Math.abs(
+              current.canvasTop -
+              baseline.canvasTop
+            ),
+
+            Math.abs(
+              current.canvasHeight -
+              baseline.canvasHeight
+            ),
+
+            Math.abs(
+              current.stripTop -
+              baseline.stripTop
+            ),
+
+            Math.abs(
+              current.eventsTop -
+              baseline.eventsTop
+            ),
+
+            Math.abs(
+              current.eventHeight -
+              baseline.eventHeight
+            ),
+
+            Math.abs(
+              current.roleHeight -
+              baseline.roleHeight
+            )
+
+          );
+
+
+        const scrollDelta =
+          Math.abs(
+            current.scrollY -
+            baseline.scrollY
+          );
+
+
+        const overflow =
+          horizontalOverflow(
+            doc
+          );
+
+
+        const currentContextOverflow =
+          Math.max(
+            contextOverflow(
+              eventContext
+            ),
+            contextOverflow(
+              roleContext
+            )
+          );
+
+
+        maxLayoutDelta =
+          Math.max(
+            maxLayoutDelta,
+            layoutDelta
+          );
+
+
+        maxScrollDelta =
+          Math.max(
+            maxScrollDelta,
+            scrollDelta
+          );
+
+
+        maxOverflow =
+          Math.max(
+            maxOverflow,
+            overflow
+          );
+
+
+        maxContextOverflow =
+          Math.max(
+            maxContextOverflow,
+            currentContextOverflow
+          );
+
+
+        const canvasRect =
+          rect(
+            canvas
+          );
+
+
+        if (
+          intersects(
+            canvasRect,
+            rect(
+              eventContext
+            )
+          )
+        ) {
+
+          errors.push(
+            (
+              spec.name +
+              ': event context intersects canvas in ' +
+              scenarioId +
+              ' / ' +
+              roleId
+            )
+          );
+        }
+
+
+        if (
+          intersects(
+            canvasRect,
+            rect(
+              roleContext
+            )
+          )
+        ) {
+
+          errors.push(
+            (
+              spec.name +
+              ': role context intersects canvas in ' +
+              scenarioId +
+              ' / ' +
+              roleId
+            )
+          );
+        }
+
+
+        const pressedRoles =
+          onePressed(
+            roleButtons
+          );
+
+
+        if (
+          pressedRoles.length !==
+          1
+        ) {
+
+          errors.push(
+            (
+              spec.name +
+              ': expected exactly one pressed role, found ' +
+              pressedRoles.length
+            )
+          );
+        }
+
+
+        const pressedScenarios =
+          onePressed(
+            scenarioButtons
+          );
+
+
+        if (
+          pressedScenarios.length !==
+          1
+        ) {
+
+          errors.push(
+            (
+              spec.name +
+              ': expected exactly one pressed scenario, found ' +
+              pressedScenarios.length
+            )
+          );
+        }
+
+
+        if (
+          scenarioId ===
+          'waste'
+        ) {
+
+          if (
+            state.visualizationLabels
+              .join('|') !==
+            expectedWasteLabels
+              .join('|')
+          ) {
+
+            errors.push(
+              (
+                spec.name +
+                ': waste visualization labels changed'
+              )
+            );
+          }
+
+
+          if (
+            canvas.dataset.visualizationLabels !==
+            expectedWasteLabels.join('|')
+          ) {
+
+            errors.push(
+              (
+                spec.name +
+                ': canvas waste-label QA metadata mismatch'
+              )
+            );
+          }
+        }
+
+
+        combinations +=
+          1;
+      }
+    }
+
+
+    if (
+      combinations !==
+      28
+    ) {
+
+      errors.push(
+        (
+          spec.name +
+          ': expected 28 scenario/lens combinations, found ' +
+          combinations
+        )
+      );
+    }
+
+
+    if (
+      observedTitles.size !==
+      4
+    ) {
+
+      errors.push(
+        (
+          spec.name +
+          ': not all four event titles were observed'
+        )
+      );
+    }
+
+
+    if (
+      observedRoleTitles.size !==
+      7
+    ) {
+
+      errors.push(
+        (
+          spec.name +
+          ': not all seven role titles were observed'
+        )
+      );
+    }
+
+
+    if (
+      maxLayoutDelta > 1
+    ) {
+
+      errors.push(
+        (
+          spec.name +
+          ': maximum layout delta exceeded 1px: ' +
+          maxLayoutDelta.toFixed(3)
+        )
+      );
+    }
+
+
+    if (
+      maxScrollDelta > 1
+    ) {
+
+      errors.push(
+        (
+          spec.name +
+          ': maximum outer-page scroll delta exceeded 1px: ' +
+          maxScrollDelta.toFixed(3)
+        )
+      );
+    }
+
+
+    if (
+      maxOverflow > 1
+    ) {
+
+      errors.push(
+        (
+          spec.name +
+          ': horizontal page overflow exceeded 1px: ' +
+          maxOverflow.toFixed(3)
+        )
+      );
+    }
+
+
+    if (
+      maxContextOverflow > 1
+    ) {
+
+      errors.push(
+        (
+          spec.name +
+          ': fixed context panel clipped content by ' +
+          maxContextOverflow.toFixed(3) +
+          'px'
+        )
+      );
+    }
+
+
+    const footer =
+      doc.querySelector(
+        '.x-footer'
+      );
+
+
+    if (!footer) {
+
+      errors.push(
+        (
+          spec.name +
+          ': footer missing'
+        )
+      );
+    }
+    else {
+
+      const footerBottom =
+        (
+          documentTop(
+            win,
+            footer
+          ) +
+          rect(
+            footer
+          ).height
+        );
+
+
+      if (
+        footerBottom >
+        doc.documentElement.scrollHeight +
+        2
+      ) {
+
+        errors.push(
+          (
+            spec.name +
+            ': lower-page content is unreachable'
+          )
+        );
+      }
+    }
+
+
+    const result = {
+
+      viewport:
+        spec.name,
+
+      width:
+        spec.width,
+
+      height:
+        spec.height,
+
+      combinations,
+
+      maxLayoutDelta:
+        Number(
+          maxLayoutDelta.toFixed(
+            3
+          )
+        ),
+
+      maxScrollDelta:
+        Number(
+          maxScrollDelta.toFixed(
+            3
+          )
+        ),
+
+      maxOverflow:
+        Number(
+          maxOverflow.toFixed(
+            3
+          )
+        ),
+
+      maxContextOverflow:
+        Number(
+          maxContextOverflow.toFixed(
+            3
+          )
+        ),
+
+      minimumTouchTarget:
+        Number(
+          minimumTouch.toFixed(
+            2
+          )
+        ),
+
+      canvasWidth:
+        Number(
+          rect(
+            canvas
+          ).width.toFixed(
+            2
+          )
+        ),
+
+      canvasHeight:
+        Number(
+          rect(
+            canvas
+          ).height.toFixed(
+            2
+          )
+        ),
+
+      pass:
+        errors.length ===
+        0,
+
+      errors
+    };
+
+
+    frame.remove();
+
+
+    return result;
+  }
+
+
+  async function run() {
+
+    const results =
+      [];
+
+
+    for (
+      const viewport
+      of viewports
+    ) {
+
+      try {
+
+        results.push(
+          await runViewport(
+            viewport
+          )
+        );
+      }
+      catch (error) {
+
+        results.push({
+
+          viewport:
+            viewport.name,
+
+          pass:
+            false,
+
+          error:
+            String(
+              error &&
+              error.message
+                ? error.message
+                : error
+            )
+
+        });
+      }
+    }
+
+
+    const failures =
+      results.filter(
+        result =>
+          !result.pass
+      );
+
+
+    const maxOverflow =
+      Math.max(
+        0,
+        ...results.map(
+          result =>
+            Number(
+              result.maxOverflow ||
+              0
+            )
+        )
+      );
+
+
+    const maxLayoutDelta =
+      Math.max(
+        0,
+        ...results.map(
+          result =>
+            Number(
+              result.maxLayoutDelta ||
+              0
+            )
+        )
+      );
+
+
+    const maxScrollDelta =
+      Math.max(
+        0,
+        ...results.map(
+          result =>
+            Number(
+              result.maxScrollDelta ||
+              0
+            )
+        )
+      );
+
+
+    const maxContextOverflow =
+      Math.max(
+        0,
+        ...results.map(
+          result =>
+            Number(
+              result.maxContextOverflow ||
+              0
+            )
+        )
+      );
+
+
+    const touchValues =
+      results
+        .filter(
+          result =>
+            Number.isFinite(
+              Number(
+                result.minimumTouchTarget
+              )
+            )
+        )
+        .map(
+          result =>
+            Number(
+              result.minimumTouchTarget
+            )
+        );
+
+
+    const minTouch =
+      touchValues.length
+        ? Math.min(
+            ...touchValues
+          )
+        : 0;
+
+
+    document.body.dataset.status =
+      failures.length ===
+      0
+        ? 'PASS'
+        : 'FAIL';
+
+
+    document.body.dataset.caseCount =
+      String(
+        results.length
+      );
+
+
+    document.body.dataset.failureCount =
+      String(
+        failures.length
+      );
+
+
+    document.body.dataset.maxOverflow =
+      String(
+        maxOverflow
+      );
+
+
+    document.body.dataset.maxLayoutDelta =
+      String(
+        maxLayoutDelta
+      );
+
+
+    document.body.dataset.maxScrollDelta =
+      String(
+        maxScrollDelta
+      );
+
+
+    document.body.dataset.minTouchTarget =
+      String(
+        minTouch
+      );
+
+
+    document.body.dataset.maxContextOverflow =
+      String(
+        maxContextOverflow
+      );
+
+
+    document.querySelector(
+      '#results'
+    ).textContent =
+      JSON.stringify(
+        {
+
+          summary: {
+
+            viewports:
+              results.length,
+
+            combinationsPerViewport:
+              28,
+
+            totalInteractions:
+              results.length *
+              28,
+
+            maxOverflow,
+
+            maxLayoutDelta,
+
+            maxScrollDelta,
+
+            maxContextOverflow,
+
+            minTouch
+          },
+
+          results
+
+        },
+        null,
+        2
+      );
+  }
+
+
+  const watchdog =
+    setTimeout(
+      () => {
+
+        if (
+          document.body.dataset.status ===
+          'RUNNING'
+        ) {
+
+          document.body.dataset.status =
+            'FAIL';
+
+
+          document.body.dataset.failureCount =
+            '1';
+
+
+          document.querySelector(
+            '#results'
+          ).textContent =
+            JSON.stringify(
+              {
+                fatal:
+                  'Mission Control regression timed out before completing.'
+              },
+              null,
+              2
+            );
+        }
+      },
+      35000
+    );
+
+
+  run()
+    .then(
+      () => {
+
+        clearTimeout(
+          watchdog
+        );
+      }
+    )
+    .catch(
+      error => {
+
+        clearTimeout(
+          watchdog
+        );
+
+
+        document.body.dataset.status =
+          'FAIL';
+
+
+        document.body.dataset.failureCount =
+          '1';
+
+
+        document.querySelector(
+          '#results'
+        ).textContent =
+          JSON.stringify(
+            {
+              fatal:
+                String(
+                  error &&
+                  error.message
+                    ? error.message
+                    : error
+                )
+            },
+            null,
+            2
+          );
+      }
+    );
+
+})();
+</script>
+
+</body>
+</html>
