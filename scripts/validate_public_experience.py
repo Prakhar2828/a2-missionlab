@@ -61,7 +61,7 @@ def main():
   if miss:fail.append('missing homepage surfaces: '+', '.join(miss))
   notes += [f'homepage canvas surfaces: {len(ip.canvases)}',f'homepage optional engineering drawers: {ip.details}']
  dedicated_page_ids={
-  'mission.html':['mission-canvas','mission-scrubber','entry-canvas','entry-scrubber','trajectory-lab','trajectory-canvas','trajectory-dv','trajectory-coast','trajectory-presets','trajectory-reset','weather-canvas'],
+  'mission.html':['mission-canvas','mission-scrubber','entry-canvas','entry-scrubber','trajectory-lab','trajectory-canvas','trajectory-dv','trajectory-coast','trajectory-presets','trajectory-reset','weather-canvas','sep-flux-log','weather-presets','weather-scale','weather-dose'],
   'windows.html':['crew-photo','crew-scrubber','crew-geometry-canvas','crew-image-prev','crew-image-next','crew-image-count','crew-zoom','crew-lightbox','crew-lightbox-image','crew-lightbox-prev','crew-lightbox-next','crew-lightbox-close'],
   'gnc.html':['gnc-canvas','gnc-start','gnc-mode-auto','gnc-mode-manual','gnc-disturbance','gnc-autopilot-status'],
   'mission-control.html':['mc-canvas'],

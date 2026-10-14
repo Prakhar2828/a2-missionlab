@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="responsive-hardening.css">
   <link rel="stylesheet" href="trajectory.css">
+  <link rel="stylesheet" href="space-weather.css">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="icon" href="favicon.ico" sizes="any">
 </head>
@@ -329,32 +330,70 @@
     </div>
   </section>
 
-<section class="x-section x-labs x-weather-experience" id="space-weather">
+<section class="x-section x-labs x-weather-experience" id="space-weather" data-pfu="1" data-scale="BELOW S1" data-scale-rank="0" data-location="deep" data-dose-known="false" data-finite="true">
     <div class="x-wrap">
       <div class="x-section-head">
         <div><p class="x-kicker">Space weather operations</p><h2>What happens when the Sun becomes part of the flight plan?</h2></div>
-        <p>Artemis II carried humans far beyond low Earth orbit. This standalone teaching model separates the mission’s actual monitoring context from hypothetical solar-particle scenarios.</p>
+        <p>Follow the engineering chain from a solar event to a measured particle environment, then to physical consequences and mission decisions. Actual Artemis II context stays separate from scenario modeling.</p>
       </div>
       <article class="lab-card lab-card-wide weather-lab">
-        <div class="lab-card-head"><p class="x-label">ARTEMIS II CONTEXT + CONCEPTUAL SCENARIO MODEL</p><h3>Move Orion. Change solar activity. Watch the operational concern change.</h3><p>Use the controls to build intuition about why radiation environment, spacecraft location, and shielding assumptions matter to crewed lunar operations. Relative indicators are intentionally qualitative and are not crew dose.</p></div>
-        <div class="lab-wide-grid">
-          <canvas id="weather-canvas" aria-label="Space weather educational simulation"></canvas>
-          <div class="lab-controls">
-            <label class="range-label" for="solar-activity"><span>Solar activity scenario</span><b id="solar-value">QUIET SUN</b></label>
-            <input id="solar-activity" type="range" min="0" max="100" value="12">
-            <div class="segmented" id="location-select"><button type="button" data-location="leo">LEO</button><button type="button" class="active" data-location="deep">Deep space</button><button type="button" data-location="lunar">Lunar vicinity</button></div>
-            <label class="range-label" for="shielding-assumption"><span>Conceptual shielding assumption</span><b id="shielding-value">medium</b></label>
-            <input id="shielding-assumption" type="range" min="0" max="100" value="50">
-            <div class="weather-readouts">
-              <div id="crew-rad-card"><span>Crew-radiation concern</span><b id="crew-rad-readout">LOW · routine awareness</b><small>How strongly this conceptual environment suggests added caution for people inside Orion. It is not a crew dose.</small></div>
-              <div id="electronics-card"><span>Electronics environment</span><b id="electronics-readout">NOMINAL · routine awareness</b><small>How much charged-particle activity should raise attention to potential single-event effects in electronics.</small></div>
-              <div id="weather-posture-card"><span>Operations posture</span><b id="weather-posture">MONITOR</b><small>The kind of flight-team response this teaching scenario suggests, from routine monitoring to protective evaluation.</small></div>
+        <div class="lab-card-head">
+          <div><p class="x-label">MISSION WEATHER BOARD + SEP RESPONSE LAB</p><h3>Measure something real. Keep dose unknown until the evidence supports it.</h3><p>The primary control is integral proton flux at energies ≥10 MeV, expressed in pfu. NOAA uses this measurement for its public Solar Radiation Storm S-scale. MissionLab uses that scale as an educational reference, not as an Artemis II flight rule.</p></div>
+          <div class="weather-head-boundary"><b>EVIDENCE BOUNDARY</b>Proton flux is an external-environment measurement. It is not absorbed dose, effective dose, a personal dosimeter reading, or a substitute for Orion-specific shielding and transport analysis.</div>
+        </div>
+
+        <div class="weather-observatory">
+          <div class="weather-visual">
+            <canvas id="weather-canvas" aria-label="Space weather energetic-proton environment teaching visualization"></canvas>
+            <div class="weather-visual-caption"><span><b>SEE IT</b> · Sun → energetic particles → spacecraft context</span><span>Qualitative geometry only · no particle transport or dose calculation</span></div>
+          </div>
+          <div class="weather-console">
+            <label class="range-label" for="sep-flux-log"><span>≥10 MeV proton flux · logarithmic axis</span><b id="sep-flux-value">1.0 pfu</b></label>
+            <input id="sep-flux-log" type="range" min="-1" max="5" step="0.01" value="0" aria-describedby="sep-flux-note">
+            <p class="weather-unit-note" id="sep-flux-note"><b>pfu</b> = particles / (cm² · s · sr). NOAA S1 begins at 10 pfu, then each higher S level begins one decade higher through S5 at 100,000 pfu.</p>
+            <div class="weather-presets" id="weather-presets" aria-label="NOAA solar radiation storm reference presets">
+              <button type="button" class="active" data-log-pfu="0">Below S1<br>1 pfu</button>
+              <button type="button" data-log-pfu="1">S1<br>10 pfu</button>
+              <button type="button" data-log-pfu="2">S2<br>100 pfu</button>
+              <button type="button" data-log-pfu="3">S3<br>1,000 pfu</button>
+              <button type="button" data-log-pfu="4">S4<br>10,000 pfu</button>
+              <button type="button" data-log-pfu="5">S5<br>100,000 pfu</button>
             </div>
-            <div class="weather-action-card"><span>WHAT WOULD OPERATORS CARE ABOUT?</span><b id="weather-action">Keep watching the environment and trends.</b><p id="weather-action-copy">Quiet conditions do not mean zero radiation. The operational question is whether the environment is changing enough to justify a different crew or spacecraft posture.</p></div>
-            <div class="actual-vs-model"><div><span>ARTEMIS II ACTUAL CONTEXT</span><p>NASA monitored the space environment and Orion carried radiation instrumentation. MissionLab does not claim a severe solar particle event occurred unless an authoritative source establishes it.</p></div><div><span>THIS INTERACTION</span><p>Shows why a more energetic environment could increase operational concern. It is an educational scenario, not reconstructed Artemis II dosimetry.</p></div></div>
+            <div class="segmented" id="location-select" aria-label="Mission location context"><button type="button" data-location="leo">LEO</button><button type="button" class="active" data-location="deep">Deep space</button><button type="button" data-location="lunar">Lunar vicinity</button></div>
+            <p class="weather-location-context" id="weather-location-context">Beyond persistent low-Earth-orbit geomagnetic protection · crewed missions require dedicated radiation monitoring and response capability.</p>
+            <div class="weather-scale-line"><span>PUBLIC REFERENCE CLASSIFICATION</span><b id="weather-scale">Below NOAA S1 reference threshold</b></div>
+            <div class="weather-readouts" aria-live="polite">
+              <div id="crew-rad-card" data-level="low"><span>Crew-radiation interpretation</span><b id="crew-rad-readout">No NOAA solar-radiation-storm threshold crossed in this scenario.</b><small>Interpretation of the external environment only. Actual crew exposure requires real dosimetry and vehicle-specific context.</small></div>
+              <div id="electronics-card" data-level="low"><span>Electronics interpretation</span><b id="electronics-readout">Energetic-proton environment remains below the NOAA S1 reference threshold.</b><small>NAIRAS can produce flux/fluence quantities used for single-event-effect assessment, but this slider is not a component upset prediction.</small></div>
+              <div id="weather-posture-card" data-level="low"><span>Mission reasoning posture</span><b id="weather-posture">MONITOR MEASUREMENTS + TREND</b><small>Public educational posture, not a NASA flight rule or internal action limit.</small></div>
+            </div>
+            <div class="weather-dose-boundary"><span>CREW DOSE</span><b id="weather-dose">UNKNOWN FROM THIS CONTROL · proton flux is not absorbed dose or crew effective dose</b></div>
+            <div class="weather-action-card"><span>WHAT WOULD OPERATORS CARE ABOUT?</span><b id="weather-action">MONITOR MEASUREMENTS + TREND</b><p id="weather-action-copy">A quiet reference state is not zero radiation. Flight teams still care about background GCR, instrument health, trends, and forecast uncertainty.</p></div>
           </div>
         </div>
-        <details class="lab-details"><summary>NAIRAS and the evidence boundary</summary><p>MissionLab uses NAIRAS as related radiation-environment context, not as Artemis II crew dosimetry. NASA CCMC now documents NAIRAS Version 4 as an aerospace ionizing-radiation model spanning aircraft and spacecraft applications. MissionLab uses the NAIRAS family as environmental/model context, not as direct Artemis II personal dosimetry; crew-specific interpretation still depends on trajectory, vehicle geometry, shielding, detector response, and dosimetry assumptions.</p><a href="library.html#radiation">Open radiation & space-weather analysis →</a></details>
+
+        <div class="weather-chain" aria-label="Space weather engineering consequence chain">
+          <div><small>1 · PHENOMENON</small><b>Solar eruption / energetic-particle event</b><p>Solar eruptions can accelerate charged particles. Arrival and intensity evolve with magnetic connectivity and transport.</p><i>→</i></div>
+          <div><small>2 · MEASUREMENT</small><b>Energetic proton flux + onboard radiation sensors</b><p>Public reference: ≥10 MeV proton flux in pfu. Orion also carries HERA sensors and crew-worn active dosimeters.</p><i>→</i></div>
+          <div><small>3 · PHYSICAL CONSEQUENCE</small><b>Ionization, energy deposition, electronics effects</b><p>Charged particles interact with materials and electronics. Flux, energy spectrum, shielding, geometry, and transport all matter.</p><i>→</i></div>
+          <div><small>4 · MISSION / CREW IMPLICATION</small><b>Awareness → assessment → protective decision</b><p>Teams integrate environment data with real spacecraft measurements, crew exposure, mission phase, system status, and approved operational criteria.</p><i>→</i></div>
+        </div>
+
+        <div class="weather-mission-context">
+          <div class="weather-context-head"><h4>Artemis II mission-window context · NASA OMNI near Earth</h4><p>MissionLab Phase 5A aligned 13,053 one-minute OMNI rows to the mission clock. These are measured/compiled near-Earth solar-wind, IMF, and geomagnetic context—not Orion-local radiation measurements.</p></div>
+          <div class="weather-context-grid">
+            <div id="weather-omni-speed"><span>MAX SOLAR-WIND SPEED</span><b>789.7 km/s</b><small>2026-04-03 15:52 UTC · MET 01:17:16:48</small></div>
+            <div id="weather-omni-bz"><span>MIN BZ GSM</span><b>−14.46 nT</b><small>2026-04-02 07:09 UTC · MET 00:08:33:48</small></div>
+            <div id="weather-omni-pressure"><span>MAX FLOW PRESSURE</span><b>11.75 nPa</b><small>2026-04-10 07:16 UTC · MET 08:08:40:48</small></div>
+            <div id="weather-omni-symh"><span>MIN SYM/H</span><b>−104 nT</b><small>2026-04-02 08:41 UTC · MET 00:10:05:48</small></div>
+          </div>
+          <p class="weather-context-boundary"><strong>MISSIONLAB DERIVED FROM NASA OMNI.</strong> OMNI is time-shifted to the nose of Earth’s bow shock. MissionLab does not treat these extrema as proof of an Orion-local radiation event, spacecraft anomaly, or crew dose.</p>
+          <div class="weather-version-grid">
+            <div><span>CURRENT CCMC DOCUMENTATION</span><b>NAIRAS Version 4 · production changelog includes 4.15</b><p>Current NASA CCMC documentation describes GCR, trapped-proton where applicable, and SEP radiation transport for aircraft/spacecraft, with dosimetric and electronics-oriented flux/fluence outputs.</p></div>
+            <div><span>HISTORICAL MISSIONLAB PHASE 5B</span><b>NAIRAS 3.0 interface prepared · no run claimed</b><p>MissionLab previously prepared 3,262 public-trajectory rows for the NAIRAS 3.0 interface. No run ID, run output, shielding depth, or NAIRAS-derived Artemis II dose was produced.</p></div>
+          </div>
+        </div>
+        <details class="lab-details"><summary>NAIRAS, Orion monitoring, and the evidence boundary</summary><p>NAIRAS is a physics-based radiation environment model hosted by NASA CCMC. Current public documentation is Version 4; MissionLab’s older Phase 5B artifact is explicitly retained as a Version 3.0 interface preparation, not silently migrated or relabeled. Artemis II carried six HERA active radiation sensors inside Orion and crew-worn active dosimeters. Those systems make radiation operationally real, but this public MissionLab experience does not claim access to private/as-flown crew dosimetry or internal NASA action thresholds.</p><a href="library.html#radiation">Open radiation & space-weather analysis →</a></details>
       </article>
     </div>
   </section>
@@ -380,6 +419,8 @@
 
 <script src="js/core.js"></script>
 <script src="js/mission.js"></script>
+<script src="js/space-weather-model.js"></script>
+<script src="js/space-weather.js"></script>
 <script src="js/trajectory-model.js"></script>
 <script src="js/trajectory.js"></script>
 </body>

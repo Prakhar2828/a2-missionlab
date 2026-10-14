@@ -1,0 +1,132 @@
+{
+  "dataset_id": "phaseh_space_weather_public_experience",
+  "mission": "Artemis II",
+  "phase": "H",
+  "status": "SPACE_WEATHER_PUBLIC_EXPERIENCE_EVIDENCE_RESOLVED",
+  "mission_context": {
+    "source_dataset": "OMNI_HRO2_1MIN",
+    "source_context": "NASA GSFC SPDF/CDAWeb combined definitive 1-minute IMF and plasma data time-shifted to the nose of Earth's bow shock, plus magnetic indices",
+    "mission_window_rows": 13053,
+    "boundary": "Near-Earth bow-shock context is not an Orion-local radiation measurement and is not crew dose.",
+    "extrema": {
+      "bz_gsm_min": {
+        "value": -14.46,
+        "unit": "nT",
+        "utc": "2026-04-02T07:09:00Z",
+        "met": "00:08:33:48"
+      },
+      "solar_wind_speed_max": {
+        "value": 789.7,
+        "unit": "km/s",
+        "utc": "2026-04-03T15:52:00Z",
+        "met": "01:17:16:48"
+      },
+      "flow_pressure_max": {
+        "value": 11.75,
+        "unit": "nPa",
+        "utc": "2026-04-10T07:16:00Z",
+        "met": "08:08:40:48"
+      },
+      "sym_h_min": {
+        "value": -104,
+        "unit": "nT",
+        "utc": "2026-04-02T08:41:00Z",
+        "met": "00:10:05:48"
+      }
+    }
+  },
+  "sep_reference_scale": {
+    "authority": "NOAA Space Weather Prediction Center",
+    "measurement": "Integral proton flux at energies >=10 MeV",
+    "unit": "pfu = particles/(cm^2 s sr)",
+    "purpose": "Public Solar Radiation Storm S-scale reference only; not an Artemis II flight rule or Orion action threshold.",
+    "thresholds": [
+      {
+        "scale": "S1",
+        "description": "Minor",
+        "minimum_pfu": 10
+      },
+      {
+        "scale": "S2",
+        "description": "Moderate",
+        "minimum_pfu": 100
+      },
+      {
+        "scale": "S3",
+        "description": "Strong",
+        "minimum_pfu": 1000
+      },
+      {
+        "scale": "S4",
+        "description": "Severe",
+        "minimum_pfu": 10000
+      },
+      {
+        "scale": "S5",
+        "description": "Extreme",
+        "minimum_pfu": 100000
+      }
+    ]
+  },
+  "artemis_ii_monitoring": {
+    "hera_active_sensors_inside_orion": 6,
+    "crew_active_dosimeter_worn_by_each_crew_member": true,
+    "public_role": "HERA provides real-time radiation monitoring/alerting context; crew dosimeters measure individual exposure. MissionLab does not possess or publish the private/as-flown crew dosimetry values here.",
+    "sources": [
+      "https://www.nasa.gov/general/artemis-ii-crew-both-subjects-and-scientists-in-nasa-deep-space-research/",
+      "https://science.nasa.gov/missions/artemis/artemis-2/to-protect-artemis-ii-astronauts-nasa-experts-keep-eyes-on-sun/"
+    ]
+  },
+  "nairas_version_resolution": {
+    "current_public_documentation": {
+      "version_family": "4",
+      "production_release_noted": "4.15",
+      "production_release_date": "2026-06-08",
+      "model_page": "https://ccmc.gsfc.nasa.gov/models/NAIRAS~4/",
+      "page_last_updated": "2026-10-13"
+    },
+    "historical_repository_interface": {
+      "version_family": "3.0",
+      "reference_manifest": "data/reference/artemis_ii_nairas_interface.json",
+      "prepared_trajectory_rows": 3262,
+      "run_submitted_by_missionlab": false,
+      "run_output_ingested": false,
+      "dose_values_reported": false,
+      "status": "TRAJECTORY_PREPARED_NO_RUN_CLAIMED"
+    },
+    "resolution": "Phase H preserves the Phase 5B NAIRAS 3.0 interface as historical repository analysis while presenting NAIRAS Version 4 as the current CCMC model documentation. No historical artifact is silently relabeled as a Version 4 run."
+  },
+  "evidence_boundaries": {
+    "omni_context_equal_orion_local_radiation": false,
+    "sep_pfu_equal_absorbed_dose": false,
+    "sep_pfu_equal_crew_effective_dose": false,
+    "public_noaa_scale_equal_nasa_flight_rule": false,
+    "location_choice_equal_shielding_model": false,
+    "orion_shielding_depth_invented": false,
+    "nairas_v3_interface_equal_nairas_v4_run": false,
+    "nairas_run_claimed": false,
+    "crew_dosimetry_claimed": false
+  },
+  "sources": [
+    {
+      "id": "nasa-cdaweb-omni",
+      "url": "https://cdaweb.gsfc.nasa.gov/cdaweb/misc/master_notes.html"
+    },
+    {
+      "id": "noaa-radiation-storm-scale",
+      "url": "https://www.swpc.noaa.gov/node/1085"
+    },
+    {
+      "id": "nasa-ccmc-nairas-v4",
+      "url": "https://ccmc.gsfc.nasa.gov/models/NAIRAS~4/"
+    },
+    {
+      "id": "nasa-artemis2-radiation-sensors",
+      "url": "https://www.nasa.gov/general/artemis-ii-crew-both-subjects-and-scientists-in-nasa-deep-space-research/"
+    },
+    {
+      "id": "nasa-artemis2-sun-monitoring",
+      "url": "https://science.nasa.gov/missions/artemis/artemis-2/to-protect-artemis-ii-astronauts-nasa-experts-keep-eyes-on-sun/"
+    }
+  ]
+}

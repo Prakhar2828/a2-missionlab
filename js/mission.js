@@ -5,6 +5,8 @@
     throw new Error('A2 MissionLab core runtime must load before experience runtimes.');
   }
 
+  const staticMissionQa = /(?:^|[?&])(?:trajectory-qa|space-weather-qa)=1(?:&|$)/.test(window.location.search);
+
   const {
     $,
     $$,
@@ -383,7 +385,7 @@
         drawCanvasLabel(ctx,'FAR SIDE / LOS BLOCKED',ix+8,portrait?iy+ih-25:iy+ih-9,iw-16,{size:portrait?9:10.5,minSize:9,color:'rgba(255,255,255,.68)',maxLines:portrait?2:1});
       }ctx.restore();
       if(missionP>.515&&missionP<.635){ctx.save();ctx.strokeStyle='rgba(255,104,93,.72)';ctx.setLineDash([3,5]);ctx.beginPath();ctx.moveTo(pos.x,pos.y);ctx.lineTo(earth.x,earth.y);ctx.stroke();ctx.setLineDash([]);drawCanvasLabel(ctx,'LUNAR OCCULTATION REGION',portrait?scene.x+8:scene.x+scene.width*.45,portrait?scene.bottom-18:scene.y+scene.height*.61,portrait?scene.width*.64:scene.width*.5,{size:portrait?10:11,minSize:10,color:'rgba(255,104,93,.92)',maxLines:portrait?2:1});ctx.restore();}
-      requestAnimationFrame(loop);};requestAnimationFrame(loop);
+      if(!staticMissionQa)requestAnimationFrame(loop);};requestAnimationFrame(loop);
   }
 
   }
@@ -413,21 +415,11 @@
       if(p>.08&&p<.58){const trail=clamp(scene.width*.28/baseScale,85,220);for(let i=0;i<16;i++){ctx.strokeStyle=`rgba(255,${85+i*5},${30+i*2},${.04+heat*.04})`;ctx.lineWidth=1+i*.18;ctx.beginPath();ctx.moveTo(12,-8+i);ctx.bezierCurveTo(trail*.35,Math.sin(t*.004+i)*12,trail*.68,(i-8)*3.6,trail,(i-8)*4.6);ctx.stroke();}}
       if(p>=.68&&p<.83){for(const dx of [-20,20]){ctx.strokeStyle='rgba(245,245,242,.88)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(dx*.2,-8);ctx.lineTo(dx,-48);ctx.stroke();ctx.beginPath();ctx.arc(dx,-52,14,Math.PI,0);ctx.stroke();}}
       if(p>=.83&&p<.98){for(const dx of [-34,0,34]){ctx.strokeStyle='rgba(247,247,244,.9)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(dx*.16,-8);ctx.lineTo(dx,-72);ctx.stroke();ctx.fillStyle='rgba(229,234,236,.92)';ctx.beginPath();ctx.arc(dx,-72,30,Math.PI,0);ctx.lineTo(dx-30,-72);ctx.closePath();ctx.fill();}}
-      ctx.fillStyle='#dce3e6';ctx.strokeStyle='#29343b';ctx.lineWidth=1.3/sc;ctx.beginPath();ctx.moveTo(-15,10);ctx.quadraticCurveTo(-20,-4,0,-19);ctx.quadraticCurveTo(20,-4,15,10);ctx.quadraticCurveTo(0,18,-15,10);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();requestAnimationFrame(loop);};requestAnimationFrame(loop);}
+      ctx.fillStyle='#dce3e6';ctx.strokeStyle='#29343b';ctx.lineWidth=1.3/sc;ctx.beginPath();ctx.moveTo(-15,10);ctx.quadraticCurveTo(-20,-4,0,-19);ctx.quadraticCurveTo(20,-4,15,10);ctx.quadraticCurveTo(0,18,-15,10);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();if(!staticMissionQa)requestAnimationFrame(loop);};requestAnimationFrame(loop);}
 
 
   }
 
-
-  // Space-weather educational lab. Scenario controls are conceptual; Artemis II evidence remains separate.
-  if ($('#space-weather')) {
-  const weatherCanvas=$('#weather-canvas');let solar=12,spaceLoc='deep',shielding=50;
-  function renderWeatherReadout(){const activity=solar<30?'QUIET SUN':solar<65?'ELEVATED ACTIVITY':'SOLAR PARTICLE EVENT';$('#solar-value').textContent=activity;$('#shielding-value').textContent=shielding<34?'light':shielding<67?'medium':'higher';const exposure=(solar/100)*(spaceLoc==='leo'?.45:1)*(1-shielding*.0055),radLevel=exposure>.55?'high':exposure>.25?'elevated':'low',elecLevel=solar>70?'high':solar>40?'elevated':'nominal';$('#crew-rad-readout').textContent=radLevel==='high'?'HIGH · protective evaluation':radLevel==='elevated'?'ELEVATED · increase monitoring':'LOW · routine awareness';$('#electronics-readout').textContent=elecLevel==='high'?'HIGH · SEE vigilance':elecLevel==='elevated'?'ELEVATED · added awareness':'NOMINAL · routine awareness';$('#weather-posture').textContent=radLevel==='high'?'EVALUATE PROTECTIVE ACTIONS':radLevel==='elevated'?'HEIGHTENED MONITORING':'MONITOR';const rc=$('#crew-rad-card'),ec=$('#electronics-card'),pc=$('#weather-posture-card');if(rc)rc.dataset.level=radLevel;if(ec)ec.dataset.level=elecLevel;if(pc)pc.dataset.level=radLevel;const action=$('#weather-action'),copy=$('#weather-action-copy');if(action&&copy){if(radLevel==='high'){action.textContent='Ask whether crew exposure can be reduced while preserving mission safety.';copy.textContent='In a real event, teams would combine measured environment data with trajectory, vehicle shielding, dosimetry, system status, and mission constraints before choosing any protective posture.';}else if(radLevel==='elevated'){action.textContent='Increase trend monitoring and prepare options before conditions worsen.';copy.textContent='The important operational move is not panic. It is recognizing a changing environment early enough to preserve decision time and coordinate crew, vehicle, and mission constraints.';}else{action.textContent='Keep watching the environment and trends.';copy.textContent='Quiet conditions do not mean zero radiation. The operational question is whether the environment is changing enough to justify a different crew or spacecraft posture.';}}$$('#location-select button').forEach(b=>b.classList.toggle('active',b.dataset.location===spaceLoc));}
-  $('#solar-activity')?.addEventListener('input',e=>{solar=Number(e.target.value);renderWeatherReadout();});$('#shielding-assumption')?.addEventListener('input',e=>{shielding=Number(e.target.value);renderWeatherReadout();});$$('#location-select button').forEach(b=>b.addEventListener('click',()=>{spaceLoc=b.dataset.location;renderWeatherReadout();}));renderWeatherReadout();
-  if(weatherCanvas){const loop=t=>{const {ctx,w,h,layout}=fitCanvas(weatherCanvas),scene=sceneRect(w,h,{},layout.phone?12:18);ctx.clearRect(0,0,w,h);ctx.fillStyle='#020508';ctx.fillRect(0,0,w,h);drawStars(ctx,w,h,layout.compact?55:80,31,.55);const sr=clamp(scene.min*.13,30,45),sun=scenePoint(scene,layout.phone?.17:.15,.50),sg=ctx.createRadialGradient(sun.x-sr*.28,sun.y-sr*.3,3,sun.x,sun.y,sr);sg.addColorStop(0,'#fff8cf');sg.addColorStop(.42,'#ffd368');sg.addColorStop(1,'#a94316');ctx.fillStyle=sg;ctx.beginPath();ctx.arc(sun.x,sun.y,sr,0,Math.PI*2);ctx.fill();const earth=scenePoint(scene,layout.phone?.58:.62,.60),er=clamp(scene.min*.085,23,30);drawEarth(ctx,earth.x,earth.y,er);for(let i=0;i<4;i++){ctx.strokeStyle=`rgba(111,231,225,${.08+(3-i)*.035})`;ctx.beginPath();ctx.ellipse(earth.x,earth.y,er*(1.55+i*.58),er*(1.05+i*.4),0,0,Math.PI*2);ctx.stroke();}let ox,oy;if(spaceLoc==='leo'){ox=earth.x+er*1.8;oy=earth.y-er*.75}else if(spaceLoc==='lunar'){ox=scene.x+scene.width*.90;oy=scene.y+scene.height*.46}else{ox=scene.x+scene.width*.82;oy=scene.y+scene.height*.28}ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(ox,oy,4,0,Math.PI*2);ctx.fill();const n=Math.round(10+solar*.8);for(let i=0;i<n;i++){const phase=((t*(.000025+.000002*solar)+i/n)%1),x=lerp(sun.x+sr+6,ox-4,phase),spread=(scene.height*(.05+solar*.0018))*Math.sin(phase*Math.PI),y=sun.y+Math.sin(i*2.43+t*.001)*spread;ctx.fillStyle=solar>65?'rgba(255,133,82,.75)':'rgba(244,203,118,.46)';ctx.fillRect(x,y,solar>65?3:2,1.4);}drawCanvasLabel(ctx,'SUN',sun.x,sun.y+sr+18,70,{size:10.5,minSize:10,align:'center',color:'rgba(255,255,255,.65)',maxLines:1});const orionLabel=spaceLoc==='leo'?'ORION · LEO':spaceLoc==='lunar'?'ORION · LUNAR VICINITY':'ORION · DEEP SPACE';drawCanvasLabel(ctx,orionLabel,layout.phone?scene.right-4:ox-34,oy-12,layout.phone?scene.width*.56:scene.right-(ox-34),{size:layout.phone?10:11,minSize:10,align:layout.phone?'right':'left',color:'rgba(255,255,255,.68)',maxLines:2});if(!layout.phone)drawCanvasLabel(ctx,`CONCEPTUAL SHIELDING ${shielding}%`,scene.x+scene.width*.55,scene.bottom-10,scene.width*.43,{size:11,minSize:10,color:'rgba(255,255,255,.65)',maxLines:1});requestAnimationFrame(loop);};requestAnimationFrame(loop);}
-
-
-  }
 
 
 })();

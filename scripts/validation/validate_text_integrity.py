@@ -34,6 +34,7 @@ PUBLIC_TEXT = [
     "mission-control.css",
     "psi.css",
     "trajectory.css",
+    "space-weather.css",
     "app.js",
     "library.js",
     "js/core.js",
@@ -45,6 +46,8 @@ PUBLIC_TEXT = [
     "js/psi.js",
     "js/trajectory-model.js",
     "js/trajectory.js",
+    "js/space-weather-model.js",
+    "js/space-weather.js",
 ]
 
 

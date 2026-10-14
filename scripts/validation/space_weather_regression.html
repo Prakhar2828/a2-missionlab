@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>A2 MissionLab Phase H space weather regression</title>
+<style>html,body{margin:0;background:#111;color:#fff;font:13px/1.45 Consolas,monospace}iframe{display:block;width:390px;height:844px;border:0;background:#000}pre{white-space:pre-wrap;padding:12px}</style>
+</head>
+<body data-status="RUNNING" data-baseline-pass="false" data-threshold-pass="false" data-location-pass="false" data-dose-pass="false" data-evidence-pass="false" data-canvas-pass="false" data-overflow-pass="false" data-finite-pass="false">
+<iframe id="app" src="../../mission.html?space-weather-qa=1#space-weather" title="Space weather regression surface"></iframe>
+<pre id="results">RUNNING</pre>
+<script>
+(() => {
+'use strict';
+const out=document.querySelector('#results');
+const frame=document.querySelector('#app');
+const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+const assert=(cond,msg)=>{if(!cond)throw new Error(msg)};
+async function main(){
+  await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Mission iframe load timeout')),9000);frame.addEventListener('load',()=>{clearTimeout(timer);setTimeout(resolve,260)},{once:true});});
+  const w=frame.contentWindow,doc=frame.contentDocument,root=doc.querySelector('#space-weather');
+  assert(root,'Space weather root missing');
+  const slider=doc.querySelector('#sep-flux-log');
+  const snap=()=>({pfu:Number(root.dataset.pfu),scale:root.dataset.scale,rank:Number(root.dataset.scaleRank),location:root.dataset.location,doseKnown:root.dataset.doseKnown,finite:root.dataset.finite,dose:doc.querySelector('#weather-dose')?.textContent||'',locationCopy:doc.querySelector('#weather-location-context')?.textContent||''});
+  const base=snap();
+  const baselinePass=base.scale==='BELOW S1'&&base.rank===0&&Math.abs(base.pfu-1)<1e-8&&base.location==='deep'&&base.doseKnown==='false'&&base.finite==='true';
+  document.body.dataset.baselinePass=String(baselinePass);assert(baselinePass,'Default physical baseline invalid');
+
+  const expected=[['0','BELOW S1',1],['1','S1',10],['2','S2',100],['3','S3',1000],['4','S4',10000],['5','S5',100000]];
+  const presetResults=[];
+  for(const [log,scale,pfu] of expected){const button=doc.querySelector(`#weather-presets [data-log-pfu="${log}"]`);assert(button,`Missing preset ${scale}`);button.click();await wait(30);const s=snap();presetResults.push(s);assert(s.scale===scale&&Math.abs(s.pfu-pfu)<1e-6&&s.doseKnown==='false',`Preset ${scale} failed`);}
+  const thresholdPass=presetResults.length===6;document.body.dataset.thresholdPass=String(thresholdPass);
+
+  slider.value='3';slider.dispatchEvent(new w.Event('input',{bubbles:true}));await wait(30);const deep=snap();
+  const leoButton=doc.querySelector('#location-select [data-location="leo"]');const lunarButton=doc.querySelector('#location-select [data-location="lunar"]');
+  leoButton.click();await wait(30);const leo=snap();lunarButton.click();await wait(30);const lunar=snap();
+  const locationPass=deep.pfu===leo.pfu&&leo.pfu===lunar.pfu&&deep.scale===leo.scale&&leo.scale===lunar.scale&&new Set([deep.locationCopy,leo.locationCopy,lunar.locationCopy]).size===3;
+  document.body.dataset.locationPass=String(locationPass);assert(locationPass,'Location improperly changes measured flux/scale or fails to change context');
+
+  const doseText=lunar.dose.toUpperCase();const dosePass=lunar.doseKnown==='false'&&doseText.includes('UNKNOWN')&&doseText.includes('NOT ABSORBED DOSE');
+  document.body.dataset.dosePass=String(dosePass);assert(dosePass,'Crew-dose boundary missing');
+
+  const sectionText=root.textContent||'';
+  const evidencePass=sectionText.includes('789.7 km/s')&&sectionText.includes('−14.46 nT')&&sectionText.includes('11.75 nPa')&&sectionText.includes('−104 nT')&&sectionText.includes('NAIRAS Version 4')&&sectionText.includes('NAIRAS 3.0 interface prepared')&&sectionText.includes('no run claimed')&&sectionText.includes('six HERA active radiation sensors');
+  document.body.dataset.evidencePass=String(evidencePass);assert(evidencePass,'Mission/NAIRAS/HERA evidence anchors missing');
+
+  const canvas=doc.querySelector('#weather-canvas');const ctx=canvas?.getContext('2d');let nonzero=false;if(ctx&&canvas.width&&canvas.height){const img=ctx.getImageData(0,0,Math.min(canvas.width,220),Math.min(canvas.height,220)).data;for(let i=3;i<img.length;i+=4){if(img[i]>0){nonzero=true;break;}}}
+  document.body.dataset.canvasPass=String(nonzero);assert(nonzero,'Space weather canvas did not render');
+  const overflow=doc.documentElement.scrollWidth-doc.documentElement.clientWidth;const sectionOverflow=Math.max(0,root.scrollWidth-root.clientWidth);const overflowPass=overflow<=1&&sectionOverflow<=1;
+  document.body.dataset.overflowPass=String(overflowPass);assert(overflowPass,`Phone overflow detected: page ${overflow}px section ${sectionOverflow}px`);
+  const finitePass=[...presetResults,deep,leo,lunar].every(s=>Number.isFinite(s.pfu)&&Number.isFinite(s.rank)&&s.finite==='true');document.body.dataset.finitePass=String(finitePass);assert(finitePass,'Non-finite public state');
+  document.body.dataset.status='PASS';out.textContent=JSON.stringify({baseline:base,presets:presetResults,deep,leo,lunar,overflow,sectionOverflow},null,2);
+}
+main().catch(error=>{document.body.dataset.status='FAIL';out.textContent=JSON.stringify({error:error.message,stack:error.stack},null,2);});
+})();
+</script>
+</body>
+</html>

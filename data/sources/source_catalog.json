@@ -68,13 +68,24 @@
   {
     "id": "nasa-nairas",
     "domain": "space_weather_radiation",
-    "title": "NAIRAS 3.0 at NASA CCMC",
+    "title": "NAIRAS 3.0 at NASA CCMC \u2014 historical Phase 5B interface",
     "agency": "NASA CCMC",
     "url": "https://ccmc.gsfc.nasa.gov/models/NAIRAS~3.0/",
     "data_type": "radiation environment model / runs-on-request",
-    "planned_use": "modeled radiation-environment context along selected Artemis II trajectory points",
+    "planned_use": "historical Phase 5B trajectory-interface preparation; no run output claimed",
     "cost": "$0",
-    "notes": "Runs-on-request may require user registration/identity and should clearly expose assumptions such as shielding depth."
+    "notes": "Retained to preserve repository history. Phase H separately records current NAIRAS Version 4 documentation; do not relabel this 3.0 interface as a Version 4 run."
+  },
+  {
+    "id": "nasa-nairas-current",
+    "domain": "space_weather_radiation",
+    "title": "NAIRAS Version 4 at NASA CCMC",
+    "agency": "NASA CCMC",
+    "url": "https://ccmc.gsfc.nasa.gov/models/NAIRAS~4/",
+    "data_type": "current radiation environment model documentation / runs-on-request capability",
+    "planned_use": "Phase H current-model documentation, radiation response-chain explanation, and v3.0/v4 evidence-version boundary",
+    "cost": "$0",
+    "notes": "Current model documentation is distinct from MissionLab's historical NAIRAS 3.0 interface preparation. No MissionLab Version 4 run is claimed."
   },
   {
     "id": "nasa-omniweb",
@@ -86,5 +97,27 @@
     "planned_use": "external heliophysics environment synchronized with mission time",
     "cost": "$0",
     "notes": "External environment must not be mislabeled as astronaut absorbed dose."
+  },
+  {
+    "id": "noaa-solar-radiation-storm-scale",
+    "domain": "space_weather_radiation",
+    "title": "NOAA Solar Radiation Storm S-scale",
+    "agency": "NOAA Space Weather Prediction Center",
+    "url": "https://www.swpc.noaa.gov/node/1085",
+    "data_type": ">=10 MeV proton-flux operational severity reference",
+    "planned_use": "Phase H physically meaningful pfu scenario control and S1-S5 public reference thresholds",
+    "cost": "$0",
+    "notes": "Public scale reference only. Do not present NOAA S categories as Artemis II flight rules or crew-dose values."
+  },
+  {
+    "id": "nasa-artemis2-radiation-monitoring",
+    "domain": "space_weather_radiation",
+    "title": "Artemis II radiation sensors inside Orion",
+    "agency": "NASA",
+    "url": "https://www.nasa.gov/general/artemis-ii-crew-both-subjects-and-scientists-in-nasa-deep-space-research/",
+    "data_type": "mission radiation-monitoring hardware context",
+    "planned_use": "HERA and Crew Active Dosimeter public mission context",
+    "cost": "$0",
+    "notes": "Public hardware role does not provide MissionLab with private/as-flown individual crew dosimetry."
   }
 ]
