@@ -63870,3 +63870,282 @@ The corrected Phase N v4 delivery is a deterministic patch ZIP plus PowerShell i
 Phase N closes the performance and failure-quality work defined by the master prompt without reopening completed phases. The current application now avoids a major globally eager optional image payload, stops two important offscreen animation loops, removes obsolete shipped Entry code, reduces duplicate resize work, applies clearer image loading ownership, and turns missing imagery into explicit bounded fallback behavior.
 
 The next planned master-prompt phase is **Phase O — Metadata / Social / README**: deliberate per-route metadata/social presentation plus a hiring-quality repository README, while preserving the completed Phase N runtime/evidence baseline.
+
+## Phase O — README + GitHub Presentation + Social Metadata + Demo Media
+
+**Status:** COMPLETE — this section is appended only after the deterministic Windows installer passes the full protected analytical/static/browser release gate plus the dedicated Phase O Edge + Chrome metadata regression.
+
+### Objective
+
+Turn the public repository and every major MissionLab route into a deliberate hiring-quality presentation surface without reopening completed mission models, evidence products, accessibility/responsive behavior, or Phase N runtime/performance/failure-state work.
+
+Phase O is intentionally bounded to:
+
+- repository README presentation,
+- deliberate title/description/canonical/social metadata on the eight major public routes,
+- one repository-owned social preview asset,
+- demo-media presentation,
+- dedicated Phase O static/browser validation,
+- portable CI enforcement of the Phase O static contract.
+
+### Immutable starting state
+
+- Repository: `C:\Users\prakh\Documents\a2-missionlab`
+- Branch: `phase-10-quality-recovery`
+- Starting / completed Phase N HEAD: `0716a6811a3cb366a26020e30ff9f93490dd35b8`
+- Starting parent / Phase N implementation: `133d7f067a3f49875aa533d40c0f268414387fa2`
+- Starting tree: `24343b5b9efdff4cd907b6b6c1e4066c3b4d1490`
+- Protected `origin/main`: `d74a88d20f6ff1bd8be2ff0dbe3fb2b44cc13187`
+- Recovery branch publication state: local-only / unpublished
+
+Phase O starts exactly from the completed Phase N documentation HEAD. No completed Phase F–N implementation is restarted, squashed, amended, or re-created.
+
+### Repository-first findings
+
+The exact Phase N tree confirmed that the remaining Phase O presentation debt was bounded and current:
+
+1. The eight major public routes did not share a complete canonical/Open Graph/Twitter contract.
+2. Canonical `<link rel="canonical">` URLs were absent.
+3. Several routes had only partial social metadata.
+4. The homepage social card still depended on a third-party NASA image URL rather than a repository-owned unfurl asset.
+5. `README.md` was still primarily a legacy Phases 0–9 publication summary instead of a concise hiring-quality engineering overview of the completed MissionLab system.
+6. Existing repo-owned demo media already included the release-overview SVG, so Phase O did not invent a redundant animation/video pipeline merely to satisfy presentation optics.
+7. GitHub Pages is enabled for the public repository, while no custom homepage/domain is configured. The canonical public project-site base is therefore `https://prakhar2828.github.io/a2-missionlab/` for this phase.
+8. Remote repository settings are intentionally not mutated because the master prompt forbids automatic push/deployment/production-state changes.
+
+### Files changed
+
+The implementation commit changes exactly these 17 paths:
+
+- `.github/workflows/ci.yml`
+- `README.md`
+- `docs/PHASE_O_PRESENTATION_QA.md`
+- `docs/assets/social/a2-missionlab-social-preview.png`
+- `docs/assets/social/a2-missionlab-social-preview.svg`
+- `gnc.html`
+- `index.html`
+- `library.html`
+- `mission-control.html`
+- `mission.html`
+- `psi.html`
+- `scripts/validate_public_experience.py`
+- `scripts/validation/phase_o_presentation_regression.html`
+- `scripts/validation/validate_phase_o_presentation.py`
+- `scripts/validation/validate_phase_o_regression.py`
+- `technical-report.html`
+- `windows.html`
+
+The documentation-only closure commit later changes only:
+
+- `docs/ENGINEERING_LOG.md`
+
+### Restored / completed presentation capability
+
+All eight major public routes now carry a deliberate, exact presentation contract:
+
+- one route-specific document title,
+- one route-specific meta description,
+- one canonical URL,
+- Open Graph site name/title/description/type/URL/image/dimensions/alt metadata,
+- Twitter/X large-card title/description/image metadata,
+- retained SVG + ICO favicon links,
+- meaningful route URL/title pairing.
+
+Covered routes:
+
+1. homepage,
+2. Mission Explorer,
+3. Through Orion's Windows,
+4. Guidance, Navigation & Control,
+5. Mission Control,
+6. Plume-Surface Interaction,
+7. Mission Library,
+8. Technical Report.
+
+### Social preview design
+
+Phase O adds one deterministic repository-owned social card at:
+
+`docs/assets/social/a2-missionlab-social-preview.png`
+
+with editable source artwork at:
+
+`docs/assets/social/a2-missionlab-social-preview.svg`
+
+Contract:
+
+- PNG dimensions: exactly `1200 × 630`,
+- no third-party runtime image dependency,
+- MissionLab visual language preserved,
+- public-data engineering reconstruction language rather than official-NASA branding,
+- evidence/product signals surfaced without pretending they are NASA telemetry or endorsements.
+
+The card communicates the project identity, engineering purpose, evidence inventory, and zero-cost architecture while remaining legible as a social/link unfurl.
+
+### README redesign decisions
+
+`README.md` is rewritten as a concise engineering/product overview rather than a chronological phase ledger. It now communicates:
+
+- what A2 MissionLab is,
+- why the project exists,
+- actual public mission/evidence inputs,
+- the seven major experiences plus the technical report,
+- evidence classes and non-equivalence guardrails,
+- architecture/data flow,
+- simulation methodology and model-fidelity boundaries,
+- selected reproducible results,
+- validation philosophy and browser/device boundaries,
+- demo media and live routes,
+- local run instructions,
+- `$0` core architecture,
+- technical challenges,
+- limitations,
+- project status and documentation entry points.
+
+Protected Phase 9 publication phrases remain present so older correct release validators are preserved rather than weakened.
+
+### Evidence boundaries
+
+Phase O changes presentation, not mission truth.
+
+It does **not** change:
+
+- mission chronology,
+- public source inventory,
+- derived mission products,
+- trajectory-correction behavior,
+- PSI behavior,
+- Space Weather model/evidence behavior,
+- Entry/descent/recovery model/evidence behavior,
+- GNC deterministic AUTO/MANUAL/disturbance behavior,
+- Mission Control scenarios/discipline lenses/decision reconstruction,
+- Windows 25-image mission-content contract,
+- Mission Library evidence/content model,
+- Technical Report engineering substance,
+- Phase L typography hierarchy,
+- Phase M accessibility/responsive semantics,
+- Phase N performance/lazy-loading/visibility/failure-state ownership.
+
+The README explicitly states that MissionLab is independent, is not an official NASA application, and does not use private NASA data, internal procedures, internal screenshots, unpublished telemetry, undisclosed controller gains, or unknown private root causes.
+
+### Testing
+
+Package-construction validation against the exact reconstructed Phase N handoff passed every gate that is truthfully executable in the build environment:
+
+- exact start HEAD/tree and clean-worktree verification,
+- `git diff --check`,
+- Phase O static metadata/README/social validation,
+- public-experience validation,
+- text-integrity validation,
+- publication-pack validation,
+- protected Phase K publication validation,
+- protected Phase L typography validation,
+- protected Phase M accessibility validation,
+- protected Phase N performance validation,
+- release validation,
+- trajectory-correction pure-model regression,
+- PSI pure-model regression,
+- Space Weather pure-model regression,
+- Entry pure-model/evidence regression,
+- celestial rendering asset/provenance validation,
+- Artemis entry-profile heritage validation,
+- Phase 4A.1 entry/descent/recovery public-evidence validation.
+
+The package-build reconstruction intentionally does not contain the repository's gitignored `data/processed/...` products required by the historical Space Weather/NAIRAS/Entry analytical validators. Several scientific dependencies such as SPICE/pymsis are also not installed in the package container. Those validators are therefore **not** falsely reported as rerun there.
+
+The package-build environment also cannot truthfully execute the required browser matrix: local Chromium cannot complete the repository loopback completion handshake in this sandbox. That is recorded as an environment limitation, not converted into a browser pass.
+
+### Deterministic Windows release gate
+
+Before this engineering-log section can be appended, the installer must run against the real repository and pass:
+
+- exact repository path / branch / HEAD / parent / tree checks,
+- clean worktree,
+- protected `origin/main` verification after fetch/prune,
+- proof that `origin/phase-10-quality-recovery` remains unpublished,
+- timestamped Phase O safety-branch creation,
+- patch ZIP SHA-256, exact path allowlist, and per-file SHA-256 verification,
+- syntax/static/publication/release validation,
+- protected pure-model validators,
+- full data-dependent Space Weather/NAIRAS/Entry analytical/evidence validators against the real processed-data products,
+- all protected Chrome/Edge route regressions retained by Phase N,
+- protected responsive browser QA,
+- protected Phase K browser regression,
+- protected Phase L browser regression,
+- protected Phase M Edge+Chrome responsive/accessibility matrix,
+- protected Phase N Edge+Chrome normal-assets + intentional-failure matrix,
+- dedicated Phase O Edge+Chrome metadata/presentation regression,
+- exact staged implementation tree verification,
+- a second Phase O-critical staged-candidate validation pass,
+- deterministic implementation commit verification,
+- documentation-only engineering-log append and deterministic documentation commit verification,
+- exact final HEAD / parent / tree verification,
+- clean worktree.
+
+Any qualification failure rolls the production mutation back to the immutable completed Phase N documentation HEAD while retaining the safety branch for forensics. No push, merge, release, deployment, or remote publication is performed.
+
+### Browser coverage
+
+The dedicated Phase O browser harness checks 96 assertions per browser across eight routes. Windows release qualification requires both:
+
+- Microsoft Edge: 96 / 96,
+- Google Chrome: 96 / 96,
+- total dedicated Phase O assertions: 192 / 192.
+
+The installer also reruns the complete protected browser stack from prior phases, including the Phase N normal/failure matrix and the Phase M responsive/accessibility matrix, before Phase O can close.
+
+Physical iPhone Safari, Android Chrome, tablet hardware, and desktop Safari are not claimed unless actually run and recorded. They remain manual Phase P release-candidate targets.
+
+### Responsive coverage
+
+Phase O does not alter layout/runtime CSS, but it still protects Phase M by requiring the full existing responsive/accessibility browser matrix in Windows release qualification. The shared `>=44 px` interaction floor and Mission Control's protected `>=64 px` target floor remain unchanged.
+
+The social card is a fixed-ratio external-preview asset and does not participate in page layout. README media uses repository-relative paths so GitHub can render it without application runtime dependencies.
+
+### Performance notes
+
+Phase O deliberately avoids reopening Phase N performance work:
+
+- no application JavaScript runtime is changed,
+- no animation ownership is changed,
+- no route layout system is changed,
+- no third-party social image is required,
+- the social PNG is approximately 148 KiB and is referenced as metadata/README media rather than as a new runtime hero dependency,
+- existing lazy-loading/failure-state behavior remains protected by regression.
+
+### Limitations
+
+- Canonical URLs assume the current GitHub Pages project-site base. A future custom domain should update the canonical/social URL contract deliberately.
+- GitHub repository homepage/topics/social-preview settings are remote production metadata and are not changed automatically under the no-push/no-remote-mutation rule.
+- The README is evidence-aware but cannot make private mission-control procedures, private telemetry, unpublished flight rules, or unknown root causes public.
+- Physical-device Safari/Android validation remains Phase P/manual release-candidate work, not a Phase O claim.
+
+### Deterministic implementation identity
+
+- Implementation subject: `Polish repository and social presentation`
+- Implementation parent: `0716a6811a3cb366a26020e30ff9f93490dd35b8`
+- Implementation tree: `2a873fa79c08c80cea2d59b7738a5a68d665fab5`
+- Implementation commit: `43e44471e2d32bc58c056cc9e4ee340e3144cbdb`
+
+The implementation commit is preserved immutably beneath the documentation-only Phase O closure commit.
+
+### Safety / delivery
+
+The Phase O delivery is one deterministic patch ZIP plus one rollback-capable PowerShell installer. The installer:
+
+- refuses any repository state other than the exact completed Phase N handoff,
+- validates ZIP/hash/path integrity before repository mutation,
+- changes only the 17 approved implementation paths,
+- fails closed on missing browsers, missing processed evidence products, validation failures, path drift, payload drift, staged-tree drift, or commit drift,
+- creates a timestamped `safety/phase-o-presentation-*` branch before mutation,
+- commits locally only after the full qualification gate passes,
+- appends this log only after the implementation commit is verified,
+- creates a separate deterministic documentation-only commit,
+- verifies a clean final worktree,
+- performs no push.
+
+### Phase O closure
+
+Phase O closes the master-prompt README / GitHub presentation / social metadata / demo-media work without reopening completed runtime or evidence phases. The repository now presents MissionLab as the evidence-grounded engineering system it has become, and every major public route has deterministic share/search metadata backed by a repo-owned social asset.
+
+The next planned master-prompt phase is **Phase P — Full release-candidate QA**. Phase P is intentionally **not started** in this phase.
