@@ -47,8 +47,8 @@
       :`Hardware clearance is ${fmt(m.clearance,1)} m beyond the modeled footprint edge.${m.hardwareLevel==='near'?' The remaining concern is a conceptual screening flag, not a predicted ejecta reach.':''}`;
     outputs.visibility.textContent=m.visibility;
     outputs.ops.textContent=`Relative erosion tendency is ${fmt(m.erosionRatio,2)}× the reference case. NASA reports that PSI can create ejecta, contamination and visibility/sensor hazards; MissionLab does not convert this proxy into a certified keep-out distance.`;
-    $$('#engine-count button').forEach(b=>b.classList.toggle('active',Number(b.dataset.engines)===state.engines));
-    $$('#regolith-select button').forEach(b=>b.classList.toggle('active',b.dataset.regolith===state.regolith));
+    $$('#engine-count button').forEach(b=>{const active=Number(b.dataset.engines)===state.engines;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
+    $$('#regolith-select button').forEach(b=>{const active=b.dataset.regolith===state.regolith;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
     draw(performance.now());
     return m;
   }
@@ -144,7 +144,12 @@
 
   const header=$('.x-header'),menu=$('.x-menu'),nav=$('.x-nav');
   if(header) addEventListener('scroll',()=>header.classList.toggle('scrolled',scrollY>18),{passive:true});
-  if(menu&&nav){menu.addEventListener('click',()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));});$$('a',nav).forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false');}));}
+  if(menu&&nav){
+    const setNavOpen=(open,{returnFocus=false}={})=>{nav.classList.toggle('open',open);menu.setAttribute('aria-expanded',String(open));if(returnFocus){try{menu.focus({preventScroll:true});}catch{menu.focus();}}};
+    menu.addEventListener('click',()=>setNavOpen(!nav.classList.contains('open')));
+    $$('a',nav).forEach(a=>a.addEventListener('click',()=>setNavOpen(false)));
+    document.addEventListener('keydown',event=>{if(event.key==='Escape'&&nav.classList.contains('open')){event.preventDefault();setNavOpen(false,{returnFocus:true});}});
+  }
 
   const ro='ResizeObserver'in window?new ResizeObserver(resize):null;ro?.observe(canvas);addEventListener('resize',resize,{passive:true});
   if('IntersectionObserver'in window){new IntersectionObserver(entries=>{visible=entries[0]?.isIntersecting!==false;if(visible){draw(performance.now());ensureAnimation();}else stopAnimation();},{threshold:.02}).observe(canvas);}

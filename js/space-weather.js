@@ -32,8 +32,8 @@
       ?'A quiet reference state is not zero radiation. Flight teams still care about background GCR, instrument health, trends, and forecast uncertainty.'
       :'This public reference scale identifies the external energetic-proton environment. Orion-specific decisions require real spacecraft measurements, crew dosimetry, geometry, shielding, system status, and NASA operational criteria.');
     for(const id of ['#crew-rad-card','#electronics-card','#weather-posture-card']){const el=$(id);if(el)el.dataset.level=levelName(result.scale.rank);}
-    $$('#location-select button').forEach(button=>button.classList.toggle('active',button.dataset.location===state.location));
-    $$('#weather-presets button').forEach(button=>button.classList.toggle('active',Math.abs(Number(button.dataset.logPfu)-state.log10Pfu)<1e-9));
+    $$('#location-select button').forEach(button=>{const active=button.dataset.location===state.location;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active));});
+    $$('#weather-presets button').forEach(button=>{const active=Math.abs(Number(button.dataset.logPfu)-state.log10Pfu)<1e-9;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active));});
     draw(result);
   }
 

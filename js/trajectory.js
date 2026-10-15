@@ -84,14 +84,14 @@
     $('#trajectory-record-time').textContent=selected.timeLabel;
     $('#trajectory-record-duration').textContent=fmtDuration(selected.durationSeconds);
     $('#trajectory-record-dv').textContent=publicDvText(selected);
-    $$('#trajectory-presets button').forEach(button=>button.classList.toggle('active',button.dataset.preset===selected.id));
+    $$('#trajectory-presets button').forEach(button=>{const active=button.dataset.preset===selected.id;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active));});
   }
 
   function updateControls(){
     $('#trajectory-dv-value').textContent=`${dv.toFixed(1)} ft/s`;
     const coastDigits=Math.abs(coast-Math.round(coast))<1e-9?0:1;
     $('#trajectory-coast-value').textContent=`${coast.toFixed(coastDigits)} h`;
-    $$('#trajectory-directions button').forEach(button=>button.classList.toggle('active',button.dataset.direction===direction));
+    $$('#trajectory-directions button').forEach(button=>{const active=button.dataset.direction===direction;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active));});
 
     const magMatches=selected.reportedDvFtS!==null&&Math.abs(dv-selected.reportedDvFtS)<.001;
     const timeMatches=Math.abs(coast-selected.coastHours)<.01;

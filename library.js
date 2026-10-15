@@ -1,81 +1,6 @@
 (() => {
 'use strict';
 
-const libraryMenu =
-  document.querySelector('.menu-btn');
-
-const libraryNav =
-  document.querySelector('.nav-links');
-
-if (libraryMenu && libraryNav) {
-
-  const setLibraryNavOpen =
-    open => {
-
-      libraryNav.classList.toggle(
-        'open',
-        open
-      );
-
-      libraryMenu.setAttribute(
-        'aria-expanded',
-        String(open)
-      );
-    };
-
-  libraryMenu.addEventListener(
-    'click',
-    () => {
-
-      setLibraryNavOpen(
-        !libraryNav.classList.contains(
-          'open'
-        )
-      );
-    }
-  );
-
-  libraryNav
-    .querySelectorAll('a')
-    .forEach(
-      link => {
-
-        link.addEventListener(
-          'click',
-          () => {
-            setLibraryNavOpen(false);
-          }
-        );
-      }
-    );
-
-  document.addEventListener(
-    'keydown',
-    event => {
-
-      if (
-        event.key === 'Escape' &&
-        libraryNav.classList.contains(
-          'open'
-        )
-      ) {
-
-        setLibraryNavOpen(false);
-
-        try {
-          libraryMenu.focus({
-            preventScroll: true
-          });
-        }
-        catch {
-          libraryMenu.focus();
-        }
-      }
-    }
-  );
-}
-
-
 const topics = [
 {
  id:'mission-overview', title:'Mission overview', domain:'Mission architecture',
@@ -444,11 +369,7 @@ const content = document.querySelector('#library-content');
 const search = document.querySelector('#library-search');
 const categories = document.querySelector('#library-categories');
 const resultCount = document.querySelector('#library-result-count');
-const menu = document.querySelector('.menu-btn');
-const nav = document.querySelector('#nav-links');
 let activeCategory='All';
-
-if(menu&&nav) menu.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')==='true';menu.setAttribute('aria-expanded',String(!open));nav.classList.toggle('open',!open)});
 
 const evidenceLegend = `<span class="evidence-pill"><i class="dot reported"></i>reported</span><span class="evidence-pill"><i class="dot"></i>derived</span><span class="evidence-pill"><i class="dot model"></i>modeled</span><span class="evidence-pill"><i class="dot unknown"></i>unknown preserved</span>`;
 const searchText=t=>[t.title,t.domain,questionById[t.id],t.intro,t.relevance,t.method,t.interpret,t.ops,t.limits,t.skills.join(' ')].join(' ').toLowerCase();

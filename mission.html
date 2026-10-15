@@ -59,7 +59,7 @@
       </div>
       <div class="mission-explorer-shell">
         <div class="mission-stage">
-          <canvas id="mission-canvas" aria-label="Interactive Earth Moon Orion mission geometry"></canvas>
+          <canvas id="mission-canvas" role="img" aria-label="Interactive Earth Moon Orion mission geometry" aria-describedby="mission-stage-caption"></canvas>
           <div class="mission-stage-hud">
             <div><small>MISSION ELAPSED TIME</small><strong id="mission-met">00:00:00:00</strong></div>
             <div><small>PHASE</small><strong id="mission-phase">Launch</strong></div>
@@ -148,7 +148,7 @@
 
     <div class="trajectory-workbench">
       <div class="trajectory-visual-shell">
-        <canvas id="trajectory-canvas" aria-label="Two-body Earth-return trajectory correction response model"></canvas>
+        <canvas id="trajectory-canvas" role="img" aria-label="Two-body Earth-return trajectory correction response model" aria-describedby="trajectory-case-note"></canvas>
         <div class="trajectory-scale-note">EARTH-RADIUS SCALE IS PHYSICAL · ARRIVAL INSET IS MAGNIFIED</div>
         <div class="trajectory-legend" aria-hidden="true">
           <span><i class="nominal"></i> reference return</span>
@@ -296,7 +296,7 @@
 
     <div class="entry-phase-i-shell">
       <div class="entry-flight-stage">
-        <canvas id="entry-flight-canvas" aria-label="Artemis II reconstructed altitude profile from the first high-rate entry state through derived surface crossing, including the loft rebound and parachute descent"></canvas>
+        <canvas id="entry-flight-canvas" role="img" aria-label="Artemis II reconstructed altitude profile from the first high-rate entry state through derived surface crossing, including the loft rebound and parachute descent" aria-describedby="entry-visual-caption"></canvas>
         <div class="entry-stage-topline">
           <div><span>RECONSTRUCTED ENTRY PROFILE</span><b id="entry-analysis-time">23:53:30.866 UTC</b><small id="entry-analysis-offset">analysis +0.0 s</small></div>
           <div class="entry-stage-evidence"><span>HIGH-RATE SOURCE</span><b>819 flight-derived states</b><small>M50 → validated analysis transform → WGS 84 geometry · browser view interpolates curated Phase 2 checkpoints</small></div>
@@ -392,14 +392,14 @@
 
         <div class="weather-observatory">
           <div class="weather-visual">
-            <canvas id="weather-canvas" aria-label="Space weather energetic-proton environment teaching visualization"></canvas>
+            <canvas id="weather-canvas" role="img" aria-label="Space weather energetic-proton environment teaching visualization" aria-describedby="weather-location-context"></canvas>
             <div class="weather-visual-caption"><span><b>SEE IT</b> · Sun → energetic particles → spacecraft context</span><span>Qualitative geometry only · no particle transport or dose calculation</span></div>
           </div>
           <div class="weather-console">
             <label class="range-label" for="sep-flux-log"><span>≥10 MeV proton flux · logarithmic axis</span><b id="sep-flux-value">1.0 pfu</b></label>
             <input id="sep-flux-log" type="range" min="-1" max="5" step="0.01" value="0" aria-describedby="sep-flux-note">
             <p class="weather-unit-note" id="sep-flux-note"><b>pfu</b> = particles / (cm² · s · sr). NOAA S1 begins at 10 pfu, then each higher S level begins one decade higher through S5 at 100,000 pfu.</p>
-            <div class="weather-presets" id="weather-presets" aria-label="NOAA solar radiation storm reference presets">
+            <div class="weather-presets" id="weather-presets" role="group" aria-label="NOAA solar radiation storm reference presets">
               <button type="button" class="active" data-log-pfu="0">Below S1<br>1 pfu</button>
               <button type="button" data-log-pfu="1">S1<br>10 pfu</button>
               <button type="button" data-log-pfu="2">S2<br>100 pfu</button>
@@ -407,7 +407,7 @@
               <button type="button" data-log-pfu="4">S4<br>10,000 pfu</button>
               <button type="button" data-log-pfu="5">S5<br>100,000 pfu</button>
             </div>
-            <div class="segmented" id="location-select" aria-label="Mission location context"><button type="button" data-location="leo">LEO</button><button type="button" class="active" data-location="deep">Deep space</button><button type="button" data-location="lunar">Lunar vicinity</button></div>
+            <div class="segmented" id="location-select" role="group" aria-label="Mission location context"><button type="button" data-location="leo">LEO</button><button type="button" class="active" data-location="deep">Deep space</button><button type="button" data-location="lunar">Lunar vicinity</button></div>
             <p class="weather-location-context" id="weather-location-context">Beyond persistent low-Earth-orbit geomagnetic protection · crewed missions require dedicated radiation monitoring and response capability.</p>
             <div class="weather-scale-line"><span>PUBLIC REFERENCE CLASSIFICATION</span><b id="weather-scale">Below NOAA S1 reference threshold</b></div>
             <div class="weather-readouts" aria-live="polite">

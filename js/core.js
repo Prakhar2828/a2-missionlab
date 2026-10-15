@@ -517,10 +517,24 @@
   // Shared chrome.
   const header=$('.x-header');
   if(header){window.addEventListener('scroll',()=>header.classList.toggle('scrolled',scrollY>18),{passive:true});}
-  const menu=$('.x-menu'), nav=$('.x-nav');
-  if(menu&&nav){menu.addEventListener('click',()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));});$$('a',nav).forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false');}));}
-  const genericMenu=$('.menu-btn'), genericNav=$('.nav-links');
-  if(genericMenu&&genericNav){genericMenu.addEventListener('click',()=>{const open=genericNav.classList.toggle('open');genericMenu.setAttribute('aria-expanded',String(open));});$$('a',genericNav).forEach(a=>a.addEventListener('click',()=>{genericNav.classList.remove('open');genericMenu.setAttribute('aria-expanded','false');}));}
+  const setupDisclosureNav=(menu,nav)=>{
+    if(!menu||!nav)return;
+    const setOpen=(open,{returnFocus=false}={})=>{
+      nav.classList.toggle('open',open);
+      menu.setAttribute('aria-expanded',String(open));
+      if(returnFocus){try{menu.focus({preventScroll:true});}catch{menu.focus();}}
+    };
+    menu.addEventListener('click',()=>setOpen(!nav.classList.contains('open')));
+    $$('a',nav).forEach(a=>a.addEventListener('click',()=>setOpen(false)));
+    document.addEventListener('keydown',event=>{
+      if(event.key==='Escape'&&nav.classList.contains('open')){
+        event.preventDefault();
+        setOpen(false,{returnFocus:true});
+      }
+    });
+  };
+  setupDisclosureNav($('.x-menu'),$('.x-nav'));
+  setupDisclosureNav($('.menu-btn'),$('.nav-links'));
 
   // Remote NASA imagery fails safely into repository-local technical imagery.
   $$('.nasa-photo').forEach(img=>{
@@ -534,7 +548,15 @@
   const heroCanvas=$('#hero-stars');
   if(heroCanvas){
     const stars=Array.from({length:80},(_,i)=>({x:(i*47.31)%997/997,y:(i*83.17)%991/991,r:.35+(i%7)*.09,p:i*.63}));
-    const draw=t=>{const {ctx,w,h}=fitCanvas(heroCanvas);ctx.clearRect(0,0,w,h);stars.forEach(s=>{const a=.12+.34*(.5+.5*Math.sin(t*.001+s.p));ctx.fillStyle=`rgba(255,255,255,${a})`;ctx.beginPath();ctx.arc(s.x*w,s.y*h,s.r,0,Math.PI*2);ctx.fill();});requestAnimationFrame(draw);};requestAnimationFrame(draw);
+    const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
+    let heroFrame=0;
+    const paint=t=>{const {ctx,w,h}=fitCanvas(heroCanvas);ctx.clearRect(0,0,w,h);stars.forEach(s=>{const a=.12+.34*(.5+.5*Math.sin(t*.001+s.p));ctx.fillStyle=`rgba(255,255,255,${a})`;ctx.beginPath();ctx.arc(s.x*w,s.y*h,s.r,0,Math.PI*2);ctx.fill();});};
+    const animate=t=>{heroFrame=0;paint(t);if(!reducedMotion.matches&&!document.hidden)heroFrame=requestAnimationFrame(animate);};
+    const syncHeroMotion=()=>{if(heroFrame){cancelAnimationFrame(heroFrame);heroFrame=0;}if(reducedMotion.matches||document.hidden)paint(0);else heroFrame=requestAnimationFrame(animate);};
+    reducedMotion.addEventListener?.('change',syncHeroMotion);
+    document.addEventListener('visibilitychange',syncHeroMotion);
+    addEventListener('resize',()=>{if(reducedMotion.matches)paint(0);},{passive:true});
+    syncHeroMotion();
   }
 
 

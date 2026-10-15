@@ -3,12 +3,12 @@
 .library-tools{margin-bottom:16px}.library-tools .search{flex:1}
 .library-categories{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
 .library-filter{border:1px solid var(--line);background:#0b1117;color:#c7d2db;border-radius:999px;padding:.5rem .75rem;cursor:pointer;font-size:.88rem}
-.library-filter:hover,.library-filter:focus-visible{border-color:#56738a;outline:none}.library-filter.active{background:#162431;border-color:var(--blue);color:#fff}
+.library-filter:hover,.library-filter:focus-visible{border-color:#56738a}.library-filter:focus-visible{outline:3px solid var(--blue);outline-offset:3px}.library-filter.active{background:#162431;border-color:var(--blue);color:#fff}
 .library-results-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin:20px 0 12px}
 .library-results-head h2{font-size:1rem;text-transform:uppercase;letter-spacing:.12em;margin:0}.library-result-count{color:var(--muted);font-size:.9rem}
 .library-index{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:0}
 .library-index .library-result-card{display:block;padding:1rem 1.05rem;min-height:154px;border:1px solid var(--line);background:#0b1117;border-radius:7px;transition:border-color .15s,background .15s,transform .15s}
-.library-index .library-result-card:hover,.library-index .library-result-card:focus-visible{border-color:#58758d;background:#101923;transform:translateY(-1px);outline:none}
+.library-index .library-result-card:hover,.library-index .library-result-card:focus-visible{border-color:#58758d;background:#101923;transform:translateY(-1px)}.library-index .library-result-card:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
 .library-result-card .result-category{display:block;color:var(--blue);font-size:.73rem;text-transform:uppercase;letter-spacing:.11em;font-weight:800;margin-bottom:.55rem}
 .library-result-card strong{display:block;font-size:1rem;line-height:1.3;margin-bottom:.55rem}.library-result-card p{margin:0;color:#aebbc5;font-size:.88rem;line-height:1.45}
 .library-empty{border:1px solid var(--line);background:#0b1117;padding:1.3rem;margin:0 0 36px}

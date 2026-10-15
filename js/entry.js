@@ -33,6 +33,7 @@
     t=clamp(next,0,model.durationSeconds);
     const s=model.stateAt(t), nearest=nearestEvent(t);
     scrubber.value=String(t);
+    scrubber.setAttribute('aria-valuetext',`${s.utc} · ${s.phase.title} · ${nearest.label}`);
     $('#entry-analysis-time').textContent=s.utc;
     $('#entry-analysis-offset').textContent=`analysis +${fmt(t,1)} s`;
     $('#entry-phase').textContent=s.phase.title;
@@ -57,7 +58,7 @@
     root.dataset.phase=s.phase.id;
     root.dataset.loft=String(s.inLoft);
     root.dataset.finite=String([s.altitudeKm,s.speedKmS,s.mach].every(Number.isFinite));
-    $$('button',eventRail).forEach(b=>b.classList.toggle('active',Math.abs(Number(b.dataset.t)-t)<18));
+    $$('button',eventRail).forEach(b=>{const near=Math.abs(Number(b.dataset.t)-t)<18;const current=Number(b.dataset.t)===nearest.t;b.classList.toggle('active',near);if(current)b.setAttribute('aria-current','true');else b.removeAttribute('aria-current');});
     if(!fromAnimation)draw();
   }
 

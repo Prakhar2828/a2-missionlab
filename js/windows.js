@@ -161,8 +161,8 @@
     const fields={badge:v.badge,index:`MISSION VIEW ${String(crewIndex+1).padStart(2,'0')} / ${String(crewViews.length).padStart(2,'0')}`,title:v.title,description:v.desc,notice:v.notice,why:v.why,time:v.time,geometry:v.geometry,evidence:v.evidence,provenance:v.provenance};
     Object.entries(fields).forEach(([k,val])=>{const el=$('#crew-'+k);if(el)el.textContent=val;});
     const count=$('#crew-image-count');if(count)count.textContent=`${String(crewIndex+1).padStart(2,'0')} / ${String(crewViews.length).padStart(2,'0')}`;
-    const scrub=$('#crew-scrubber');if(scrub){scrub.max=crewViews.length-1;scrub.value=crewIndex;}
-    const thumbs=$$('#crew-filmstrip button');thumbs.forEach((b,j)=>b.classList.toggle('active',j===crewIndex));
+    const scrub=$('#crew-scrubber');if(scrub){scrub.max=crewViews.length-1;scrub.value=crewIndex;scrub.setAttribute('aria-valuetext',`${crewIndex+1} of ${crewViews.length}: ${v.title}`);}
+    const thumbs=$$('#crew-filmstrip button');thumbs.forEach((b,j)=>{const active=j===crewIndex;b.classList.toggle('active',active);if(active)b.setAttribute('aria-current','true');else b.removeAttribute('aria-current');});
     const active=thumbs[crewIndex],strip=$('#crew-filmstrip');if(active&&strip){const left=Math.max(0,active.offsetLeft-(strip.clientWidth-active.clientWidth)/2);strip.scrollTo({left,behavior:'smooth'});}
     drawCrewGeometry(v);
     syncCrewLightbox(v);
@@ -480,26 +480,10 @@
     }
   );
 
-  $('#crew-photo')?.addEventListener(
+  $('#crew-photo-open')?.addEventListener(
     'click',
     e=>{
       e.preventDefault();
-      openCrewLightbox(
-        e.currentTarget
-      );
-    }
-  );
-
-  $('#crew-photo')?.addEventListener(
-    'keydown',
-    e=>{
-      if(
-        e.key!=='Enter' &&
-        e.key!==' '
-      )return;
-
-      e.preventDefault();
-
       openCrewLightbox(
         e.currentTarget
       );

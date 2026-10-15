@@ -50,6 +50,8 @@
   ];
   let missionP=0;
   let missionMoment=null;
+  const missionReducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
+  let refreshMissionCanvas=()=>{};
   const missionMarkerIndexes=[0,3,4,5,8,10];
 
   function missionNearest(p){
@@ -203,6 +205,8 @@
         );
       }
     }
+
+    refreshMissionCanvas();
   }
 
   function goMissionPrevious(){
@@ -385,7 +389,15 @@
         drawCanvasLabel(ctx,'FAR SIDE / LOS BLOCKED',ix+8,portrait?iy+ih-25:iy+ih-9,iw-16,{size:portrait?9:10.5,minSize:9,color:'rgba(255,255,255,.68)',maxLines:portrait?2:1});
       }ctx.restore();
       if(missionP>.515&&missionP<.635){ctx.save();ctx.strokeStyle='rgba(255,104,93,.72)';ctx.setLineDash([3,5]);ctx.beginPath();ctx.moveTo(pos.x,pos.y);ctx.lineTo(earth.x,earth.y);ctx.stroke();ctx.setLineDash([]);drawCanvasLabel(ctx,'LUNAR OCCULTATION REGION',portrait?scene.x+8:scene.x+scene.width*.45,portrait?scene.bottom-18:scene.y+scene.height*.61,portrait?scene.width*.64:scene.width*.5,{size:portrait?10:11,minSize:10,color:'rgba(255,104,93,.92)',maxLines:portrait?2:1});ctx.restore();}
-      if(!staticMissionQa)requestAnimationFrame(loop);};requestAnimationFrame(loop);
+      missionFrame=0;if(!staticMissionQa&&!missionReducedMotion.matches&&!document.hidden)missionFrame=requestAnimationFrame(loop);};
+    let missionFrame=0;
+    refreshMissionCanvas=()=>{
+      if(staticMissionQa||missionReducedMotion.matches||document.hidden){if(missionFrame){cancelAnimationFrame(missionFrame);missionFrame=0;}loop(0);return;}
+      if(!missionFrame)missionFrame=requestAnimationFrame(loop);
+    };
+    missionReducedMotion.addEventListener?.('change',refreshMissionCanvas);
+    document.addEventListener('visibilitychange',refreshMissionCanvas);
+    refreshMissionCanvas();
   }
 
   }

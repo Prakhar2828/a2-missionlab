@@ -71,10 +71,16 @@
               fetchpriority="high"
               decoding="async"
               alt="Earth beginning to recede during Artemis II outbound coast"
-              role="button"
-              tabindex="0"
-              aria-label="Open current Artemis II image fullscreen"
             >
+
+            <button
+              id="crew-photo-open"
+              class="crew-photo-open"
+              type="button"
+              aria-label="Open current Artemis II image fullscreen"
+              aria-haspopup="dialog"
+              aria-controls="crew-lightbox"
+            ></button>
 
             <button
               id="crew-image-prev"
@@ -138,7 +144,9 @@
             >
               <canvas
                 id="crew-geometry-canvas"
+                role="img"
                 aria-label="Simplified Earth Moon view geometry"
+                aria-describedby="crew-geometry"
               ></canvas>
             </div>
 

@@ -38,7 +38,7 @@ const explanations={
   verify:'Sensors observe the changed state, close the feedback loop, and begin the next correction cycle.'
 };
 function setBlock(key){
-  $$('[data-gnc-block]').forEach(b=>b.classList.toggle('active',b.dataset.gncBlock===key));
+  $$('[data-gnc-block]').forEach(b=>{const active=b.dataset.gncBlock===key;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
   const box=$('#gnc-block-explainer');if(box)box.textContent=explanations[key];
 }
 $$('[data-gnc-block]').forEach(b=>b.addEventListener('click',()=>setBlock(b.dataset.gncBlock)));

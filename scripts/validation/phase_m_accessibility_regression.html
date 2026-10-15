@@ -1,0 +1,1155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>A2 MissionLab Phase M Accessibility + Responsive QA</title>
+
+<style>
+html,body{
+  margin:0;
+  background:#101418;
+  color:#eef4f7;
+  font:13px/1.45 Consolas,monospace;
+}
+iframe{
+  display:block;
+  border:0;
+  margin:0 0 16px;
+  background:#000;
+}
+pre{
+  white-space:pre-wrap;
+  padding:16px;
+}
+</style>
+</head>
+
+<body
+  data-status="RUNNING"
+  data-case-count="0"
+  data-failure-count="0"
+  data-max-overflow="0"
+>
+
+<pre id="results">RUNNING</pre>
+
+<script>
+(() => {
+'use strict';
+
+const routes = [
+  {
+    route:'index.html',
+    required:[
+      '#hero-stars',
+      '#experiences',
+      '#experience-grid'
+    ]
+  },
+  {
+    route:'mission.html',
+    required:[
+      '#mission-explorer',
+      '#mission-canvas',
+      '#trajectory-lab',
+      '#trajectory-canvas',
+      '#trajectory-dv',
+      '#trajectory-coast',
+      '#entry-lab',
+      '#space-weather'
+    ]
+  },
+  {
+    route:'windows.html',
+    required:[
+      '#crew-view',
+      '#crew-photo-stage',
+      '#crew-image-prev',
+      '#crew-image-next',
+      '#crew-zoom',
+      '#crew-lightbox'
+    ]
+  },
+  {
+    route:'gnc.html',
+    required:[
+      '#gnc-lab',
+      '#gnc-canvas',
+      '#gnc-mode-auto',
+      '#gnc-mode-manual',
+      '#gnc-disturbance',
+      '#gnc-start'
+    ]
+  },
+  {
+    route:'mission-control.html',
+    required:[
+      '#mission-control',
+      '#mc-canvas',
+      '#mc-events',
+      '#mc-decision-trace'
+    ]
+  },
+  {
+    route:'psi.html',
+    required:[
+      '#psi-lab-section',
+      '#psi-canvas',
+      '#psi-alt',
+      '#psi-throttle',
+      '#psi-cant',
+      '#psi-spread',
+      '#psi-hardware',
+      '#psi-reset'
+    ]
+  },
+  {
+    route:'library.html',
+    required:[
+      '#library-search',
+      '#library-index',
+      '#library-content'
+    ]
+  },
+  {
+    route:'technical-report.html',
+    required:[]
+  }
+];
+
+const viewports = [
+  {name:'phone-320x568',width:320,height:568},
+  {name:'phone-360x800',width:360,height:800},
+  {name:'phone-375x812',width:375,height:812},
+  {name:'phone-390x844',width:390,height:844},
+  {name:'phone-430x932',width:430,height:932},
+  {name:'phone-landscape-844x390',width:844,height:390},
+  {name:'tablet-portrait-768x1024',width:768,height:1024},
+  {name:'tablet-landscape-1024x768',width:1024,height:768},
+  {name:'approx-1024-1024x800',width:1024,height:800},
+  {name:'desktop-1280x800',width:1280,height:800},
+  {name:'desktop-1440x900',width:1440,height:900},
+  {name:'desktop-1920x1080',width:1920,height:1080}
+];
+
+const expectedRoutes = [
+  'mission.html',
+  'windows.html',
+  'gnc.html',
+  'mission-control.html',
+  'psi.html',
+  'library.html',
+  'technical-report.html'
+];
+
+const pause =
+  ms =>
+    new Promise(
+      resolve =>
+        setTimeout(
+          resolve,
+          ms
+        )
+    );
+
+const settle =
+  async win => {
+
+    void win.document
+      .documentElement
+      .offsetHeight;
+
+    await pause(140);
+
+    void win.document
+      .documentElement
+      .offsetHeight;
+  };
+
+function visible(element) {
+
+  let node = element;
+
+  while (
+    node &&
+    node.nodeType === 1
+  ) {
+
+    const style =
+      node.ownerDocument
+        .defaultView
+        .getComputedStyle(node);
+
+    if (
+      style.display === 'none' ||
+      style.visibility === 'hidden' ||
+      Number(style.opacity || 1) < .01
+    ) {
+      return false;
+    }
+
+    node =
+      node.parentElement;
+  }
+
+  return true;
+}
+
+function closedMobileNavChild(
+  element
+) {
+
+  const nav =
+    element.closest(
+      '.x-nav,.nav-links'
+    );
+
+  if (!nav) {
+    return false;
+  }
+
+  const doc =
+    element.ownerDocument;
+
+  const menu =
+    doc.querySelector(
+      '.x-menu,.menu-btn'
+    );
+
+  if (!menu) {
+    return false;
+  }
+
+  const style =
+    doc.defaultView
+      .getComputedStyle(menu);
+
+  const mobile =
+    style.display !== 'none' &&
+    style.visibility !== 'hidden';
+
+  if (!mobile) {
+    return false;
+  }
+
+  return !nav.classList.contains(
+    'open'
+  );
+}
+
+function insideScroller(
+  element
+) {
+
+  let node =
+    element.parentElement;
+
+  const win =
+    element.ownerDocument
+      .defaultView;
+
+  while (
+    node &&
+    node !==
+      element.ownerDocument.body
+  ) {
+
+    const style =
+      win.getComputedStyle(node);
+
+    if (
+      (
+        style.overflowX === 'auto' ||
+        style.overflowX === 'scroll'
+      ) &&
+      node.scrollWidth >
+        node.clientWidth + 2
+    ) {
+      return true;
+    }
+
+    node =
+      node.parentElement;
+  }
+
+  return false;
+}
+
+function horizontalOverflow(
+  doc
+) {
+
+  const root =
+    doc.documentElement;
+
+  const body =
+    doc.body;
+
+  return Math.max(
+    0,
+    Math.max(
+      root.scrollWidth,
+      body
+        ? body.scrollWidth
+        : 0
+    ) -
+    root.clientWidth
+  );
+}
+
+function clippedControls(
+  doc,
+  win
+) {
+
+  const failures = [];
+
+  const controls =
+    [
+      ...doc.querySelectorAll(
+        'a,button,input,select,textarea,summary,[role="button"]'
+      )
+    ];
+
+  for (
+    const control
+    of controls
+  ) {
+
+    if (
+      !visible(control) ||
+      closedMobileNavChild(
+        control
+      ) ||
+      insideScroller(
+        control
+      )
+    ) {
+      continue;
+    }
+
+    const rect =
+      control.getBoundingClientRect();
+
+    if (
+      rect.width <= 2 ||
+      rect.height <= 2
+    ) {
+      continue;
+    }
+
+    if (
+      rect.right < 0 ||
+      rect.left >
+        win.innerWidth
+    ) {
+      continue;
+    }
+
+    if (
+      rect.left < -2 ||
+      rect.right >
+        win.innerWidth + 2
+    ) {
+
+      failures.push({
+        tag:control.tagName,
+        id:control.id || '',
+        class:
+          typeof control.className ===
+            'string'
+            ? control.className
+            : '',
+        left:
+          Number(
+            rect.left.toFixed(2)
+          ),
+        right:
+          Number(
+            rect.right.toFixed(2)
+          )
+      });
+    }
+  }
+
+  return failures;
+}
+
+function canvasFailures(
+  doc
+) {
+
+  const failures = [];
+
+  for (
+    const canvas
+    of doc.querySelectorAll(
+      'canvas'
+    )
+  ) {
+
+    if (!visible(canvas)) {
+      continue;
+    }
+
+    const rect =
+      canvas.getBoundingClientRect();
+
+    if (
+      rect.width < 2 ||
+      rect.height < 2
+    ) {
+
+      failures.push({
+        id:canvas.id || '',
+        width:rect.width,
+        height:rect.height
+      });
+    }
+  }
+
+  return failures;
+}
+
+function missingRouteLinks(
+  doc
+) {
+
+  const hrefs =
+    new Set(
+      [
+        ...doc.querySelectorAll(
+          'a[href]'
+        )
+      ]
+      .map(
+        link =>
+          (
+            link.getAttribute(
+              'href'
+            ) || ''
+          )
+          .split('#')[0]
+      )
+    );
+
+  return expectedRoutes.filter(
+    route =>
+      !hrefs.has(route)
+  );
+}
+
+async function mobileMenuTest(
+  doc,
+  win
+) {
+
+  const menu =
+    doc.querySelector(
+      '.x-menu,.menu-btn'
+    );
+
+  const nav =
+    doc.querySelector(
+      '.x-nav,.nav-links'
+    );
+
+  if (
+    !menu ||
+    !nav
+  ) {
+
+    return {
+      applicable:false,
+      pass:true
+    };
+  }
+
+  const style =
+    win.getComputedStyle(menu);
+
+  if (
+    style.display === 'none' ||
+    style.visibility === 'hidden'
+  ) {
+
+    return {
+      applicable:false,
+      pass:true
+    };
+  }
+
+  menu.click();
+
+  await pause(50);
+
+  const expanded =
+    menu.getAttribute(
+      'aria-expanded'
+    ) === 'true';
+
+  const opened =
+    nav.classList.contains(
+      'open'
+    );
+
+  const openRect =
+    nav.getBoundingClientRect();
+
+  const insideViewport =
+    openRect.left >= -2 &&
+    openRect.right <=
+      win.innerWidth + 2;
+
+  const openVisible =
+    win.getComputedStyle(nav)
+      .visibility !== 'hidden' &&
+    win.getComputedStyle(nav)
+      .display !== 'none';
+
+  doc.dispatchEvent(new win.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
+
+  await pause(30);
+
+  const escaped =
+    menu.getAttribute('aria-expanded') === 'false' &&
+    !nav.classList.contains('open');
+
+  const focusReturned =
+    doc.activeElement === menu;
+
+  menu.click();
+  await pause(20);
+  const firstLink=nav.querySelector('a[href]');
+  let linkClosed=true;
+  if(firstLink){
+    firstLink.addEventListener('click',event=>event.preventDefault(),{once:true,capture:true});
+    firstLink.click();
+    await pause(20);
+    linkClosed=menu.getAttribute('aria-expanded')==='false'&&!nav.classList.contains('open');
+  }
+
+  return {
+    applicable:true,
+    expanded,
+    opened,
+    openVisible,
+    insideViewport,
+    escaped,
+    focusReturned,
+    linkClosed,
+    pass:
+      expanded &&
+      opened &&
+      openVisible &&
+      insideViewport &&
+      escaped &&
+      focusReturned &&
+      linkClosed
+  };
+}
+
+function windowsChecks(
+  doc
+) {
+
+  const stage =
+    doc.querySelector(
+      '#crew-photo-stage'
+    );
+
+  if (!stage) {
+    return [
+      '#crew-photo-stage:missing'
+    ];
+  }
+
+  const stageRect =
+    stage.getBoundingClientRect();
+
+  const failures = [];
+
+  for (
+    const selector
+    of [
+      '#crew-image-prev',
+      '#crew-image-next',
+      '#crew-zoom'
+    ]
+  ) {
+
+    const control =
+      doc.querySelector(
+        selector
+      );
+
+    if (!control) {
+      failures.push(
+        selector + ':missing'
+      );
+
+      continue;
+    }
+
+    const rect =
+      control.getBoundingClientRect();
+
+    if (
+      rect.left <
+        stageRect.left - 2 ||
+      rect.right >
+        stageRect.right + 2 ||
+      rect.top <
+        stageRect.top - 2 ||
+      rect.bottom >
+        stageRect.bottom + 2
+    ) {
+
+      failures.push(
+        selector +
+        ':outside-stage'
+      );
+    }
+  }
+
+  return failures;
+}
+
+function gncChecks(
+  doc
+) {
+
+  const failures = [];
+
+  for (
+    const selector
+    of [
+      '#gnc-mode-auto',
+      '#gnc-mode-manual',
+      '#gnc-disturbance',
+      '#gnc-start'
+    ]
+  ) {
+
+    const control =
+      doc.querySelector(
+        selector
+      );
+
+    if (!control) {
+
+      failures.push(
+        selector +
+        ':missing'
+      );
+
+      continue;
+    }
+
+    const rect =
+      control.getBoundingClientRect();
+
+    if (
+      rect.width < 40 ||
+      rect.height < 40
+    ) {
+
+      failures.push(
+        selector +
+        ':target-too-small'
+      );
+    }
+  }
+
+  return failures;
+}
+
+function missionControlChecks(
+  doc
+) {
+
+  const events =
+    doc.querySelector(
+      '#mc-events'
+    );
+
+  if (!events) {
+    return [
+      '#mc-events:missing'
+    ];
+  }
+
+  if (
+    events.querySelectorAll(
+      'button'
+    ).length < 1
+  ) {
+
+    return [
+      '#mc-events:no-buttons'
+    ];
+  }
+
+  return [];
+}
+
+
+function accessibleName(control,doc){
+  const direct=(control.getAttribute('aria-label')||control.getAttribute('title')||'').trim();
+  if(direct)return direct;
+  const labelledBy=(control.getAttribute('aria-labelledby')||'').trim();
+  if(labelledBy){
+    const text=labelledBy.split(/\s+/).map(id=>doc.getElementById(id)?.textContent||'').join(' ').trim();
+    if(text)return text;
+  }
+  if(control.id){
+    const label=doc.querySelector(`label[for="${CSS.escape(control.id)}"]`);
+    if(label?.textContent.trim())return label.textContent.trim();
+  }
+  const wrapping=control.closest('label');
+  if(wrapping?.textContent.trim())return wrapping.textContent.trim();
+  return (control.textContent||'').trim();
+}
+
+function phaseMChecks(doc,win,route){
+  const failures=[];
+
+  for(const control of doc.querySelectorAll('button,input,select,textarea,summary,a[href]')){
+    if(!visible(control)||closedMobileNavChild(control))continue;
+    if(!accessibleName(control,doc))failures.push(`${control.tagName.toLowerCase()}#${control.id||''}:missing-accessible-name`);
+  }
+
+  for(const canvas of doc.querySelectorAll('canvas')){
+    if(canvas.getAttribute('aria-hidden')==='true')continue;
+    if(canvas.getAttribute('role')!=='img')failures.push(`#${canvas.id}:canvas-role`);
+    if(!(canvas.getAttribute('aria-label')||'').trim())failures.push(`#${canvas.id}:canvas-name`);
+  }
+
+  if(win.innerWidth<=1050){
+    for(const control of doc.querySelectorAll('button,.x-button,.menu-btn,.x-menu,.engineering-drawer summary')){
+      if(!visible(control)||closedMobileNavChild(control)||insideScroller(control))continue;
+      const rect=control.getBoundingClientRect();
+      if(rect.width>2&&rect.height>2&&rect.height<43.5)failures.push(`${control.tagName.toLowerCase()}#${control.id||''}:touch-height-${rect.height.toFixed(1)}`);
+    }
+  }
+
+  const groups=['#trajectory-presets','#trajectory-directions','#weather-presets','#location-select','#engine-count','#regolith-select'];
+  for(const selector of groups){
+    const group=doc.querySelector(selector);if(!group)continue;
+    const buttons=[...group.querySelectorAll('button')];
+    if(!buttons.length)continue;
+    const states=buttons.map(button=>button.getAttribute('aria-pressed'));
+    if(states.some(state=>state!=='true'&&state!=='false'))failures.push(`${selector}:missing-aria-pressed`);
+    if(states.filter(state=>state==='true').length!==1)failures.push(`${selector}:expected-one-selected`);
+  }
+
+  if(route==='windows.html'){
+    const photo=doc.querySelector('#crew-photo');
+    const opener=doc.querySelector('#crew-photo-open');
+    if(photo?.getAttribute('role')==='button'||photo?.hasAttribute('tabindex'))failures.push('#crew-photo:nonsemantic-button-role');
+    if(!opener||opener.tagName!=='BUTTON')failures.push('#crew-photo-open:missing-semantic-button');
+    const current=[...doc.querySelectorAll('#crew-filmstrip button[aria-current="true"]')];
+    if(current.length!==1)failures.push(`#crew-filmstrip:current-count-${current.length}`);
+  }
+
+  if(route==='entry.html'){
+    // No standalone Entry route in the public route set.
+  }
+
+  if(route==='mission-control.html'&&win.innerWidth<=1050){
+    const controls=[...doc.querySelectorAll('#mc-events button,[data-mc-role]')].filter(visible);
+    const min=controls.length?Math.min(...controls.map(el=>el.getBoundingClientRect().height)):64;
+    if(min<63.5)failures.push(`mission-control-touch-${min.toFixed(1)}`);
+  }
+
+  return failures;
+}
+
+async function createFrame(
+  route,
+  viewport
+) {
+
+  const frame =
+    document.createElement(
+      'iframe'
+    );
+
+  frame.width =
+    String(viewport.width);
+
+  frame.height =
+    String(viewport.height);
+
+  frame.style.width =
+    viewport.width +
+    'px';
+
+  frame.style.height =
+    viewport.height +
+    'px';
+
+  frame.src =
+    '../../' +
+    route +
+    '?phase-i-qa=' +
+    encodeURIComponent(
+      viewport.name
+    );
+
+  document.body.appendChild(
+    frame
+  );
+
+  /*
+   * Intentionally do NOT wait for window.load.
+   *
+   * Remote NASA imagery may still be resolving after the local page
+   * DOM, CSS, and JavaScript needed for responsive QA are available.
+   */
+  const started =
+    Date.now();
+
+  while (
+    Date.now() -
+    started <
+    8000
+  ) {
+
+    try {
+
+      const win =
+        frame.contentWindow;
+
+      const doc =
+        frame.contentDocument;
+
+      const pathname =
+        win &&
+        win.location
+          ? win.location.pathname
+          : '';
+
+      const correctRoute =
+        pathname.endsWith(
+          '/' + route
+        ) ||
+        pathname.endsWith(
+          route
+        );
+
+      const domReady =
+        doc &&
+        doc.body &&
+        (
+          doc.readyState ===
+            'interactive' ||
+          doc.readyState ===
+            'complete'
+        );
+
+      if (
+        correctRoute &&
+        domReady
+      ) {
+
+        return frame;
+      }
+    }
+    catch(error) {
+      // Navigation transition: retry.
+    }
+
+    await pause(60);
+  }
+
+  frame.remove();
+
+  throw new Error(
+    route +
+    ' DOM readiness timeout'
+  );
+}
+
+async function runCase(
+  contract,
+  viewport
+) {
+
+  const frame =
+    await createFrame(
+      contract.route,
+      viewport
+    );
+
+  const win =
+    frame.contentWindow;
+
+  const doc =
+    frame.contentDocument;
+
+  await settle(win);
+
+  const missingRequired =
+    contract.required.filter(
+      selector =>
+        !doc.querySelector(
+          selector
+        )
+    );
+
+  const overflow =
+    horizontalOverflow(doc);
+
+  const clipped =
+    clippedControls(
+      doc,
+      win
+    );
+
+  const canvases =
+    canvasFailures(doc);
+
+  const missingNavRoutes =
+    missingRouteLinks(doc);
+
+  const menu =
+    await mobileMenuTest(
+      doc,
+      win
+    );
+
+  const phaseM = phaseMChecks(doc,win,contract.route);
+
+  let routeSpecific = [];
+
+  if (
+    contract.route ===
+    'windows.html'
+  ) {
+    routeSpecific =
+      windowsChecks(doc);
+  }
+
+  if (
+    contract.route ===
+    'gnc.html'
+  ) {
+    routeSpecific =
+      gncChecks(doc);
+  }
+
+  if (
+    contract.route ===
+    'mission-control.html'
+  ) {
+    routeSpecific =
+      missionControlChecks(
+        doc
+      );
+  }
+
+  const pass =
+    missingRequired.length === 0 &&
+    overflow <= 2 &&
+    clipped.length === 0 &&
+    canvases.length === 0 &&
+    missingNavRoutes.length === 0 &&
+    menu.pass &&
+    phaseM.length === 0 &&
+    routeSpecific.length === 0;
+
+  const result = {
+    route:contract.route,
+    viewport:viewport.name,
+    width:viewport.width,
+    height:viewport.height,
+    innerWidth:win.innerWidth,
+    horizontalOverflow:
+      overflow,
+    missingRequired,
+    clippedInteractive:
+      clipped,
+    canvasFailures:
+      canvases,
+    missingNavRoutes,
+    menu,
+    phaseM,
+    routeSpecific,
+    pass
+  };
+
+  frame.remove();
+
+  return result;
+}
+
+async function run() {
+
+  const results = [];
+
+  for (
+    const contract
+    of routes
+  ) {
+
+    for (
+      const viewport
+      of viewports
+    ) {
+
+      try {
+
+        results.push(
+          await runCase(
+            contract,
+            viewport
+          )
+        );
+      }
+      catch(error) {
+
+        results.push({
+          route:
+            contract.route,
+          viewport:
+            viewport.name,
+          pass:false,
+          error:
+            String(
+              error &&
+              error.message
+                ? error.message
+                : error
+            )
+        });
+      }
+    }
+  }
+
+  const failures =
+    results.filter(
+      result =>
+        !result.pass
+    );
+
+  const maxOverflow =
+    Math.max(
+      0,
+      ...results.map(
+        result =>
+          Number(
+            result
+              .horizontalOverflow
+            || 0
+          )
+      )
+    );
+
+  document.body.dataset.status =
+    failures.length === 0
+      ? 'PASS'
+      : 'FAIL';
+
+  document.body.dataset.caseCount =
+    String(results.length);
+
+  document.body.dataset.failureCount =
+    String(failures.length);
+
+  document.body.dataset.maxOverflow =
+    String(maxOverflow);
+
+  document.querySelector(
+    '#results'
+  ).textContent =
+    JSON.stringify(
+      {
+        summary:{
+          cases:
+            results.length,
+          failures:
+            failures.length,
+          maxHorizontalOverflow:
+            maxOverflow
+        },
+        failures,
+        results
+      },
+      null,
+      2
+    );
+}
+
+const watchdog =
+  setTimeout(
+    () => {
+
+      if (
+        document.body
+          .dataset.status ===
+        'RUNNING'
+      ) {
+
+        document.body
+          .dataset.status =
+          'FAIL';
+
+        document.querySelector(
+          '#results'
+        ).textContent =
+          JSON.stringify(
+            {
+              fatal:
+                'Responsive browser QA harness timed out.'
+            },
+            null,
+            2
+          );
+      }
+    },
+    85000
+  );
+
+run()
+  .then(
+    () => {
+      clearTimeout(
+        watchdog
+      );
+    }
+  )
+  .catch(
+    error => {
+
+      clearTimeout(
+        watchdog
+      );
+
+      document.body
+        .dataset.status =
+        'FAIL';
+
+      document.querySelector(
+        '#results'
+      ).textContent =
+        JSON.stringify(
+          {
+            fatal:
+              String(
+                error &&
+                error.message
+                  ? error.message
+                  : error
+              )
+          },
+          null,
+          2
+        );
+    }
+  );
+
+})();
+</script>
+</body>
+</html>
