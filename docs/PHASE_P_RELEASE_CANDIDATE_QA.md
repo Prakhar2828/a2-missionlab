@@ -126,3 +126,12 @@ Phase P does not intentionally alter public route markup, simulation physics, mi
 ## Phase boundary
 
 Successful Phase P means the candidate has passed the complete release-candidate qualification available on the real Windows repository plus mandatory portable CI coverage. It does **not** mean Phase Q is complete, and it does not authorize a push or deployment.
+
+
+## Portable CI browser runtime hardening — 2026-10-15
+
+The portable Linux CI gate uses the automation-oriented `chrome-headless-shell` binary pinned to Chrome for Testing `155.0.8059.39`. This is deliberate: the full Chrome binary reproducibly failed to terminate the `--dump-dom` + virtual-time Mission Explorer regression on GitHub Ubuntu runners even though the same protected Mission Explorer geometry/containment contract passed the exhaustive Windows Chrome + Edge release gate.
+
+This change does **not** weaken browser qualification. The same nine portable Phase P suites remain required and fail closed; `continue-on-error` remains prohibited. The exhaustive Windows release gate remains unchanged and continues to use installed Edge + Chrome. The pinned shell only stabilizes the Linux CI execution surface for deterministic CLI automation.
+
+Evidence boundary: this CI hotfix addresses runner/browser-process behavior only. It does not modify MissionLab mission truth, models, simulations, public UI, evidence architecture, or runtime behavior.

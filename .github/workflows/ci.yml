@@ -63,14 +63,29 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Set up Chrome for Testing
-        id: setup-chrome
+      - name: Set up Chrome runtime dependencies
         uses: browser-actions/setup-chrome@v2
         with:
-          chrome-version: stable
+          chrome-version: 155.0.8059.39
           install-dependencies: true
 
+      - name: Set up pinned Chrome Headless Shell
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="155.0.8059.39"
+          archive="$RUNNER_TEMP/chrome-headless-shell-linux64.zip"
+          destination="$RUNNER_TEMP/a2-chrome-headless-shell"
+          curl --fail --location --silent --show-error \
+            "https://storage.googleapis.com/chrome-for-testing-public/${version}/linux64/chrome-headless-shell-linux64.zip" \
+            --output "$archive"
+          rm -rf "$destination"
+          mkdir -p "$destination"
+          unzip -q "$archive" -d "$destination"
+          binary="$destination/chrome-headless-shell-linux64/chrome-headless-shell"
+          test -x "$binary"
+          "$binary" --version
+          echo "PHASE_P_CHROME=$binary" >> "$GITHUB_ENV"
+
       - name: Run mandatory Phase P portable browser gate
-        env:
-          PHASE_P_CHROME: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: python scripts/validation/validate_phase_p_regression.py --portable

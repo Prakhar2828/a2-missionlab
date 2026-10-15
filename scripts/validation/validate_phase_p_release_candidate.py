@@ -81,9 +81,13 @@ def main() -> int:
     public_validator = PUBLIC_VALIDATOR.read_text(encoding="utf-8")
     orchestrator = ORCHESTRATOR.read_text(encoding="utf-8")
 
-    require("browser-actions/setup-chrome@v2" in ci, "portable CI installs current Chrome-for-Testing action major")
-    require("id: setup-chrome" in ci, "portable CI captures the Chrome setup output")
-    require("PHASE_P_CHROME: ${{ steps.setup-chrome.outputs.chrome-path }}" in ci, "portable CI passes the exact Chrome executable into Phase P")
+    require("browser-actions/setup-chrome@v2" in ci, "portable CI installs Chrome runtime dependencies with the current action major")
+    require("chrome-version: 155.0.8059.39" in ci, "portable CI pins the Chrome 155 runtime dependency generation")
+    require("chrome-headless-shell-linux64.zip" in ci, "portable CI installs the automation-oriented Chrome Headless Shell")
+    require('version="155.0.8059.39"' in ci, "portable CI pins the exact Chrome Headless Shell version")
+    require("${version}/linux64/chrome-headless-shell-linux64.zip" in ci, "portable CI downloads the pinned Chrome Headless Shell artifact")
+    require('echo "PHASE_P_CHROME=$binary" >> "$GITHUB_ENV"' in ci, "portable CI passes the pinned Headless Shell executable into Phase P")
+    require('test -x "$binary"' in ci, "portable CI verifies the Headless Shell executable before qualification")
     require(
         "python scripts/validation/validate_phase_p_release_candidate.py" in ci,
         "portable CI runs the Phase P static release-candidate gate",
