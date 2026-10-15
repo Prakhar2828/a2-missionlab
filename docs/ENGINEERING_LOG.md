@@ -64410,3 +64410,300 @@ Phase P is delivered as one deterministic patch ZIP plus one rollback-capable Po
 Phase P closes the master-prompt **Full release-candidate QA** phase by converting the previously fragmented test inventory into a fail-closed release system with mandatory portable Chromium CI coverage and one exhaustive Windows Edge + Chrome release command, while preserving every completed product/evidence/runtime contract.
 
 The next planned master-prompt phase is **Phase Q — Adversarial executive review + final polish**. Phase Q is intentionally **not started** in this phase.
+
+## Phase Q — Adversarial Executive Review + Final Polish
+
+**Status:** COMPLETE — this section is appended only after the deterministic Windows installer applies the bounded Phase Q mutation and passes the complete protected static/evidence/model qualification plus the exhaustive Phase P Edge + Chrome release-candidate browser gate.
+
+### Objective
+
+Close the master-prompt implementation sequence with separate adversarial reviews from SpaceX technical leadership, NASA leadership, Blue Origin leadership, flight operations, GNC, EDL, principal software engineering, and recruiting perspectives; score every major public route honestly; review component-level quality; fix defensible final weaknesses; preserve all completed mission/runtime/evidence contracts; and requalify the final local candidate without pushing.
+
+### Immutable starting state
+
+- Repository: `C:\Users\prakh\Documents\a2-missionlab`
+- Branch: `phase-10-quality-recovery`
+- Starting / completed Phase P HEAD: `6fde6eb68be599e689191bf88ff1887917522dfd`
+- Starting parent / Phase P implementation: `f2724bfc717b4632991a5beb5e605879aaefeb0c`
+- Starting tree: `13845507314626ed823a859fca08e96dc85b7ee2`
+- Protected `origin/main`: `d74a88d20f6ff1bd8be2ff0dbe3fb2b44cc13187`
+- Recovery branch publication state: local-only / unpublished
+
+Phase Q starts exactly from the completed Phase P documentation HEAD. No Phase F–P implementation is restarted, squashed, amended, or recreated.
+
+### Adversarial findings
+
+The eight required reviews are recorded separately in `docs/PHASE_Q_ADVERSARIAL_REVIEW.md`.
+
+The strongest final product finding was **not** a missing simulation or runtime interaction. Phase P had already qualified the protected Mission Explorer, Windows, GNC, Mission Control, PSI, Trajectory, Space Weather, Entry, publication, typography, accessibility/responsive, performance/failure-state, and presentation systems.
+
+The defensible Phase Q weaknesses were repository-state and release-truth inconsistencies:
+
+1. `README.md` still described validation/project status as though the quality-recovery branch stopped at Phase N/O even though Phase P had completed.
+2. `docs/VALIDATION_REPORT.md` incorrectly marked historical Phase 9 publication quality as `In progress` even though Phase 9 had long been closed.
+3. legacy compatibility release files still described an obsolete overlay packaging workflow and an obsolete branch target;
+4. those compatibility files referenced release artifacts no longer present in the integrated repository;
+5. the image/figure ledgers retained obsolete overlay wording and two encoding placeholders (`Earth ? NASA`, `Moon ? NASA`);
+6. there was no final Phase Q static contract protecting the required adversarial reviews, route/component scoring, hard limitations, and final documentation-state consistency.
+
+The reviews also reconfirmed known large-file debt in `js/mission.js`, `js/mission-control.js`, and `library.js`. Phase Q intentionally does **not** perform a high-risk final mass refactor because those runtimes are mature, behaviorally protected, and no correctness/performance defect was demonstrated.
+
+### Files changed
+
+The implementation commit changes exactly eleven paths:
+
+- `.github/workflows/ci.yml`
+- `FINAL_POLISH_RELEASE_NOTES.md`
+- `PATCH_MANIFEST.txt`
+- `PUBLIC_EXPERIENCE_FINAL_README.md`
+- `README.md`
+- `assets/public/FIGURE_AUDIT.md`
+- `assets/public/IMAGE_SOURCES.md`
+- `docs/PHASE_Q_ADVERSARIAL_REVIEW.md`
+- `docs/VALIDATION_REPORT.md`
+- `scripts/validate_public_experience.py`
+- `scripts/validation/validate_phase_q_adversarial_review.py`
+
+The documentation-only closure commit later changes only:
+
+- `docs/ENGINEERING_LOG.md`
+
+No public route HTML, route CSS, application/runtime JavaScript, mission/reference data, simulation constants/equations, mission imagery selection, interaction logic, responsive geometry, accessibility semantics, or Phase P browser orchestration is changed by the Phase Q implementation.
+
+### Separate adversarial reviews completed
+
+Phase Q performs and records the required reviews as:
+
+- SpaceX technical leadership;
+- NASA leadership;
+- Blue Origin leadership;
+- flight director / flight operations;
+- GNC engineer;
+- EDL engineer;
+- principal software engineer;
+- recruiter.
+
+Each review attacks the project from its own criteria rather than collapsing the exercise into one generic summary. The resulting fix set is intentionally small because the reviews did not uncover a defensible runtime defect after Phase P qualification.
+
+### Honest route scoring
+
+`docs/PHASE_Q_ADVERSARIAL_REVIEW.md` scores all eight major routes across the master-prompt dimensions:
+
+- first impression;
+- typography;
+- copy;
+- visual composition;
+- interaction quality;
+- technical depth;
+- mission specificity;
+- aerospace relevance;
+- simulation quality;
+- imagery;
+- diagrams;
+- animation;
+- mobile quality;
+- accessibility;
+- performance;
+- reliability;
+- evidence integrity;
+- code quality;
+- memorability;
+- hiring impact.
+
+Every major route average remains at or above 9.0. Below-9 category scores are not hidden: mobile/accessibility retain explicit physical-device/screen-reader evidence limitations, and selected route code-quality scores retain documented large-file debt.
+
+### Component-level review
+
+Phase Q independently reviews:
+
+- header;
+- desktop navigation;
+- mobile navigation;
+- footer;
+- hero;
+- headings;
+- body copy;
+- buttons;
+- selectors;
+- tabs/rails;
+- cards;
+- labels;
+- canvases;
+- charts;
+- image viewer;
+- diagrams;
+- engineering depth layers;
+- evidence blocks;
+- citations;
+- figures;
+- tables;
+- loading states;
+- error states.
+
+No strong page is allowed to hide a weak component. The final review records where automated evidence is strong and where physical/manual evidence remains unavailable.
+
+### Final polish decisions
+
+Phase Q makes only defensible final changes:
+
+- README validation/status now reflects the Phase P release-candidate qualification and Phase Q closure;
+- the Validation Report correctly marks Phase 9 complete and summarizes K–Q quality-recovery qualification;
+- compatibility release files now describe the integrated repository rather than an obsolete overlay workflow;
+- stale references to missing compatibility artifacts are removed;
+- image/figure ledgers use current repository language and correct the legacy celestial-heading encoding placeholders;
+- CI runs the new Phase Q static contract;
+- public-experience validation requires the Phase Q review record and validator.
+
+### Evidence boundaries
+
+Phase Q changes repository/release truth, not mission truth.
+
+It does **not** alter:
+
+- mission chronology;
+- public source inventory;
+- evidence classifications;
+- reported / derived / modeled / inferred / unknown boundaries;
+- trajectory/GNC/entry/space-weather/PSI physics;
+- private/unknown fact boundaries;
+- operational-role disclaimers;
+- mission imagery provenance;
+- simulation fidelity claims.
+
+No private NASA material, fabricated telemetry, fabricated flight rule, fake controller parameter, or invented operational loop is introduced.
+
+### Package-build validation
+
+Package construction against the exact reconstructed Phase P state passed every gate truthfully executable in the build environment:
+
+- exact Phase P HEAD / parent / tree reconstruction;
+- clean starting worktree;
+- protected public `origin/main` confirmation through GitHub;
+- confirmation that the recovery branch remains unpublished;
+- `git diff --check`;
+- JavaScript syntax checks across protected runtimes;
+- Python compilation for the changed validation code;
+- Phase Q adversarial-review/final-polish validation;
+- public text/markup integrity;
+- public-experience validation;
+- publication pack validation;
+- publication web validation;
+- final release validation;
+- Phase K publication validation;
+- Phase L typography validation;
+- Phase M accessibility validation;
+- Phase N performance/failure-state static validation;
+- Phase O presentation/metadata validation;
+- Phase P static release-candidate validation;
+- trajectory-correction pure-model regression;
+- PSI pure-model regression;
+- Space Weather pure-model regression;
+- Entry pure-model/evidence regression.
+
+The construction environment blocks Chromium navigation to localhost and `file://` with `ERR_BLOCKED_BY_ADMINISTRATOR`, so no new Phase Q browser/screenshot pass is fabricated from that environment. The real Windows installer remains authoritative for final exhaustive browser requalification.
+
+### Deterministic Windows qualification
+
+Before this engineering-log section can be appended, the installer must pass:
+
+- exact repository path / branch / Phase P HEAD / parent / tree verification;
+- clean worktree;
+- fetched/pruned protected `origin/main` verification;
+- proof that `origin/phase-10-quality-recovery` remains unpublished;
+- timestamped `safety/phase-q-adversarial-review-*` branch creation;
+- patch ZIP SHA-256, exact allowlist, and every payload SHA-256;
+- Python/JavaScript syntax validation;
+- all protected static/publication/accessibility/performance/presentation validators;
+- the Phase Q static adversarial-review/final-polish contract;
+- pure-model regressions;
+- full data-dependent Space Weather/NAIRAS/Entry analytical/evidence validation against the real repository products;
+- the complete Phase P Windows exhaustive Edge + Chrome browser orchestration;
+- exact staged implementation-tree verification;
+- staged-candidate critical validation;
+- deterministic implementation-commit verification;
+- documentation-only engineering-log append;
+- deterministic documentation-commit verification;
+- exact final HEAD / parent / tree verification;
+- clean final worktree.
+
+Any required failure aborts Phase Q and rolls the production branch back to the immutable completed Phase P documentation HEAD while retaining the safety branch for forensics. No push, merge, release, Pages deployment, or other remote mutation is performed.
+
+### Browser coverage
+
+Final Windows qualification reuses the complete Phase P protected release system rather than inventing a weaker Phase Q browser suite.
+
+That release gate covers:
+
+- Mission Explorer geometry/scroll/interactions;
+- Through Orion Windows image navigation/lightbox/scroll behavior;
+- deterministic GNC AUTO/MANUAL/disturbance behavior;
+- Mission Control scenario/lens regression;
+- PSI interaction/model behavior;
+- trajectory-correction causality/model behavior;
+- Space Weather interaction/model behavior;
+- Entry / descent / recovery interaction/model behavior;
+- the global responsive matrix;
+- Phase K publication behavior;
+- Phase L typography/visual hierarchy;
+- Phase M accessibility/responsive Edge + Chrome matrix;
+- Phase N normal-assets and intentional-failure Edge + Chrome matrix;
+- Phase O metadata/social presentation Edge + Chrome matrix.
+
+Remote GitHub Actions Phase Q validation is not claimed as executed because the master prompt forbids automatic push. The workflow is updated so the Phase Q static gate runs once the user explicitly publishes the commit.
+
+### Responsive coverage
+
+The Phase M 192-case Edge + Chrome responsive/accessibility matrix remains authoritative and is rerun through the Phase P Windows release gate after the Phase Q mutation.
+
+The protected viewport set includes phone portrait classes, phone landscape, tablet portrait/landscape, approximately-1024 widths, and 1280/1440/1920 desktop classes.
+
+Phase Q makes no responsive CSS mutation because no responsive defect was demonstrated.
+
+### Performance notes
+
+Phase Q adds no public runtime dependency and changes no route JavaScript/CSS payload.
+
+The only executable addition is one small static Python validation script used in CI/release qualification. Phase N lazy loading, visibility-aware animation ownership, image fallback behavior, and intentional-failure contracts remain unchanged.
+
+### Limitations
+
+The following remain explicitly unclaimed unless separately run and recorded:
+
+- physical iPhone Safari;
+- physical Android Chrome;
+- physical tablet browser testing;
+- desktop Safari where accessible;
+- real assistive-technology/screen-reader review;
+- remote Phase P/Phase Q CI execution before an explicit push.
+
+The Phase Q construction sandbox also cannot provide a truthful new subjective screenshot/browser session because its Chromium policy blocks local navigation. The adversarial reviews therefore use exact source, existing Phase P Windows browser evidence, QA contracts, and evidence architecture; final Windows browser requalification is mandatory in the installer.
+
+### Deterministic implementation identity
+
+- Implementation subject: `Complete Phase Q adversarial review and final polish`
+- Implementation parent: `6fde6eb68be599e689191bf88ff1887917522dfd`
+- Implementation tree: `c38dfd94e56cd1d1610f541e2a2b49c7cff15047`
+- Implementation commit: `38cbe4347b04f8b7ecdd89001b4c94777299693f`
+
+The implementation commit is preserved immutably beneath the documentation-only Phase Q closure commit.
+
+### Safety / delivery
+
+Phase Q is delivered as one deterministic patch ZIP plus one rollback-capable PowerShell installer. The installer:
+
+- accepts only the exact completed Phase P starting state;
+- validates remote baseline and unpublished recovery-branch state;
+- creates a timestamped safety branch before mutation;
+- validates ZIP/path/hash integrity before copying any implementation file;
+- changes only the eleven approved implementation paths;
+- fails closed on validation, browser, evidence/data, path, hash, tree, or commit drift;
+- appends this engineering-log section only after full requalification passes;
+- creates a separate deterministic documentation-only commit;
+- verifies a clean final worktree;
+- performs no push.
+
+### Phase Q closure
+
+Phase Q closes the master-prompt **Adversarial executive review + final polish** phase. The local recovery/qualification sequence is complete through Phase Q, subject to the explicitly documented manual/device evidence boundaries above.
+
+There is no next implementation phase in the supplied master prompt. Publication remains a separate explicit user decision; this phase performs **no push**.
