@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Phase O Presentation Regression</title>
+</head>
+<body>
+<pre id="results">RUNNING</pre>
+<script>
+(() => {
+  'use strict';
+  const BASE='https://prakhar2828.github.io/a2-missionlab/';
+  const SOCIAL=BASE+'docs/assets/social/a2-missionlab-social-preview.png';
+  const routes={
+    'index.html':{title:'A2 MissionLab — Artemis II Engineering Reconstruction',description:'Explore Artemis II through public mission data, deterministic engineering models, Mission Control reasoning, crew imagery, GNC, entry, space weather, and evidence-aware analysis.',canonical:BASE,type:'website'},
+    'mission.html':{title:'Mission Explorer — A2 MissionLab',description:'Explore Artemis II trajectory, correction maneuvers, entry and recovery, and space-weather context through evidence-bounded public-data reconstruction.',canonical:BASE+'mission.html',type:'website'},
+    'windows.html':{title:"Through Orion's Windows — A2 MissionLab",description:'Explore 25 evidence-labeled Artemis II mission images with crew-view context, geometry, provenance, and direct NASA source links.',canonical:BASE+'windows.html',type:'website'},
+    'gnc.html':{title:'Guidance, Navigation & Control — A2 MissionLab',description:'Explore public Artemis II GNC architecture through a simplified proximity-operations teaching model with auto, manual, and disturbance modes.',canonical:BASE+'gnc.html',type:'website'},
+    'mission-control.html':{title:'Mission Control — A2 MissionLab',description:'Explore Artemis II Mission Control reasoning through discipline lenses, public mission scenarios, evidence boundaries, and decision reconstruction.',canonical:BASE+'mission-control.html',type:'website'},
+    'psi.html':{title:'Plume-Surface Interaction — A2 MissionLab',description:'Explore future-Artemis plume-surface interaction through an evidence-bounded educational model of geometry, regolith response, ejecta, and hardware exposure.',canonical:BASE+'psi.html',type:'website'},
+    'library.html':{title:'Mission Library — A2 MissionLab',description:'Search an evidence-aware Artemis II engineering knowledge base spanning flight dynamics, GNC, communications, entry, science, Mission Control, and data methods.',canonical:BASE+'library.html',type:'website'},
+    'technical-report.html':{title:'Technical Report — A2 MissionLab',description:'Read the A2 MissionLab technical report on reconstructing Artemis II from public data using flight dynamics, mission operations, environmental modeling, and explicit evidence boundaries.',canonical:BASE+'technical-report.html',type:'article'},
+  };
+  const failures=[];
+  let cases=0;
+  const check=(ok,label,detail='')=>{cases++;if(!ok)failures.push({label,detail});};
+  const one=(doc,selector)=>{const nodes=[...doc.querySelectorAll(selector)];return nodes.length===1?nodes[0]:null;};
+  const content=(doc,selector)=>one(doc,selector)?.getAttribute('content')||'';
+  const href=(doc,selector)=>one(doc,selector)?.getAttribute('href')||'';
+  const run=async()=>{
+    for(const [route,e] of Object.entries(routes)){
+      const response=await fetch('../../'+route,{cache:'no-store'});
+      check(response.ok,route+' served','status '+response.status);
+      const source=await response.text();
+      const doc=new DOMParser().parseFromString(source,'text/html');
+      check(doc.title===e.title,route+' title',doc.title);
+      check(content(doc,'meta[name="description"]')===e.description,route+' description');
+      check(href(doc,'link[rel="canonical"]')===e.canonical,route+' canonical');
+      check(content(doc,'meta[property="og:site_name"]')==='A2 MissionLab',route+' og site name');
+      check(content(doc,'meta[property="og:title"]')===e.title,route+' og title');
+      check(content(doc,'meta[property="og:description"]')===e.description,route+' og description');
+      check(content(doc,'meta[property="og:type"]')===e.type,route+' og type');
+      check(content(doc,'meta[property="og:url"]')===e.canonical,route+' og url');
+      check(content(doc,'meta[property="og:image"]')===SOCIAL,route+' og image');
+      check(content(doc,'meta[property="og:image:width"]')==='1200'&&content(doc,'meta[property="og:image:height"]')==='630'&&Boolean(content(doc,'meta[property="og:image:alt"]')),route+' og image contract');
+      check(content(doc,'meta[name="twitter:card"]')==='summary_large_image'&&content(doc,'meta[name="twitter:title"]')===e.title&&content(doc,'meta[name="twitter:description"]')===e.description&&content(doc,'meta[name="twitter:image"]')===SOCIAL,route+' twitter/x contract');
+    }
+    const payload={status:failures.length?'FAIL':'PASS',cases,failures};
+    document.documentElement.dataset.status=payload.status;
+    document.documentElement.dataset.caseCount=String(cases);
+    document.documentElement.dataset.failureCount=String(failures.length);
+    document.getElementById('results').textContent=JSON.stringify(payload,null,2);
+    const token=new URLSearchParams(location.search).get('token')||'';
+    try{await fetch('/__phase_o_result__?token='+encodeURIComponent(token),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true});}catch(_){/* driver timeout will report */}
+  };
+  run().catch(async error=>{
+    const payload={status:'FAIL',cases,failures:[...failures,{label:'unhandled browser regression error',detail:String(error&&error.stack||error)}]};
+    document.getElementById('results').textContent=JSON.stringify(payload,null,2);
+    const token=new URLSearchParams(location.search).get('token')||'';
+    try{await fetch('/__phase_o_result__?token='+encodeURIComponent(token),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true});}catch(_){ }
+  });
+})();
+</script>
+</body>
+</html>

@@ -29,6 +29,9 @@ jobs:
       - name: Validate Phase 10 public experience
         run: python scripts/validate_public_experience.py
 
+      - name: Validate Phase O presentation metadata
+        run: python scripts/validation/validate_phase_o_presentation.py
+
       - name: Validate Mission Explorer interaction stability
         run: python scripts/validation/validate_mission_scroll_regression.py
 
