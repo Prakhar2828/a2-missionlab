@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -172,7 +172,8 @@ async function createFrame(
     +'?mission-phase-b-r4='
     +encodeURIComponent(
       spec.name
-    );
+    )
+    +'&trajectory-qa=1';
 
   document.body.appendChild(
     frame
