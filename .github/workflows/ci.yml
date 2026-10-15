@@ -32,11 +32,8 @@ jobs:
       - name: Validate Phase O presentation metadata
         run: python scripts/validation/validate_phase_o_presentation.py
 
-      - name: Validate Mission Explorer interaction stability
-        run: python scripts/validation/validate_mission_scroll_regression.py
-
-      - name: Validate deterministic GNC interaction
-        run: python scripts/validation/validate_gnc_auto_regression.py
+      - name: Validate Phase P release-candidate controls
+        run: python scripts/validation/validate_phase_p_release_candidate.py
 
       - name: Validate Phase 9A publication pack
         run: python scripts/validation/validate_publication_pack.py
@@ -46,3 +43,28 @@ jobs:
 
       - name: Validate final MissionLab release
         run: python scripts/validation/validate_release.py
+
+  browser-smoke:
+    runs-on: ubuntu-latest
+    needs: validate
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Chrome for Testing
+        id: setup-chrome
+        uses: browser-actions/setup-chrome@v2
+        with:
+          chrome-version: stable
+          install-dependencies: true
+
+      - name: Run mandatory Phase P portable browser gate
+        env:
+          PHASE_P_CHROME: ${{ steps.setup-chrome.outputs.chrome-path }}
+        run: python scripts/validation/validate_phase_p_regression.py --portable
