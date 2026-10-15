@@ -63506,3 +63506,367 @@ The project remains:
 - unpublished on the recovery branch
 
 **NO PUSH WAS PERFORMED.**
+
+## Phase N — Performance + Failure-Quality Hardening
+
+**Status:** COMPLETE — this section is appended only after the deterministic Windows installer passes the full protected analytical/static/browser release gate plus the dedicated Phase N normal-asset and intentional-failure browser passes.
+
+### Objective
+
+Make the completed Phase M product feel more immediate and fail more gracefully without changing protected mission models, evidence boundaries, interaction semantics, or visual identity.
+
+Phase N is deliberately bounded to current-tree performance and failure-quality debt:
+
+- stop paying for Earth/Moon imagery on routes that never draw those bodies,
+- suspend autonomous Mission Explorer and GNC animation work when it is not visible,
+- remove permanently bypassed legacy Entry code,
+- remove duplicate Windows resize redraw ownership,
+- defer noncritical image loading/decoding while preserving priority imagery,
+- replace broken-image icons and unexplained blank regions with explicit user-facing fallback states,
+- prove that missing optional celestial JPEGs do not blank the mission canvases.
+
+### Immutable starting state
+
+- Repository: `C:\Users\prakh\Documents\a2-missionlab`
+- Branch: `phase-10-quality-recovery`
+- Starting HEAD: `14e161281e733b700159c5a306e970a8de74dea3`
+- Starting parent / Phase M implementation: `60cdc7a1be2b081b0fcd7e7105cc4de8806f356a`
+- Starting tree: `72f26106a8eccbb5b500e95e74bb54fc9eb5b81b`
+- Protected `origin/main`: `d74a88d20f6ff1bd8be2ff0dbe3fb2b44cc13187`
+- Recovery branch publication state: local-only / unpublished
+
+Phase N starts exactly from the completed Phase M documentation HEAD. Completed Phase F/G/H/I/J/K/L/M work is preserved and is not restarted, squashed, amended, or reimplemented.
+
+### Repository-first audit findings
+
+The handoff contained only Phase N audit notes; no Phase N production mutation had occurred in the user repository. Re-auditing the exact Phase M tree confirmed the remaining debt was current:
+
+1. `js/core.js` eagerly created Earth and Moon `Image` resources on every route that loaded the shared runtime. The Earth JPEG is 518,573 bytes and the Moon JPEG is 252,499 bytes, for 771,072 bytes (~753 KiB) of optional celestial payload.
+2. Mission Explorer already honored reduced motion and `document.hidden`, but it still kept animation ownership while its canvas was offscreen.
+3. GNC ran a continuous RAF loop without document-visibility or viewport suspension.
+4. `js/mission.js` still shipped a legacy Entry/descent/recovery implementation that the Phase I `data-entry-phase-i` contract permanently bypassed.
+5. Through Orion's Windows performed an additional direct crew-geometry redraw on resize after the existing RAF-coalesced resize owner had already been installed.
+6. Mission Explorer, GNC, Mission Control, and Technical Report figures were still eager by markup despite being noncritical to first paint.
+7. Shared image fallback behavior covered the NASA-photo substitution path but did not provide a universal explicit state for a missing local figure or a failed fallback image.
+8. `mission.html`, `gnc.html`, and `mission-control.html` retained NASA image preconnect hints even though those routes do not request remote NASA image resources.
+
+Previously identified Phase E opportunities that were already solved by later phases were not redone: Mission Library focused rendering/lazy figures are protected Phase K behavior, the obsolete Technical Report `app.js` load was already removed, and shared reduced-motion behavior from Phase M remains protected.
+
+### Performance implementation
+
+#### Demand-owned celestial imagery
+
+`js/core.js` now begins Earth and Moon assets in an `idle` state. `drawEarth()` or `drawMoon()` owns the first request for the corresponding JPEG.
+
+The canvas does not wait on the asset. The existing procedural Earth/Moon renderer draws immediately, then a successfully decoded JPEG upgrades a later frame. If a JPEG fails, the procedural body remains the final rendering path.
+
+This removes the previous global eager request from non-celestial routes while preserving meaningful visual quality on routes that actually use celestial imagery.
+
+Celestial completion now emits a targeted `a2:celestialchange` event instead of synthesizing a global `resize` event. Current consumers with celestial canvases subscribe to that event and schedule only the redraw they need:
+
+- Mission Explorer
+- Trajectory Correction
+- Space Weather
+- Mission Control
+
+#### Visibility-aware animation ownership
+
+Mission Explorer now has explicit RAF ownership and a viewport visibility gate using `IntersectionObserver` with a small pre-entry margin. It pauses when:
+
+- its canvas is offscreen,
+- the document is hidden,
+- reduced motion is requested,
+- deterministic static QA mode is active.
+
+It resumes only when needed and exposes `data-a2-animation="running|paused"` for deterministic browser QA.
+
+GNC now uses the same visibility principle while preserving its meaningful control simulation. It pauses when the canvas is offscreen or the document is hidden, cancels the owned RAF, and resets its timestamp so resuming does not apply hidden/offscreen elapsed time as a large simulation step. Reduced motion does not disable the educational GNC control simulation because that progression is meaningful rather than decorative.
+
+#### Dead JavaScript removal
+
+The legacy Entry/descent/recovery implementation inside `js/mission.js` was permanently bypassed by the current Phase I route contract. Phase N removes that unreachable renderer instead of carrying it into every Mission Explorer load.
+
+`js/mission.js` changes from 27,082 bytes to 18,114 bytes, a reduction of 8,968 bytes (~33.1%). The protected current Entry implementation in `js/entry-model.js` and `js/entry.js` is unchanged.
+
+#### Resize work
+
+Through Orion's Windows keeps the existing RAF-coalesced crew-geometry resize owner and removes the second direct resize redraw. Viewer behavior, 25-image navigation, adjacent preload, lightbox, keyboard/touch navigation, and protected geometry remain unchanged.
+
+#### Image loading and decoding policy
+
+The loading policy is now explicit rather than uniformly eager:
+
+- Homepage hero: remains eager and receives `fetchpriority="high"` plus async decoding.
+- Remaining homepage imagery: lazy + async decoding.
+- Mission Explorer figures: lazy + async decoding.
+- GNC static figure: lazy + async decoding.
+- Mission Control static figure: lazy + async decoding.
+- Technical Report: all 13 engineering figures lazy + async decoding.
+- Through Orion's Windows: primary current mission image remains eager; lower-page local figure content is lazy + async while existing adjacent-image preload behavior remains protected.
+
+Unused NASA image preconnects are removed from Mission Explorer, GNC, and Mission Control.
+
+### Failure-quality implementation
+
+The shared runtime now captures image `error` events at document level, including images inserted after startup. It also checks already-completed failed images so a failure that occurs before the shared handler is installed is still converted into a meaningful state.
+
+Failure behavior is layered:
+
+1. If an image declares a local `data-fallback`, that fallback is attempted once.
+2. If the fallback fails, or if no fallback exists, the broken image is hidden.
+3. A visible `role="status"` replacement is inserted with the message: `Figure unavailable in this build. The surrounding mission context remains available.`
+
+This avoids a browser broken-image icon or unexplained blank region without fabricating replacement mission evidence.
+
+Optional Earth/Moon JPEG failure is handled differently because a scientifically bounded procedural visualization already exists. A failed celestial request moves the shared state to fallback/partial as appropriate and keeps the procedural canvas nonblank.
+
+### Phase N implementation allowlist
+
+The implementation commit changes exactly these 19 paths:
+
+1. `docs/PHASE_N_PERFORMANCE_QA.md`
+2. `gnc.html`
+3. `index.html`
+4. `js/core.js`
+5. `js/gnc.js`
+6. `js/mission-control.js`
+7. `js/mission.js`
+8. `js/space-weather.js`
+9. `js/trajectory.js`
+10. `js/windows.js`
+11. `mission-control.html`
+12. `mission.html`
+13. `scripts/validate_public_experience.py`
+14. `scripts/validation/phase_n_performance_regression.html`
+15. `scripts/validation/validate_phase_n_performance.py`
+16. `scripts/validation/validate_phase_n_regression.py`
+17. `styles.css`
+18. `technical-report.html`
+19. `windows.html`
+
+The documentation-only closure commit later changes only:
+
+- `docs/ENGINEERING_LOG.md`
+
+### Dedicated Phase N QA
+
+Added:
+
+- `docs/PHASE_N_PERFORMANCE_QA.md`
+- `scripts/validation/validate_phase_n_performance.py`
+- `scripts/validation/phase_n_performance_regression.html`
+- `scripts/validation/validate_phase_n_regression.py`
+
+The static Phase N validator locks the current performance/failure contract, including:
+
+- exact 771,072-byte optional celestial baseline,
+- idle/demand-owned Earth/Moon resources,
+- no eager global celestial image owner,
+- targeted celestial redraw event ownership,
+- reduced `js/mission.js` runtime and absence of bypassed legacy Entry code,
+- visibility-aware Mission Explorer/GNC animation ownership,
+- removal of duplicate Windows resize redraw,
+- shared explicit image failure behavior,
+- procedural celestial fallback availability,
+- route-specific lazy/async image policy,
+- homepage hero priority,
+- removal of unused NASA preconnects,
+- inclusion of Phase N artifacts in the public release validator.
+
+The dedicated browser harness runs 20 assertions per mode. It deliberately establishes route-local canvas visibility before testing animation state instead of assuming a canvas is visible at page load. It disables smooth scrolling inside the tested route, computes the canvas document-space position, scrolls the iframe window directly, and couples running/paused assertions to measured viewport geometry. It covers:
+
+- no Earth/Moon request on GNC, Mission Library, or Technical Report,
+- no visible `undefined`/`NaN` failure text on those routes,
+- exact Earth/Moon demand on Mission Explorer and Mission Control,
+- expected celestial state in normal and intentional-404 modes,
+- nonblank celestial canvases under asset failure,
+- Mission Explorer offscreen RAF pause and resume,
+- GNC visible/offscreen/resume RAF behavior,
+- explicit local technical-figure failure replacement with no broken-image icon.
+
+The Windows driver runs the same 20 assertions twice per browser: normal assets and intentional Earth/Moon 404 failure. Across Edge and Chrome, the dedicated Phase N gate therefore covers 80 assertions.
+
+### Windows gate qualification history
+
+The first Phase N delivery attempt reached the dedicated Phase N browser gate only after the complete protected stack through Phase M had passed. The new Phase N gate then failed in both Edge and Chrome, in both normal-asset and intentional-celestial-failure modes. The installer retried once, failed closed again, rolled the repository back to the immutable Phase M documentation HEAD `14e161281e733b700159c5a306e970a8de74dea3`, removed the Phase N files, and reported a clean worktree. It retained the forensic safety branch `safety/phase-n-performance-20261014-233419723`.
+
+The repeated failures were limited to the new animation-visibility assertions: Mission Explorer was reported as `running` after the harness attempted to move it offscreen, while GNC alternated between `paused` and `running` at points the harness assumed were visible/offscreen. This inconsistency exposed a harness geometry/synchronization defect rather than a protected simulation/model failure.
+
+Root cause: the original Phase N harness assumed GNC was visible immediately after loading even though the current route places the simulator below its intro and section material. It also used nested-frame scrolling patterns that were already known elsewhere in the repository to be ambiguous: `scrollIntoView()` from a nested iframe can move the outer browsing context, and the site's `scroll-behavior: smooth` can make immediate visibility-state assertions race the actual route position.
+
+The corrected harness does not weaken the requirement. It is stricter and more explicit:
+
+- it disables smooth scrolling only inside the test route,
+- computes document-space canvas coordinates,
+- scrolls the route window directly to a measured visible position before asserting `running`,
+- scrolls the route window to a measured position at least 180 px beyond the viewport before asserting `paused`,
+- resumes by directly restoring a measured visible position,
+- requires both the expected `data-a2-animation` state and matching measured geometry for each assertion,
+- avoids nested-frame `scrollIntoView()` entirely.
+
+No protected Phase F-M runtime/model contract was changed by that correction. The Phase N production runtime behavior from the first package remained intact; the v2 change was confined to the Phase N QA documentation/static contract/browser harness.
+
+The second Windows qualification attempt again passed the complete protected stack through Phase M. The dedicated Phase N driver then failed differently and more narrowly: Edge and Chrome, in both normal and intentional-celestial-failure modes, remained at `Status: RUNNING`, `Cases: 0`, `Failures: 0`. The retry reproduced the same condition. The installer therefore failed closed again, restored the immutable Phase M documentation HEAD, removed all Phase N production/QA mutations, confirmed a clean worktree, and retained the second forensic safety branch `safety/phase-n-performance-20261014-234654498`.
+
+That second failure exposed a completion-protocol defect, not a Phase N assertion failure. The multi-route iframe harness still waited on `frame.onload`, even though current public routes can intentionally contain remote NASA imagery irrelevant to the local regression and `window.load` can remain pending on those requests. The Python driver also used Chromium `--dump-dom` plus virtual-time expiry as its implicit signal that the asynchronous harness had finished. When the first route never reached the harness's `onload` continuation, Chromium could emit the still-initial `RUNNING / 0 cases` DOM before any assertion had executed.
+
+The v3 qualification harness removes both ambiguous dependencies:
+
+- route readiness is based on same-origin pathname + DOM `interactive`/`complete` readiness, not `window.load`,
+- route-position settling forces layout and uses bounded real timers rather than waiting on the RAF mechanism being tested,
+- all v2 measured visible/offscreen geometry requirements remain intact,
+- `scrollIntoView()` remains prohibited in the nested harness,
+- the browser produces a completed JSON payload only after the 20 assertions finish,
+- that payload is POSTed to a tokenized loopback endpoint owned by the Python driver,
+- the Python driver waits for that exact completion event, then terminates the isolated headless browser process tree,
+- `--dump-dom` and virtual-time expiry are no longer treated as test-completion signals,
+- absence of the completion POST is a hard timeout/failure, never a synthetic pass.
+
+No Phase F-M runtime/model/evidence contract and no Phase N production-runtime optimization was changed to address the second failure. The v3 correction is confined to Phase N QA documentation, static self-validation, the browser harness, and its Python driver.
+
+The third Windows qualification attempt proved that the v3 completion handshake worked: Edge and Chrome completed all 20 assertions in both normal and intentional-celestial-failure modes instead of hanging at `RUNNING / 0 cases`. The protected release stack again passed through Phase M. The dedicated Phase N gate then reported exactly three failures in every browser/mode combination: the intentionally missing Technical Report figure did not produce the explicit fallback node, its broken-image state was not hidden, and the readable `Figure unavailable` status was therefore absent. The retry reproduced the same 3-of-20 failure set. The installer failed closed, restored `14e161281e733b700159c5a306e970a8de74dea3`, removed the Phase N files, confirmed a clean worktree, and retained `safety/phase-n-performance-20261015-000911198`.
+
+That third failure exposed a lazy-loading test-order defect, not a shared image-failure runtime defect. Phase N deliberately marks Technical Report figures `loading="lazy"`. The harness replaced the `src` of `#fig-oem-events` while that figure was still far offscreen, then waited for an image `error` event. Chromium is allowed to defer an offscreen lazy image request, so there was no failed resource request and therefore no `error` event for `js/core.js` to handle.
+
+The v4 qualification harness preserves the production lazy-loading policy and tests the user-visible failure path instead of bypassing it:
+
+- load the Technical Report to DOM readiness,
+- position `#fig-oem-events` into the route viewport with the same measured route-local geometry helper already used for RAF assertions,
+- only then swap the visible figure to the intentionally missing local resource,
+- wait for the existing shared capture-phase image-error handler to hide the image and append the readable failure state,
+- preserve the exact 20-case count and all prior normal/celestial-failure requirements.
+
+No Phase N production runtime changed for v4. The correction is confined to Phase N QA documentation, the static self-validation contract, and the browser harness. The tokenized Python completion driver from v3 remains unchanged.
+
+### Protected validation
+
+Package-construction validation against the exact reconstructed handoff tree passed the gates that are truthfully executable in the build sandbox:
+
+- JavaScript syntax for all changed route runtimes
+- Python syntax for new/changed Phase N validators
+- `git diff --check`
+- public experience validation
+- public text/markup integrity validation
+- Phase K publication/knowledge-system static contract
+- Phase L typography/visual-quality static contract
+- Phase M accessibility/responsive static contract
+- Phase N performance/loading/failure static contract
+- Trajectory Correction pure-model/evidence regression
+- PSI pure-model/evidence regression
+- Space Weather pure-model/evidence regression
+- Entry pure-model/evidence regression
+- celestial asset/provenance validation
+
+The package-build reconstruction intentionally does not contain the repository's gitignored `data/processed/...` products required by the historical full analytical suite, so those file-dependent analytical validators are not falsely reported as rerun there.
+
+The package-build environment also cannot truthfully execute the required Windows Edge + Chrome headless matrix. Local Chromium cannot establish the loopback HTTP navigation required by these repository browser harnesses in the package-build sandbox, including a trivial immediate-POST page. This is recorded as an environment limitation, not converted into a product pass.
+
+### Deterministic Windows release gate
+
+Before this engineering-log section can be appended, the installer must run against the user's real repository and pass all of the following:
+
+- exact repository path / branch / HEAD / parent / tree checks,
+- clean worktree,
+- protected `origin/main` verification after fetch/prune,
+- proof that `origin/phase-10-quality-recovery` remains unpublished,
+- timestamped Phase N safety branch creation,
+- patch ZIP SHA-256, exact path allowlist, and per-file SHA-256 verification,
+- protected static/model/evidence suite,
+- full Entry and Space Weather analytical/evidence validators against the real processed-data products,
+- final release validator,
+- all protected Chrome/Edge route browser regressions from prior phases,
+- the existing responsive browser QA,
+- Phase K browser regression,
+- Phase L browser regression,
+- the protected Phase M 12-viewport × 8-route × 2-browser matrix (192 cases),
+- Phase N browser regression in Edge and Chrome, normal + intentional celestial 404 mode (80 assertions total),
+- exact staged implementation tree verification,
+- a second Phase N-critical staged-candidate validation pass,
+- exact deterministic implementation commit verification,
+- documentation-only log append and deterministic documentation commit verification,
+- exact final HEAD / parent / tree verification,
+- clean worktree.
+
+Any failure before completion causes the installer to roll production mutation back to the immutable Phase M documentation starting commit while retaining the safety branch for forensics. No push, merge, deployment, release, or remote publication is performed.
+
+### Responsive and mobile boundary
+
+Phase N does not redesign the responsive system or weaken Phase M. The full Phase M matrix remains mandatory in the installer, including the shared >=44 px interaction floor and Mission Control's protected >=64 px target floor.
+
+The performance changes are intentionally compatible with phone/tablet behavior:
+
+- image lazy loading reduces initial noncritical transfer/decoding pressure,
+- offscreen RAF suspension avoids spending frame time on invisible canvases,
+- RAF resume resets elapsed time where necessary instead of catching up hidden time,
+- existing canvas sizing and route-specific responsive geometry remain untouched.
+
+Physical iPhone Safari, Android Chrome, tablet hardware, and desktop Safari are not claimed unless actually run; they remain manual release-candidate targets.
+
+### Performance result
+
+Measured current-tree effects include:
+
+- Optional celestial JPEG payload: 771,072 bytes, no longer requested merely because `js/core.js` is present.
+- `js/mission.js`: 27,082 -> 18,114 bytes (`-8,968 bytes`, about `-33.1%`).
+- Non-celestial GNC, Mission Library, and Technical Report are explicitly guarded in browser QA against celestial JPEG requests.
+- Mission Explorer and GNC no longer own continuous RAF work while offscreen/hidden.
+- Windows no longer performs the duplicate direct crew-geometry resize redraw.
+- Below-fold/static figure decode ownership is deferred without lowering the priority of the homepage hero or the current Windows mission image.
+
+Phase N does not introduce a bundler, rewrite historical CSS/JS wholesale, or remove high-value imagery simply to improve a synthetic score.
+
+### Evidence and product boundaries
+
+Phase N does **not** change:
+
+- mission chronology or public evidence,
+- evidence taxonomy or provenance wording,
+- Trajectory Correction model behavior,
+- PSI model behavior,
+- Space Weather model/evidence behavior,
+- Phase I Entry model/evidence behavior,
+- GNC deterministic AUTO/MANUAL model, disturbance behavior, or control semantics,
+- Mission Control scenarios, lenses, decision behavior, or mission evidence,
+- Through Orion's Windows 25-image content/navigation/lightbox contract,
+- Mission Library focused rendering/content model,
+- Technical Report engineering substance/print contract,
+- Phase L typography hierarchy,
+- Phase M accessibility/responsive semantics.
+
+Canonical evidence classes remain unchanged:
+
+- NASA REPORTED
+- MISSIONLAB DERIVED
+- MODELED
+- INFERRED
+- UNKNOWN / NOT PUBLIC
+
+### Deterministic implementation identity
+
+- Implementation subject: `Harden performance and failure states`
+- Implementation parent: `14e161281e733b700159c5a306e970a8de74dea3`
+- Implementation tree: `ab1f9e6b5e50f60226a257dd880cb0785aa3a1c5`
+- Implementation commit: `133d7f067a3f49875aa533d40c0f268414387fa2`
+
+The implementation commit is preserved immutably beneath the documentation-only Phase N closure commit.
+
+### Safety / delivery
+
+The corrected Phase N v4 delivery is a deterministic patch ZIP plus PowerShell installer. All three prior qualification attempts left the real branch clean at the immutable Phase M start and retained their safety branches; v4 starts from that exact rollback state. The installer:
+
+- refuses to operate from any repository state other than the exact completed Phase M handoff,
+- validates the patch before repository mutation,
+- changes only the 19 approved implementation paths,
+- fails closed on missing browsers, missing processed evidence products, validation failures, path drift, payload drift, staged-tree drift, or commit drift,
+- creates a timestamped `safety/phase-n-performance-*` branch before mutation,
+- commits locally only after the complete release gate passes,
+- appends this log only after the implementation commit is verified,
+- creates a separate deterministic documentation-only commit,
+- verifies a clean final worktree,
+- performs no push.
+
+### Phase N closure
+
+Phase N closes the performance and failure-quality work defined by the master prompt without reopening completed phases. The current application now avoids a major globally eager optional image payload, stops two important offscreen animation loops, removes obsolete shipped Entry code, reduces duplicate resize work, applies clearer image loading ownership, and turns missing imagery into explicit bounded fallback behavior.
+
+The next planned master-prompt phase is **Phase O — Metadata / Social / README**: deliberate per-route metadata/social presentation plus a hiring-quality repository README, while preserving the completed Phase N runtime/evidence baseline.
