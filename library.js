@@ -391,31 +391,118 @@ const extras = {
   'psi':{timeline:'No Artemis II flown-event timeline exists for plume–surface interaction because Artemis II did not land. This is explicitly future Artemis campaign context.',inputs:'Future lander engine/nozzle conditions, geometry, ambient regime, regolith properties and particle-size distribution would be required.',outputs:'A validated solution would need coupled plume flow, surface erosion/entrainment, ejecta transport, sensor/hardware impact, and test correlation.',caption:'Campaign context only: Artemis II did not land. NASA currently targets Artemis IV in early 2028 for the first Artemis lunar landing; continuum CFD, DSMC, and granular/particle methods would address different parts of PSI.'}
 };
 
-const sourceCatalogUrl='https://github.com/Prakhar2828/a2-missionlab/blob/public-experience-v3/data/sources/source_catalog.json';
+const repositoryBaseline='c7758aa415928467da0ebb6e48c276c1082be566';
+const sourceCatalogUrl=`https://github.com/Prakhar2828/a2-missionlab/blob/${repositoryBaseline}/data/sources/source_catalog.json`;
 const nasaMissionUrl='https://www.nasa.gov/artemis-ii-multimedia/';
+
+const categoryById = {
+  'mission-overview':'Mission Operations','flight-dynamics':'Flight Dynamics','lunar-flyby':'Flight Dynamics','communications':'Mission Operations',
+  'gnc':'Vehicle & GNC','manual-piloting':'Vehicle & GNC','propulsion':'Vehicle & GNC','maneuvers':'Flight Dynamics',
+  'entry-dynamics':'Entry & Recovery','atmospheric-modeling':'Entry & Recovery','convective-heating':'Entry & Recovery','thermal-protection':'Entry & Recovery','parachutes-recovery':'Entry & Recovery',
+  'eclss':'Vehicle & GNC','space-weather':'Environment & Radiation','radiation':'Environment & Radiation',
+  'lunar-science':'Lunar Science','human-observation':'Lunar Science','impact-flashes':'Lunar Science',
+  'mission-control':'Mission Operations','decision-reconstruction':'Mission Operations',
+  'data-engineering':'Data & Software','data-science':'Data & Software','anomaly-detection':'Data & Software','software-architecture':'Data & Software',
+  'uncertainty':'Evidence & Methods','evidence-methodology':'Evidence & Methods','psi':'Future Artemis'
+};
+
+const questionById = {
+  'mission-overview':'How do the major Artemis II systems and mission phases connect on one operational timeline?',
+  'flight-dynamics':'How can public trajectory products reconstruct Orion’s motion without pretending they are onboard navigation telemetry?',
+  'lunar-flyby':'What can public trajectory and ephemeris data establish about Orion’s lunar flyby geometry?',
+  'communications':'How do lunar geometry, ground-station visibility, and expected blackout shape communications availability?',
+  'gnc':'How do guidance, navigation, and control turn desired spacecraft state into verified motion?',
+  'manual-piloting':'What did Orion manual-control demonstrations exercise, and what can public evidence actually establish about them?',
+  'propulsion':'What propulsion capability did Orion’s European Service Module provide, and where does public evidence stop?',
+  'maneuvers':'Why can small trajectory-correction maneuvers matter so much later in the mission?',
+  'entry-dynamics':'How does Orion transition from deep-space return to atmospheric entry, parachutes, splashdown, and recovery?',
+  'atmospheric-modeling':'How are density, Mach, dynamic pressure, and rarefaction reconstructed along entry?',
+  'convective-heating':'How can Sutton–Graves estimate entry heating without claiming measured heat-shield telemetry?',
+  'thermal-protection':'What can public materials evidence and modeled heating say about Orion’s thermal-protection problem?',
+  'parachutes-recovery':'How do public event anchors connect parachute deployment, splashdown, crew recovery, and spacecraft recovery?',
+  'eclss':'How can public environmental and waste-management evidence be analyzed without overstating spacecraft fault knowledge?',
+  'space-weather':'Why does a crewed lunar mission care about energetic-particle and solar-weather conditions?',
+  'radiation':'What can public radiation models and mission geometry say about environment without becoming crew dosimetry?',
+  'lunar-science':'How can crew imagery, audio, geometry, and later science products be reconstructed as one lunar-observation record?',
+  'human-observation':'How does a human observation become a technically useful data product rather than just a photograph or quote?',
+  'impact-flashes':'How are possible lunar impact-flash observations reconciled with timing, imagery, and science-team evidence?',
+  'mission-control':'How do different Mission Control disciplines reason about the same mission state from different priorities?',
+  'decision-reconstruction':'How can public evidence reconstruct operational decision logic without inventing private flight-controller conversations?',
+  'data-engineering':'What data architecture makes a multi-domain public mission reconstruction auditable and reproducible?',
+  'data-science':'How can robust time-series methods identify meaningful changes without turning statistics into fault claims?',
+  'anomaly-detection':'What does anomaly detection legitimately tell us about spacecraft data, and what does it not tell us?',
+  'software-architecture':'How does MissionLab keep analysis deterministic, testable, static, and zero-cost?',
+  'uncertainty':'How should numerical uncertainty and evidence uncertainty be represented when the public record has mixed precision?',
+  'evidence-methodology':'How does MissionLab keep reported facts, derived results, models, inferences, and unknowns from collapsing together?',
+  'psi':'What would a defensible plume–surface interaction analysis require for a future Artemis lunar landing?'
+};
+
+const categoryOrder=['All','Flight Dynamics','Vehicle & GNC','Mission Operations','Entry & Recovery','Environment & Radiation','Lunar Science','Data & Software','Evidence & Methods','Future Artemis'];
 
 const index = document.querySelector('#library-index');
 const content = document.querySelector('#library-content');
 const search = document.querySelector('#library-search');
+const categories = document.querySelector('#library-categories');
+const resultCount = document.querySelector('#library-result-count');
 const menu = document.querySelector('.menu-btn');
 const nav = document.querySelector('#nav-links');
+let activeCategory='All';
+
 if(menu&&nav) menu.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')==='true';menu.setAttribute('aria-expanded',String(!open));nav.classList.toggle('open',!open)});
 
 const evidenceLegend = `<span class="evidence-pill"><i class="dot reported"></i>reported</span><span class="evidence-pill"><i class="dot"></i>derived</span><span class="evidence-pill"><i class="dot model"></i>modeled</span><span class="evidence-pill"><i class="dot unknown"></i>unknown preserved</span>`;
+const searchText=t=>[t.title,t.domain,questionById[t.id],t.intro,t.relevance,t.method,t.interpret,t.ops,t.limits,t.skills.join(' ')].join(' ').toLowerCase();
+const topicCategory=t=>categoryById[t.id]||'Evidence & Methods';
+
+function relatedTopics(t){
+ const same=topics.filter(other=>other.id!==t.id&&topicCategory(other)===topicCategory(t));
+ if(same.length>=3)return same.slice(0,3);
+ return same.concat(topics.filter(other=>other.id!==t.id&&!same.includes(other)&&other.domain.split('/')[0].trim()===t.domain.split('/')[0].trim())).slice(0,3);
+}
+
 function article(t){
  const x=extras[t.id]||{};
- const visual=x.figure?`<figure class="tech-figure deep-visual"><img src="${x.figure}" alt="${t.title} MissionLab engineering figure"><figcaption><span class="caption-title">Primary MissionLab figure</span>${x.caption||''}</figcaption></figure>`:(x.caption?`<div class="note warning"><strong>Visualization boundary.</strong> ${x.caption}</div>`:'');
+ const category=topicCategory(t);
+ const question=questionById[t.id]||`What does ${t.title.toLowerCase()} tell us about Artemis II?`;
+ const visual=x.figure?`<figure class="tech-figure deep-visual"><img src="${x.figure}" alt="${t.title} MissionLab engineering figure" loading="lazy"><figcaption><span class="caption-title">Primary MissionLab figure</span>${x.caption||''}</figcaption></figure>`:(x.caption?`<div class="note warning"><strong>Visualization boundary.</strong> ${x.caption}</div>`:'');
  const equation=x.equation?`<div class="equation">${x.equation}</div>`:'';
- return `<article class="deep-dive" id="${t.id}" data-search="${[t.title,t.domain,t.intro,t.relevance,t.method,t.skills.join(' ')].join(' ').toLowerCase()}"><div class="article-grid"><div class="article-main"><div class="kicker">${t.domain}</div><h2>${t.title}</h2><div class="meta">${evidenceLegend}</div><p class="lead">${t.intro}</p><h3>Why it mattered to Artemis II</h3><p>${t.relevance}</p><h3>Mission timeline / context</h3><p>${x.timeline||'This topic is correlated to the shared MissionLab mission clock; public source precision is preserved rather than silently upgraded.'}</p><h3>System, physics, or analytical method</h3><p>${t.method}</p>${equation}${visual}<h3>Inputs & outputs</h3><div class="io-grid"><div><b>Inputs</b><p>${x.inputs||'Public source records and the validated MissionLab reference artifacts linked at right.'}</p></div><div><b>Outputs</b><p>${x.outputs||'Evidence-aware derived/reference artifacts and explanatory products linked at right.'}</p></div></div><h3>How to interpret the result</h3><p>${t.interpret}</p><h3>Mission Control relevance</h3><p>${t.ops}</p><h3>Assumptions, uncertainty, and limitations</h3><p>${t.limits}</p><h3>Provenance & reproducibility</h3><p>Repository artifacts at right are the auditable implementation trail. The <a class="artifact-link" href="${sourceCatalogUrl}">source catalog</a> records public-source provenance; the <a class="artifact-link" href="${nasaMissionUrl}">NASA Artemis II multimedia collection</a> provides mission context. MissionLab-derived and model-derived quantities remain labeled separately from authority-reported facts.</p><div class="note"><strong>What this demonstrates technically.</strong> ${t.skills.join(' · ')}</div></div><aside class="article-aside"><h4>Repository evidence</h4><ul>${t.artifacts.map(a=>{const dir=a.endsWith('/');const clean=dir?a.slice(0,-1):a;const kind=dir?'tree':'blob';return `<li><a class="artifact-link" href="https://github.com/Prakhar2828/a2-missionlab/${kind}/public-experience-v3/${clean}">${a}</a></li>`}).join('')}</ul><h4>Capabilities</h4><ul>${t.skills.map(s=>`<li>${s}</li>`).join('')}</ul><a class="btn" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false">Back to library index</a></aside></div></article>`;
+ const artifacts=t.artifacts.map(a=>{const dir=a.endsWith('/');const clean=dir?a.slice(0,-1):a;const kind=dir?'tree':'blob';return `<li><a class="artifact-link" href="https://github.com/Prakhar2828/a2-missionlab/${kind}/${repositoryBaseline}/${clean}">${a}</a></li>`}).join('');
+ const related=relatedTopics(t).map(other=>`<a href="#${other.id}">${questionById[other.id]||other.title}</a>`).join('');
+ return `<article class="deep-dive" id="${t.id}" data-category="${category}"><div class="library-back"><a href="#library-results">← Back to library results</a></div><div class="article-grid"><div class="article-main"><span class="library-article-category">${category}</span><div class="kicker">${t.domain}</div><h2>${t.title}</h2><div class="knowledge-path" aria-label="Knowledge path"><span>Question</span><span>Explanation</span><span>Evidence</span><span>Source</span></div><p class="library-question"><b>Question</b>${question}</p><div class="meta">${evidenceLegend}</div><h3>Explanation</h3><p class="lead">${t.intro}</p><h3>Why it mattered to Artemis II</h3><p>${t.relevance}</p><h3>Mission timeline / context</h3><p>${x.timeline||'This topic is correlated to the shared MissionLab mission clock; public source precision is preserved rather than silently upgraded.'}</p><h3>System, physics, or analytical method</h3><p>${t.method}</p>${equation}${visual}<h3>Inputs & outputs</h3><div class="io-grid"><div><b>Inputs</b><p>${x.inputs||'Public source records and the validated MissionLab reference artifacts linked at right.'}</p></div><div><b>Outputs</b><p>${x.outputs||'Evidence-aware derived/reference artifacts and explanatory products linked at right.'}</p></div></div><h3>Evidence and interpretation</h3><p>${t.interpret}</p><h3>Mission Control relevance</h3><p>${t.ops}</p><h3>Assumptions, uncertainty, and limitations</h3><p>${t.limits}</p><div class="library-source-block"><h3>Source and reproducibility</h3><p>Repository artifacts at right are the auditable implementation trail. The <a class="artifact-link" href="${sourceCatalogUrl}">source catalog</a> records public-source provenance; the <a class="artifact-link" href="${nasaMissionUrl}">NASA Artemis II multimedia collection</a> provides mission context. MissionLab-derived and modeled quantities remain separate from authority-reported facts.</p><div class="note"><strong>What this demonstrates technically.</strong> ${t.skills.join(' · ')}</div></div></div><aside class="article-aside"><h4>Repository evidence</h4><ul>${artifacts}</ul><h4>Capabilities</h4><ul>${t.skills.map(s=>`<li>${s}</li>`).join('')}</ul><h4>Related questions</h4><div class="related-topics">${related||'<span>No adjacent topic in this category.</span>'}</div><a class="btn" href="technical-report.html">Open Technical Report</a></aside></div></article>`;
 }
-function render(){
+
+function renderCategories(){
+ if(!categories)return;
+ categories.innerHTML=categoryOrder.map(category=>`<button class="library-filter${category===activeCategory?' active':''}" type="button" data-category="${category}" aria-pressed="${category===activeCategory}">${category}</button>`).join('');
+ categories.querySelectorAll('.library-filter').forEach(button=>button.addEventListener('click',()=>{activeCategory=button.dataset.category||'All';renderBrowse();}));
+}
+
+function filteredTopics(){
  const q=(search?.value||'').trim().toLowerCase();
- const shown=topics.filter(t=>!q || [t.title,t.domain,t.intro,t.relevance,t.method,t.skills.join(' ')].join(' ').toLowerCase().includes(q));
- index.innerHTML=shown.map(t=>`<a href="#${t.id}">${t.title}</a>`).join('');
- content.innerHTML=shown.map(article).join('');
- if(q && !shown.length) content.innerHTML='<div class="deep-dive"><h2>No matching deep dive</h2><p>Try a broader engineering term such as “entry”, “GNC”, “communications”, “science”, or “data”.</p></div>';
+ return topics.filter(t=>(activeCategory==='All'||topicCategory(t)===activeCategory)&&(!q||searchText(t).includes(q)));
 }
-search?.addEventListener('input',render); render();
-function openHash(){const id=location.hash.slice(1);if(!id)return;const el=document.getElementById(id);if(el)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),50)}
-window.addEventListener('hashchange',openHash);openHash();
+
+function renderBrowse(){
+ renderCategories();
+ const shown=filteredTopics();
+ if(resultCount)resultCount.textContent=`${shown.length} of ${topics.length} deep dives`;
+ if(index){
+  index.innerHTML=shown.map(t=>`<a class="library-result-card" href="#${t.id}" data-topic="${t.id}"><span class="result-category">${topicCategory(t)}</span><strong>${t.title}</strong><p>${questionById[t.id]||t.intro}</p></a>`).join('');
+  if(!shown.length)index.innerHTML='<div class="library-empty"><strong>No matching engineering question.</strong><p>Try a broader term or choose “All” to clear the category filter.</p></div>';
+ }
+ renderSelected();
+}
+
+function renderSelected(){
+ if(!content)return;
+ const id=location.hash.slice(1);
+ const selected=topics.find(t=>t.id===id);
+ if(selected){content.innerHTML=article(selected);return;}
+ content.innerHTML='<div class="library-reader-intro"><strong>Select an engineering question above.</strong><p>The Library now opens one focused deep dive at a time so the path from question to explanation, evidence, and source remains clear.</p></div>';
+}
+
+search?.addEventListener('input',renderBrowse);
+window.addEventListener('hashchange',()=>{renderSelected();const selected=topics.find(t=>t.id===location.hash.slice(1));if(selected){setTimeout(()=>document.getElementById(selected.id)?.scrollIntoView({behavior:'smooth',block:'start'}),20);}});
+renderBrowse();
+if(topics.find(t=>t.id===location.hash.slice(1)))setTimeout(()=>document.getElementById(location.hash.slice(1))?.scrollIntoView({behavior:'auto',block:'start'}),0);
 })();
