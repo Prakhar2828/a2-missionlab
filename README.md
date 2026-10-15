@@ -138,8 +138,10 @@ A feature is not considered complete because it renders once. The release stack 
 - accessibility and responsive browser matrix
 - performance, loading, and intentional-failure browser regression
 - Phase O metadata/social/README presentation validation
+- Phase P fail-closed release-candidate orchestration across the protected browser stack
+- Phase Q adversarial executive review and repository-state consistency validation
 
-Phase N qualification passed its dedicated Chrome/Edge normal-assets and intentional-failure matrix **80/80**, while preserving the Phase M **192-case** responsive/accessibility matrix. Physical iPhone Safari, Android Chrome, tablet hardware, and desktop Safari remain manual release-candidate targets unless explicitly run and recorded.
+Phase P qualification passed the exhaustive protected Windows Edge + Chrome release-candidate gate, including the Phase N **80/80** normal-assets/intentional-failure matrix and the Phase M **192-case** responsive/accessibility matrix. Phase Q adds the final adversarial review and repository/presentation truth pass without weakening those gates. Physical iPhone Safari, Android Chrome, tablet hardware, desktop Safari, and real screen-reader sessions remain unclaimed unless explicitly run and recorded.
 
 See [Validation Report](docs/VALIDATION_REPORT.md) and the phase-specific QA records under `docs/`.
 
@@ -218,12 +220,13 @@ The current public site is static and client-side. GitHub Pages deployment is in
 
 ## Project status
 
-**Phases 0 through 9 are complete** relative to defensible public evidence and the validated publication scope. The current quality-recovery branch has additionally completed protected experience recovery/polish through Phase N, with Phase O dedicated to README, GitHub presentation, social metadata, and demo media.
+**Phases 0 through 9 are complete** relative to defensible public evidence and the validated publication scope. The local quality-recovery branch has additionally completed the master-prompt recovery/qualification sequence through **Phase Q**: protected experience recovery and redesign, publication and typography, accessibility/mobile hardening, performance/failure-state hardening, repository/social presentation, full release-candidate QA, and final adversarial executive review. The recovery branch remains unpublished until an explicit user-directed push.
 
 ## Documentation
 
 - [Technical methodology](docs/METHODOLOGY.md)
 - [Validation report](docs/VALIDATION_REPORT.md)
+- [Phase Q adversarial review](docs/PHASE_Q_ADVERSARIAL_REVIEW.md)
 - [Provenance standard](docs/PROVENANCE.md)
 - [Mission Analyst guide](docs/ANALYST_GUIDE.md)
 - [Publication summary](docs/PUBLICATION_SUMMARY.md)

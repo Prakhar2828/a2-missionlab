@@ -35,6 +35,9 @@ jobs:
       - name: Validate Phase P release-candidate controls
         run: python scripts/validation/validate_phase_p_release_candidate.py
 
+      - name: Validate Phase Q adversarial review and final polish
+        run: python scripts/validation/validate_phase_q_adversarial_review.py
+
       - name: Validate Phase 9A publication pack
         run: python scripts/validation/validate_publication_pack.py
 

@@ -1,56 +1,57 @@
-A2 MissionLab final public experience polish overlay
-====================================================
+A2 MissionLab integrated release manifest
+========================================
 
-Core frontend
+This compatibility filename is retained from the earlier public-experience packaging workflow. It now describes the integrated repository release surfaces rather than an overlay archive.
+
+Primary public routes
 - index.html
-- styles.css
-- app.js
+- mission.html
+- windows.html
+- gnc.html
+- mission-control.html
+- psi.html
 - library.html
-- library.js
 - technical-report.html
-- favicon.svg
-- favicon.ico
 
-Public experience assets
-- assets/public/IMAGE_SOURCES.md
+Core presentation/runtime
+- styles.css
+- landing.css
+- responsive-hardening.css
+- typography.css
+- route-specific CSS
+- app.js
+- js/*.js route/model runtimes
+- library.js
+
+Evidence and publication
+- data/reference/* curated mission evidence products
+- data/sources/source_catalog.json
 - assets/public/AUTHORITATIVE_SOURCE_AUDIT.md
+- assets/public/IMAGE_SOURCES.md
 - assets/public/FIGURE_AUDIT.md
-- assets/public/fallback-mission.svg
-- assets/public/figures/navigation-state-products.svg
-- assets/public/figures/esm-propulsion-architecture.svg
-- assets/public/figures/trajectory-correction-plan-execution.svg
-- assets/public/figures/entry-recovery-sequence.svg
-- assets/public/figures/gnc-proximity-loop.svg
+- docs/METHODOLOGY.md
+- docs/PROVENANCE.md
+- docs/VALIDATION_REPORT.md
+- docs/ANALYST_GUIDE.md
+- docs/PUBLICATION_SUMMARY.md
+- docs/PHASE_Q_ADVERSARIAL_REVIEW.md
 
-Validation and release documentation
+Release qualification
 - scripts/validate_public_experience.py
-- scripts/run_public_experience.ps1
-- PUBLIC_EXPERIENCE_FINAL_README.md
-- FINAL_POLISH_RELEASE_NOTES.md
-- PATCH_MANIFEST.txt
-- SHA256SUMS.txt
-- validation/public-experience-final-polish/BROWSER_VALIDATION_REPORT.md
-- validation/public-experience-final-polish/browser-validation.json
+- scripts/validation/validate_text_integrity.py
+- scripts/validation/validate_phase_k_publication.py
+- scripts/validation/validate_phase_l_typography.py
+- scripts/validation/validate_phase_m_accessibility.py
+- scripts/validation/validate_phase_n_performance.py
+- scripts/validation/validate_phase_o_presentation.py
+- scripts/validation/validate_phase_p_release_candidate.py
+- scripts/validation/validate_phase_p_regression.py
+- scripts/validation/validate_phase_q_adversarial_review.py
 
-Publish-readiness hotfix highlights
-- Mission Control blackout-card / canvas-label overlap removed
-- gallery provenance and 01 / 25 counter separated
-- site-wide small typography enlarged for readability
-- small canvas annotations enlarged
+Current qualification model
+- portable CI: static/evidence gates + mandatory Phase P Chromium browser gate
+- local Windows release: complete protected Edge + Chrome Phase P release orchestration
+- Phase Q: final adversarial review, repository-state consistency, and full requalification
+- manual-only unless separately recorded: physical iPhone Safari, Android Chrome, tablet hardware, desktop Safari, real screen reader
 
-Final-polish implementation highlights
-- 25-moment NASA Artemis II gallery with in-image arrows / keyboard navigation
-- removed distracting internal Orion-window bars
-- GNC AUTO / MANUAL modes and disturbance recovery
-- rebuilt GNC / navigation public diagrams
-- Mission Control role onboarding and nomenclature boundaries
-- trajectory-correction HUD / burn feedback
-- plain-language Space Weather outputs
-- independent PSI cant / spread controls and explanations
-
-Repository dependencies intentionally NOT duplicated
-- validated Phase 0–9 data/reference files
-- existing analysis / ingestion / processing scripts
-- existing docs/assets quantitative engineering figures
-
-The overlay is intended to be extracted over the existing repository root and does not delete unrelated files.
+No push, merge, release publication, or Pages deployment is performed automatically.

@@ -1,6 +1,6 @@
-# A2 MissionLab — final-polish image source ledger
+# A2 MissionLab — image source and provenance ledger
 
-Public photography in **Through Orion’s Windows** is loaded from NASA’s Images asset service using the NASA asset IDs below. The overlay does not bundle NASA photography. If a network image is unavailable, `assets/public/fallback-mission.svg` appears only as an offline/network-failure fallback and is never represented as flight photography.
+Public photography in **Through Orion’s Windows** is loaded from NASA’s Images asset service using the NASA asset IDs below. The repository does not bundle the remote NASA flight photography used by the viewer. If a network image is unavailable, `assets/public/fallback-mission.svg` appears only as an offline/network-failure fallback and is never represented as flight photography.
 
 **Evidence rule:** a photograph is labeled as an exact event image only when NASA metadata/reporting supports that connection. MissionLab-derived geometry is kept separate from image provenance; same-phase/context images are explicitly identified as such.
 
@@ -42,12 +42,12 @@ Public photography in **Through Orion’s Windows** is loaded from NASA’s Imag
 - Artemis II image/video mission recap: https://www.nasa.gov/general/artemis-ii-mission-milestones-an-image-and-video-recap/
 - NASA Images detail page for the Artemis science-console image: https://images.nasa.gov/details/jsc2026e020490
 
-## Final-polish gallery behavior
+## Gallery behavior
 
 - 25 moments are available through visible previous/next controls placed directly on the image, the lower timeline controls, the scrubber, thumbnails, and left/right keyboard navigation while the gallery is in view.
 - The decorative interior cross-window bars from the previous public build were removed. The subtle outer Orion-window framing remains.
 - Each moment exposes mission time/phase context, viewing geometry, evidence type, provenance, and why the observation mattered.
-- Remote NASA image delivery is intentionally kept separate from the overlay’s local MissionLab diagrams and fallback art.
+- Remote NASA image delivery is intentionally kept separate from the repository-local MissionLab diagrams and fallback art.
 
 ## Phase H celestial rendering assets
 
@@ -56,7 +56,7 @@ fidelity of schematic MissionLab canvas scenes. They are not asserted to be
 timestamp-specific Artemis II observations, exact spacecraft camera geometry,
 private telemetry, or exact illumination/orientation states.
 
-### Earth ? NASA/JPL PIA18033
+### Earth — NASA/JPL PIA18033
 
 - Local asset: `assets/public/celestial/earth_pia18033.jpg`
 - NASA identifier: PIA18033
@@ -66,7 +66,7 @@ private telemetry, or exact illumination/orientation states.
 - Source imagery: VIIRS aboard Suomi NPP
 - MissionLab use: visual Earth disk material inside educational canvas scenes
 
-### Moon ? NASA SVS Moon Mosaic 5001
+### Moon — NASA SVS Moon Mosaic 5001
 
 - Local asset: `assets/public/celestial/moon_lro_mosaic.jpg`
 - NASA SVS identifier: 5001

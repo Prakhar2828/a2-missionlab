@@ -32,7 +32,21 @@ Completion means complete relative to defensible public evidence.
 | 6 | Lunar science | Complete |
 | 7 | Mission Control perspectives | Complete |
 | 8 | Evidence-Grounded Mission Analyst | Complete |
-| 9 | Publication quality | In progress |
+| 9 | Publication quality | Complete |
+
+## Quality-recovery qualification
+
+The post-publication quality-recovery sequence is locally qualified through **Phase Q** on `phase-10-quality-recovery`.
+
+- Phase K: Technical Report + Mission Library publication hardening
+- Phase L: typography + visual-quality contract
+- Phase M: accessibility + responsive hardening, including the 192-case Edge/Chrome matrix
+- Phase N: performance, loading, and intentional-failure hardening, including the 80/80 normal/failure browser matrix
+- Phase O: README, route metadata, social preview, and repository presentation
+- Phase P: fail-closed full release-candidate orchestration; exhaustive Windows Edge + Chrome release gate passed
+- Phase Q: separate adversarial reviews, honest route/component scoring, final repository-state polish, and complete requalification before local closure
+
+This report does not claim physical iPhone Safari, Android Chrome, tablet hardware, desktop Safari, real screen-reader review, or unpublished remote CI execution. Those remain explicit evidence boundaries unless separately run and recorded.
 
 ## Major validation boundaries
 

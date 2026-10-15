@@ -1,4 +1,4 @@
-# A2 MissionLab — final public figure audit
+# A2 MissionLab — public figure audit
 
 The final public layer preserves validated Phase 0–9 engineering artifacts and changes presentation, not the underlying evidence.
 
@@ -16,4 +16,4 @@ Every redesigned SVG was rendered at publication scale for a final visual inspec
 
 The final rendered set contains no intentionally retained white-background architecture diagram. Quantitative scientific plots that answer real engineering questions remain available in the Technical Report or Mission Library, including heating, atmosphere/Mach/dynamic pressure, ECLSS, communications geometry, and lunar-science reconstruction.
 
-No validated repository artifact is deleted by this overlay.
+The audited figures remain repository-tracked publication assets and preserve the underlying validated evidence products.
