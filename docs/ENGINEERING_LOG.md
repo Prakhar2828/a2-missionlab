@@ -63213,3 +63213,296 @@ The project remains:
 - unpublished on the recovery branch
 
 **NO PUSH WAS PERFORMED.**
+
+## Phase M — Accessibility + Mobile / Responsive Hardening
+
+**Status:** COMPLETE — release documentation is appended only after the deterministic Windows installer passes the full Phase M release gate.
+
+### Objective
+
+Treat mobile as a first-class A2 MissionLab product surface and close real accessibility/responsive gaps without redesigning protected mission experiences, weakening evidence discipline, changing simulation/state models, or compressing the desktop product into a generic mobile shell.
+
+Phase M specifically hardens:
+
+- semantic interaction behavior
+- keyboard navigation and Escape handling
+- focus return and visible focus
+- screen-reader selected/current/value state
+- canvas alternatives
+- reduced-motion behavior for nonessential autonomous canvas animation
+- mobile navigation ownership
+- touch-target and safe-area contracts
+- expanded responsive release coverage across the required viewport matrix
+
+### Immutable starting state
+
+- Repository: `C:\Users\prakh\Documents\a2-missionlab`
+- Branch: `phase-10-quality-recovery`
+- Starting HEAD: `e711db684adda507efd973fc6f090fdc50baa841`
+- Starting parent: `7a73b538d6aa3dfa7c8bd24dc08a9b33c0876b46`
+- Starting tree: `68184cad8052ce1f3decf633c744e8243ae91196`
+- Protected `origin/main`: `d74a88d20f6ff1bd8be2ff0dbe3fb2b44cc13187`
+- Recovery branch remains local-only / unpublished
+
+Phase M starts exactly from the completed Phase L documentation HEAD. Completed Phase F/G/H/I/J/K/L implementation history is not rewritten, squashed, amended, or redone.
+
+### Repository-first audit findings
+
+The current Phase L product already contained substantial responsive hardening, including:
+
+- shared phone/tablet breakpoints
+- safe-area inset handling
+- a shared `>=44 px` mobile control-height floor
+- Mission Control's protected `>=64 px` target contract
+- route-specific responsive layouts
+- protected Windows viewer geometry and controls
+- protected GNC, Mission Control, PSI, Trajectory, Space Weather, and Entry browser/model contracts
+
+Phase M therefore avoids broad CSS churn and addresses only present gaps discovered in the current tree:
+
+1. Shared mobile navigation did not consistently support Escape-to-close with focus return.
+2. Mission Library installed duplicate mobile-nav handlers in addition to shared navigation ownership.
+3. Several mutually exclusive visual button groups did not expose their selected state to assistive technology.
+4. Entry and Windows position controls exposed numeric values without equivalent mission-context text.
+5. Entry event and Windows filmstrip current-position state was visual only.
+6. The shared hero-star canvas and Mission Explorer's autonomous canvas loop did not consistently honor `prefers-reduced-motion`.
+7. Meaningful engineering canvases relied on visual context without a uniform accessible image/text-equivalent contract.
+8. Through Orion's Windows assigned button semantics directly to image content instead of using a native action control.
+9. Windows and Mission Library had focus styles that could be made more explicit and reliable.
+10. The existing protected responsive matrix covered 96 total Chrome/Edge cases; Phase M required the full twelve-viewport matrix without weakening that older suite.
+11. The first real Windows Phase M browser gate exposed one remaining touch-target gap: the Through Orion's Windows `#crew-zoom` control inherited a 42 px base minimum outside the `<=760 px` media query and rendered at 42.8 px on 768/844/1024-wide cases. The validator correctly rejected it; the final Phase M rule raises the base minimum to 44 px.
+
+### Implemented accessibility hardening
+
+#### Shared and standalone navigation
+
+`js/core.js` now owns shared disclosure navigation behavior for the standard public-route navigation patterns. The disclosure state remains synchronized through `aria-expanded`; Escape closes an open menu and returns focus to the trigger without forcing a scroll jump.
+
+Mission Library's duplicate nav handlers were removed so one shared owner controls the behavior.
+
+PSI intentionally does not load the shared core runtime, so `js/psi.js` receives the equivalent standalone Escape/focus-return behavior.
+
+#### Screen-reader state
+
+Visual selection state is now synchronized with assistive-technology state where the control semantics are mutually exclusive choices:
+
+- Trajectory Correction maneuver presets and direction controls use `aria-pressed`.
+- Space Weather reference presets and mission-location context use `aria-pressed`.
+- PSI engine-count and regolith controls use `aria-pressed`.
+- GNC explanatory loop controls synchronize `aria-pressed` while preserving the already-protected AUTO/MANUAL state contract.
+
+Current-position semantics use `aria-current` where the meaning is location/progress rather than a toggle:
+
+- Entry event rail
+- Through Orion's Windows filmstrip
+
+Entry and Windows scrubbers now expose descriptive `aria-valuetext` that combines the numeric position with mission meaning.
+
+#### Canvas semantics and alternatives
+
+The decorative landing-page star canvas remains hidden from assistive technology.
+
+Meaningful engineering canvases now expose image semantics and accessible naming/text-equivalent references using nearby visible explanatory content. This adds no hidden scientific claim and does not change evidence provenance.
+
+Covered current public surfaces include Mission Explorer, Trajectory Correction, Entry, Space Weather, GNC, PSI, Windows geometry, and the already-protected Mission Control canvas contract.
+
+#### Reduced motion
+
+Nonessential autonomous animation now respects `prefers-reduced-motion` in:
+
+- the shared landing hero-star canvas
+- the current Mission Explorer canvas loop
+
+Under reduced motion those surfaces render a stable frame and still redraw when state changes. Visibility handling prevents unnecessary autonomous RAF work while the document is hidden.
+
+User-driven or simulation-essential engineering interactions are not indiscriminately disabled. Entry playback and GNC progression remain explicit mission-learning controls. PSI and Mission Control retain their existing reduced-motion handling.
+
+#### Through Orion's Windows semantics and focus
+
+The current mission photograph remains semantic image content with its descriptive `alt` text.
+
+A separate native `button` now owns the fullscreen action and references the existing dialog. This preserves image meaning and viewer geometry instead of assigning `role="button"` and `tabindex` directly to the image.
+
+Viewer arrows, zoom controls, fullscreen image action, lightbox controls, and Mission Library filters/cards retain explicit visible `:focus-visible` treatment. The Windows fullscreen/zoom trigger now also enforces a 44 px base minimum height across tablet and phone-landscape widths, rather than only inside the narrow-phone media query.
+
+### Responsive/mobile contract
+
+Phase M preserves the existing safe-area and touch-target work instead of rewriting it.
+
+The dedicated Phase M browser matrix adds these twelve viewport classes per browser:
+
+1. `320 × 568`
+2. `360 × 800`
+3. `375 × 812`
+4. `390 × 844`
+5. `430 × 932`
+6. `844 × 390` phone landscape
+7. `768 × 1024` tablet portrait
+8. `1024 × 768` tablet landscape
+9. `1024 × 800` approximately-1024 class
+10. `1280 × 800`
+11. `1440 × 900`
+12. `1920 × 1080`
+
+Across eight public routes this is 96 route/viewport cases per browser and 192 total cases across Chrome and Edge.
+
+The Phase M browser gate checks, among other protected invariants:
+
+- unintended horizontal overflow
+- clipped visible interactive controls
+- zero-size canvas failures
+- public-route navigation completeness
+- mobile menu open/close state
+- Escape close + focus return
+- nav-link close behavior
+- accessible names for visible controls
+- engineering canvas accessible naming
+- mobile touch-target floor
+- selected/current ARIA state
+- Windows native image-action/current-filmstrip semantics
+- Windows/GNC/Mission Control route-specific contracts
+- Mission Control's protected `>=64 px` target invariant
+
+The pre-existing `validate_responsive_browser_qa.py` matrix remains unchanged and mandatory. Phase M adds coverage; it does not replace or weaken protected browser regressions.
+
+### Dedicated Phase M QA
+
+Added:
+
+- `docs/PHASE_M_ACCESSIBILITY_QA.md`
+- `scripts/validation/validate_phase_m_accessibility.py`
+- `scripts/validation/phase_m_accessibility_regression.html`
+- `scripts/validation/validate_phase_m_regression.py`
+
+The static gate verifies the eight public routes for document language, one named main landmark, skip-link resolution, one primary H1, labeled navigation, explicit image alt text, canvas semantics/text alternatives, native Windows image-action semantics, disclosure ownership, Escape/focus return, selected/current/value state, reduced motion, visible focus, touch-target floors, Mission Control's 64 px protected contract, safe-area support, and grouped Space Weather choice semantics.
+
+### Protected product/evidence boundaries
+
+Phase M does **not** alter:
+
+- mission chronology or public evidence
+- evidence taxonomy or provenance wording
+- Mission Explorer phase progression or geometry
+- Windows mission-image set, viewer geometry, preload behavior, lightbox model, or arrow/touch/keyboard navigation contract
+- GNC fixed-step model, AUTO/MANUAL behavior, THC/RHC controls, disturbance injection, or educational closed loop
+- Mission Control scenarios, lenses, decision model, narrative/canvas separation, or target-size invariant
+- PSI model behavior
+- Trajectory Correction propagation/model behavior
+- Space Weather model/evidence behavior
+- Entry / Descent / Recovery model/evidence behavior
+- Phase K Mission Library content/focused-rendering model
+- Phase K Technical Report engineering substance/print contract
+- Phase L typography floors, ratios, font architecture, or route-specific visual identity
+
+Canonical evidence classes remain unchanged:
+
+- NASA REPORTED
+- MISSIONLAB DERIVED
+- MODELED
+- INFERRED
+- UNKNOWN / NOT PUBLIC
+
+### Validation and coverage boundary
+
+During deterministic package construction from the Phase M handoff, the available reconstructed tree passed:
+
+- changed-file allowlist verification
+- `git diff --check`
+- JavaScript syntax checks for shared and protected route runtimes
+- `scripts/validate_public_experience.py`
+- `scripts/validation/validate_text_integrity.py`
+- `scripts/validation/validate_phase_k_publication.py`
+- `scripts/validation/validate_phase_l_typography.py`
+- `scripts/validation/validate_phase_m_accessibility.py`
+- Trajectory Correction pure-model/evidence regression
+- PSI pure-model/evidence regression
+- Space Weather pure-model/evidence regression
+- Entry pure-model/evidence regression
+- celestial asset/provenance validation
+- final release validation
+
+The handoff reconstruction intentionally does not contain the repository's gitignored `data/processed/...` products, so legacy analytical validators that require those files cannot be truthfully re-executed in the package-build sandbox. The first such observed dependency was `data/processed/entry/entry_trajectory_m50.csv`; Space Weather analytical context similarly requires processed products. Those validators are not marked as passed or weakened.
+
+The deterministic Windows installer therefore keeps the full protected analytical/evidence suite mandatory against the user's real repository, where the processed products exist, before any Phase M implementation commit is accepted.
+
+Likewise, the package-build environment does not provide the required Windows Edge + Chrome execution environment. No Phase M Edge/Chrome pass is claimed from package construction. The installer requires both browsers and fails closed if the protected browser matrix or expanded Phase M matrix does not pass.
+
+The first real Windows release-gate execution validated the full protected analytical/evidence chain and all pre-Phase-M Chrome/Edge browser regressions, then failed closed only on the expanded Phase M matrix: both Edge and Chrome reported four failing `windows.html` cases, each identifying `button#crew-zoom:touch-height-42.8`. The installer rolled the repository back cleanly to the immutable Phase L starting commit. The corrected delivery changes the control's base minimum height to 44 px and leaves the >=44 px validator requirement unchanged.
+
+Physical iPhone Safari, Android Chrome, tablet hardware, and desktop Safari are not claimed by this phase unless actually run; they remain manual release-candidate targets.
+
+### Phase M implementation allowlist
+
+The implementation changes exactly these 20 paths:
+
+1. `docs/PHASE_M_ACCESSIBILITY_QA.md` — added Phase M accessibility/responsive contract
+2. `gnc.html` — named/text-equivalent GNC engineering canvas semantics
+3. `js/core.js` — shared nav Escape/focus return + reduced-motion hero canvas handling
+4. `js/entry.js` — event `aria-current` + mission-context slider value text
+5. `js/gnc.js` — synchronized explanatory-loop `aria-pressed` state
+6. `js/mission.js` — reduced-motion/visibility handling for the current Mission Explorer canvas
+7. `js/psi.js` — selected-state semantics + standalone nav Escape/focus return
+8. `js/space-weather.js` — selected-state semantics
+9. `js/trajectory.js` — selected-state semantics
+10. `js/windows.js` — current-filmstrip/value text + native fullscreen-button event ownership
+11. `library.css` — explicit keyboard focus treatment
+12. `library.js` — remove duplicate shared navigation ownership
+13. `mission.html` — engineering canvas semantics + grouped Space Weather choice semantics
+14. `psi.html` — PSI canvas text-equivalent semantics
+15. `scripts/validate_public_experience.py` — require Phase M QA artifacts
+16. `scripts/validation/phase_m_accessibility_regression.html` — added expanded responsive/accessibility browser harness
+17. `scripts/validation/validate_phase_m_accessibility.py` — added static accessibility/mobile contract
+18. `scripts/validation/validate_phase_m_regression.py` — added required Chrome/Edge Phase M driver
+19. `windows.css` — native image-action overlay + explicit focus-visible treatment + >=44 px base fullscreen/zoom target
+20. `windows.html` — native fullscreen button + Windows geometry canvas semantics
+
+The documentation-only closure commit later changes only:
+
+- `docs/ENGINEERING_LOG.md`
+
+### Deterministic implementation identity
+
+- Implementation subject: `Harden accessibility and responsive behavior`
+- Implementation parent: `e711db684adda507efd973fc6f090fdc50baa841`
+- Implementation tree: `9d2e1541ffd3971d7d4610de7eebbb45e6bc263e`
+- Implementation commit: `60cdc7a1be2b081b0fcd7e7105cc4de8806f356a`
+
+The implementation commit is preserved immutably beneath the documentation-only Phase M closure commit.
+
+### Safety / rollback / delivery
+
+The Phase M installer:
+
+- refuses to run unless the real repository is clean at the exact completed Phase L documentation HEAD
+- verifies the expected branch, parent, starting tree, and protected `origin/main`
+- verifies the recovery branch remains unpublished
+- creates a timestamped `safety/phase-m-accessibility-*` branch before production mutation
+- validates patch SHA-256, exact allowlist, per-file payload hashes, and embedded project-log hash
+- applies only the approved Phase M paths
+- runs the protected static/model/evidence gate and the full Entry analytical/evidence suite
+- runs the complete protected Chrome/Edge browser matrix plus the expanded 192-case Phase M matrix
+- verifies the exact staged implementation tree before commit
+- repeats Phase M-critical static/browser validation against that exact staged tree without unnecessarily duplicating every full browser matrix
+- creates the deterministic local implementation commit only after all gates pass
+- appends this complete Phase M section without replacing prior engineering-log content
+- creates a separate deterministic documentation-only local commit
+- verifies exact final HEAD / parent / tree and a clean worktree
+- rolls back all production mutation to the immutable Phase L starting commit on any failure before completion
+- retains the Phase M safety branch for forensics
+- performs no push, merge, deployment, release, or remote publication
+
+### Phase M closure
+
+Phase M hardens A2 MissionLab's keyboard, assistive-technology, reduced-motion, and mobile/responsive behavior at the presentation/interaction boundary while preserving the mission-analysis product underneath it.
+
+The project remains:
+
+- public-data grounded
+- evidence bounded
+- deterministic where modeled
+- static / zero-cost
+- mobile-aware without desktop compression
+- locally committed only
+- unpublished on the recovery branch
+
+**NO PUSH WAS PERFORMED.**
