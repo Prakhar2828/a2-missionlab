@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>A2 MissionLab Phase L typography regression</title><style>html,body{margin:0;background:#111;color:#fff;font:13px/1.4 Consolas,monospace}iframe{display:block;border:0;margin:0 0 10px;background:#000}pre{white-space:pre-wrap;padding:12px}</style></head>
+<body data-status="RUNNING" data-case-count="0" data-failure-count="0" data-max-overflow="0" data-min-h1-line-ratio="99" data-max-h1-tracking-ratio="0" data-min-body-size="99"><pre id="results">RUNNING</pre>
+<script>
+(async()=>{'use strict';
+const routes=['index.html','mission.html','windows.html','gnc.html','mission-control.html','psi.html','library.html','technical-report.html'];
+const viewports=[{name:'phone-390x844',width:390,height:844},{name:'landscape-844x390',width:844,height:390},{name:'tablet-768x1024',width:768,height:1024},{name:'desktop-1440x900',width:1440,height:900}];
+const results=[];let failures=0,cases=0,maxOverflow=0,minH1Line=99,maxH1Track=0,minBody=99;
+const pause=ms=>new Promise(r=>setTimeout(r,ms));
+const overflow=doc=>Math.max(0,Math.max(doc.documentElement.scrollWidth,doc.body?doc.body.scrollWidth:0)-doc.documentElement.clientWidth);
+const frame=(src,w,h)=>new Promise((resolve,reject)=>{const f=document.createElement('iframe');f.width=String(w);f.height=String(h);f.src=src;f.onload=()=>resolve(f);f.onerror=reject;document.body.appendChild(f);});
+function num(v){const x=parseFloat(v);return Number.isFinite(x)?x:0;}
+function ratioLine(cs){const fs=num(cs.fontSize);const lh=num(cs.lineHeight);return fs>0&&lh>0?lh/fs:0;}
+function ratioTrack(cs){const fs=num(cs.fontSize);if(!fs)return 0;const ls=cs.letterSpacing==='normal'?0:num(cs.letterSpacing);return Math.abs(ls/fs);}
+function check(ok,label,detail=''){cases++;if(!ok){failures++;results.push(`FAIL ${label}${detail?`: ${detail}`:''}`);}else results.push(`PASS ${label}`);}
+for(const vp of viewports){
+ for(const route of routes){
+  const f=await frame(`../../${route}`,vp.width,vp.height);await pause(150);const w=f.contentWindow,d=w.document;
+  const styles=[...d.querySelectorAll('link[rel="stylesheet"]')].map(x=>(x.getAttribute('href')||'').split('?')[0]);
+  check(styles.at(-1)==='typography.css',`${vp.name} ${route} typography cascade`,styles.join(' > '));
+  const bodyStyle=w.getComputedStyle(d.body);const bodySize=num(bodyStyle.fontSize);minBody=Math.min(minBody,bodySize);check(!bodyStyle.fontFamily.toLowerCase().includes('inter'),`${vp.name} ${route} no Inter dependency`,bodyStyle.fontFamily);check(bodySize>=16,`${vp.name} ${route} body readability floor`,`${bodySize}px`);
+  const h1=d.querySelector('main h1')||d.querySelector('h1');check(!!h1,`${vp.name} ${route} primary H1 exists`);
+  if(h1){const cs=w.getComputedStyle(h1),lr=ratioLine(cs),tr=ratioTrack(cs),r=h1.getBoundingClientRect();minH1Line=Math.min(minH1Line,lr);maxH1Track=Math.max(maxH1Track,tr);check(lr>=0.86,`${vp.name} ${route} H1 line-height ratio`,lr.toFixed(3));check(tr<=0.055,`${vp.name} ${route} H1 tracking ratio`,tr.toFixed(3));check(r.left>=-1&&r.right<=w.innerWidth+1,`${vp.name} ${route} H1 viewport containment`,`${r.left.toFixed(1)}..${r.right.toFixed(1)} / ${w.innerWidth}`);}
+  const section=d.querySelector('.x-section-head h2');if(section){const sr=ratioLine(w.getComputedStyle(section));check(sr>=0.92,`${vp.name} ${route} section H2 line-height ratio`,sr.toFixed(3));}
+  const o=overflow(d);maxOverflow=Math.max(maxOverflow,o);check(o<=1,`${vp.name} ${route} horizontal containment`,`${o}px`);
+  f.remove();
+ }
+}
+document.body.dataset.status=failures?'FAIL':'PASS';document.body.dataset.caseCount=String(cases);document.body.dataset.failureCount=String(failures);document.body.dataset.maxOverflow=String(maxOverflow);document.body.dataset.minH1LineRatio=minH1Line.toFixed(3);document.body.dataset.maxH1TrackingRatio=maxH1Track.toFixed(3);document.body.dataset.minBodySize=minBody.toFixed(2);document.querySelector('#results').textContent=results.join('\n');
+})().catch(err=>{document.body.dataset.status='FAIL';document.body.dataset.failureCount='1';document.querySelector('#results').textContent=`UNCAUGHT ${err&&err.stack?err.stack:err}`;});
+</script></body></html>

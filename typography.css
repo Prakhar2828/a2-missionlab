@@ -1,0 +1,166 @@
+/* Phase L — deliberate zero-cost system typography + visual hierarchy.
+   Loaded after route CSS so the display/readability contract is stable across
+   Windows, macOS, Linux, iOS, and Android without a remote or paid font. */
+
+html {
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+  font-family: var(--font-sans);
+}
+
+code,
+kbd,
+samp,
+pre,
+.artifact-link,
+.publication-meta code,
+.equation-number {
+  font-family: var(--font-mono);
+}
+
+/* Keep the cinematic scale, remove font-dependent compression. */
+.x-intro h1 {
+  max-width: 980px;
+  margin: 0;
+  font-size: clamp(3rem,6vw,6.4rem);
+  line-height: .94;
+  letter-spacing: -.043em;
+  text-wrap: balance;
+}
+
+.x-hero h1 {
+  line-height: .87;
+  letter-spacing: -.048em;
+  text-wrap: balance;
+}
+
+.landing-page .x-hero h1 {
+  line-height: .87;
+  letter-spacing: -.046em;
+}
+
+.x-intro h2,
+.x-section-head h2,
+.x-photo-break-overlay h2,
+.x-final-cta h2 {
+  line-height: .96;
+  letter-spacing: -.043em;
+  text-wrap: balance;
+}
+
+.gnc-page #gnc-lab .x-section-head h2,
+.mission-control-page #mission-control .x-section-head h2 {
+  line-height: .94;
+  letter-spacing: -.043em;
+}
+
+.psi-hero h1 {
+  line-height: .91;
+  letter-spacing: -.045em;
+  text-wrap: balance;
+}
+
+.library-hero h1,
+.report-hero h1 {
+  line-height: .96;
+  letter-spacing: -.043em;
+  text-wrap: balance;
+}
+
+.entry-phase-title h3,
+.entry-state-heading h3,
+.entry-recovery-head h3 {
+  line-height: 1;
+  letter-spacing: -.038em;
+  text-wrap: balance;
+}
+
+/* Metadata remains technical, but no longer relies on extreme tracking. */
+.x-overline,
+.x-kicker,
+.x-label,
+.eyebrow,
+.kicker {
+  letter-spacing: .105em;
+  line-height: 1.35;
+}
+
+/* Paragraphs and long-form technical text get a stable reading rhythm. */
+.x-hero-copy,
+.x-section-head > p,
+.library-hero > .container > p,
+.report-hero > .container > p,
+.article-main p,
+.report p,
+.report li,
+.prose p {
+  text-wrap: pretty;
+}
+
+.report article,
+.article-main {
+  font-kerning: normal;
+}
+
+/* Engineering numbers should scan column-to-column without changing width. */
+.entry-gauges strong,
+.entry-metric-grid strong,
+.mission-stage-hud strong,
+.gnc-status-row b,
+.burn-readout b,
+.maneuver-hud b,
+.weather-readouts b,
+.psi-result-card b,
+.publication-meta code,
+.summary-stat b,
+.method-table,
+.report table {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Preserve mathematical notation as a distinct publication voice. */
+.equation,
+.parameter-grid b {
+  font-family: Georgia,"Times New Roman",serif;
+}
+
+@media (max-width: 760px) {
+  .x-intro h1 {
+    font-size: clamp(2.55rem,10.5vw,4.4rem);
+    line-height: .98;
+    letter-spacing: -.032em;
+  }
+
+  .x-hero h1,
+  .landing-page .x-hero h1,
+  .psi-hero h1 {
+    line-height: .92;
+    letter-spacing: -.038em;
+  }
+
+  .x-intro h2,
+  .x-section-head h2,
+  .x-photo-break-overlay h2,
+  .x-final-cta h2,
+  .gnc-page #gnc-lab .x-section-head h2,
+  .mission-control-page #mission-control .x-section-head h2,
+  .library-hero h1,
+  .report-hero h1 {
+    line-height: .99;
+    letter-spacing: -.034em;
+  }
+}
+
+@media print {
+  body {
+    font-family: Georgia,"Times New Roman",serif;
+  }
+}
