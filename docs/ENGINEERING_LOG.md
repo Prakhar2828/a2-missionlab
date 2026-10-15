@@ -62908,3 +62908,308 @@ while preserving the existing mission reconstruction, zero-cost architecture, pu
 ### Next phase
 
 Proceed to **Phase L — Typography + Visual Quality** only after the successful Phase K installer output is retained.
+
+## Phase L — Typography + Visual Quality
+
+**Status:** COMPLETE — APPENDED ONLY AFTER REAL WINDOWS CHROME + EDGE RELEASE GATES PASS
+
+### Objective
+
+Stabilize A2 MissionLab typography across platforms and improve visual hierarchy without repainting the product, weakening evidence discipline, changing simulation behavior, or collapsing the distinct identities of the public routes.
+
+Phase L addresses the typography and visual-quality requirements from the governing project specification:
+
+- remove the unresolved `Inter` dependency
+- use a deliberate zero-cost font architecture
+- normalize fragile display tracking and line height
+- improve heading hierarchy across the public experience
+- preserve readable technical metadata, equations, and numerical data
+- retain distinct route visual identities
+- keep the zero-budget static architecture
+
+### Immutable starting state
+
+- Repository: `C:\Users\prakh\Documents\a2-missionlab`
+- Branch: `phase-10-quality-recovery`
+- Starting HEAD: `01b7e20101c12604ccd9934488bcf589a0ba16c4`
+- Starting subject: `Document completed Phase K`
+- Starting parent: `e39a9fab0c3f62a9aa35da631ec73357e300d434`
+- Starting tree: `1291c776161b96016f3628fc49e96de50475e7df`
+- Protected `origin/main`: `d74a88d20f6ff1bd8be2ff0dbe3fb2b44cc13187`
+- Recovery branch remains local-only / unpublished
+
+### Phase L v1 failed-attempt forensic history
+
+The first Phase L installer attempt on the real Windows repository correctly failed closed during stage `[6/11]` before any implementation commit was created.
+
+Observed failure:
+
+- every Phase L static typography assertion passed except `no repository font binaries required`
+- the failing assertion performed a recursive filesystem census beneath the repository root for `.woff`, `.woff2`, `.ttf`, and `.otf` files
+- that assertion was broader than the actual product contract because a developer checkout may contain unrelated third-party font resources inside local tooling/dependency environments while the public static application never loads or requires them
+- the public typography architecture had already passed the meaningful dependency checks: no `@font-face`, no remote font service, deliberate system font stacks, and no computed `Inter` dependency in the product design
+
+The v1 installer then correctly:
+
+- reset the repository to immutable completed Phase K HEAD `01b7e20101c12604ccd9934488bcf589a0ba16c4`
+- returned the worktree clean
+- retained safety branch `safety/phase-l-typography-20261014-210541789`
+- created no Phase L implementation or documentation commit
+- performed no push
+
+Root cause was the **new static regression contract**, not the typography product change.
+
+Phase L v2 corrects that contract by validating the public dependency graph instead of asserting global filesystem absence: public HTML routes and top-level runtime CSS must not reference `.woff`, `.woff2`, `.ttf`, or `.otf` assets, and the existing `@font-face` / remote-font-service prohibitions remain enforced. Development-only third-party files that are never referenced by the public application are outside this product invariant.
+
+The typography product behavior was not weakened or altered to make the test pass.
+
+### Repository-first typography audit
+
+The audit confirmed the Phase L debt explicitly identified by the master specification:
+
+- `styles.css` requested `Inter`
+- no `@font-face` rule existed
+- no public route or runtime stylesheet referenced a font binary
+- no Google Fonts or other font-service import existed
+- therefore `Inter` was not actually delivered and the rendered type depended on the visitor's local environment
+
+The audit also confirmed that the product already has useful route-specific visual identities and does **not** need a global visual repaint.
+
+The principal hierarchy weakness was over-compressed display typography:
+
+- the shared experience hero used approximately `0.78` line height with `-0.075em` tracking
+- the homepage-specific hero tightened further in places
+- GNC and Mission Control large section titles used approximately `0.87–0.88` line height with `-0.065em` tracking
+- Library and Technical Report display titles also used aggressive negative tracking
+- Mission, Windows, GNC, and Mission Control introductory H1 elements had no dedicated shared display rule and therefore depended too heavily on inherited/browser defaults
+
+### Final typography architecture
+
+Phase L deliberately chooses a **system-font architecture** instead of adding a bundled or remote font dependency.
+
+Primary sans stack:
+
+`system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`
+
+Primary monospace stack:
+
+`ui-monospace, "SFMono-Regular", "Cascadia Mono", Consolas, "Liberation Mono", monospace`
+
+Mathematical equations retain a dedicated serif voice using Georgia / Times New Roman fallbacks.
+
+This architecture:
+
+- costs `$0.00`
+- makes no paid-font assumption
+- makes no locally installed `Inter` assumption
+- avoids a remote font-service dependency
+- uses native platform typography where available
+- keeps technical monospace and mathematical notation visually distinct
+
+### Visual hierarchy changes
+
+A new shared `typography.css` is loaded **after** route-specific CSS on all eight public routes.
+
+The Phase L layer intentionally changes typography only; it does not redefine route backgrounds, colors, imagery, simulation surfaces, or application state.
+
+Key changes:
+
+- explicit display treatment for Mission / Windows / GNC / Mission Control introductory H1 elements
+- normalized main experience hero line height and tracking
+- normalized GNC and Mission Control large section-title compression
+- normalized PSI hero display typography
+- normalized Mission Library and Technical Report title typography
+- normalized entry/recovery large heading rhythm
+- reduced excessive metadata tracking while preserving technical hierarchy
+- `text-wrap: balance` for large display headings where appropriate
+- `text-wrap: pretty` for selected long-form explanatory text
+- tabular lining numerals for important engineering readouts, report tables, and publication metrics
+- Technical Report print serif behavior preserved
+- mathematical equation serif behavior preserved
+- explicit mobile display-type adjustments rather than relying on desktop compression
+
+### Route identity preservation
+
+Phase L preserves the existing route-specific stylesheets and identities:
+
+- Homepage → `landing.css`
+- Mission → trajectory / space weather / entry route styling
+- Windows → `windows.css`
+- GNC → `gnc.css`
+- Mission Control → `mission-control.css`
+- PSI → `psi.css`
+- Mission Library → `library.css`
+- Technical Report → `report.css`
+
+The new typography layer does not introduce background or color rules. It is intentionally not a global visual repaint.
+
+### Dedicated Phase L QA
+
+Added:
+
+- `docs/PHASE_L_TYPOGRAPHY_QA.md`
+- `scripts/validation/validate_phase_l_typography.py`
+- `scripts/validation/phase_l_typography_regression.html`
+- `scripts/validation/validate_phase_l_regression.py`
+
+Static Phase L validation enforces:
+
+- unresolved `Inter` request removed
+- system-ui-first sans stack present
+- deliberate system monospace stack present
+- no `@font-face` dependency
+- no remote font-service dependency
+- public typography requires no repository font binaries
+- typography layer does not repaint route identity
+- explicit intro H1 hierarchy
+- normalized cinematic hero compression
+- normalized GNC / Mission Control display hierarchy
+- tabular lining numerals on engineering readouts
+- mathematical serif voice retained
+- Technical Report print serif contract retained
+- explicit mobile typography treatment
+- every public route loads `typography.css` last
+- every public route retains its route-specific visual stylesheet
+
+The Phase L browser regression exercises all eight public routes at representative:
+
+- phone portrait
+- phone landscape
+- tablet
+- desktop
+
+On real Windows release acceptance it requires both Chrome and Edge and verifies:
+
+- typography stylesheet cascade order
+- no computed `Inter` dependency
+- body readability floor of at least `16 px`
+- primary H1 existence and viewport containment
+- primary H1 line-height/font-size ratio `>= 0.86`
+- primary H1 absolute tracking ratio `<= 0.055`
+- section display H2 line-height/font-size ratio `>= 0.92` where present
+- no unintended horizontal overflow
+
+### Protected regression contract
+
+Before the Phase L implementation commit is created, the deterministic Windows installer requires the complete protected suite to pass, including:
+
+- public experience validation
+- text / markup integrity validation
+- Phase L static typography validation
+- Trajectory Correction pure-model validation
+- PSI pure-model validation
+- Space Weather pure-model validation
+- Entry pure-model/evidence validation
+- celestial asset validation
+- final release validation
+- Mission Explorer Chrome/Edge regression
+- Through Orion's Windows regression
+- GNC deterministic Chrome/Edge regression
+- Mission Control Chrome/Edge regression
+- PSI Chrome/Edge regression
+- Trajectory Correction Chrome/Edge regression
+- Space Weather Chrome/Edge regression
+- Entry Chrome/Edge regression
+- global responsive Chrome/Edge QA
+- Phase K Mission Library + Technical Report regression
+- Phase L typography + visual-quality Chrome/Edge regression
+
+The full protected browser matrix is run before exact staged-tree verification. After the exact Phase L candidate tree is staged, the Phase L-critical static/browser gates are repeated against that staged candidate before commit.
+
+### Evidence and engineering boundaries
+
+Phase L changes presentation only.
+
+It does **not** alter:
+
+- mission data
+- mission chronology
+- evidence taxonomy
+- evidence wording
+- quantitative results
+- PSI model behavior
+- trajectory-correction propagation
+- space-weather model behavior
+- Entry / Descent / Recovery model behavior
+- GNC fixed-step behavior
+- Mission Control scenarios or decision model
+- Windows mission imagery set
+- Mission Explorer phase progression or geometry
+- Phase K Mission Library content
+- Phase K Technical Report engineering substance
+
+Existing canonical evidence classes remain:
+
+- NASA REPORTED
+- MISSIONLAB DERIVED
+- MODELED
+- INFERRED
+- UNKNOWN / NOT PUBLIC
+
+### Phase L implementation allowlist
+
+The implementation changes exactly these 14 paths:
+
+1. `docs/PHASE_L_TYPOGRAPHY_QA.md` — added
+2. `gnc.html` — load shared typography layer last
+3. `index.html` — load shared typography layer last
+4. `library.html` — load shared typography layer last
+5. `mission-control.html` — load shared typography layer last
+6. `mission.html` — load shared typography layer last
+7. `psi.html` — load shared typography layer last
+8. `scripts/validation/phase_l_typography_regression.html` — added
+9. `scripts/validation/validate_phase_l_regression.py` — added
+10. `scripts/validation/validate_phase_l_typography.py` — added
+11. `styles.css` — replace unresolved `Inter` request with deliberate system font tokens
+12. `technical-report.html` — load shared typography layer last
+13. `typography.css` — added shared Phase L typography and hierarchy layer
+14. `windows.html` — load shared typography layer last
+
+The documentation-only commit later changes only:
+
+- `docs/ENGINEERING_LOG.md`
+
+### Deterministic implementation identity
+
+- Implementation subject: `Stabilize typography and visual hierarchy`
+- Implementation parent: `01b7e20101c12604ccd9934488bcf589a0ba16c4`
+- Implementation tree: `1a07f2458077b0cceecc9d64f948bf5703105d80`
+- Implementation commit: `7a73b538d6aa3dfa7c8bd24dc08a9b33c0876b46`
+
+The implementation commit is preserved immutably beneath the documentation-only Phase L closure commit.
+
+### Safety / rollback / delivery
+
+The Phase L installer:
+
+- refuses to run unless the real repository is clean at the exact completed Phase K documentation HEAD
+- verifies the expected branch, parent, tree, and protected `origin/main`
+- verifies the recovery branch remains unpublished
+- creates a timestamped `safety/phase-l-typography-*` branch before production mutation
+- validates patch SHA-256, exact allowlist, per-file payload hashes, and embedded project-log hash
+- applies only the approved Phase L paths
+- runs the complete protected analytical + browser release matrix
+- verifies the exact staged implementation tree before commit
+- repeats Phase L-critical validation against that exact staged tree
+- creates the deterministic local implementation commit only after all gates pass
+- appends this complete Phase L section without replacing prior engineering-log content
+- creates a separate deterministic documentation-only local commit
+- verifies exact final HEAD / parent / tree and a clean worktree
+- rolls back all production mutation to the immutable Phase K starting commit on any failure before completion
+- retains the Phase L safety branch for forensics
+- performs no push, merge, deployment, release, or remote publication
+
+### Phase L closure
+
+Phase L resolves the font-delivery ambiguity and stabilizes A2 MissionLab's visual hierarchy without converting the product into a generic design system or sacrificing route identity.
+
+The project remains:
+
+- public-data grounded
+- evidence bounded
+- deterministic where modeled
+- static / zero-cost
+- locally committed only
+- unpublished on the recovery branch
+
+**NO PUSH WAS PERFORMED.**
