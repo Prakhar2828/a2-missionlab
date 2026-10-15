@@ -62496,3 +62496,415 @@ The completed phase:
 ### Next phase
 
 Proceed to **Phase K — Technical Report + Mission Library** only after the successful Phase J installer output is retained.
+
+## Phase K — Technical Report + Mission Library Publication Upgrade
+
+**Status:** COMPLETE — APPENDED ONLY AFTER REAL WINDOWS CHROME + EDGE RELEASE GATES PASS
+
+### Objective
+
+Upgrade the two publication surfaces that turn A2 MissionLab from a strong interactive engineering project into a serious reviewable technical body of work:
+
+- Technical Report
+- Mission Library
+
+Phase K follows the governing publication goals without changing the underlying Artemis II reconstruction, weakening evidence boundaries, or rewriting protected Phase F/G/H/I/J systems.
+
+The publication design target is:
+
+`QUESTION → EXPLANATION → EVIDENCE → SOURCE`
+
+for knowledge discovery, and a formal engineering-report structure for technical review.
+
+### Immutable starting state
+
+- Repository: `C:\Users\prakh\Documents\a2-missionlab`
+- Branch: `phase-10-quality-recovery`
+- Starting HEAD: `c7758aa415928467da0ebb6e48c276c1082be566`
+- Starting subject: `Document completed Phase J`
+- Starting parent: `e259e311a7c83396c5b8629d2a6d1831e3ef9b25`
+- Starting tree: `6778e63c19c598212457823643f01e5e757ced1e`
+- Protected `origin/main`: `d74a88d20f6ff1bd8be2ff0dbe3fb2b44cc13187`
+- Recovery branch remains local-only / unpublished
+
+### Repository-first audit findings
+
+The Technical Report already contained substantial engineering depth:
+
+- 25 major technical sections plus source ledger
+- 13 engineering figures
+- 3 technical tables
+- public-data methodology
+- OEM / SPICE / communications / GNC / maneuver / entry / heating / ECLSS / radiation / lunar-science / Mission Control content
+- evidence taxonomy
+- reproducibility / validation
+- selected quantitative results
+- limitations
+
+The primary weakness was publication architecture, not missing engineering substance. It still behaved as one long web article and lacked a compact executive review layer, formal revision identification, indexed/numbered publication apparatus, and dedicated print/PDF presentation. It also still loaded obsolete top-level `app.js`.
+
+The Mission Library already contained 28 deep technical articles. The weakness was information architecture: one search box fed a flat index and every matching full article was rendered into the page simultaneously. Categories, result counts, question-led discovery, related concepts, and focused progressive disclosure were missing.
+
+Phase K therefore preserves the technical content and changes the publication / knowledge-system architecture.
+
+### Phase K implementation changed-path allowlist
+
+The implementation commit changes exactly these 9 paths:
+
+1. `docs/PHASE_K_PUBLICATION_QA.md` — added
+2. `library.css` — added
+3. `library.html` — modified
+4. `library.js` — modified
+5. `report.css` — added
+6. `technical-report.html` — modified
+7. `scripts/validation/phase_k_publication_regression.html` — added
+8. `scripts/validation/validate_phase_k_publication.py` — added
+9. `scripts/validation/validate_phase_k_regression.py` — added
+
+The later documentation-only commit changes only:
+
+- `docs/ENGINEERING_LOG.md`
+
+No Mission Explorer, Windows, GNC, Mission Control, PSI, Trajectory Correction, Space Weather, or Entry production runtime is modified.
+
+### Technical Report publication upgrade
+
+The Technical Report now includes a formal publication layer without replacing its engineering substance.
+
+Added / strengthened:
+
+- dedicated `report.css`
+- publication revision block
+- exact study-baseline commit identification
+- explicit public-evidence policy
+- zero-cost delivery architecture identification
+- executive summary
+- compact publication-scope metrics
+- cross-links from executive summary to methods, validation, and results
+- indexed figure/table navigation
+- stable anchors for all 13 engineering figures
+- numbered figure captions
+- stable anchors and formal captions for all 3 tables
+- numbered Sutton–Graves equation
+- ordered references / artifact ledger
+- print/PDF-specific CSS with `@page` and print media rules
+- stable repository evidence links pinned to the immutable Phase J study baseline instead of the obsolete `public-experience-v3` branch
+- removal of obsolete top-level `app.js` from the report route
+
+The report preserves all existing major technical sections and retains the quantitative reconstruction ledger.
+
+### Publication scope metrics
+
+The executive publication layer exposes repository-validated scope from the tracked publication/release manifests:
+
+- 25 indexed datasets
+- 81 normalized public sources
+- 24 mission events
+- 10 decision threads
+- 6 postflight records
+- 146 searchable records
+- 8 deterministic analyst tools
+- 8 answer routes
+
+These metrics are repository publication metrics, not hiring/marketing estimates.
+
+### Current NASA campaign-context verification
+
+The dated future-Artemis paragraph was checked against current NASA public pages on 14 October 2026.
+
+The Phase K report preserves the time-bounded statement that:
+
+- Artemis III is scheduled as a 2027 low-Earth-orbit demonstration mission for critical future landing systems
+- NASA continues to target early 2028 for Artemis IV as the first Artemis lunar landing
+
+The report uses current NASA mission/science landing pages and keeps the statement explicitly dated because campaign architecture can change.
+
+Phase K does not reinterpret future-campaign plans as Artemis II flight events.
+
+### Mission Library information architecture
+
+The Mission Library still contains all 28 technical deep dives, but the browsing model is now question-led and progressively disclosed.
+
+Canonical Phase K categories:
+
+1. Flight Dynamics
+2. Vehicle & GNC
+3. Mission Operations
+4. Entry & Recovery
+5. Environment & Radiation
+6. Lunar Science
+7. Data & Software
+8. Evidence & Methods
+9. Future Artemis
+
+The interface adds:
+
+- `All` + 9 category controls
+- live result count
+- lightweight question/result cards
+- curated engineering question for every deep dive
+- search across question, title, domain, method, interpretation, limitations, and capabilities
+- one focused full article at a time
+- direct deep-link behavior through topic hashes
+- explicit four-stage knowledge path:
+  - Question
+  - Explanation
+  - Evidence
+  - Source
+- related-question discovery
+- stable repository-evidence links pinned to the Phase J study baseline
+- lazy loading for deep-dive engineering figures
+- dedicated `library.css`
+- responsive browse/read states
+
+The result is a knowledge system rather than a 28-article document dump.
+
+### Evidence discipline preserved
+
+Phase K does not change the canonical evidence taxonomy:
+
+- NASA REPORTED
+- MISSIONLAB DERIVED
+- MODELED
+- INFERRED
+- UNKNOWN / NOT PUBLIC
+
+Permanent boundaries preserved include:
+
+- public OEM state != Orion onboard navigation state
+- DSN tracking != onboard navigation sensor
+- temporal sequence != causation
+- statistical anomaly != spacecraft fault
+- modeled heating != measured TPS telemetry
+- public mission reconstruction != private Mission Control data
+- educational maneuver modeling != NASA targeting solution
+- environmental context != crew dosimetry
+- PSI model != flight-qualified plume analysis
+- Artemis II loft/rebound != Artemis I skip entry
+
+Publication polish does not upgrade uncertain evidence into stronger claims.
+
+### Dedicated Phase K static validator
+
+Added:
+
+`scripts/validation/validate_phase_k_publication.py`
+
+It requires at minimum:
+
+- dedicated report/library stylesheets
+- executive summary
+- exact Phase J study-baseline identity
+- 13 stable report figure anchors
+- 3 numbered/anchored tables
+- numbered Sutton–Graves equation
+- formal ordered reference/artifact ledger
+- explicit print/PDF CSS
+- obsolete report `app.js` absent
+- obsolete `public-experience-v3` repository links absent from Phase K publication surfaces
+- current NASA science / Artemis IV landing-page paths
+- all report figure assets resolvable locally
+- all 28 Library deep dives retained
+- curated question for every deep dive
+- canonical category for every deep dive
+- focused one-article rendering
+- explicit Question → Explanation → Evidence → Source path
+- related-topic discovery
+- lazy-loaded deep-dive figures
+
+### Phase K v1 failed-attempt forensic history — not current production state
+
+The first Phase K installer correctly passed the existing protected static, evidence, pure-model, release, Mission Explorer, Windows, GNC, Mission Control, PSI, Trajectory Correction, Space Weather, Entry, and global responsive gates, but the new dedicated Phase K browser regression failed identically in Chrome and Edge at one Library search assertion.
+
+Observed behavior at all four representative viewports in both browsers:
+
+- query: `Sutton`
+- actual lightweight Library result cards: `2`
+- v1 regression expectation: `1`
+- every other Phase K browser assertion: PASS
+- horizontal overflow: `0 px`
+- initial Library cards: `28`
+- focused deep-dive article count: `1`
+- report figures: `13`
+- report tables: `3`
+
+The browser gate retried once and reproduced the same deterministic failure. The installer then correctly rolled the repository back to immutable Phase J documentation start `c7758aa415928467da0ebb6e48c276c1082be566`, removed all Phase K mutation, returned the worktree clean, retained safety branch `safety/phase-k-publication-20261014-204738324`, and performed no push.
+
+Root cause was in the **new regression expectation**, not the Library search implementation. Phase K search deliberately indexes title, curated question, domain, explanation, method, interpretation, limitations, and capability text. The query `Sutton` therefore correctly matches both:
+
+1. `convective-heating` — the Sutton–Graves convective-heating deep dive
+2. `thermal-protection` — whose method explicitly explains the boundary between a Sutton–Graves external-flow estimate and Avcoat material response
+
+Requiring only one result would contradict the intended full-text knowledge-system search semantics.
+
+Phase K v2 therefore strengthens the regression contract instead of weakening the product: `Sutton` must return exactly those two topic IDs. The QA contract records the same invariant. No Library production search logic was changed to make the test pass.
+
+During v2 release reconstruction, an additional **packaging-only deterministic-target defect** was found before delivery: the earlier sandbox used to calculate the v1 expected implementation tree still had a staged `docs/ENGINEERING_LOG.md` index entry from local release preparation. That contaminated the v1 precomputed tree/commit target even though `docs/ENGINEERING_LOG.md` was not in the 9-file implementation allowlist. The user’s failed v1 run never reached staged-tree verification, so this defect never mutated or committed anything in the real repository.
+
+V2 discards those contaminated targets. Its implementation tree and commit are recomputed from a fresh clone of exact Phase J HEAD plus only the exact 9-file patch, and the documentation tree is computed only after a separate append of this log section.
+
+This preserves the project rule established in earlier phases: inspect the first real failure, fix the actual defect, and do not distort correct engineering behavior merely to satisfy a test.
+
+### Dedicated Phase K Chrome / Edge browser regression
+
+Added:
+
+`scripts/validation/phase_k_publication_regression.html`
+
+and:
+
+`scripts/validation/validate_phase_k_regression.py`
+
+Required release browsers:
+
+- Chrome
+- Edge
+
+Representative Phase K viewports per browser:
+
+- `390 × 844`
+- `844 × 390`
+- `768 × 1024`
+- `1440 × 900`
+
+The dedicated regression verifies:
+
+- 28 initial Library cards
+- 10 category controls (`All` + 9 categories)
+- live result count
+- Entry & Recovery category filtering
+- Sutton search coverage requiring exactly `convective-heating` and `thermal-protection`
+- only one focused full article rendered
+- four-stage knowledge path
+- curated technical question rendering
+- related-question discovery
+- Library horizontal containment
+- four-block report publication metadata
+- report executive summary
+- all 13 indexed report figures
+- all 3 numbered report tables
+- obsolete report `app.js` absent
+- report horizontal containment
+
+The dedicated harness exercises 64 assertions per browser across the four representative viewports.
+
+### Protected validation matrix
+
+Before Phase K can commit, the release installer requires the existing protected regressions to remain green:
+
+- Mission Explorer — Chrome + Edge
+- Through Orion's Windows — Chrome + Edge
+- GNC deterministic AUTO/MANUAL — Chrome + Edge
+- Mission Control — Chrome + Edge
+- PSI — Chrome + Edge
+- Trajectory Correction — Chrome + Edge
+- Space Weather — Chrome + Edge
+- Entry / Descent / Recovery — Chrome + Edge
+- global responsive browser QA — Chrome + Edge
+- dedicated Phase K publication regression — Chrome + Edge
+
+The full protected browser matrix runs once before staging. After exact staged-tree verification, only the Phase K static publication validator and dedicated Phase K browser regression are repeated, avoiding unnecessary duplicate browser load while still validating the exact candidate tree.
+
+### Non-browser validation
+
+The Phase K candidate also requires:
+
+- JavaScript syntax validation
+- Python bytecode compilation for publication validators
+- `scripts/validate_public_experience.py`
+- `scripts/validation/validate_text_integrity.py`
+- `scripts/validation/validate_phase_k_publication.py`
+- Trajectory Correction pure-model regression
+- PSI pure-model regression
+- Space Weather pure-model regression
+- Entry pure-model/evidence regression
+- celestial rendering asset validation
+- final release validation
+- `git diff --check`
+
+### Performance / architecture effects
+
+Phase K is intentionally bounded.
+
+- No backend added.
+- No database added.
+- No API dependency added.
+- No paid inference added.
+- No analytics dependency added.
+- No font dependency added.
+- No new network request required for core interaction.
+- No protected simulation animation loop changed.
+- Technical Report drops an obsolete JavaScript runtime dependency.
+- Mission Library no longer renders every full matching deep dive simultaneously.
+- Library engineering figures load lazily when a selected article is rendered.
+
+Total required ongoing operating cost remains:
+
+`$0.00`
+
+### Accessibility / responsive behavior
+
+Phase K preserves semantic headings and adds:
+
+- button-based category filters
+- `aria-pressed` state
+- live result-count announcement
+- direct hash navigation
+- focused single-article reading
+- responsive category controls
+- responsive browse cards
+- responsive knowledge-path layout
+- report table overflow containment inherited from the protected responsive layer
+- report print presentation independent of screen-only navigation
+
+The dedicated browser regression checks both Library and Report horizontal containment at phone portrait, phone landscape, tablet, and desktop widths.
+
+### Git safety / rollback
+
+The Phase K release installer:
+
+- requires exact branch `phase-10-quality-recovery`
+- requires exact starting HEAD `c7758aa415928467da0ebb6e48c276c1082be566`
+- requires exact starting parent `e259e311a7c83396c5b8629d2a6d1831e3ef9b25`
+- requires exact starting tree `6778e63c19c598212457823643f01e5e757ced1e`
+- verifies protected `origin/main = d74a88d20f6ff1bd8be2ff0dbe3fb2b44cc13187`
+- requires the recovery branch to remain unpublished
+- creates a timestamped `safety/phase-k-publication-*` branch before mutation
+- validates patch ZIP hash, exact allowlist, and each payload SHA-256
+- applies only the 9 approved implementation paths
+- runs static, evidence, pure-model, release, protected-browser, and Phase K-specific gates
+- stages only the exact allowlist
+- verifies the exact candidate tree
+- repeats Phase K-critical validation against the exact staged tree
+- creates a deterministic local implementation commit
+- appends this complete Phase K section without modifying prior engineering-log content
+- creates a separate documentation-only local commit
+- verifies final HEAD / parent / tree and a clean worktree
+- rolls production mutation back to the immutable Phase J documentation start if a required gate fails
+- never runs `git push`
+
+### Final Phase K implementation Git state
+
+- Implementation commit: `e39a9fab0c3f62a9aa35da631ec73357e300d434`
+- Commit subject: `Upgrade technical publication and mission library`
+- Parent: `c7758aa415928467da0ebb6e48c276c1082be566`
+- Implementation tree: `560f3d9dbb055e8013bda197998d793437f057a0`
+- Documentation commit: separate local commit created only after successful release gates and engineering-log append
+- Final worktree after documentation commit: clean
+- Remote recovery branch: unpublished
+- Push performed: **NO**
+
+### Phase closure
+
+Phase K is complete only after the real Windows release installer passes all required gates and reaches both deterministic local commits.
+
+The completed phase turns:
+
+- the Technical Report into a reviewable engineering publication with formal revision, executive, figure/table/equation, reference, and print structure
+- the Mission Library into a categorized, question-led, progressively disclosed technical knowledge system
+
+while preserving the existing mission reconstruction, zero-cost architecture, public-evidence discipline, and all protected F–J experience contracts.
+
+### Next phase
+
+Proceed to **Phase L — Typography + Visual Quality** only after the successful Phase K installer output is retained.
