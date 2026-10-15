@@ -64149,3 +64149,264 @@ The Phase O delivery is one deterministic patch ZIP plus one rollback-capable Po
 Phase O closes the master-prompt README / GitHub presentation / social metadata / demo-media work without reopening completed runtime or evidence phases. The repository now presents MissionLab as the evidence-grounded engineering system it has become, and every major public route has deterministic share/search metadata backed by a repo-owned social asset.
 
 The next planned master-prompt phase is **Phase P — Full release-candidate QA**. Phase P is intentionally **not started** in this phase.
+
+## Phase P — Full Release-Candidate QA
+
+**Status:** COMPLETE — this section is appended only after the deterministic Windows installer passes the complete static/evidence/model qualification and the exhaustive protected Edge + Chrome release-candidate browser gate.
+
+### Objective
+
+Qualify the completed Phase O system as a release candidate without reopening completed product-design, mission-model, evidence, accessibility, responsive, performance, failure-state, or presentation phases.
+
+Phase P is intentionally a QA/control phase. It strengthens release orchestration and CI enforcement while preserving the public product unless a real qualification defect is demonstrated.
+
+### Immutable starting state
+
+- Repository: `C:\Users\prakh\Documents\a2-missionlab`
+- Branch: `phase-10-quality-recovery`
+- Starting / completed Phase O HEAD: `8e0ba840391e7b239fca422cb660c7354fa4349b`
+- Starting parent / Phase O implementation: `43e44471e2d32bc58c056cc9e4ee340e3144cbdb`
+- Starting tree: `a3a48442cf0cd3777e17cdb50d93c3be8d918f64`
+- Protected `origin/main`: `d74a88d20f6ff1bd8be2ff0dbe3fb2b44cc13187`
+- Recovery branch publication state: local-only / unpublished
+
+Phase P starts exactly from the completed Phase O documentation HEAD. No Phase F–O implementation is restarted, squashed, amended, or recreated.
+
+### Repository-first findings
+
+1. The completed Phase O product already had strong dedicated validators for Mission Explorer, Windows, GNC, Mission Control, PSI, trajectory correction, Space Weather, Entry, publication, typography, accessibility, performance/failure states, responsive behavior, and social/repository presentation.
+2. The remaining release-candidate gap was orchestration rather than missing product functionality.
+3. Portable CI still allowed important browser regressions to behave as best-effort checks when a compatible browser was unavailable; the master prompt explicitly required a real portable Chromium gate rather than incomplete CI browser enforcement.
+4. The existing Windows release stack already represented the strongest exhaustive Edge + Chrome contract and therefore should be orchestrated, not replaced with a weaker duplicate framework.
+5. Real-device iPhone Safari, Android Chrome, physical tablet, desktop Safari where accessible, real screen-reader review, and subjective executive-level review cannot honestly be inferred from headless CI/browser automation.
+6. Phase Q owns adversarial executive review and final polish, so Phase P must not silently absorb or claim that later phase.
+
+### Files changed
+
+The implementation commit changes exactly five paths:
+
+- `.github/workflows/ci.yml`
+- `docs/PHASE_P_RELEASE_CANDIDATE_QA.md`
+- `scripts/validate_public_experience.py`
+- `scripts/validation/validate_phase_p_release_candidate.py`
+- `scripts/validation/validate_phase_p_regression.py`
+
+The documentation-only closure commit later changes only:
+
+- `docs/ENGINEERING_LOG.md`
+
+No public route HTML, application CSS, simulation/evidence data, imagery, or runtime JavaScript is changed by the Phase P implementation.
+
+### Completed release-candidate capability
+
+Phase P adds one explicit release-candidate control layer:
+
+- a static Phase P contract that inventories and protects the complete validator set,
+- a portable Chromium CI gate that is mandatory rather than silently skippable,
+- deterministic use of the exact Chrome-for-Testing executable produced by `browser-actions/setup-chrome@v2`,
+- a single exhaustive Windows release command that orchestrates the already-proven protected browser suites,
+- explicit separation between automated coverage and manual/device-only coverage,
+- public-release validation requiring the Phase P QA artifacts.
+
+### Portable CI design
+
+The CI workflow now separates static/publication validation from browser smoke qualification.
+
+The browser job:
+
+1. waits for the static `validate` job,
+2. installs Chrome for Testing through `browser-actions/setup-chrome@v2`,
+3. captures the action's exact `chrome-path`,
+4. passes that path to Phase P as `PHASE_P_CHROME`,
+5. runs `python scripts/validation/validate_phase_p_regression.py --portable`,
+6. fails the job on the first protected browser failure.
+
+Phase P creates a temporary `google-chrome` discovery shim pointing to the exact setup-action executable so the historical validators can remain unchanged and continue using their proven browser-discovery contracts.
+
+The portable suite covers:
+
+- Mission Explorer interaction/scroll stability,
+- Through Orion Windows navigation/scroll stability,
+- GNC deterministic AUTO/MANUAL interaction,
+- Mission Control layout/decision behavior,
+- PSI interaction/model behavior,
+- trajectory-correction interaction/model behavior,
+- Space Weather interaction/model behavior,
+- Entry / descent / recovery interaction/model behavior,
+- the global eight-route responsive smoke matrix.
+
+This is intentionally described as Chromium CI coverage, not Edge/Safari/physical-device coverage.
+
+### Windows exhaustive release gate
+
+`python scripts/validation/validate_phase_p_regression.py --windows-release` orchestrates the portable suites plus the protected:
+
+- Phase K publication browser regression,
+- Phase L typography/visual-quality browser regression,
+- Phase M accessibility/responsive Edge + Chrome matrix,
+- Phase N normal-assets + intentional-failure Edge + Chrome matrix,
+- Phase O metadata/social presentation Edge + Chrome matrix.
+
+Historical validators retain their own exact case counts, viewport matrices, interaction assertions, browser requirements, and failure semantics. Phase P does not reduce them to one shallow smoke test.
+
+### Evidence boundaries
+
+Phase P changes QA infrastructure, not mission truth.
+
+It does **not** alter:
+
+- mission chronology,
+- public source inventory,
+- evidence classifications,
+- reconstructed/derived values,
+- simulation equations or constants,
+- private/unknown fact boundaries,
+- NASA terminology boundaries,
+- operational-role disclaimers,
+- README mission claims,
+- public route metadata/content.
+
+No private NASA material, fabricated telemetry, fabricated flight rule, or new mission reconstruction is introduced.
+
+### Package-build validation
+
+Package construction against the exact reconstructed Phase O state passed every gate that is truthfully executable in the build environment:
+
+- exact Phase O HEAD/tree reconstruction,
+- clean starting worktree,
+- protected remote `origin/main` confirmation,
+- `git diff --check`,
+- JavaScript syntax checks across protected runtimes,
+- Phase P Python compilation,
+- public text/markup integrity,
+- public-experience validation,
+- publication pack validation,
+- publication web validation,
+- final release validation,
+- Phase K publication validation,
+- Phase L typography validation,
+- Phase M accessibility validation,
+- Phase N performance/failure-state static validation,
+- Phase O presentation/metadata validation,
+- Phase P static release-candidate validation,
+- trajectory-correction pure-model regression,
+- PSI pure-model regression,
+- Space Weather pure-model regression,
+- Entry pure-model/evidence regression,
+- celestial asset/provenance validation.
+
+The supplied forensic handoff intentionally omits gitignored `data/processed/...` products, so historical Space Weather/NAIRAS/Entry analytical validators that require those real processed products cannot be truthfully rerun in the package container. That remains a required Windows installer gate rather than a fabricated package-build pass.
+
+The package container also cannot complete the repository's required local headless Chromium loopback handshake reliably. No browser pass is claimed from that environment. The real Windows release installer therefore remains authoritative for local exhaustive browser qualification, while remote portable Chromium coverage becomes mandatory once the user chooses to push and CI executes.
+
+### Deterministic Windows qualification
+
+Before this engineering-log section can be appended, the installer must pass:
+
+- exact repository path / branch / Phase O HEAD / parent / tree verification,
+- clean worktree,
+- fetched/pruned protected `origin/main` verification,
+- proof that `origin/phase-10-quality-recovery` remains unpublished,
+- timestamped `safety/phase-p-release-candidate-*` branch creation,
+- patch ZIP SHA-256, exact allowlist, and every payload SHA-256,
+- Python/JavaScript syntax validation,
+- all protected static/publication/accessibility/performance/presentation validators,
+- Phase P static control validation,
+- pure-model regressions,
+- full data-dependent Space Weather/NAIRAS/Entry analytical/evidence validation against the real repository products,
+- the complete Phase P Windows exhaustive Edge + Chrome browser orchestration,
+- exact staged implementation-tree verification,
+- staged-candidate critical validation,
+- deterministic implementation-commit verification,
+- documentation-only engineering-log append,
+- deterministic documentation-commit verification,
+- exact final HEAD / parent / tree verification,
+- clean final worktree.
+
+Any required failure aborts Phase P and rolls the production branch back to the immutable completed Phase O documentation HEAD while retaining the safety branch for forensics. No push, merge, release, Pages deployment, or other remote mutation is performed.
+
+### Browser coverage
+
+Windows release qualification requires the complete protected browser stack through Phase O with Microsoft Edge and Google Chrome wherever the historical gate requires both browsers.
+
+That includes, at minimum:
+
+- route/interactions for Mission Explorer, Windows, GNC, Mission Control, PSI, trajectory correction, Space Weather, and Entry,
+- the global responsive matrix,
+- Phase K publication behavior,
+- Phase L typography behavior,
+- Phase M's eight-route / twelve-viewport-per-browser accessibility-responsive matrix,
+- Phase N normal-assets and intentional celestial-failure modes,
+- Phase O's 96 assertions per browser across all eight routes.
+
+The Phase P orchestrator fails on the first failed protected suite and does not convert missing release browsers into a pass.
+
+Remote GitHub Actions browser CI is not claimed as executed during this local-only phase because the master prompt forbids automatic push. Phase P instead makes that job mandatory so it runs when the user later publishes the branch/commit.
+
+### Responsive coverage
+
+The protected Phase M release matrix remains authoritative for the master-prompt viewport contract, including:
+
+- 320 × 568,
+- 360-class phone,
+- 375-class phone,
+- 390 × 844,
+- 430 × 932,
+- phone landscape,
+- tablet portrait,
+- tablet landscape,
+- approximately 1024 px,
+- 1280 × 800,
+- 1440 × 900,
+- 1920 × 1080 where practical.
+
+Phase P does not create a competing responsive implementation. It requires the completed responsive system to pass again as release-candidate evidence.
+
+### Performance notes
+
+Phase P adds no application-runtime dependency and does not alter route JavaScript/CSS payloads.
+
+The only production-adjacent change is CI/test infrastructure. Browser orchestration runs outside the public runtime. Phase N performance, lazy loading, animation ownership, failure fallbacks, and route-specific loading behavior remain unchanged and protected by their existing validators.
+
+### Limitations
+
+The following are explicitly **not automated or claimed** by Phase P:
+
+- physical iPhone Safari,
+- physical Android Chrome,
+- physical tablet browser testing,
+- desktop Safari where accessible,
+- real assistive-technology/screen-reader review,
+- subjective five-minute SpaceX/NASA/Blue Origin/flight-director/GNC/EDL/principal-engineer/recruiter reviews.
+
+Those are manual/device or Phase Q responsibilities. Phase P also cannot truthfully claim the new remote CI job has executed until the user explicitly chooses to push.
+
+### Deterministic implementation identity
+
+- Implementation subject: `Add full release-candidate QA gate`
+- Implementation parent: `8e0ba840391e7b239fca422cb660c7354fa4349b`
+- Implementation tree: `b7a608bf63b6487ea93235eb3b3295ed01566cfa`
+- Implementation commit: `f2724bfc717b4632991a5beb5e605879aaefeb0c`
+
+The implementation commit is preserved immutably beneath the documentation-only Phase P closure commit.
+
+### Safety / delivery
+
+Phase P is delivered as one deterministic patch ZIP plus one rollback-capable PowerShell installer. The installer:
+
+- accepts only the exact completed Phase O starting state,
+- validates remote baseline and unpublished recovery-branch state,
+- creates a timestamped safety branch before mutation,
+- validates ZIP/path/hash integrity before copying any implementation file,
+- changes only the five approved implementation paths,
+- fails closed on validation, browser, evidence/data, path, hash, tree, or commit drift,
+- appends this engineering-log section only after full release-candidate qualification passes,
+- creates a separate deterministic documentation-only commit,
+- verifies a clean final worktree,
+- performs no push.
+
+### Phase P closure
+
+Phase P closes the master-prompt **Full release-candidate QA** phase by converting the previously fragmented test inventory into a fail-closed release system with mandatory portable Chromium CI coverage and one exhaustive Windows Edge + Chrome release command, while preserving every completed product/evidence/runtime contract.
+
+The next planned master-prompt phase is **Phase Q — Adversarial executive review + final polish**. Phase Q is intentionally **not started** in this phase.
