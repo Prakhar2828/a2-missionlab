@@ -1,4 +1,5 @@
 /* Phase K — publication-specific report architecture. */
+.report-hero .creator-byline{margin:.85rem 0 .35rem;color:#9fb0bd;font-size:.9rem}.report-hero .creator-byline a{color:#eef4f8;border-bottom:1px solid #506270;padding-bottom:.08rem}.report-hero .creator-byline a:hover,.report-hero .creator-byline a:focus-visible{border-bottom-color:#a8bfd0}
 .report-hero{padding-bottom:42px}
 .report-publication{border-bottom:1px solid var(--line);background:#090e14}
 .report-publication .container{padding:22px 0}

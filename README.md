@@ -10,6 +10,8 @@ A2 MissionLab is an independent open-source project for exploring Artemis II as 
 
 > A2 MissionLab is not an official NASA application, is not NASA-endorsed, and does not use non-public NASA data, internal procedures, internal screenshots, or unpublished telemetry.
 
+**Built independently by [Prakhar Pandey](https://www.linkedin.com/in/prakhar-pandey-470702263).** MissionLab integrates the public-data pipeline, deterministic analysis, bounded engineering models, interactive mission experiences, evidence architecture, validation, and publication layer; NASA/ESA source material remains externally attributed.
+
 ## Why MissionLab exists
 
 Human-spaceflight information is scattered across trajectory files, mission updates, science archives, imagery, technical references, environmental datasets, and postflight reporting. MissionLab asks a narrower engineering question: **how much mission understanding can be reconstructed from public evidence without pretending the public record is complete?**
@@ -140,10 +142,11 @@ A feature is not considered complete because it renders once. The release stack 
 - Phase O metadata/social/README presentation validation
 - Phase P fail-closed release-candidate orchestration across the protected browser stack
 - Phase Q adversarial executive review and repository-state consistency validation
+- post-Phase-Q creator identity, contact integrity, and anti-portfolio regression validation
 
 Phase P qualification passed the exhaustive protected Windows Edge + Chrome release-candidate gate, including the Phase N **80/80** normal-assets/intentional-failure matrix and the Phase M **192-case** responsive/accessibility matrix. Phase Q adds the final adversarial review and repository/presentation truth pass without weakening those gates. Physical iPhone Safari, Android Chrome, tablet hardware, desktop Safari, and real screen-reader sessions remain unclaimed unless explicitly run and recorded.
 
-See [Validation Report](docs/VALIDATION_REPORT.md) and the phase-specific QA records under `docs/`.
+See [Validation Report](docs/VALIDATION_REPORT.md), the [Creator Identity + Executive Conversion Review](docs/CREATOR_CONVERSION_QA.md), and the phase-specific QA records under `docs/`.
 
 ## Demo media
 

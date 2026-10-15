@@ -86,6 +86,24 @@
   margin-top: 1.35rem;
 }
 
+.landing-page .x-creator-line {
+  margin: 0.95rem 0 0;
+  color: rgba(216, 227, 235, 0.76);
+  font-size: 0.82rem;
+  letter-spacing: 0.015em;
+}
+
+.landing-page .x-creator-line a {
+  color: #f0f5f8;
+  border-bottom: 1px solid rgba(240, 245, 248, 0.38);
+  padding-bottom: 0.08rem;
+}
+
+.landing-page .x-creator-line a:hover,
+.landing-page .x-creator-line a:focus-visible {
+  border-bottom-color: rgba(240, 245, 248, 0.9);
+}
+
 .landing-page .x-hero-actions .x-button {
   min-height: 48px;
   padding-inline: 1.2rem;
@@ -714,6 +732,42 @@
   }
 }
 
+
+/* CREATOR / ENGINEERING OWNERSHIP */
+
+.home-engineering-ownership {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.28fr) minmax(0, 1fr);
+  gap: clamp(18px, 4vw, 54px);
+  align-items: start;
+  margin-top: 24px;
+  padding: 18px 20px;
+  border: 1px solid #c9d0d4;
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.home-engineering-ownership > span {
+  color: #43718f;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+}
+
+.home-engineering-ownership p {
+  max-width: 900px;
+  margin: 0;
+  color: #53616d;
+  font-size: 0.9rem;
+  line-height: 1.62;
+}
+
+@media (max-width: 700px) {
+  .home-engineering-ownership {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 16px;
+  }
+}
 
 /* MOBILE */
 

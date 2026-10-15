@@ -38,6 +38,9 @@ jobs:
       - name: Validate Phase Q adversarial review and final polish
         run: python scripts/validation/validate_phase_q_adversarial_review.py
 
+      - name: Validate creator identity and executive conversion
+        run: python scripts/validation/validate_creator_conversion.py
+
       - name: Validate Phase 9A publication pack
         run: python scripts/validation/validate_publication_pack.py
 
