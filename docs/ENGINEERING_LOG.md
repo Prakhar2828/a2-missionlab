@@ -62222,3 +62222,277 @@ The completed phase:
 ### Next phase
 
 Proceed to **Phase J — Mission Explorer / Through Orion's Windows / GNC / Mission Control protected subjective polish + QA contract cleanup** only after the successful Phase I installer output is retained.
+
+## Phase J — Mission Explorer / Windows / GNC / Mission Control Protected Polish + QA Contract Cleanup
+
+**Status:** COMPLETE — APPENDED ONLY AFTER REAL WINDOWS CHROME + EDGE RELEASE GATES PASS
+
+### Objective
+
+Perform the protected subjective-quality pass on Mission Explorer, Through Orion's Windows, GNC, and Mission Control without rewriting already strong systems, weakening evidence discipline, or destabilizing the Phase F/G/H/I product contracts.
+
+Phase J follows the repository-first rule: inspect the current protected experiences and the strongest historical pre-split build, identify actual current weaknesses, and mutate only where there is a material clarity or QA benefit.
+
+### Immutable starting state
+
+- Repository: `C:\Users\prakh\Documents\a2-missionlab`
+- Branch: `phase-10-quality-recovery`
+- Starting HEAD: `7963a9a237a288631789242072816bc16b9588e2`
+- Starting parent: `31f37ee0c6ea27775d8621de29b6f0d31d618564`
+- Starting tree: `0c8d16542a7cc3f72196ba42e95138afb5083db4`
+- Starting subject: `Document completed Phase I`
+- Protected `origin/main`: `d74a88d20f6ff1bd8be2ff0dbe3fb2b44cc13187`
+- Recovery branch remains intentionally local-only / unpublished.
+
+### Design archaeology / current-state findings
+
+The strong historical pre-split build around `718abc5e18403ba26eff3a68cfd208690ce6dbaf` was inspected only for product archaeology.
+
+The current multi-page implementation remains materially stronger and is preserved.
+
+Current inspection found:
+
+- Mission Explorer already preserves stable phase progression, mission clock, geometry, milestone navigation, responsive containment, and zero-scroll-jump behavior. No production mutation was justified.
+- Through Orion's Windows already presents 25 curated mission/science moments with direct on-image navigation, filmstrip navigation, keyboard/touch behavior, provenance, geometry context, zoom/lightbox behavior, preload behavior, stable viewer geometry, and evidence-aware captions. No production mutation was justified.
+- Mission Control already contains the acronym/discipline onboarding and operational-reasoning structure that the historical complaint requested. The product itself uses approximately `64 px` or larger scenario/discipline targets, but its regression still enforced only `44 px`; that mismatch was a real QA defect.
+- GNC retained AUTO, MANUAL, deterministic fixed-step behavior, disturbance injection, THC, RHC, disturbance recovery, and the protected simulator behavior, but the current CSS rendered the inter-block closed-loop connector as a literal `?` rather than an arrow. This was a real visual/diagram defect rather than a historical-only complaint.
+- GNC explanatory wording described the loop correctly in broad terms but did not make the desired-state → estimated-state → error → command → response → feedback relationship as explicit as the Phase J product objective requires.
+
+Phase J therefore deliberately avoids a broad visual rewrite.
+
+### Exact implementation changed-file allowlist
+
+The Phase J implementation commit changes exactly these 7 paths:
+
+1. `docs/PHASE_D_MISSION_CONTROL_QA.md`
+2. `gnc.css`
+3. `gnc.html`
+4. `js/gnc.js`
+5. `scripts/validate_public_experience.py`
+6. `scripts/validation/mission_control_regression.html`
+7. `scripts/validation/validate_mission_control_regression.py`
+
+The documentation-only closure commit changes only:
+
+- `docs/ENGINEERING_LOG.md`
+
+### GNC diagram / explanatory polish
+
+The protected GNC simulator behavior is unchanged.
+
+Phase J fixes the diagram connector by replacing the literal mystery `?` CSS content with an explicit Unicode right-arrow escape:
+
+`content: "\\2192";`
+
+This avoids source-encoding ambiguity while restoring intentional direction between the six closed-loop blocks.
+
+The public explanation now states the causal loop explicitly:
+
+`desired state → estimated state → error → guidance / control → command → spacecraft response → feedback`
+
+The six interactive architecture blocks are clarified as:
+
+- SENSE — measure motion
+- ESTIMATE — estimated state
+- GUIDE — compare to target
+- CONTROL — error to command
+- FIRE — spacecraft response
+- VERIFY — close feedback loop
+
+The corresponding progressive-disclosure explanations in `js/gnc.js` now make the error, command, response, and feedback relationships explicit while preserving the existing evidence boundary around private Orion navigation filters, control laws, gains, allocation logic, and individual thruster histories.
+
+No deterministic physics constant, fixed-step behavior, AUTO timing target, manual THC/RHC behavior, disturbance behavior, canvas model, or protected GNC evidence claim is changed.
+
+### Mission Control QA contract cleanup
+
+Mission Control production CSS already protects `64 px` minimum discipline-lens targets and larger scenario targets.
+
+The dedicated browser regression previously failed only below `44 px`, which under-enforced the real product contract.
+
+Phase J strengthens both layers of that gate:
+
+- browser harness: `minimumTouch < 64` is now a failure
+- Python release gate: reported minimum touch target below `64 px` is now a failure
+- QA documentation now records the protected `64 px` contract
+
+No Mission Control scenario, discipline lens, seven-stage decision model, narrative/canvas separation, state model, evidence language, or runtime behavior is changed.
+
+### Static contract hardening
+
+`scripts/validate_public_experience.py` now protects the Phase J corrections so they cannot silently regress:
+
+- GNC public copy must retain the desired-state / estimated-state / error / feedback concepts
+- GNC CSS must retain the explicit right-arrow escape
+- the mystery `?` connector is explicitly forbidden
+- Mission Control's browser regression must enforce `64 px`
+- Mission Control's Python gate must enforce and report `64 px`
+
+### Evidence / terminology boundaries preserved
+
+Phase J does not alter the canonical evidence taxonomy:
+
+- NASA REPORTED
+- MISSIONLAB DERIVED
+- MODELED
+- INFERRED
+- UNKNOWN / NOT PUBLIC
+
+The following protected non-equivalences remain unchanged:
+
+- public OEM state != Orion onboard navigation state
+- DSN tracking != onboard navigation sensor
+- temporal sequence != causation
+- statistical anomaly != spacecraft fault
+- modeled heating != measured TPS telemetry
+- public mission reconstruction != private Mission Control data
+- educational maneuver modeling != NASA targeting solution
+- environmental context != crew dosimetry
+- PSI model != flight-qualified plume analysis
+- Artemis II loft/rebound != Artemis I skip entry
+
+GNC continues to state that public evidence establishes architecture, not private filter internals or exact thruster histories.
+
+Mission Control continues to state that `COMM` is MissionLab shorthand and `ENG SUPPORT` is a synthesis lens rather than asserted Artemis II front-room console nomenclature.
+
+### Validation — static / syntax / analytical
+
+Before any commit, the release installer requires:
+
+- exact branch / HEAD / parent / tree verification
+- clean worktree verification
+- fetched and verified `origin/main`
+- exact patch ZIP SHA-256 verification
+- exact changed-path allowlist verification
+- SHA-256 verification for every payload file
+- `git diff --check`
+- JavaScript syntax checks for protected public runtimes
+- Python compile checks for modified validation scripts
+- final public-experience validation
+- public text / markup integrity validation
+- Trajectory Correction pure-model regression
+- PSI pure-model regression
+- Phase I Entry pure-model/evidence regression
+- celestial asset/provenance validation
+- existing release validation
+
+The exact staged candidate reruns the Phase J-critical public/text checks plus the GNC and Mission Control dedicated browser gates before the deterministic implementation commit is created.
+
+### Real Windows browser / responsive release gate
+
+This section is appended only after the release installer requires and passes both Chrome and Edge on the user's real Windows repository.
+
+Protected dedicated regressions required to pass:
+
+- Mission Explorer — Chrome + Edge
+- Through Orion's Windows — Chrome + Edge
+- deterministic GNC AUTO / MANUAL — Chrome + Edge
+- Mission Control — Chrome + Edge
+- PSI — Chrome + Edge
+- Trajectory Correction — Chrome + Edge
+- Space Weather — Chrome + Edge
+- Entry / Descent / Recovery — Chrome + Edge
+- global responsive browser QA — Chrome + Edge
+
+Phase J-specific browser expectations:
+
+- GNC AUTO capture remains within the protected `15–20 s` simulation-time window
+- deterministic cadence spread remains within the protected tolerance
+- manual THC/RHC remains functional
+- manual and AUTO disturbance paths remain functional
+- GNC canvas remains finite and responsive
+- Mission Control still exercises all 4 scenarios × 7 discipline lenses
+- all 7 decision-model stages remain present
+- Mission Control horizontal overflow remains within the protected tolerance
+- Mission Control scenario/lens-driven layout and page-scroll drift remain within the protected tolerance
+- fixed context panels remain unclipped
+- minimum observed Mission Control scenario/discipline target is now required to be at least `64 px`
+- global tested horizontal overflow remains within the protected tolerance
+
+The full protected browser matrix runs once before staging. After the exact staged tree is verified, only the Phase J-critical GNC and Mission Control browser regressions are repeated, preserving the existing browser-resource safeguard instead of duplicating the entire matrix.
+
+### Responsive / interaction preservation
+
+Phase J intentionally leaves the Mission Explorer and Windows production implementations untouched because current repository evidence shows their earlier problems have already been solved.
+
+Protected responsive behavior remains:
+
+- Mission Explorer stable geometry and zero-scroll-jump interaction contract
+- Windows stable viewer geometry, direct arrows, keyboard/touch navigation, lightbox/zoom, preload behavior, and no-scroll-jump contract
+- GNC responsive canvas and deterministic AUTO/MANUAL behavior
+- Mission Control no-overflow, no-layout-drift, no-page-scroll-drift, fixed-context containment, and large-target contract
+
+No new global CSS layer, uncontrolled selector churn, route-wide refactor, or architecture merge is introduced.
+
+### Performance / architecture notes
+
+- No new animation loop is added.
+- No new network request is added.
+- No new image or font dependency is added.
+- No backend is added.
+- No paid service is added.
+- Zero-cost static HTML/CSS/JavaScript architecture remains intact.
+- Mission Explorer and Windows production code remain byte-for-byte unchanged by the implementation commit.
+- GNC physics/integration behavior remains unchanged; the mutation is explanatory/presentational only.
+- Mission Control runtime behavior remains unchanged; the mutation is test-contract/documentation only.
+
+### Git safety / rollback
+
+The Phase J release installer:
+
+- requires the exact repository path
+- requires branch `phase-10-quality-recovery`
+- requires starting HEAD `7963a9a237a288631789242072816bc16b9588e2`
+- requires starting parent `31f37ee0c6ea27775d8621de29b6f0d31d618564`
+- requires starting tree `0c8d16542a7cc3f72196ba42e95138afb5083db4`
+- fetches and verifies `origin/main = d74a88d20f6ff1bd8be2ff0dbe3fb2b44cc13187`
+- creates a timestamped `safety/phase-j-polish-*` branch before mutation
+- validates the patch ZIP and every payload hash
+- rejects unexpected changed or staged paths
+- stages only the 7 approved implementation paths
+- verifies the exact staged implementation tree
+- creates a deterministic local implementation commit only after all release gates pass
+- appends this complete Phase J record to `docs/ENGINEERING_LOG.md` without rewriting prior log content
+- creates a separate documentation-only local commit with the validated implementation commit as its parent
+- verifies final HEAD / parent / tree and a clean worktree
+- rolls back to the immutable completed Phase I documentation start on any failure after mutation begins
+- never runs `git push`
+
+### Final Phase J implementation Git state
+
+- Implementation commit: `e259e311a7c83396c5b8629d2a6d1831e3ef9b25`
+- Commit subject: `Polish GNC clarity and Mission Control QA`
+- Parent: `7963a9a237a288631789242072816bc16b9588e2`
+- Implementation tree: `5d5969a56120e2e91b93e80e435a24c2e29768b9`
+- Documentation commit: separate local commit created only after successful release gates and engineering-log append
+- Final worktree after documentation commit: clean
+- Remote recovery branch: still unpublished
+- Push performed: **NO**
+
+### Current limitations / manual release work preserved
+
+- Automated Phase J release coverage is Chrome and Edge on the user's real Windows machine; it does not claim Safari or Firefox coverage.
+- Real-device iPhone Safari, Android Chrome, and tablet subjective visual inspection remain part of later final-device release QA.
+- Phase J does not attempt a full typography, accessibility, performance, metadata, or publication redesign; those remain governed by later master-prompt phases.
+- Subjective polish does not fabricate private Mission Control displays, private flight-control data, proprietary GNC internals, or unpublished mission information.
+
+### Phase closure
+
+Phase J is complete only if the release installer reaches both the deterministic local implementation commit and the separate documentation-only commit after all required static, analytical, Chrome, Edge, and responsive gates pass.
+
+The completed phase:
+
+- preserves Mission Explorer rather than rewriting a solved interaction system
+- preserves Through Orion's Windows rather than destabilizing a solved 25-moment mission/science viewer
+- fixes the real GNC connector defect
+- makes the GNC closed-loop cause/effect relationship easier to understand in seconds
+- strengthens Mission Control QA to the real `64 px` product contract
+- adds static guards so both Phase J fixes cannot silently regress
+- preserves all Phase F/G/H/I product and evidence contracts
+- remains zero-cost and static
+- ends in local commits only
+- leaves the recovery branch unpublished
+- performs no push
+
+### Next phase
+
+Proceed to **Phase K — Technical Report + Mission Library** only after the successful Phase J installer output is retained.
