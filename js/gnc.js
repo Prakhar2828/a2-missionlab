@@ -228,12 +228,42 @@ $('#gnc-disturbance')?.addEventListener('click',()=>disturb(false));
 setBlock('sense');setMode('auto');reset();
 
 if(canvas){
-  let last=performance.now();
-  const frame=timestamp=>{
-    const elapsed=Math.max(0,(timestamp-last)/1000);last=timestamp;
-    if(!QA_MODE)advanceSimulation(elapsed);else{updateReadouts();render();}
-    requestAnimationFrame(frame);
+  let frameId=0;
+  let last=0;
+  let canvasInView=true;
+
+  const stopLoop=()=>{
+    if(frameId){cancelAnimationFrame(frameId);frameId=0;}
+    last=0;
+    canvas.dataset.a2Animation='paused';
   };
-  requestAnimationFrame(frame);
+
+  const frame=timestamp=>{
+    frameId=0;
+    if(document.hidden||!canvasInView){stopLoop();return;}
+    const elapsed=last?Math.max(0,(timestamp-last)/1000):0;
+    last=timestamp;
+    if(!QA_MODE)advanceSimulation(elapsed);else{updateReadouts();render();}
+    frameId=requestAnimationFrame(frame);
+    canvas.dataset.a2Animation='running';
+  };
+
+  const syncLoop=()=>{
+    if(document.hidden||!canvasInView){stopLoop();return;}
+    last=0;
+    if(!frameId)frameId=requestAnimationFrame(frame);
+    canvas.dataset.a2Animation='running';
+  };
+
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(entries=>{
+      canvasInView=entries[0]?.isIntersecting!==false;
+      if(canvasInView){render();syncLoop();}else stopLoop();
+    },{rootMargin:'180px'}).observe(canvas);
+  }
+
+  document.addEventListener('visibilitychange',syncLoop);
+  window.addEventListener('resize',()=>{if(document.hidden||!canvasInView)return;render();},{passive:true});
+  syncLoop();
 }
 })();

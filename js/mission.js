@@ -365,6 +365,9 @@
 
   initMission();
   if(missionCanvas){
+    let missionFrame=0;
+    let missionInView=true;
+
     const loop=t=>{const {ctx,w,h,layout}=fitCanvas(missionCanvas);ctx.clearRect(0,0,w,h);drawStars(ctx,w,h,layout.compact?105:150,13,.72);
       const portrait=layout.profile==='phone-portrait',landPhone=layout.profile==='phone-landscape';
       const scene=sceneRect(w,h,{top:portrait?16:landPhone?14:18,bottom:portrait?16:landPhone?14:22},portrait?10:14);
@@ -389,49 +392,33 @@
         drawCanvasLabel(ctx,'FAR SIDE / LOS BLOCKED',ix+8,portrait?iy+ih-25:iy+ih-9,iw-16,{size:portrait?9:10.5,minSize:9,color:'rgba(255,255,255,.68)',maxLines:portrait?2:1});
       }ctx.restore();
       if(missionP>.515&&missionP<.635){ctx.save();ctx.strokeStyle='rgba(255,104,93,.72)';ctx.setLineDash([3,5]);ctx.beginPath();ctx.moveTo(pos.x,pos.y);ctx.lineTo(earth.x,earth.y);ctx.stroke();ctx.setLineDash([]);drawCanvasLabel(ctx,'LUNAR OCCULTATION REGION',portrait?scene.x+8:scene.x+scene.width*.45,portrait?scene.bottom-18:scene.y+scene.height*.61,portrait?scene.width*.64:scene.width*.5,{size:portrait?10:11,minSize:10,color:'rgba(255,104,93,.92)',maxLines:portrait?2:1});ctx.restore();}
-      missionFrame=0;if(!staticMissionQa&&!missionReducedMotion.matches&&!document.hidden)missionFrame=requestAnimationFrame(loop);};
-    let missionFrame=0;
-    refreshMissionCanvas=()=>{
-      if(staticMissionQa||missionReducedMotion.matches||document.hidden){if(missionFrame){cancelAnimationFrame(missionFrame);missionFrame=0;}loop(0);return;}
-      if(!missionFrame)missionFrame=requestAnimationFrame(loop);
+      missionFrame=0;
+      const shouldAnimate=!staticMissionQa&&!missionReducedMotion.matches&&!document.hidden&&missionInView;
+      missionCanvas.dataset.a2Animation=shouldAnimate?'running':'paused';
+      if(shouldAnimate)missionFrame=requestAnimationFrame(loop);
     };
+
+    refreshMissionCanvas=()=>{
+      if(missionFrame){cancelAnimationFrame(missionFrame);missionFrame=0;}
+      const shouldAnimate=!staticMissionQa&&!missionReducedMotion.matches&&!document.hidden&&missionInView;
+      missionCanvas.dataset.a2Animation=shouldAnimate?'running':'paused';
+      if(shouldAnimate)missionFrame=requestAnimationFrame(loop);else loop(0);
+    };
+
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(entries=>{
+        missionInView=entries[0]?.isIntersecting!==false;
+        refreshMissionCanvas();
+      },{rootMargin:'180px'}).observe(missionCanvas);
+    }
+
     missionReducedMotion.addEventListener?.('change',refreshMissionCanvas);
     document.addEventListener('visibilitychange',refreshMissionCanvas);
+    window.addEventListener('a2:celestialchange',refreshMissionCanvas);
     refreshMissionCanvas();
   }
 
   }
-
-
-  // Entry / descent / recovery: NASA-reported anchors with educational interpolation.
-  if ($('#entry-lab') && !$('#entry-lab').hasAttribute('data-entry-phase-i')) {
-  const entryCanvas=$('#entry-canvas');let entryP=0;
-  const entryStates=[
-    {p:0,time:'23:53 UTC',phase:'Entry interface',cap:'400,000 ft. Mach 35. The atmosphere is about to become the braking system.',alt:'121.9 km',mach:'35',q:'building',heat:'rising',comm:'available',evidence:'NASA REPORTED MILESTONE',lesson:'The atmosphere starts doing the braking.',copy:'NASA reported Orion reaching the atmosphere at 400,000 feet at roughly Mach 35. Aerodynamic drag removes most of the lunar-return kinetic energy; this scene interpolates between public milestones.'},
-    {p:.16,time:'~23:54 UTC',phase:'Hypersonic entry',cap:'Speed is still enormous while density rises by orders of magnitude.',alt:'~90 km',mach:'>25',q:'rising fast',heat:'high',comm:'available → degrading',evidence:'EDUCATIONAL INTERPOLATION',lesson:'Heating is extremely sensitive to velocity.',copy:'In Sutton–Graves, convective stagnation heat flux scales approximately with V³ and the square root of density. The visualization is qualitative; use the engineering drawer for the actual MissionLab model curve.'},
-    {p:.32,time:'~23:55–23:57 UTC',phase:'Peak-heating / blackout neighborhood',cap:'A luminous plasma envelope forms while Orion rapidly sheds energy.',alt:'~70–55 km',mach:'hypersonic',q:'high',heat:'MODEL PEAK REGION',comm:'planned blackout',evidence:'MODEL + NASA BLACKOUT CONTEXT',lesson:'Expected radio silence is not a communications failure.',copy:'Ionized gas around the capsule can interfere with RF propagation. NASA expected an approximately six-minute blackout after entry interface; MissionLab does not infer plasma density from the communications event.'},
-    {p:.53,time:'00:00 UTC',phase:'Communications reacquisition',cap:'The plasma environment relaxes enough for contact to return.',alt:'lower atmosphere',mach:'falling rapidly',q:'falling',heat:'falling',comm:'reacquired',evidence:'NASA REPORTED MINUTE',lesson:'Reacquisition marks an operational transition.',copy:'NASA reported communications reestablished at 8:00 p.m. EDT. That public event is used as a milestone, not as a direct measurement of plasma properties.'},
-    {p:.72,time:'00:03 UTC',phase:'Drogue parachutes',cap:'At 23,400 ft, two drogues stabilize and slow Orion.',alt:'7.13 km',mach:'subsonic',q:'low',heat:'low',comm:'available',evidence:'NASA REPORTED · 23,400 FT · 479 FT/S',lesson:'Drogues make the capsule stable before the big canopies arrive.',copy:'NASA reported drogue deployment at 23,400 feet, with velocity dropping to 479 ft/s. A parachute deployed at hypersonic entry speed would see destructive loads, so terminal descent must wait until the atmosphere has already removed almost all of the energy.'},
-    {p:.83,time:'00:04 UTC',phase:'Main parachutes',cap:'At 5,400 ft, the drogues cut away and three mains deploy.',alt:'1.65 km',mach:'low',q:'very low',heat:'ambient',comm:'available',evidence:'NASA REPORTED · 5,400 FT · <200 FT/S',lesson:'The mains carry the final descent.',copy:'The drogue stage stabilizes and slows first; the three main canopies then provide the much larger drag area needed to reduce speed for ocean impact.'},
-    {p:1,time:'00:07 UTC',phase:'Splashdown',cap:'Orion reaches the Pacific off San Diego.',alt:'0 km',mach:'0',q:'0',heat:'ambient',comm:'recovery',evidence:'NASA REPORTED',lesson:'Splashdown ends the flight path, not the engineering.',copy:'NASA reported parachute-assisted splashdown at 8:07 p.m. EDT on April 10, which is 00:07 UTC on April 11. Recovery, safing, extraction, inspection, and postflight analysis continue after touchdown.'}
-  ];
-  function nearestState(p){return entryStates.reduce((b,s)=>Math.abs(s.p-p)<Math.abs(b.p-p)?s:b,entryStates[0]);}
-  function renderEntry(p,snap=false){entryP=clamp(p,0,1);const st=nearestState(entryP);if(snap)entryP=st.p;const map={time:'entry-time',phase:'entry-phase',cap:'entry-visual-caption',alt:'g-alt',mach:'g-mach',q:'g-q',heat:'g-heat',comm:'g-comm',evidence:'entry-evidence',lesson:'entry-lesson-title',copy:'entry-lesson-copy'};Object.entries(map).forEach(([k,id])=>{const el=$('#'+id);if(el)el.textContent=st[k]});const range=$('#entry-scrubber');if(range)range.value=Math.round(entryP*1000);$$('#entry-milestones button').forEach(b=>b.classList.toggle('active',Math.abs(Number(b.dataset.p)-entryP)<.065));const sig=$('#entry-signal');if(sig){const blackout=entryP>.22&&entryP<.5;sig.classList.toggle('blackout',blackout);$('span',sig).textContent=blackout?'EXPECTED BLACKOUT':entryP<.53?'COMM AVAILABLE':'COMM REACQUIRED';}}
-  const eMiles=$('#entry-milestones');if(eMiles){eMiles.innerHTML=entryStates.map(x=>`<button type="button" data-p="${x.p}">${x.phase}</button>`).join('');$$('button',eMiles).forEach(b=>b.addEventListener('click',()=>renderEntry(Number(b.dataset.p),true)));}$('#entry-scrubber')?.addEventListener('input',e=>renderEntry(Number(e.target.value)/1000));
-  const entryTopics={speed:'<strong>Why velocity matters so much.</strong> Lunar-return entry begins around Mach 35. In the Sutton–Graves approximation, convective heat flux scales roughly with velocity cubed, so modest changes in speed strongly change the heating term. That model output is not heat-shield telemetry.',pressure:'<strong>Dynamic pressure is aerodynamic loading pressure.</strong> q = ½ρV². Density climbs dramatically while velocity is falling; their competition produces a peak instead of a steady increase all the way to the ocean.',blackout:'<strong>Why radio can disappear.</strong> Hypersonic heating ionizes gas around the capsule. The resulting plasma can interfere with RF propagation. NASA treated this as a planned entry blackout, which is operationally different from an unexpected communications anomaly.',parachutes:'<strong>Why Orion cannot deploy parachutes immediately.</strong> At entry interface the kinetic energy and aerodynamic loads are far beyond what terminal-descent canopies are designed to absorb. The heat shield and atmosphere must do the high-energy braking first.',staging:'<strong>Why drogues and mains are separate.</strong> Drogues deploy first to stabilize and slow the capsule at 23,400 ft. At 5,400 ft they are cut away and three much larger main canopies deploy for the final descent.'};
-  function setEntryTopic(k){$$('[data-entry-topic]').forEach(b=>b.classList.toggle('active',b.dataset.entryTopic===k));const e=$('#entry-topic-panel');if(e)e.innerHTML=entryTopics[k];}$$('[data-entry-topic]').forEach(b=>b.addEventListener('click',()=>setEntryTopic(b.dataset.entryTopic)));setEntryTopic('speed');renderEntry(0,true);
-  if(entryCanvas){const loop=t=>{const {ctx,w,h,layout}=fitCanvas(entryCanvas);ctx.clearRect(0,0,w,h);const p=entryP,overlayed=!layout.phone,scene=sceneRect(w,h,{top:overlayed?128:0,bottom:overlayed?92:0},layout.phone?8:10);const bg=ctx.createLinearGradient(0,0,0,h);bg.addColorStop(0,p<.55?'#010308':'#071625');bg.addColorStop(.58,p<.38?'#050811':'#183a55');bg.addColorStop(1,p<.6?'#0b1b2a':'#5a91ad');ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);if(p<.62)drawStars(ctx,w,h,layout.compact?85:120,71,1-p);
-      const limbY=scene.y+scene.height*(.93-.26*clamp(p/.7,0,1)),er=Math.max(scene.width*1.12,scene.height*.92),ex=scene.cx,ey=limbY+er*.72;for(let k=5;k>=1;k--){ctx.strokeStyle=`rgba(85,173,226,${.025*k})`;ctx.lineWidth=k*5;ctx.beginPath();ctx.arc(ex,ey,er-k*2,Math.PI,Math.PI*2);ctx.stroke();}ctx.fillStyle=p>.7?'#15516e':'#071d2e';ctx.beginPath();ctx.arc(ex,ey,er,Math.PI,Math.PI*2);ctx.fill();
-      if(p>.84){const ocean=scene.y+scene.height*.82;ctx.fillStyle='rgba(37,111,143,.78)';ctx.fillRect(scene.x,ocean,scene.width,scene.bottom-ocean);ctx.strokeStyle='rgba(216,243,255,.26)';for(let i=0;i<7;i++){ctx.beginPath();ctx.moveTo(scene.x,ocean+i*10+Math.sin(t*.002+i)*2);ctx.quadraticCurveTo(scene.cx,ocean-2+i*10,scene.right,ocean+i*10);ctx.stroke();}}
-      const cx=lerp(scene.x+scene.width*(layout.phone?.77:.74),scene.cx,p),cy=lerp(scene.y+scene.height*.17,scene.y+scene.height*.73,p),baseScale=clamp(scene.min/440,.72,1.15),heat=Math.sin(clamp(p/.56,0,1)*Math.PI);ctx.save();ctx.translate(cx,cy);ctx.rotate(lerp(-.45,.08,p));const sc=baseScale*(1+clamp((p-.58)/.42,0,1)*.7);ctx.scale(sc,sc);
-      if(p>.08&&p<.58){const trail=clamp(scene.width*.28/baseScale,85,220);for(let i=0;i<16;i++){ctx.strokeStyle=`rgba(255,${85+i*5},${30+i*2},${.04+heat*.04})`;ctx.lineWidth=1+i*.18;ctx.beginPath();ctx.moveTo(12,-8+i);ctx.bezierCurveTo(trail*.35,Math.sin(t*.004+i)*12,trail*.68,(i-8)*3.6,trail,(i-8)*4.6);ctx.stroke();}}
-      if(p>=.68&&p<.83){for(const dx of [-20,20]){ctx.strokeStyle='rgba(245,245,242,.88)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(dx*.2,-8);ctx.lineTo(dx,-48);ctx.stroke();ctx.beginPath();ctx.arc(dx,-52,14,Math.PI,0);ctx.stroke();}}
-      if(p>=.83&&p<.98){for(const dx of [-34,0,34]){ctx.strokeStyle='rgba(247,247,244,.9)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(dx*.16,-8);ctx.lineTo(dx,-72);ctx.stroke();ctx.fillStyle='rgba(229,234,236,.92)';ctx.beginPath();ctx.arc(dx,-72,30,Math.PI,0);ctx.lineTo(dx-30,-72);ctx.closePath();ctx.fill();}}
-      ctx.fillStyle='#dce3e6';ctx.strokeStyle='#29343b';ctx.lineWidth=1.3/sc;ctx.beginPath();ctx.moveTo(-15,10);ctx.quadraticCurveTo(-20,-4,0,-19);ctx.quadraticCurveTo(20,-4,15,10);ctx.quadraticCurveTo(0,18,-15,10);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();if(!staticMissionQa)requestAnimationFrame(loop);};requestAnimationFrame(loop);}
-
-
-  }
-
 
 
 })();

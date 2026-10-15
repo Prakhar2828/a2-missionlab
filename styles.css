@@ -151,3 +151,18 @@ body{font-size:16.5px}
   .crew-image-count{right:12px;top:12px}
   .crew-photo-provenance{left:18px;right:18px;top:190px;max-width:none}
 }
+/* Phase N failure-state hardening: broken images become explicit, readable fallbacks. */
+.a2-image-failure{
+  display:grid;
+  place-items:center;
+  min-height:9rem;
+  padding:1.1rem;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:12px;
+  background:linear-gradient(145deg,rgba(8,15,23,.96),rgba(13,24,34,.9));
+  color:rgba(238,246,250,.72);
+  font-size:.82rem;
+  line-height:1.45;
+  text-align:center;
+}
+figure>.a2-image-failure{width:100%;}

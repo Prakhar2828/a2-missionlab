@@ -234,6 +234,7 @@
   $('#trajectory-reset').addEventListener('click',()=>selectPreset(selected.id));
   window.addEventListener('resize',scheduleDraw,{passive:true});
   window.addEventListener('orientationchange',scheduleDraw,{passive:true});
+  window.addEventListener('a2:celestialchange',scheduleDraw);
   if('ResizeObserver' in window) new ResizeObserver(scheduleDraw).observe(canvas.parentElement);
   update();
 })();

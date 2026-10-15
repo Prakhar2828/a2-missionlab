@@ -82,73 +82,70 @@
     for(let i=0;i<count;i++){const x=rand()*w,y=rand()*h,r=rand()*1.25+.2,a=(rand()*.65+.18)*alpha;ctx.fillStyle=`rgba(255,255,255,${a})`;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();}
     ctx.restore();
   }
-  const celestialImages={};
-  let celestialLoaded=0;
-  let celestialFailed=0;
+  const celestialAssets={
+    earth:{
+      src:'assets/public/celestial/earth_pia18033.jpg',
+      status:'idle',
+      image:null
+    },
+    moon:{
+      src:'assets/public/celestial/moon_lro_mosaic.jpg',
+      status:'idle',
+      image:null
+    }
+  };
 
-  document.documentElement.dataset.a2Celestial='loading';
+  document.documentElement.dataset.a2Celestial='idle';
 
   function updateCelestialAssetState(){
-    const total=2;
-    const finished=celestialLoaded+celestialFailed;
+    const states=Object.values(celestialAssets);
+    const requested=states.filter(asset=>asset.status!=='idle');
 
-    if(celestialLoaded===total){
-      document.documentElement.dataset.a2Celestial='ready';
-    }else if(finished===total){
-      document.documentElement.dataset.a2Celestial=
-        celestialLoaded>0?'partial':'fallback';
-    }else{
+    if(!requested.length){
+      document.documentElement.dataset.a2Celestial='idle';
+      return;
+    }
+
+    if(requested.some(asset=>asset.status==='loading')){
       document.documentElement.dataset.a2Celestial='loading';
+    }else if(requested.every(asset=>asset.status==='ready')){
+      document.documentElement.dataset.a2Celestial='ready';
+    }else if(requested.every(asset=>asset.status==='failed')){
+      document.documentElement.dataset.a2Celestial='fallback';
+    }else{
+      document.documentElement.dataset.a2Celestial='partial';
     }
 
     invalidateCanvasLayouts();
 
     requestAnimationFrame(()=>{
-      window.dispatchEvent(
-        new Event('resize')
-      );
+      window.dispatchEvent(new Event('a2:celestialchange'));
     });
   }
 
-  function loadCelestialImage(name,src){
-    const img=new Image();
+  function ensureCelestialImage(name){
+    const asset=celestialAssets[name];
+    if(!asset || asset.status!=='idle')return asset?.image||null;
 
+    const img=new Image();
+    asset.image=img;
+    asset.status='loading';
     img.decoding='async';
 
-    img.addEventListener(
-      'load',
-      ()=>{
-        celestialLoaded++;
-        updateCelestialAssetState();
-      },
-      {once:true}
-    );
+    img.addEventListener('load',()=>{
+      asset.status='ready';
+      updateCelestialAssetState();
+    },{once:true});
 
-    img.addEventListener(
-      'error',
-      ()=>{
-        celestialFailed++;
-        updateCelestialAssetState();
-      },
-      {once:true}
-    );
+    img.addEventListener('error',()=>{
+      asset.status='failed';
+      updateCelestialAssetState();
+    },{once:true});
 
-    img.src=src;
-
-    celestialImages[name]=img;
-
+    img.src=asset.src;
+    updateCelestialAssetState();
     return img;
   }
-
-  loadCelestialImage(
-    'earth',
-    'assets/public/celestial/earth_pia18033.jpg'
-  );
-
-  loadCelestialImage(
-    'moon',
-    'assets/public/celestial/moon_lro_mosaic.jpg'
-  );
 
   function celestialImageReady(img){
     return Boolean(
@@ -324,7 +321,7 @@
   function drawEarth(ctx,x,y,r){
     if(
       !celestialImageReady(
-        celestialImages.earth
+        ensureCelestialImage('earth')
       )
     ){
       drawEarthProcedural(
@@ -377,7 +374,7 @@
 
     drawCelestialImageDisk(
       ctx,
-      celestialImages.earth,
+      celestialAssets.earth.image,
       x,
       y,
       r,
@@ -410,7 +407,7 @@
   function drawMoon(ctx,x,y,r){
     if(
       !celestialImageReady(
-        celestialImages.moon
+        ensureCelestialImage('moon')
       )
     ){
       drawMoonProcedural(
@@ -463,7 +460,7 @@
 
     drawCelestialImageDisk(
       ctx,
-      celestialImages.moon,
+      celestialAssets.moon.image,
       x,
       y,
       r,
@@ -536,12 +533,44 @@
   setupDisclosureNav($('.x-menu'),$('.x-nav'));
   setupDisclosureNav($('.menu-btn'),$('.nav-links'));
 
-  // Remote NASA imagery fails safely into repository-local technical imagery.
-  $$('.nasa-photo').forEach(img=>{
-    img.addEventListener('error',()=>{
-      const fb=img.dataset.fallback;
-      if(fb && !img.dataset.didFallback){img.dataset.didFallback='1';img.classList.add('is-fallback');img.src=fb;img.alt += ' — NASA image unavailable; MissionLab local figure substituted';}
-    });
+  // Image failures never become broken-image icons or unexplained blank regions.
+  function showImageFailure(img){
+    if(img.dataset.a2FailureShown)return;
+    img.dataset.a2FailureShown='1';
+    img.classList.add('a2-image-unavailable');
+    img.setAttribute('aria-hidden','true');
+    img.style.display='none';
+
+    const host=img.closest('figure')||img.parentElement;
+    if(!host || host.querySelector(':scope > .a2-image-failure'))return;
+
+    const note=document.createElement('div');
+    note.className='a2-image-failure';
+    note.setAttribute('role','status');
+    note.textContent='Figure unavailable in this build. The surrounding mission context remains available.';
+    host.append(note);
+  }
+
+  function handleImageFailure(img){
+    const fb=img.dataset.fallback;
+    if(fb && !img.dataset.didFallback){
+      img.dataset.didFallback='1';
+      img.classList.add('is-fallback');
+      img.src=fb;
+      if(img.alt && !img.alt.includes('NASA image unavailable')){
+        img.alt+=' — NASA image unavailable; MissionLab local figure substituted';
+      }
+      return;
+    }
+    showImageFailure(img);
+  }
+
+  document.addEventListener('error',event=>{
+    if(event.target instanceof HTMLImageElement)handleImageFailure(event.target);
+  },true);
+
+  $$('img').forEach(img=>{
+    if(img.complete && img.getAttribute('src') && img.naturalWidth===0)handleImageFailure(img);
   });
 
   // Hero star shimmer.

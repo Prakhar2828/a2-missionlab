@@ -1871,6 +1871,12 @@
 
 
   window.addEventListener(
+    'a2:celestialchange',
+    scheduleCanvas
+  );
+
+
+  window.addEventListener(
     'resize',
     scheduleCanvas,
     {

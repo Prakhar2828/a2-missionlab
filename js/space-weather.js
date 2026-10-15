@@ -68,5 +68,6 @@
   $$('#location-select button').forEach(button=>button.addEventListener('click',()=>{state.location=button.dataset.location;update();}));
   $$('#weather-presets button').forEach(button=>button.addEventListener('click',()=>{state.log10Pfu=Number(button.dataset.logPfu);if(slider)slider.value=String(state.log10Pfu);update();}));
   let resizeQueued=false;window.addEventListener('resize',()=>{if(resizeQueued)return;resizeQueued=true;requestAnimationFrame(()=>{resizeQueued=false;draw(model.evaluate(state));});},{passive:true});
+  window.addEventListener('a2:celestialchange',()=>draw(model.evaluate(state)));
   update();
 })();

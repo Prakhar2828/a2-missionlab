@@ -973,7 +973,7 @@
     closeLightbox:closeCrewLightbox
   });
 
-  window.addEventListener('resize',()=>drawCrewGeometry(crewViews[crewIndex]));renderCrew(0);
+  renderCrew(0);
 
   }
 

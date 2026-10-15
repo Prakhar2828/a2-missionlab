@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en" data-status="RUNNING" data-case-count="0" data-failure-count="0">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Phase N Performance Regression</title>
+  <style>
+    body{margin:0;background:#05080d;color:#eef5f8;font:14px/1.4 system-ui,sans-serif}
+    #stage{position:fixed;inset:0;width:1280px;height:900px;border:0;opacity:.02;pointer-events:none}
+    #results{white-space:pre-wrap;padding:1rem}
+  </style>
+</head>
+<body>
+  <iframe id="stage" title="Phase N regression route"></iframe>
+  <pre id="results">Running Phase N browser regression…</pre>
+<script>
+(async()=>{
+  'use strict';
+  const root=document.documentElement;
+  const out=document.querySelector('#results');
+  const frame=document.querySelector('#stage');
+  const params=new URLSearchParams(location.search);
+  const failureMode=params.get('failure')==='1';
+  const resultToken=params.get('token')||'';
+  const failures=[];
+  let cases=0;
+  const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+  const check=(condition,label,detail='')=>{cases++;if(!condition)failures.push({label,detail});};
+  const waitFor=async(fn,timeout=6000,step=40)=>{const start=performance.now();while(performance.now()-start<timeout){try{const value=fn();if(value)return value;}catch{}await sleep(step);}return null;};
+  const loadRoute=async route=>{
+    /*
+     * Do not wait for window.load. Several public routes intentionally contain
+     * remote NASA imagery, so load can remain pending even after the local DOM,
+     * CSS, and JavaScript required by this regression are ready. This mirrors
+     * the proven Phase M browser harness and prevents a remote image request
+     * from holding the entire Phase N gate in RUNNING / 0-cases state.
+     */
+    frame.src=`../../${route}?phase-n-regression=1&v=${Date.now()}`;
+    const started=Date.now();
+    while(Date.now()-started<12000){
+      try{
+        const win=frame.contentWindow;
+        const doc=frame.contentDocument;
+        const pathname=win?.location?.pathname||'';
+        const correctRoute=pathname.endsWith('/'+route)||pathname.endsWith(route);
+        const domReady=Boolean(doc?.body&&(doc.readyState==='interactive'||doc.readyState==='complete'));
+        if(correctRoute&&domReady){
+          await sleep(180);
+          return {win,doc};
+        }
+      }catch{}
+      await sleep(60);
+    }
+    throw new Error(`DOM readiness timeout loading ${route}`);
+  };
+  const resources=win=>win.performance.getEntriesByType('resource').map(entry=>entry.name);
+  const celestialRequests=win=>resources(win).filter(name=>/\/assets\/public\/celestial\/(?:earth_pia18033|moon_lro_mosaic)\.jpg(?:$|\?)/.test(name));
+  const canvasHasPixels=canvas=>{
+    try{
+      if(!canvas||canvas.width<2||canvas.height<2)return false;
+      const ctx=canvas.getContext('2d');
+      if(!ctx)return false;
+      const w=Math.min(canvas.width,240),h=Math.min(canvas.height,160);
+      const data=ctx.getImageData(0,0,w,h).data;
+      for(let i=3;i<data.length;i+=4)if(data[i]>0)return true;
+      return false;
+    }catch{return false;}
+  };
+  const routeGeometry=(win,element)=>{
+    const rect=element.getBoundingClientRect();
+    return {
+      top:rect.top,
+      bottom:rect.bottom,
+      height:rect.height,
+      scrollY:win.scrollY,
+      innerHeight:win.innerHeight
+    };
+  };
+  const isRouteVisible=(win,element)=>{
+    const rect=element.getBoundingClientRect();
+    return rect.bottom>0&&rect.top<win.innerHeight;
+  };
+  const isRouteFarOffscreen=(win,element)=>{
+    const rect=element.getBoundingClientRect();
+    const margin=180;
+    return rect.bottom<=-margin||rect.top>=win.innerHeight+margin;
+  };
+  const settleRoute=async win=>{
+    /*
+     * Force route-local layout, then allow IntersectionObserver/scroll delivery
+     * without depending on requestAnimationFrame. RAF is the behavior under
+     * test and may legitimately be suspended while the canvas is offscreen.
+     */
+    void win.document.documentElement.offsetHeight;
+    await sleep(140);
+    void win.document.documentElement.offsetHeight;
+  };
+  const placeRouteElement=async(win,doc,element,mode)=>{
+    /*
+     * Do not use element.scrollIntoView() in this nested iframe harness.
+     * Chromium can scroll the outer browsing context instead of the route,
+     * and the site's smooth-scroll rule also makes state timing ambiguous.
+     * Establish the intended route scroll position directly, as the proven
+     * Windows regression harness does.
+     */
+    doc.documentElement.style.scrollBehavior='auto';
+    if(doc.body)doc.body.style.scrollBehavior='auto';
+    const initial=element.getBoundingClientRect();
+    const documentTop=win.scrollY+initial.top;
+    const maxScrollY=Math.max(0,doc.documentElement.scrollHeight-win.innerHeight);
+    let target=0;
+    if(mode==='visible'){
+      const desiredTop=Math.max(24,(win.innerHeight-Math.min(initial.height,win.innerHeight-48))/2);
+      target=Math.max(0,Math.min(documentTop-desiredTop,maxScrollY));
+    }else{
+      const clearance=Math.max(240,win.innerHeight*.3);
+      const aboveTarget=Math.max(0,Math.min(documentTop+initial.height+clearance,maxScrollY));
+      const belowTarget=Math.max(0,Math.min(documentTop-win.innerHeight-clearance,maxScrollY));
+      target=aboveTarget;
+      win.scrollTo(0,target);
+      await settleRoute(win);
+      if(!isRouteFarOffscreen(win,element)){
+        target=belowTarget;
+      }
+    }
+    win.scrollTo(0,target);
+    await settleRoute(win);
+    return routeGeometry(win,element);
+  };
+
+  try{
+    for(const route of ['gnc.html','library.html','technical-report.html']){
+      const {win,doc}=await loadRoute(route);
+      await sleep(500);
+      check(celestialRequests(win).length===0,`${route} does not request celestial JPEGs`,celestialRequests(win).join('\n'));
+      check(!/\b(?:undefined|NaN)\b/.test(doc.body.innerText),`${route} has no undefined/NaN failure text`);
+    }
+
+    {
+      const {win,doc}=await loadRoute('mission.html');
+      const canvas=doc.querySelector('#mission-canvas');
+      await placeRouteElement(win,doc,canvas,'visible');
+      await waitFor(()=>canvas.dataset.a2Animation==='running',3000);
+      const state=await waitFor(()=>doc.documentElement.dataset.a2Celestial && !['idle','loading'].includes(doc.documentElement.dataset.a2Celestial) ? doc.documentElement.dataset.a2Celestial : null,8000);
+      const req=celestialRequests(win);
+      check(req.length===2,'Mission Explorer demands exactly Earth + Moon celestial JPEGs',req.join('\n'));
+      check(state===(failureMode?'fallback':'ready'),`Mission Explorer celestial state is ${failureMode?'fallback':'ready'}`,String(state));
+      check(canvasHasPixels(canvas),'Mission Explorer canvas remains nonblank');
+
+      const offscreenGeometry=await placeRouteElement(win,doc,canvas,'offscreen');
+      const paused=await waitFor(()=>canvas.dataset.a2Animation==='paused',3000);
+      check(Boolean(paused)&&isRouteFarOffscreen(win,canvas),'Mission Explorer suspends RAF when canvas is offscreen',JSON.stringify({animation:canvas.dataset.a2Animation,geometry:offscreenGeometry}));
+      const visibleGeometry=await placeRouteElement(win,doc,canvas,'visible');
+      const resumed=await waitFor(()=>canvas.dataset.a2Animation==='running',3000);
+      check(Boolean(resumed)&&isRouteVisible(win,canvas),'Mission Explorer resumes RAF when canvas returns onscreen',JSON.stringify({animation:canvas.dataset.a2Animation,geometry:visibleGeometry}));
+    }
+
+    {
+      const {win,doc}=await loadRoute('mission-control.html');
+      const canvas=doc.querySelector('#mc-canvas');
+      await placeRouteElement(win,doc,canvas,'visible');
+      const state=await waitFor(()=>doc.documentElement.dataset.a2Celestial && !['idle','loading'].includes(doc.documentElement.dataset.a2Celestial) ? doc.documentElement.dataset.a2Celestial : null,8000);
+      const req=celestialRequests(win);
+      check(req.length===2,'Mission Control demands exactly Earth + Moon celestial JPEGs',req.join('\n'));
+      check(state===(failureMode?'fallback':'ready'),`Mission Control celestial state is ${failureMode?'fallback':'ready'}`,String(state));
+      check(canvasHasPixels(canvas),'Mission Control canvas remains nonblank');
+    }
+
+    {
+      const {win,doc}=await loadRoute('gnc.html');
+      const canvas=doc.querySelector('#gnc-canvas');
+      const initialGeometry=await placeRouteElement(win,doc,canvas,'visible');
+      const running=await waitFor(()=>canvas.dataset.a2Animation==='running',3000);
+      check(Boolean(running)&&isRouteVisible(win,canvas),'GNC RAF runs while canvas is visible',JSON.stringify({animation:canvas.dataset.a2Animation,geometry:initialGeometry}));
+      const offscreenGeometry=await placeRouteElement(win,doc,canvas,'offscreen');
+      const paused=await waitFor(()=>canvas.dataset.a2Animation==='paused',3000);
+      check(Boolean(paused)&&isRouteFarOffscreen(win,canvas),'GNC suspends RAF when canvas is offscreen',JSON.stringify({animation:canvas.dataset.a2Animation,geometry:offscreenGeometry}));
+      const resumedGeometry=await placeRouteElement(win,doc,canvas,'visible');
+      const resumed=await waitFor(()=>canvas.dataset.a2Animation==='running',3000);
+      check(Boolean(resumed)&&isRouteVisible(win,canvas),'GNC resumes RAF without hidden-time catch-up',JSON.stringify({animation:canvas.dataset.a2Animation,geometry:resumedGeometry}));
+    }
+
+    {
+      const {win,doc}=await loadRoute('technical-report.html');
+      const figure=doc.querySelector('#fig-oem-events');
+      const img=figure?.querySelector('img');
+      /*
+       * Technical Report figures are intentionally loading=lazy after Phase N.
+       * A synthetic missing src on an offscreen lazy image is not guaranteed to
+       * be requested by Chromium, so no error event can exist yet. Put the real
+       * figure into the route viewport first, then inject the missing resource.
+       * This exercises the user-visible failure path without weakening lazy load.
+       */
+      if(figure){await placeRouteElement(win,doc,figure,'visible');}
+      if(img){img.src='assets/public/phase-n-intentional-missing-figure.svg';}
+      const note=await waitFor(()=>figure?.querySelector('.a2-image-failure'),3000);
+      check(Boolean(note),'missing local figure produces explicit failure state');
+      check(Boolean(img&&img.style.display==='none'),'broken local image icon is hidden');
+      check(Boolean(note&&note.getAttribute('role')==='status'&&/Figure unavailable/.test(note.textContent)),'image failure state is readable and user-facing');
+    }
+
+    root.dataset.status=failures.length?'FAIL':'PASS';
+  }catch(error){
+    failures.push({label:'regression harness exception',detail:String(error&&error.stack||error)});
+    root.dataset.status='FAIL';
+  }
+
+  root.dataset.caseCount=String(cases);
+  root.dataset.failureCount=String(failures.length);
+  const payload={
+    status:root.dataset.status,
+    mode:failureMode?'celestial-failure':'normal',
+    cases,
+    failures
+  };
+  out.textContent=JSON.stringify(payload,null,2);
+
+  try{
+    const response=await fetch(`/__phase_n_result__?token=${encodeURIComponent(resultToken)}`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload),
+      cache:'no-store',
+      keepalive:true
+    });
+    if(!response.ok)throw new Error(`result POST returned ${response.status}`);
+  }catch(error){
+    root.dataset.status='FAIL';
+    failures.push({label:'browser completion handshake',detail:String(error&&error.stack||error)});
+    root.dataset.failureCount=String(failures.length);
+    out.textContent=JSON.stringify({...payload,status:'FAIL',failures},null,2);
+  }
+})();
+</script>
+</body>
+</html>

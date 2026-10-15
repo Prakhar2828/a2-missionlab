@@ -10,7 +10,6 @@
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <title>Mission Explorer &mdash; A2 MissionLab</title>
-  <link rel="preconnect" href="https://images-assets.nasa.gov">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="responsive-hardening.css">
   <link rel="stylesheet" href="trajectory.css">
@@ -113,7 +112,7 @@
         <summary><span>Show me the engineering behind the mission map</span><small>trajectory products · SPICE geometry · uncertainty</small></summary>
         <div class="engineering-drawer-body">
           <div><h3>This is a reconstruction, not a telemetry feed.</h3><p>The visual uses the validated MissionLab event timeline and derived lunar geometry to teach mission progression. The underlying project parses public Orion Orbit Ephemeris Message products, uses SPICE for Earth/Moon/Sun geometry, refines closest approach, and correlates public events without claiming access to Orion's private onboard navigation state.</p><a href="library.html#flight-dynamics">Open the flight-dynamics deep dive →</a></div>
-          <figure><img src="docs/assets/phase1f_oem_with_events.svg" alt="MissionLab OEM trajectory with correlated events"><figcaption>MissionLab public OEM trajectory and event correlation.</figcaption></figure>
+          <figure><img src="docs/assets/phase1f_oem_with_events.svg" alt="MissionLab OEM trajectory with correlated events" loading="lazy" decoding="async"><figcaption>MissionLab public OEM trajectory and event correlation.</figcaption></figure>
         </div>
       </details>
     </div>
@@ -366,12 +365,12 @@
     <details class="engineering-drawer entry-engineering-drawer">
       <summary><span>Show the engineering</span><small>trajectory · atmosphere · Mach · heating · loft · recovery · evidence boundaries</small></summary>
       <div class="engineering-drawer-body entry-figures entry-phase-i-figures">
-        <figure><img src="docs/assets/entry/phase2c_entry_altitude.svg" alt="MissionLab reconstructed Artemis II entry altitude history"><figcaption>Flight-derived altitude reconstruction. The non-monotonic loft / rebound is visible in the trajectory history.</figcaption></figure>
-        <figure><img src="docs/assets/entry/phase2e_dynamic_pressure.svg" alt="MissionLab modeled Artemis II entry dynamic pressure"><figcaption>Modeled dynamic pressure from NRLMSIS density and reconstructed Earth-relative speed.</figcaption></figure>
-        <figure><img src="docs/assets/entry/phase2e_sutton_graves_heat_flux.svg" alt="MissionLab modeled Sutton Graves convective heat flux"><figcaption>Sutton–Graves MODELED external convective heat flux. Not measured heat-shield telemetry.</figcaption></figure>
-        <figure><img src="docs/assets/entry/phase2f_artemis_ii_rebound_profile.svg" alt="MissionLab Artemis II loft rebound profile"><figcaption>Artemis II derived loft / rebound geometry. This is not Artemis I-style skip-entry classification.</figcaption></figure>
-        <figure><img src="docs/assets/entry/phase2f_loft_heating_flux.svg" alt="MissionLab modeled heating through the Artemis II loft rebound"><figcaption>Modeled external heat flux through the loft / rebound. External heat-flux decline does not prove TPS internal cooling.</figcaption></figure>
-        <figure><img src="docs/assets/recovery/phase4a2_entry_to_recovery_timeline.svg" alt="MissionLab Artemis II entry to recovery timeline"><figcaption>Public-minute operational sequence from entry through crew and spacecraft recovery.</figcaption></figure>
+        <figure><img src="docs/assets/entry/phase2c_entry_altitude.svg" alt="MissionLab reconstructed Artemis II entry altitude history" loading="lazy" decoding="async"><figcaption>Flight-derived altitude reconstruction. The non-monotonic loft / rebound is visible in the trajectory history.</figcaption></figure>
+        <figure><img src="docs/assets/entry/phase2e_dynamic_pressure.svg" alt="MissionLab modeled Artemis II entry dynamic pressure" loading="lazy" decoding="async"><figcaption>Modeled dynamic pressure from NRLMSIS density and reconstructed Earth-relative speed.</figcaption></figure>
+        <figure><img src="docs/assets/entry/phase2e_sutton_graves_heat_flux.svg" alt="MissionLab modeled Sutton Graves convective heat flux" loading="lazy" decoding="async"><figcaption>Sutton–Graves MODELED external convective heat flux. Not measured heat-shield telemetry.</figcaption></figure>
+        <figure><img src="docs/assets/entry/phase2f_artemis_ii_rebound_profile.svg" alt="MissionLab Artemis II loft rebound profile" loading="lazy" decoding="async"><figcaption>Artemis II derived loft / rebound geometry. This is not Artemis I-style skip-entry classification.</figcaption></figure>
+        <figure><img src="docs/assets/entry/phase2f_loft_heating_flux.svg" alt="MissionLab modeled heating through the Artemis II loft rebound" loading="lazy" decoding="async"><figcaption>Modeled external heat flux through the loft / rebound. External heat-flux decline does not prove TPS internal cooling.</figcaption></figure>
+        <figure><img src="docs/assets/recovery/phase4a2_entry_to_recovery_timeline.svg" alt="MissionLab Artemis II entry to recovery timeline" loading="lazy" decoding="async"><figcaption>Public-minute operational sequence from entry through crew and spacecraft recovery.</figcaption></figure>
         <div class="entry-equation-note"><h3>q̇ = k √(ρ / Rₙ) V³</h3><p>MissionLab’s low-fidelity Sutton–Graves implementation uses modeled NRLMSIS 2.0 density, Earth-relative reconstructed speed, and a 6.035 m Orion EFT-1 heritage/reference nose radius. Primary public interpretation is limited to <strong>Kn &lt; 0.01 and Mach ≥ 5</strong>. The primary integrated modeled convective heat load is <strong>162.686370921 MJ/m²</strong>; the stronger-continuum sensitivity is <strong>159.150073328 MJ/m²</strong>.</p><p><strong>Permanent boundary:</strong> modeled heating ≠ measured TPS heat flux, measured temperature, ablation/recession, material damage, or crew thermal exposure. Kinematic deceleration / g₀-equivalent ≠ crew sensed g-load.</p><div class="entry-source-links"><a href="library.html#entry-dynamics">Entry dynamics deep dive →</a><a href="library.html#convective-heating">Convective heating deep dive →</a><a href="https://www.nasa.gov/blogs/missions/2026/04/10/artemis-ii-flight-day-10-re-entry-live-updates/" target="_blank" rel="noreferrer noopener">NASA Flight Day 10 live updates ↗</a></div></div>
       </div>
     </details>
