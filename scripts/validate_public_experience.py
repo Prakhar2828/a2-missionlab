@@ -106,6 +106,16 @@ def main():
   if phrase not in mission_js:fail.append('trajectory model missing implementation contract: '+phrase)
  for phrase in ['AUTO MODE','MANUAL MODE','Introduce disturbance','MissionLab shorthand','WHAT WOULD OPERATORS CARE ABOUT?']:
   if phrase.lower() not in text.lower():fail.append('missing final-polish UX concept: '+phrase)
+ gnc_html=(ROOT/'gnc.html').read_text(encoding='utf8')
+ gnc_css=(ROOT/'gnc.css').read_text(encoding='utf8')
+ for phrase in ['desired state','estimated state','form an error','feedback loop','Error to command','Spacecraft response']:
+  if phrase.lower() not in gnc_html.lower():fail.append('GNC closed-loop explanation missing Phase J concept: '+phrase)
+ if 'content: \"\\2192\";' not in gnc_css:fail.append('GNC diagram connector must use an explicit right-arrow escape')
+ if 'content: \"?\";' in gnc_css:fail.append('GNC diagram still renders mystery question-mark connectors')
+ mc_regression_html=(ROOT/'scripts/validation/mission_control_regression.html').read_text(encoding='utf8')
+ mc_regression_py=(ROOT/'scripts/validation/validate_mission_control_regression.py').read_text(encoding='utf8')
+ if 'minimumTouch < 64' not in mc_regression_html:fail.append('Mission Control browser regression does not enforce the 64 px touch-target contract')
+ if 'float(min_touch) < 64' not in mc_regression_py or 'Required touch target: >= 64 px' not in mc_regression_py:fail.append('Mission Control Python gate does not enforce/report the 64 px touch-target contract')
  windows_js=(ROOT/'js/windows.js').read_text(encoding='utf8')
  crew_count=len(re.findall(r'\"id\":\"(?:art|jsc)[^\"]+\"',windows_js))
  notes.append(f'Through Orion windows moments: {crew_count}')

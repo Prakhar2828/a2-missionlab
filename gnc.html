@@ -99,16 +99,16 @@
             <button id="gnc-reset" class="x-button x-button-ghost" type="button">Reset approach</button>
           </div>
           <div class="gnc-sensors"><span>STATE / SENSOR CONTEXT</span><div id="sensor-chips"></div></div>
-          <p class="gnc-explain" id="gnc-explain">The simulation starts with an offset state. Sense the error, estimate the state, guide toward the target, command a correction, fire conceptual RCS, and verify what changed.</p>
+          <p class="gnc-explain" id="gnc-explain">The simulation starts with an offset state. Compare the desired state with the estimated state to form an error; guidance and control turn that error into a command, RCS changes the spacecraft state, and sensors close the feedback loop.</p>
         </div>
       </div>
       <div class="system-loop gnc-loop" aria-label="Guidance navigation and control closed loop">
-        <button type="button" data-gnc-block="sense" class="active"><small>01</small><b>SENSE</b><span>Observe motion</span></button><i>→</i>
-        <button type="button" data-gnc-block="estimate"><small>02</small><b>ESTIMATE</b><span>Know the state</span></button><i>→</i>
-        <button type="button" data-gnc-block="guide"><small>03</small><b>GUIDE</b><span>Choose target</span></button><i>→</i>
-        <button type="button" data-gnc-block="control"><small>04</small><b>CONTROL</b><span>Form correction</span></button><i>→</i>
-        <button type="button" data-gnc-block="fire"><small>05</small><b>FIRE</b><span>RCS effectors</span></button><i>→</i>
-        <button type="button" data-gnc-block="verify"><small>06</small><b>VERIFY</b><span>Measure again</span></button>
+        <button type="button" data-gnc-block="sense" class="active"><small>01</small><b>SENSE</b><span>Measure motion</span></button><i>→</i>
+        <button type="button" data-gnc-block="estimate"><small>02</small><b>ESTIMATE</b><span>Estimated state</span></button><i>→</i>
+        <button type="button" data-gnc-block="guide"><small>03</small><b>GUIDE</b><span>Compare to target</span></button><i>→</i>
+        <button type="button" data-gnc-block="control"><small>04</small><b>CONTROL</b><span>Error to command</span></button><i>→</i>
+        <button type="button" data-gnc-block="fire"><small>05</small><b>FIRE</b><span>Spacecraft response</span></button><i>→</i>
+        <button type="button" data-gnc-block="verify"><small>06</small><b>VERIFY</b><span>Close feedback loop</span></button>
       </div>
       <div class="system-loop-explainer" id="gnc-block-explainer"></div>
       <div class="gnc-evidence-band"><div><span>NASA REPORTED</span><b>~70 min proximity operations completed</b></div><div><span>NASA REPORTED</span><b>Controlled approach + retreat</b></div><div><span>NASA REPORTED</span><b>Onboard nav sensors + RCS used</b></div><div><span>NASA REPORTED</span><b>Automated departure</b></div><div><span>NOT PUBLIC</span><b>Exact state / thruster histories</b></div></div>

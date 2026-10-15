@@ -577,7 +577,7 @@
 }
 
 .gnc-page .gnc-loop > button:not(:last-of-type)::after {
-  content: "?";
+  content: "\2192";
   position: absolute;
   z-index: 3;
   top: 50%;

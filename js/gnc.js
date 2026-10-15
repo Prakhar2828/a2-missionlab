@@ -32,10 +32,10 @@ if(sensorBox)sensorBox.innerHTML=sensors.map((s,i)=>`<span class="sensor-chip ${
 const explanations={
   sense:'Sensors observe motion and references. NASA reported onboard navigation sensors during proximity operations; DSN is external ground support, not an onboard sensor.',
   estimate:'Navigation fuses measurements into an estimated state. MissionLab does not claim access to Orion’s private navigation-filter state.',
-  guide:'Guidance defines the desired condition. The target box is educational, not a recovered flown gate.',
-  control:'Control turns state error into a correction request. The proprietary Orion control law, gains, and allocation logic are not public.',
-  fire:'Effectors create force and torque. Individual Artemis II thruster firing history is not public.',
-  verify:'The vehicle moves, sensors observe the result, and the loop repeats.'
+  guide:'Guidance compares the desired condition with the estimated state so the remaining error is explicit. The target box is educational, not a recovered flown gate.',
+  control:'Control turns that state error into a correction command. The proprietary Orion control law, gains, and allocation logic are not public.',
+  fire:'Effectors create force and torque, producing the spacecraft response. Individual Artemis II thruster firing history is not public.',
+  verify:'Sensors observe the changed state, close the feedback loop, and begin the next correction cycle.'
 };
 function setBlock(key){
   $$('[data-gnc-block]').forEach(b=>b.classList.toggle('active',b.dataset.gncBlock===key));

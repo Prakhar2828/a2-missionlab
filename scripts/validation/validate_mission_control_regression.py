@@ -362,10 +362,10 @@ def run_browser(
 
                 return False
 
-            if float(min_touch) < 44:
+            if float(min_touch) < 64:
 
                 print(
-                    "FAIL: touch target fell below 44 px"
+                    "FAIL: touch target fell below 64 px"
                 )
 
                 return False
@@ -558,7 +558,7 @@ def main():
     )
 
     print(
-        "Required touch target: >= 44 px"
+        "Required touch target: >= 64 px"
     )
 
     print(

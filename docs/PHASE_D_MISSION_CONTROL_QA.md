@@ -109,7 +109,7 @@ The browser regression verifies:
 - all seven decision stages update
 - decision model retains DECISION between OPTIONS and ACTION
 - waste-system visualization retains TEMP, WASTE, CABIN, POWER
-- scenario and role controls meet a 44 px minimum touch target
+- scenario and role controls meet the protected 64 px minimum touch-target contract
 - canvas dimensions remain nonzero
 - no horizontal page overflow
 - no scenario/role-triggered outer-page scroll jump above 1 px
