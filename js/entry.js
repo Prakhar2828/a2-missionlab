@@ -11,12 +11,26 @@
   const eventRail=$('#entry-event-rail');
   const play=$('#entry-play');
   const reset=$('#entry-reset');
+  const stage=$('.entry-flight-stage');
+  const stageTopline=$('.entry-stage-topline');
+  let stagePlay=null,stageReset=null;
+  const entryPlaybackProfile='r8-cinematic-paced';
   let t=0,playing=false,lastFrame=0;
   const qa=/(?:^|[?&])entry-qa=1(?:&|$)/.test(location.search);
 
   function fmt(value,digits=1){return Number.isFinite(value)?value.toFixed(digits):'—';}
   function metric(id,value,detail){const el=$(id);if(el)el.textContent=value;const d=$(id+'-detail');if(d)d.textContent=detail||'';}
   function nearestEvent(seconds){return model.events.reduce((best,e)=>Math.abs(e.t-seconds)<Math.abs(best.t-seconds)?e:best,model.events[0]);}
+  function installStageControls(){
+    if(!stageTopline||$('#entry-stage-play'))return;
+    const dock=document.createElement('div');
+    dock.className='entry-stage-live-controls';
+    dock.innerHTML='<span>WATCH THE RECONSTRUCTION</span><div><button type="button" id="entry-stage-play" aria-pressed="false">Play profile</button><button type="button" id="entry-stage-reset">Reset</button></div>';
+    const evidence=stageTopline.querySelector('.entry-stage-evidence');
+    stageTopline.insertBefore(dock,evidence||null);
+    stagePlay=$('#entry-stage-play');
+    stageReset=$('#entry-stage-reset');
+  }
 
   function renderEventRail(){
     eventRail.innerHTML=model.events.map(e=>`<button type="button" data-t="${e.t}" data-kind="${e.kind}"><span>${e.time}</span><b>${e.label}</b><small>${e.evidence}</small></button>`).join('');
@@ -114,13 +128,35 @@
 
   scrubber.min='0';scrubber.max=String(model.durationSeconds);scrubber.step='.1';
   scrubber.addEventListener('input',()=>{playing=false;updatePlay();setTime(Number(scrubber.value),false);});
-  function updatePlay(){play.textContent=playing?'Pause':'Play';play.setAttribute('aria-pressed',String(playing));}
-  play.addEventListener('click',()=>{playing=!playing;lastFrame=0;updatePlay();if(playing)requestAnimationFrame(tick);});
-  reset.addEventListener('click',()=>{playing=false;updatePlay();setTime(0,false);});
-  function tick(now){if(!playing)return;if(!lastFrame)lastFrame=now;const dt=Math.min(80,now-lastFrame);lastFrame=now;setTime(t+dt*.18,true);draw();if(t>=model.durationSeconds){playing=false;updatePlay();return;}requestAnimationFrame(tick);}
+  function updatePlay(){
+    play.textContent=playing?'Pause':'Play';play.setAttribute('aria-pressed',String(playing));
+    if(stagePlay){stagePlay.textContent=playing?'Pause profile':'Play profile';stagePlay.setAttribute('aria-pressed',String(playing));}
+  }
+  function startEntryPlayback(){
+    const launch=()=>{if(playing)requestAnimationFrame(tick);};
+    if(stage){
+      const r=stage.getBoundingClientRect();
+      const offscreen=r.top<0||r.bottom>innerHeight;
+      if(offscreen){
+        stage.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
+        setTimeout(launch,300);
+        return;
+      }
+    }
+    launch();
+  }
+  function toggleEntryPlayback(){playing=!playing;lastFrame=0;root.dataset.playbackProfile=entryPlaybackProfile;updatePlay();if(playing)startEntryPlayback();}
+  function resetEntryPlayback(){playing=false;lastFrame=0;updatePlay();setTime(0,false);}
+  play.addEventListener('click',toggleEntryPlayback);
+  reset.addEventListener('click',resetEntryPlayback);
+  function tick(now){if(!playing)return;if(!lastFrame)lastFrame=now;const dt=Math.min(80,now-lastFrame);lastFrame=now;const factor=t<240?.018:t<569?.028:t<629?.014:t<810?.018:.010;setTime(t+dt*factor,true);draw();if(t>=model.durationSeconds){playing=false;updatePlay();return;}requestAnimationFrame(tick);}
   addEventListener('resize',draw,{passive:true});
 
-  renderEventRail();renderRecovery();setTime(0,false);draw();
+  installStageControls();
+  if(stagePlay)stagePlay.addEventListener('click',toggleEntryPlayback);
+  if(stageReset)stageReset.addEventListener('click',resetEntryPlayback);
+  root.dataset.playbackProfile=entryPlaybackProfile;
+  renderEventRail();renderRecovery();setTime(0,false);updatePlay();draw();
   if(qa){
     const probe=[0,20,85,112.294128,239.647374,431,464.815771,569.134,629.134,817.957676].map(model.stateAt);
     root.dataset.qaFinite=String(probe.every(s=>[s.altitudeKm,s.speedKmS,s.mach,s.progress].every(Number.isFinite)));

@@ -6,11 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 
-ENTRY_CORE_BLOBS = {
-    "js/entry.js": "6d14588227e56f7d41422301233a17d00ac2ffde",
-    "js/entry-model.js": "169c860861d1b34f47f4a6349b8000e012ef12bb",
-    "entry.css": "6d29af4e09af1beadca2d613a0c7c3319755c375",
-}
+ENTRY_MODEL_BLOB = "169c860861d1b34f47f4a6349b8000e012ef12bb"
 
 
 def require(condition: bool, message: str) -> None:
@@ -24,6 +20,8 @@ def git_blob(path: str) -> str:
 
 
 def main() -> int:
+    entry_runtime = (ROOT / "js/entry.js").read_text(encoding="utf-8")
+    entry_css = (ROOT / "entry.css").read_text(encoding="utf-8")
     visual = (ROOT / "js/entry-visual.js").read_text(encoding="utf-8")
     css = (ROOT / "entry-visual.css").read_text(encoding="utf-8")
     mission = (ROOT / "mission.html").read_text(encoding="utf-8")
@@ -31,8 +29,9 @@ def main() -> int:
     print("A2 MissionLab Phase R7 cinematic additive Entry validation")
     print("=" * 76)
 
-    for path, expected in ENTRY_CORE_BLOBS.items():
-        require(git_blob(path) == expected, f"protected current Entry file remains byte-for-byte unchanged: {path}")
+    require(git_blob("js/entry-model.js") == ENTRY_MODEL_BLOB, "protected Entry flight-derived model remains byte-for-byte unchanged")
+    require("entryPlaybackProfile='r8-cinematic-paced'" in entry_runtime, "R8 presentation cadence is present without changing the model")
+    require("Phase R8 engineering viewport-fit" in entry_css, "R8 engineering viewport-fit presentation is present")
 
     require('id="entry-visual-companion"' in mission, "additive visual companion remains mounted separately")
     require('<script src="js/entry.js"></script>' in mission and '<script src="js/entry-visual.js"></script>' in mission, "current Entry runtime and cinematic additive runtime both remain loaded")
@@ -40,6 +39,10 @@ def main() -> int:
 
     required_tokens = [
         "cinematicVersion = 'r7'",
+        "cinematicRevision = R8.version",
+        "cameraContinuous",
+        "surfaceContext",
+        "oceanVisible",
         "drawSpaceEarth",
         "drawEntryHorizon",
         "drawAtmosphericWorld",
@@ -58,6 +61,7 @@ def main() -> int:
         require(token in visual, f"cinematic visual contract present: {token}")
 
     require("mode === 'ocean'" in visual and "earthContext = mode === 'space' || mode === 'entry' ? 'curved-limb' : 'none'" in visual, "Earth curvature is restricted to space/entry and removed for ocean recovery")
+    require("R8.oceanRevealStart" in visual and "surfaceContext" in visual, "R8 separates high-altitude descent, parachutes, distant ocean approach, and splashdown")
     require("root.dataset.parachuteMode" in visual, "parachute phase is surfaced for browser QA")
     require("root.dataset.plasmaActive" in visual, "plasma/heating phase is surfaced for browser QA")
     require("root.dataset.currentSimulationPreserved = 'true'" in visual, "cinematic companion explicitly preserves current simulation boundary")

@@ -5,11 +5,7 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-EXPECTED_ENTRY_BLOBS = {
-    "js/entry.js": "6d14588227e56f7d41422301233a17d00ac2ffde",
-    "js/entry-model.js": "169c860861d1b34f47f4a6349b8000e012ef12bb",
-    "entry.css": "6d29af4e09af1beadca2d613a0c7c3319755c375",
-}
+EXPECTED_ENTRY_MODEL_BLOB = "169c860861d1b34f47f4a6349b8000e012ef12bb"
 
 
 def require(condition: bool, message: str) -> None:
@@ -48,6 +44,8 @@ def main() -> int:
     styles = read("styles.css")
     landing = read("landing.css")
     weather = read("js/space-weather.js")
+    entry_runtime = read("js/entry.js")
+    entry_css = read("entry.css")
     entry_visual = read("js/entry-visual.js")
     entry_visual_css = read("entry-visual.css")
 
@@ -83,9 +81,11 @@ def main() -> int:
         require(phrase in weather, f"Space Weather visual contract present: {phrase}")
     require("solar-activity" not in weather and "shielding-assumption" not in weather, "old generic Space Weather controls were not restored")
 
-    # The current engineering Entry implementation must remain byte-for-byte identical to production main.
-    for path, expected in EXPECTED_ENTRY_BLOBS.items():
-        require(git_blob(path) == expected, f"current Entry implementation preserved byte-for-byte: {path}")
+    # R8 intentionally changes presentation cadence/layout while preserving the flight-derived model.
+    require(git_blob("js/entry-model.js") == EXPECTED_ENTRY_MODEL_BLOB, "Entry flight-derived model remains byte-for-byte preserved")
+    require("entryPlaybackProfile='r8-cinematic-paced'" in entry_runtime, "engineering Entry playback uses the R8 watchable cadence")
+    require("entry-stage-live-controls" in entry_runtime, "engineering Entry exposes in-stage play/reset controls")
+    require("Phase R8 engineering viewport-fit" in entry_css, "engineering Entry stage uses the R8 viewport-fit layout")
 
     require('id="entry-visual-companion"' in mission, "additional Entry visual companion exists inside mission route")
     require('id="entry-flight-canvas"' in mission and 'id="entry-scrubber"' in mission and 'id="entry-play"' in mission, "current engineering Entry controls remain present")
