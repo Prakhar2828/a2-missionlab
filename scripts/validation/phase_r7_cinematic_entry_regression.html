@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>A2 MissionLab Phase R7 cinematic Entry regression</title><style>html,body{margin:0;background:#101216;color:#fff;font:13px/1.45 Consolas,monospace}iframe{position:absolute;left:-10000px;top:0;border:0;background:#000}pre{white-space:pre-wrap;padding:12px}</style></head>
+<body data-status="RUNNING" data-space-pass="false" data-entry-pass="false" data-descent-pass="false" data-drogue-pass="false" data-main-pass="false" data-ocean-pass="false" data-independence-pass="false" data-responsive-pass="false"><iframe id="app"></iframe><pre id="results">RUNNING</pre>
+<script>
+(() => {'use strict';
+const frame=document.querySelector('#app'),out=document.querySelector('#results');
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+const assert=(ok,msg)=>{if(!ok)throw new Error(msg)};
+async function load(w=1440,h=900){frame.style.width=`${w}px`;frame.style.height=`${h}px`;await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('load timeout')),12000);frame.onload=()=>{clearTimeout(timer);setTimeout(resolve,260)};frame.src='../../mission.html?entry-qa=1&phase-r-qa=1&phase-r7-qa=1#entry-lab';});return {w:frame.contentWindow,d:frame.contentDocument};}
+const overflow=(d,s)=>{const e=s?d.querySelector(s):d.documentElement;return e?Math.max(0,e.scrollWidth-e.clientWidth):999};
+async function main(){
+  const page=await load();const d=page.d,w=page.w;
+  const engineering=d.querySelector('#entry-lab[data-entry-phase-i]'),engineeringScrub=d.querySelector('#entry-scrubber');
+  const companion=d.querySelector('#entry-visual-companion'),scrub=d.querySelector('#entry-visual-scrubber');
+  assert(engineering&&engineeringScrub&&companion&&scrub,'required Entry surfaces missing');
+  const snap={v:engineeringScrub.value,phase:engineering.dataset.phase,alt:d.querySelector('#g-alt')?.textContent||'',speed:d.querySelector('#g-speed')?.textContent||''};
+  async function at(t){scrub.value=String(t);scrub.dispatchEvent(new w.Event('input',{bubbles:true}));await wait(80);return {...companion.dataset};}
+  let s=await at(10);let pass=s.cinematicVersion==='r7'&&s.sceneMode==='space'&&s.earthContext==='curved-limb'&&s.oceanRecovery==='false'&&s.parachuteMode==='none'&&s.canvasPass==='true';document.body.dataset.spacePass=String(pass);assert(pass,'space cinematic scene contract failed');
+  s=await at(85);pass=s.sceneMode==='entry'&&s.earthContext==='curved-limb'&&s.plasmaActive==='true'&&s.oceanRecovery==='false';document.body.dataset.entryPass=String(pass);assert(pass,'entry/plasma cinematic scene contract failed');
+  s=await at(300);pass=s.sceneMode==='descent'&&s.earthContext==='none'&&s.parachuteMode==='none'&&s.oceanRecovery==='false';document.body.dataset.descentPass=String(pass);assert(pass,'atmospheric descent scene contract failed');
+  s=await at(590);pass=s.sceneMode==='drogue'&&s.parachuteMode==='drogue'&&s.earthContext==='none';document.body.dataset.droguePass=String(pass);assert(pass,'drogue scene contract failed');
+  s=await at(700);pass=s.sceneMode==='main'&&s.parachuteMode==='main'&&s.earthContext==='none';document.body.dataset.mainPass=String(pass);assert(pass,'main parachute scene contract failed');
+  s=await at(817.957676);pass=s.sceneMode==='ocean'&&s.earthContext==='none'&&s.oceanRecovery==='true'&&s.capsuleAfloat==='true'&&s.parachuteMode==='none'&&s.visualPhase==='splashdown';document.body.dataset.oceanPass=String(pass);assert(pass,'ocean splashdown scene must contain no Earth-outline context and leave Orion afloat');
+  const after={v:engineeringScrub.value,phase:engineering.dataset.phase,alt:d.querySelector('#g-alt')?.textContent||'',speed:d.querySelector('#g-speed')?.textContent||''};pass=companion.dataset.qaIndependent==='true'&&companion.dataset.currentSimulationPreserved==='true'&&JSON.stringify(snap)===JSON.stringify(after);document.body.dataset.independencePass=String(pass);assert(pass,'cinematic companion coupled to protected engineering simulation');
+  const viewports=[[390,844],[430,932],[768,1024],[844,390],[1280,800],[1440,900]];const r=[];
+  for(const [vw,vh] of viewports){frame.style.width=`${vw}px`;frame.style.height=`${vh}px`;await wait(100);const pageOverflow=overflow(d),compOverflow=overflow(d,'#entry-visual-companion');r.push({vw,vh,pageOverflow,compOverflow});assert(pageOverflow<=1&&compOverflow<=1,`responsive overflow at ${vw}x${vh}: page=${pageOverflow}, companion=${compOverflow}`);}
+  pass=r.every(x=>x.pageOverflow<=1&&x.compOverflow<=1);document.body.dataset.responsivePass=String(pass);assert(pass,'responsive matrix failed');
+  document.body.dataset.status='PASS';out.textContent=JSON.stringify({snap,after,responsive:r},null,2);
+}
+const watchdog=setTimeout(()=>{if(document.body.dataset.status==='RUNNING'){document.body.dataset.status='FAIL';out.textContent=JSON.stringify({fatal:'R7 watchdog timeout'},null,2);}},30000);
+main().then(()=>clearTimeout(watchdog)).catch(e=>{clearTimeout(watchdog);document.body.dataset.status='FAIL';out.textContent=JSON.stringify({error:e.message,stack:e.stack},null,2);});
+})();
+</script></body></html>
