@@ -847,7 +847,7 @@
     grid-template-columns:
       minmax(0, 0.92fr)
       minmax(0, 1.08fr);
-    grid-template-rows: 500px;
+    grid-template-rows: 504px;
   }
 
   .mission-control-page .mc-event-context {
@@ -989,7 +989,7 @@
 
   .mission-control-page .console-detail {
     grid-template-rows:
-      440px
+      480px
       820px;
   }
 }
