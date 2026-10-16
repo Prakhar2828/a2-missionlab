@@ -1026,3 +1026,67 @@
   .home-experience-card-psi{min-height:430px}
   .home-psi-visual{left:7%;right:7%;top:24px;width:auto;height:190px}
 }
+
+/* ============================================================
+   PHASE R8.2 HOMEPAGE DESKTOP VIEWPORT-FIT HOTFIX
+   Prevent the hero overline/headline stack from clipping at
+   normal 100% browser zoom on shorter desktop/laptop viewports.
+   Mobile behavior is intentionally unchanged.
+   ============================================================ */
+
+@media (min-width: 1051px) and (max-height: 960px) {
+  .landing-page .x-hero-content {
+    padding-bottom: clamp(28px, 4vh, 42px);
+  }
+
+  .landing-page .x-hero h1 {
+    max-width: 820px;
+    font-size: clamp(4.5rem, 8.1vw, 7.8rem);
+  }
+
+  .landing-page .x-hero-copy {
+    max-width: 690px;
+    margin-top: 1.2rem;
+    font-size: clamp(1rem, 1.35vw, 1.24rem);
+    line-height: 1.5;
+  }
+
+  .landing-page .x-hero-actions {
+    margin-top: 1.05rem;
+  }
+
+  .landing-page .x-creator-line {
+    margin-top: 0.7rem;
+  }
+
+  .landing-page .x-hero-facts {
+    margin-top: 1.5rem;
+  }
+}
+
+@media (min-width: 1051px) and (max-height: 820px) {
+  .landing-page .x-hero-content {
+    padding-bottom: 24px;
+  }
+
+  .landing-page .x-hero h1 {
+    font-size: clamp(4.25rem, 7.65vw, 7.25rem);
+  }
+
+  .landing-page .x-hero-copy {
+    margin-top: 1rem;
+    font-size: clamp(0.98rem, 1.25vw, 1.16rem);
+  }
+
+  .landing-page .x-hero-actions {
+    margin-top: 0.9rem;
+  }
+
+  .landing-page .x-creator-line {
+    margin-top: 0.6rem;
+  }
+
+  .landing-page .x-hero-facts {
+    margin-top: 1.2rem;
+  }
+}
