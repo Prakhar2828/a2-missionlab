@@ -76,7 +76,10 @@ def main() -> int:
             shim = Path(shim_dir) / "google-chrome"
             shim.symlink_to(chrome)
             child_env = os.environ.copy()
-            child_env["PATH"] = str(Path(shim_dir)) + os.pathsep + child_env.get("PATH", "")
+            # Portable CI is intentionally a single pinned Chromium-family gate.
+            # Isolate browser discovery to the shim so runner-installed browsers
+            # cannot silently expand or destabilize portable qualification.
+            child_env["PATH"] = str(Path(shim_dir))
             print("Portable Chrome:", chrome)
             for label, script, script_args in suite:
                 run_gate(label, script, script_args, child_env)
