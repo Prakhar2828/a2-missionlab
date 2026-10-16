@@ -7,6 +7,13 @@
     );
   }
 
+
+  const staticMissionControlQa =
+    /(?:^|[?&])(?:phase-d-regression=[^&]*|trajectory-qa=1)(?:&|$)/
+      .test(
+        window.location.search
+      );
+
   const {
     $,
     $$,
@@ -1161,7 +1168,10 @@
 
 
     const motionTime =
-      reducedMotion()
+      (
+        reducedMotion() ||
+        staticMissionControlQa
+      )
         ? 0
         : t;
 
@@ -1812,6 +1822,7 @@
 
 
     if (
+      !staticMissionControlQa &&
       !reducedMotion() &&
       canvasInView &&
       !document.hidden
