@@ -25,7 +25,9 @@ def main() -> int:
 
     require('href="report.css"' in report, "Technical Report uses dedicated publication CSS")
     require('id="executive-summary"' in report, "Technical Report has an executive summary")
-    require(START in report, "Technical Report identifies the exact Phase J study baseline")
+    require("Study baseline" not in report, "Technical Report no longer publishes a visible Study baseline field")
+    require(START not in report, "Technical Report no longer exposes the raw Phase J baseline hash")
+    require("Static GitHub Pages deployment" in report, "Technical Report retains deployment architecture without a cost claim")
     require(report.count('class="tech-figure" id="fig-') == 13, "Technical Report has 13 stable figure anchors")
     require(len(re.findall(r'<table id="table-[^"]+"><caption>Table [123]\.', report)) == 3, "Technical Report has 3 numbered/anchored tables")
     require('<script src="app.js"></script>' not in report, "obsolete app.js is not loaded by Technical Report")

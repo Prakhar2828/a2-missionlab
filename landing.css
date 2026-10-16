@@ -985,3 +985,44 @@
     filter: saturate(1.03);
   }
 }
+/* Phase R — PSI homepage discovery */
+.home-experience-grid{
+  grid-template-areas:
+    "mission windows"
+    "gnc control"
+    "psi psi";
+}
+.home-experience-card-psi{
+  grid-area:psi;
+  min-height:390px;
+  background:
+    radial-gradient(circle at 72% 30%,rgba(204,157,92,.14),transparent 27%),
+    linear-gradient(145deg,#100c08,#070b0e 58%,#020609);
+}
+.home-experience-card-psi::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  opacity:.2;
+  background-image:
+    linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);
+  background-size:38px 38px;
+}
+.home-psi-visual{position:absolute;z-index:2;right:7%;top:28px;width:min(43%,430px);height:225px;overflow:hidden}
+.home-psi-lander{position:absolute;z-index:4;left:48%;top:25px;width:66px;height:42px;transform:translateX(-50%);border:1px solid rgba(225,235,239,.68);background:#172027;box-shadow:0 8px 24px rgba(0,0,0,.26)}
+.home-psi-lander::before,.home-psi-lander::after{content:"";position:absolute;top:34px;width:1px;height:58px;background:rgba(225,235,239,.55)}
+.home-psi-lander::before{left:12px;transform:rotate(21deg);transform-origin:top}.home-psi-lander::after{right:12px;transform:rotate(-21deg);transform-origin:top}
+.home-psi-plume{position:absolute;z-index:2;left:48%;top:64px;width:150px;height:116px;transform:translateX(-50%);clip-path:polygon(43% 0,57% 0,95% 100%,5% 100%);background:linear-gradient(180deg,rgba(240,207,147,.31),rgba(195,126,62,.12) 72%,transparent)}
+.home-psi-surface{position:absolute;z-index:3;left:3%;right:3%;bottom:31px;height:1px;background:rgba(219,191,153,.52);box-shadow:0 7px 22px rgba(181,130,72,.12)}
+.home-psi-visual>i{position:absolute;z-index:4;bottom:26px;width:5px;height:5px;border:1px solid rgba(222,191,147,.58);border-radius:50%;transform:rotate(18deg)}
+.home-psi-visual>i:nth-of-type(1){left:20%;bottom:36px}.home-psi-visual>i:nth-of-type(2){left:31%;bottom:24px;width:3px;height:3px}.home-psi-visual>i:nth-of-type(3){right:31%;bottom:41px;width:4px;height:4px}.home-psi-visual>i:nth-of-type(4){right:20%;bottom:28px}.home-psi-visual>i:nth-of-type(5){right:10%;bottom:48px;width:3px;height:3px}
+@media(max-width:960px){
+  .home-experience-grid{grid-template-columns:1fr 1fr;grid-template-areas:"mission mission" "windows windows" "gnc control" "psi psi"}
+  .home-psi-visual{right:5%;width:46%}
+}
+@media(max-width:700px){
+  .home-experience-grid{grid-template-columns:1fr;grid-template-areas:"mission" "windows" "gnc" "control" "psi"}
+  .home-experience-card-psi{min-height:430px}
+  .home-psi-visual{left:7%;right:7%;top:24px;width:auto;height:190px}
+}

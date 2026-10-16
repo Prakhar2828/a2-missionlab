@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>A2 MissionLab Phase R targeted polish regression</title>
+<style>html,body{margin:0;background:#101216;color:#fff;font:13px/1.45 Consolas,monospace}iframe{position:absolute;left:-10000px;top:0;border:0;background:#000}pre{white-space:pre-wrap;padding:12px}</style>
+</head>
+<body
+  data-status="RUNNING"
+  data-report-pass="false"
+  data-psi-pass="false"
+  data-disclosure-pass="false"
+  data-weather-pass="false"
+  data-entry-current-pass="false"
+  data-entry-visual-pass="false"
+  data-entry-independence-pass="false"
+  data-responsive-pass="false"
+>
+<iframe id="app" title="Phase R regression surface"></iframe>
+<pre id="results">RUNNING</pre>
+<script>
+(() => {
+'use strict';
+const frame=document.querySelector('#app'),out=document.querySelector('#results');
+const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+const assert=(cond,msg)=>{if(!cond)throw new Error(msg)};
+
+async function load(path,w=1280,h=900){
+  frame.style.width=`${w}px`;frame.style.height=`${h}px`;
+  await new Promise((resolve,reject)=>{
+    const timer=setTimeout(()=>reject(new Error(`load timeout: ${path}`)),15000);
+    frame.onload=()=>{clearTimeout(timer);setTimeout(resolve,220)};
+    frame.src='../../'+path;
+  });
+  return {w:frame.contentWindow,doc:frame.contentDocument};
+}
+function overflow(doc,selector){const root=selector?doc.querySelector(selector):doc.documentElement;return root?Math.max(0,root.scrollWidth-root.clientWidth):999;}
+function countGradient(value){return (String(value).match(/linear-gradient/gi)||[]).length;}
+
+async function main(){
+  const results={};
+
+  let page=await load('technical-report.html',1280,800);let text=page.doc.body.textContent||'';
+  const reportPass=!text.includes('Study baseline')&&!text.includes('c7758aa415928467da0ebb6e48c276c1082be566')&&!text.includes('$0')&&!/ongoing\s+cost/i.test(text)&&text.includes('Static GitHub Pages deployment');
+  document.body.dataset.reportPass=String(reportPass);assert(reportPass,'Technical Report public metadata cleanup failed');
+
+  page=await load('index.html',1280,800);
+  const psi=page.doc.querySelector('#experience-grid .home-experience-card-psi[href="psi.html"]');
+  const psiPass=!!psi&&/PLUME|PSI/i.test(psi.textContent)&&/Five ways in/i.test(page.doc.body.textContent||'');
+  document.body.dataset.psiPass=String(psiPass);assert(psiPass,'Homepage PSI first-class experience card missing');
+
+  const disclosureRoutes=['mission.html','windows.html','gnc.html','mission-control.html','psi.html'];let drawerCount=0;
+  for(const route of disclosureRoutes){
+    page=await load(route,1024,768);const drawers=[...page.doc.querySelectorAll('details.engineering-drawer')];drawerCount+=drawers.length;
+    for(const details of drawers){
+      const span=details.querySelector('summary span');assert(span,`${route}: disclosure label span missing`);
+      details.open=false;let pseudo=page.w.getComputedStyle(span,'::before');
+      assert(parseFloat(pseudo.width)>=21&&parseFloat(pseudo.height)>=21,`${route}: disclosure circle size regressed`);
+      assert((pseudo.content==='""'||pseudo.content==='none')&&countGradient(pseudo.backgroundImage)>=2,`${route}: closed disclosure still uses an off-center text glyph`);
+      details.open=true;pseudo=page.w.getComputedStyle(span,'::before');
+      assert((pseudo.content==='""'||pseudo.content==='none')&&countGradient(pseudo.backgroundImage)>=1,`${route}: open disclosure still uses an off-center text glyph`);
+    }
+  }
+  const disclosurePass=drawerCount>0;document.body.dataset.disclosurePass=String(disclosurePass);assert(disclosurePass,'No engineering disclosure controls were exercised');
+
+  page=await load('mission.html?space-weather-qa=1#space-weather',430,932);let root=page.doc.querySelector('#space-weather');
+  const weatherPass=!!root&&root.dataset.visualDirection==='sun-to-orion'&&root.dataset.animation==='paused'&&root.dataset.finite==='true'&&overflow(page.doc,'#space-weather')<=1;
+  document.body.dataset.weatherPass=String(weatherPass);assert(weatherPass,'Space Weather propagation visual/QA contract failed');
+
+  // Entry must contain BOTH the existing current engineering simulation and the restored additive visual.
+  page=await load('mission.html?entry-qa=1&phase-r-qa=1#entry-lab',430,932);
+  const engineering=page.doc.querySelector('#entry-lab[data-entry-phase-i]');
+  const engineeringCanvas=page.doc.querySelector('#entry-flight-canvas');
+  const engineeringScrub=page.doc.querySelector('#entry-scrubber');
+  const engineeringPlay=page.doc.querySelector('#entry-play');
+  const companion=page.doc.querySelector('#entry-visual-companion');
+  const visualCanvas=page.doc.querySelector('#entry-visual-canvas');
+  const visualScrub=page.doc.querySelector('#entry-visual-scrubber');
+  const visualPlay=page.doc.querySelector('#entry-visual-play');
+  assert(engineering&&engineeringCanvas&&engineeringScrub&&engineeringPlay,'Current engineering Entry simulation is missing');
+  assert(companion&&visualCanvas&&visualScrub&&visualPlay,'Additive Entry visual companion is missing');
+
+  const engineeringSnapshot={
+    value:engineeringScrub.value,
+    phase:engineering.dataset.phase,
+    alt:page.doc.querySelector('#g-alt')?.textContent||'',
+    speed:page.doc.querySelector('#g-speed')?.textContent||'',
+    mach:page.doc.querySelector('#g-mach')?.textContent||'',
+  };
+  const entryCurrentPass=engineering.dataset.qaFinite==='true'&&engineering.dataset.canvasPass==='true'&&engineering.dataset.finite==='true';
+  document.body.dataset.entryCurrentPass=String(entryCurrentPass);assert(entryCurrentPass,'Existing current Entry engineering simulation failed its protected QA state');
+
+  visualScrub.value='629.134';visualScrub.dispatchEvent(new page.w.Event('input',{bubbles:true}));await wait(60);
+  assert(companion.dataset.visualPhase==='parachutes','Additive visual did not reach parachute/recovery phase');
+  assert(companion.dataset.canvasPass==='true','Additive visual canvas failed at parachute/recovery phase');
+  visualScrub.value='817.957676';visualScrub.dispatchEvent(new page.w.Event('input',{bubbles:true}));await wait(60);
+  const entryVisualPass=companion.dataset.visualSequence==='space-entry-descent-parachutes-splashdown'&&companion.dataset.visualPhase==='splashdown'&&companion.dataset.modelDriven==='true'&&companion.dataset.qaAnchors==='true';
+  document.body.dataset.entryVisualPass=String(entryVisualPass);assert(entryVisualPass,'Additive Entry visual sequence contract failed');
+
+  const engineeringAfter={
+    value:engineeringScrub.value,
+    phase:engineering.dataset.phase,
+    alt:page.doc.querySelector('#g-alt')?.textContent||'',
+    speed:page.doc.querySelector('#g-speed')?.textContent||'',
+    mach:page.doc.querySelector('#g-mach')?.textContent||'',
+  };
+  const independent=companion.dataset.qaIndependent==='true'&&companion.dataset.currentSimulationPreserved==='true'&&JSON.stringify(engineeringSnapshot)===JSON.stringify(engineeringAfter);
+  document.body.dataset.entryIndependencePass=String(independent);assert(independent,'Additive visual changed or coupled to the existing current Entry engineering simulation');
+  results.engineeringSnapshot=engineeringSnapshot;results.engineeringAfter=engineeringAfter;
+
+  const viewports=[[390,844],[430,932],[768,1024],[844,390],[1280,800],[1440,900]];
+  const routes=['index.html','technical-report.html','psi.html','mission.html?space-weather-qa=1','mission.html?entry-qa=1&phase-r-qa=1#entry-lab'];
+  const viewportResults=[];
+  // Load each changed route once, then resize the same document through every required viewport.
+  // The repository-wide responsive gate already performs independent reload coverage across all 8 routes.
+  // This targeted Phase R gate is intentionally focused on the changed surfaces and avoids repeatedly
+  // reloading the heavy Mission Explorer route, which can make headless Chrome/Edge miss an iframe
+  // load event even though the product itself has already passed the protected browser suites.
+  for(const route of routes){
+    page=await load(route,viewports[0][0],viewports[0][1]);
+    for(const [vw,vh] of viewports){
+      frame.style.width=`${vw}px`;frame.style.height=`${vh}px`;
+      try{page.w.dispatchEvent(new page.w.Event('resize'));}catch(_error){}
+      await wait(180);
+      const amount=overflow(page.doc);viewportResults.push({route,vw,vh,overflow:amount});assert(amount<=1,`${route}: horizontal overflow ${amount}px at ${vw}x${vh}`);
+      if(route.includes('entry-qa')){assert(overflow(page.doc,'#entry-lab')<=1,`${route}: Entry section overflow at ${vw}x${vh}`);assert(overflow(page.doc,'#entry-visual-companion')<=1,`${route}: additive visual overflow at ${vw}x${vh}`);}
+    }
+  }
+  const responsivePass=viewportResults.every(x=>x.overflow<=1);document.body.dataset.responsivePass=String(responsivePass);
+
+  document.body.dataset.status='PASS';results.drawerCount=drawerCount;results.viewportResults=viewportResults;out.textContent=JSON.stringify(results,null,2);
+}
+const watchdog=setTimeout(()=>{if(document.body.dataset.status==='RUNNING'){document.body.dataset.status='FAIL';out.textContent=JSON.stringify({fatal:'Phase R regression watchdog timed out'},null,2);}},70000);
+main().then(()=>clearTimeout(watchdog)).catch(error=>{clearTimeout(watchdog);document.body.dataset.status='FAIL';out.textContent=JSON.stringify({error:error.message,stack:error.stack},null,2);});
+})();
+</script>
+</body>
+</html>

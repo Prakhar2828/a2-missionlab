@@ -3,7 +3,7 @@
 .report-hero{padding-bottom:42px}
 .report-publication{border-bottom:1px solid var(--line);background:#090e14}
 .report-publication .container{padding:22px 0}
-.publication-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;border:1px solid var(--line);background:var(--line)}
+.publication-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;border:1px solid var(--line);background:var(--line)}
 .publication-meta>div{background:#0b1117;padding:14px 16px;min-width:0}
 .publication-meta span{display:block;color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
 .publication-meta strong,.publication-meta code{font-size:.92rem;color:#eef4f8;overflow-wrap:anywhere}
@@ -31,7 +31,7 @@
 .report .validation-ledger b{display:block;color:#fff}.report .validation-ledger span{color:var(--muted);font-size:.9rem}
 .report .crossref{color:var(--blue);text-decoration:underline;text-decoration-color:#3d627e;text-underline-offset:3px}
 .report .revision-note{font-size:.9rem;color:var(--muted);margin-top:.8rem}
-@media(max-width:900px){.publication-meta{grid-template-columns:1fr 1fr}.summary-grid{grid-template-columns:1fr 1fr}.report-nav-grid{grid-template-columns:1fr}.report .validation-ledger{grid-template-columns:1fr}}
+@media(max-width:900px){.publication-meta{grid-template-columns:repeat(3,minmax(0,1fr))}.summary-grid{grid-template-columns:1fr 1fr}.report-nav-grid{grid-template-columns:1fr}.report .validation-ledger{grid-template-columns:1fr}}
 @media(max-width:560px){.publication-meta,.summary-grid{grid-template-columns:1fr}}
 @media print{
   @page{size:letter;margin:.62in}
@@ -41,7 +41,7 @@
   .container{width:100%!important;max-width:none!important}
   .report-hero h1{font-size:28pt!important;letter-spacing:-.03em!important;color:#111!important;margin-top:0}
   .report-hero p,.report p,.report li,.publication-meta span,.publication-meta strong,.publication-meta code,.publication-index li{color:#222!important}
-  .publication-meta{border:1px solid #bbb!important;background:#fff!important;grid-template-columns:repeat(2,1fr)}
+  .publication-meta{border:1px solid #bbb!important;background:#fff!important;grid-template-columns:repeat(3,1fr)}
   .publication-meta>div,.summary-stat,.publication-index,.report .toc,.report .validation-ledger>div{background:#fff!important;border-color:#bbb!important}
   .report article{max-width:none!important}
   .report h2,.report h3,.report th,.report td,.report .abstract,.caption-title,.report .tech-figure figcaption::before{color:#111!important}

@@ -27,6 +27,7 @@
   <link rel="stylesheet" href="trajectory.css">
   <link rel="stylesheet" href="space-weather.css">
   <link rel="stylesheet" href="entry.css">
+  <link rel="stylesheet" href="entry-visual.css">
   <link rel="stylesheet" href="typography.css">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="icon" href="favicon.ico" sizes="any">
@@ -352,7 +353,37 @@
       <p class="entry-time-boundary"><strong>Two clocks are intentionally visible.</strong> Analysis checkpoints can have sub-second precision because they are derived from the high-rate source. NASA live-update events such as reacquisition, drogues, mains, and splashdown remain public-minute anchors and are not promoted to exact telemetry epochs.</p>
     </div>
 
-    <div class="entry-teach-grid">
+        <section class="entry-visual-companion" id="entry-visual-companion" aria-labelledby="entry-visual-title" data-current-simulation-preserved="true">
+      <div class="entry-visual-companion-head">
+        <div>
+          <p class="x-label">VISUAL COMPANION · ADDITIVE</p>
+          <h3 id="entry-visual-title">See Orion move from space to splashdown.</h3>
+        </div>
+        <p>This restored visual sequence sits <strong>alongside</strong> the current engineering reconstruction above. It does not replace, simplify, or drive the existing Entry / Descent / Recovery simulation.</p>
+      </div>
+      <div class="entry-visual-companion-shell">
+        <div class="entry-visual-stage">
+          <canvas id="entry-visual-canvas" role="img" aria-label="Supplemental visual sequence of Orion progressing from near-space entry through atmospheric descent, parachutes, and ocean splashdown" aria-describedby="entry-visual-note"></canvas>
+          <div class="entry-visual-stage-badge"><strong>Visual companion only.</strong> The current engineering simulation, readouts, evidence labels, and recovery timeline remain the authoritative interactive reconstruction on this page.</div>
+        </div>
+        <aside class="entry-visual-console" aria-label="Supplemental Entry visual controls">
+          <div class="entry-visual-status">
+            <div><span>VISUAL PHASE</span><b id="entry-visual-phase">Space edge</b></div>
+            <div><span>MODEL CLOCK</span><b id="entry-visual-time">23:53:30.866 UTC</b></div>
+          </div>
+          <p class="entry-visual-note" id="entry-visual-note">Orion approaches the sensible atmosphere from near-space conditions.</p>
+          <div class="entry-visual-phase-buttons" id="entry-visual-phase-buttons" aria-label="Visual sequence phase jumps"></div>
+          <label class="entry-visual-scrubber-label" for="entry-visual-scrubber"><span>Scrub the supplemental visual</span><strong>independent of the engineering scrubber</strong></label>
+          <input id="entry-visual-scrubber" type="range" min="0" max="817.975" step="0.1" value="0" aria-label="Supplemental visual Entry sequence timeline">
+          <div class="entry-visual-actions">
+            <button id="entry-visual-play" type="button" aria-pressed="false">Play visual sequence</button>
+            <button id="entry-visual-reset" type="button">Reset visual</button>
+          </div>
+          <p class="entry-visual-boundary"><strong>Evidence boundary:</strong> the scene is an educational visualization driven by the existing current <code>A2EntryModel</code>. Public-minute parachute and splashdown events are not promoted to private exact deployment/impact telemetry.</p>
+        </aside>
+      </div>
+    </section>
+<div class="entry-teach-grid">
       <article class="entry-teach-card entry-teach-wide">
         <p class="x-label">THE RELATIONSHIP THAT MATTERS</p>
         <h3>Nearly equal dynamic-pressure peaks. More than an order of magnitude difference in modeled heating.</h3>
@@ -481,6 +512,7 @@
 <script src="js/mission.js"></script>
 <script src="js/entry-model.js"></script>
 <script src="js/entry.js"></script>
+<script src="js/entry-visual.js"></script>
 <script src="js/space-weather-model.js"></script>
 <script src="js/space-weather.js"></script>
 <script src="js/trajectory-model.js"></script>
