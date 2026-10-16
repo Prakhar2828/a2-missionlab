@@ -731,7 +731,8 @@ async function createFrame(
     '?phase-i-qa=' +
     encodeURIComponent(
       viewport.name
-    );
+    ) +
+    '&trajectory-qa=1';
 
   document.body.appendChild(
     frame

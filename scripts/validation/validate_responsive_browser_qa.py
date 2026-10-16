@@ -5,6 +5,7 @@ import html
 import json
 import os
 import re
+import shutil
 import subprocess
 import tempfile
 import threading
@@ -37,76 +38,133 @@ class QuietHandler(
 
 def browser_paths():
 
-    env = os.environ
-
-    candidates = {
-        "edge": [
-            (
-                env.get(
-                    "PROGRAMFILES(X86)"
-                ),
-                "Microsoft/Edge/Application/msedge.exe",
-            ),
-            (
-                env.get(
-                    "PROGRAMFILES"
-                ),
-                "Microsoft/Edge/Application/msedge.exe",
-            ),
-            (
-                env.get(
-                    "LOCALAPPDATA"
-                ),
-                "Microsoft/Edge/Application/msedge.exe",
-            ),
-        ],
-
-        "chrome": [
-            (
-                env.get(
-                    "PROGRAMFILES"
-                ),
-                "Google/Chrome/Application/chrome.exe",
-            ),
-            (
-                env.get(
-                    "PROGRAMFILES(X86)"
-                ),
-                "Google/Chrome/Application/chrome.exe",
-            ),
-            (
-                env.get(
-                    "LOCALAPPDATA"
-                ),
-                "Google/Chrome/Application/chrome.exe",
-            ),
-        ],
-    }
-
     found = {}
 
-    for name, options in candidates.items():
+    candidates = {
+        "edge": [],
+        "chrome": [],
+    }
 
-        for base, relative in options:
+    if os.name == "nt":
 
-            if not base:
-                continue
+        env = os.environ
 
-            path = (
-                Path(base)
-                / relative
+        possibilities = [
+            (
+                "PROGRAMFILES(X86)",
+                "Microsoft/Edge/Application/msedge.exe",
+                "edge",
+            ),
+            (
+                "PROGRAMFILES",
+                "Microsoft/Edge/Application/msedge.exe",
+                "edge",
+            ),
+            (
+                "LOCALAPPDATA",
+                "Microsoft/Edge/Application/msedge.exe",
+                "edge",
+            ),
+            (
+                "PROGRAMFILES",
+                "Google/Chrome/Application/chrome.exe",
+                "chrome",
+            ),
+            (
+                "PROGRAMFILES(X86)",
+                "Google/Chrome/Application/chrome.exe",
+                "chrome",
+            ),
+            (
+                "LOCALAPPDATA",
+                "Google/Chrome/Application/chrome.exe",
+                "chrome",
+            ),
+        ]
+
+        for (
+            environment_name,
+            relative_path,
+            browser_name,
+        ) in possibilities:
+
+            base = env.get(
+                environment_name
             )
+
+            if base:
+
+                candidates[
+                    browser_name
+                ].append(
+                    Path(base)
+                    / relative_path
+                )
+
+    else:
+
+        possibilities = [
+            (
+                "microsoft-edge",
+                "edge",
+            ),
+            (
+                "microsoft-edge-stable",
+                "edge",
+            ),
+            (
+                "google-chrome",
+                "chrome",
+            ),
+            (
+                "google-chrome-stable",
+                "chrome",
+            ),
+            (
+                "chromium",
+                "chrome",
+            ),
+            (
+                "chromium-browser",
+                "chrome",
+            ),
+        ]
+
+        for (
+            executable_name,
+            browser_name,
+        ) in possibilities:
+
+            executable = shutil.which(
+                executable_name
+            )
+
+            if executable:
+
+                candidates[
+                    browser_name
+                ].append(
+                    Path(
+                        executable
+                    )
+                )
+
+    for (
+        browser_name,
+        paths,
+    ) in candidates.items():
+
+        for path in paths:
 
             if path.is_file():
 
-                found[name] = (
-                    path.resolve()
-                )
+                found[
+                    browser_name
+                ] = path.resolve()
 
                 break
 
     return found
-
 
 def run_browser(
     name,
@@ -141,6 +199,13 @@ def run_browser(
             "--dump-dom",
             url,
         ]
+
+        if os.name != "nt":
+
+            command.insert(
+                1,
+                "--no-sandbox",
+            )
 
         result = subprocess.run(
             command,
@@ -312,26 +377,50 @@ def main():
 
     browsers = browser_paths()
 
-    required_names = [
-        "edge",
-        "chrome",
-    ]
+    if not browsers:
 
-    missing = [
-        name
-        for name
-        in required_names
-        if name not in browsers
-    ]
+        if args.required:
 
-    if missing:
+            print(
+                "FAIL: no compatible "
+                "Chromium-family browser found."
+            )
+
+            return 1
 
         print(
-            "FAIL: missing browser(s):",
-            ", ".join(missing)
+            "SKIP: no compatible "
+            "Chromium-family browser found."
         )
 
-        return 1
+        return 0
+
+    if (
+        args.required
+        and os.name == "nt"
+    ):
+
+        missing = [
+            name
+            for name
+            in (
+                "edge",
+                "chrome",
+            )
+            if name not in browsers
+        ]
+
+        if missing:
+
+            print(
+                "FAIL: required Windows "
+                "browser(s) missing:",
+                ", ".join(
+                    missing
+                ),
+            )
+
+            return 1
 
     old_cwd = Path.cwd()
 
@@ -366,7 +455,7 @@ def main():
 
     try:
 
-        for name in required_names:
+        for name in sorted(browsers):
 
             results[name] = (
                 run_browser(
@@ -410,7 +499,13 @@ def main():
     )
 
     print(
-        "Browsers: EDGE, CHROME"
+        "Browsers:",
+        ", ".join(
+            name.upper()
+            for name in sorted(
+                results
+            )
+        ),
     )
 
     print(
@@ -426,7 +521,10 @@ def main():
     )
 
     print(
-        "Total cases: 96"
+        "Total cases:",
+        48 * len(
+            results
+        ),
     )
 
     print(

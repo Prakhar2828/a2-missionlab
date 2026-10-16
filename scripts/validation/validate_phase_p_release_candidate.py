@@ -108,6 +108,46 @@ def main() -> int:
     require("--required" in orchestrator, "Phase P orchestration keeps protected browser requirements fail-closed")
     require("PHASE_P_CHROME" in orchestrator and "google-chrome" in orchestrator, "portable Phase P maps the setup action Chrome path into protected browser discovery")
 
+    for portable_script in (
+        "validate_mission_control_regression.py",
+        "validate_responsive_browser_qa.py",
+    ):
+        portable_source = (
+            ROOT
+            / "scripts"
+            / "validation"
+            / portable_script
+        ).read_text(encoding="utf-8")
+
+        require(
+            "shutil.which" in portable_source,
+            f"{portable_script} supports PATH-based portable browser discovery",
+        )
+        require(
+            'if os.name != "nt"' in portable_source,
+            f"{portable_script} applies Linux Chromium no-sandbox launch compatibility",
+        )
+        require(
+            'and os.name == "nt"' in portable_source,
+            f"{portable_script} reserves dual Edge+Chrome requirement for Windows",
+        )
+        require(
+            "for name in sorted(browsers)" in portable_source,
+            f"{portable_script} executes every discovered portable Chromium-family browser",
+        )
+
+    responsive_harness = (
+        ROOT
+        / "scripts"
+        / "validation"
+        / "responsive_browser_qa.html"
+    ).read_text(encoding="utf-8")
+
+    require(
+        "&trajectory-qa=1" in responsive_harness,
+        "responsive QA enables static Mission Explorer animation mode",
+    )
+
     for phrase in [
         "iPhone Safari on physical hardware",
         "Android Chrome on physical hardware",
