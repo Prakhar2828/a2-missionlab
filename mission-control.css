@@ -509,8 +509,8 @@
   min-width: 0;
   display: grid;
   grid-template-rows:
-    470px
-    640px;
+    502px
+    608px;
   align-content: start;
   gap: 0;
   padding: 0;
