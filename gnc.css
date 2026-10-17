@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    A2 MissionLab - Phase G GNC Experience
    Dedicated gnc.html presentation only.
    Simulation/evidence logic remains in js/gnc.js.
@@ -365,6 +365,8 @@
   z-index: 5;
   top: 16px;
   left: 16px;
+  transform: none;
+  white-space: normal;
   max-width:
     calc(
       100% - 32px
